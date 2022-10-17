@@ -1,0 +1,125 @@
+.notification {
+  align-items: center;
+  background-color: var(--Notification-backgroundColor);
+  border-radius: 6px;
+  box-shadow: 0 0 6px 0 var(--Notification-boxShadowColor);
+  box-sizing: border-box;
+  color: var(--Notification-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.6em 2em;
+  position: fixed;
+  text-align: center;
+  transition: all 0.25s ease-in-out;
+  z-index: -1;
+}
+
+.notification.error {
+  background-color: var(--Notification-backgroundColor--error);
+  color: var(--Notification-color--error);
+  font-weight: bold;
+}
+
+.notification.success {
+  background-color: var(--Notification-backgroundColor--success);
+  color: var(--Notification-color--success);
+  font-weight: bold;
+}
+
+.notification.cancel {
+  background-color: var(--Notification-backgroundColor--cancel);
+  color: var(--Notification-color--cancel);
+  border-radius: 0;
+  max-width: 750px;
+  width: 100%;
+  padding: 14px 58px 14px 24px;
+}
+
+.notification .icon-close {
+  cursor: pointer;
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  right: 16px;
+}
+
+.notification.top-left {
+  left: 25px;
+  top: 25px;
+  transform: scale(0);
+}
+
+.notification.top-center {
+  left: 50%;
+  top: 25px;
+  transform: translate(-50%, 0) scale(0);
+}
+
+.notification.top-right {
+  right: 25px;
+  top: 25px;
+  transform: scale(0);
+}
+
+.notification.center {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.notification.bottom-right {
+  right: 25px;
+  bottom: 25px;
+  transform: scale(0);
+}
+
+.notification.bottom-center {
+  left: 50%;
+  bottom: 25px;
+  transform: translate(-50%, 0) scale(0);
+}
+
+.notification.bottom-left {
+  left: 25px;
+  bottom: 25px;
+  transform: scale(0);
+}
+
+.notification.active {
+  z-index: 3;
+}
+
+.notification.top-left.active {
+  transform: scale(1);
+}
+
+.notification.top-center.active {
+  transform: translate(-50%, 0) scale(1);
+}
+
+.notification.top-right.active {
+  transform: scale(1);
+}
+
+.notification.center.acttive {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.notification.bottom-right.active {
+  transform: scale(1);
+}
+
+.notification.bottom-center.active {
+  transform: translate(-50%, 0) scale(1);
+}
+
+.notification.bottom-left.active {
+  transform: scale(1);
+}
+
+@media screen and (max-width: 768px) {
+  .notification.cancel {
+    max-width: 80%;
+  }
+}

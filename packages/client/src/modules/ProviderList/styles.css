@@ -1,0 +1,100 @@
+.provider-list {
+  background-color: var(--ProviderList-backgroundColor);
+  border-radius: 5px 0 0 5px;
+  border-right: 1px solid var(--ProviderList-borderRightColor);
+  box-shadow: var(--ProviderList-boxShadow);
+  overflow-y: auto;
+  width: 280px;
+  margin-left: 12px;
+  margin-top: 1px;
+}
+
+.provider-list .header-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  margin: 12px 20px 0 12px;
+}
+
+.provider-list .title {
+  font-size: var(--font-size-lg);
+  line-height: 19px;
+  color: var(--ProviderListTitle-color);
+}
+
+.provider-list .icon {
+  height: 15px;
+  width: 15px;
+}
+
+.provider-list .provider-search {
+  display: flex;
+  background-color: var(--ProviderListSearch-backgroundColor);
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid var(--ProviderListSearch-borderColor);
+  box-sizing: border-box;
+  height: 45px;
+  margin: 12px;
+  padding-right: 10px;
+}
+
+.provider-list .provider-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: var(--font-size-xl);
+  line-height: 22px;
+}
+
+.provider-list .provider-search input::placeholder {
+  color: var(--ProviderListSearchPlaceholder-color);
+}
+
+.provider-list .provider-search .icon {
+  fill: var(--ProviderListSearchIcon-fill);
+  margin: 10px;
+}
+
+.provider-list .providers {
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.provider-list .provider-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.provider-list .provider-item.active {
+  background-color: var(--ProviderListItem-backgroundColor--active);
+}
+
+.provider-list .provider-item.active .provider-name {
+  color: var(--ProviderListItemName-color--active);
+}
+
+.provider-list .provider-name {
+  margin-left: 8px;
+  font-size: var(--font-size-xl);
+  line-height: 22px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--ProviderListItemName-color);
+}
+
+@media screen and (max-width: 768px) {
+  .provider-list {
+    background-color: var(--ModalHeader-backgroundColor--mobile);
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    margin: 0;
+  }
+}

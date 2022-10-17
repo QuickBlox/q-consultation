@@ -1,0 +1,29 @@
+.avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--Avatar-borderColor);
+  background-color: var(--Avatar-backgroundColor);
+}
+
+.avatar .avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar .avatar-icon {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 80%;
+  width: 100%;
+  fill: var(--AvatarIcon-fill);
+}

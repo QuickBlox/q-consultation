@@ -1,0 +1,6 @@
+@media screen and (max-width: 768px) {
+  .modal.choose .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+}

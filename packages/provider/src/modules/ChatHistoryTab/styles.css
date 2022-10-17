@@ -1,0 +1,20 @@
+.chat-history-tab {
+  padding-left: 12px;
+  height: 100%;
+  width: auto;
+  background-color: var(--ChatHistoryTab-backgroundColor);
+}
+
+.chat-history-tab .list-content {
+  padding-bottom: 10px;
+}
+
+.chat-history-tab .appointment-card {
+  padding-right: 12px;
+}
+
+.chat-history-tab .chat-history-empty {
+  text-align: center;
+  padding: 10px;
+  font-weight: 600;
+}

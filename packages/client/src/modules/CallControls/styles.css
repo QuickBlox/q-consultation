@@ -1,0 +1,66 @@
+.controls {
+  align-items: flex-start;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+
+.controls .control-btn {
+  background-color: var(--CallControlBtn-backgroundColor);
+  border-radius: 5px;
+  border: none;
+  color: var(--CallControlBtn-color);
+  font-size: var(--font-size-xs);
+  height: 44px;
+  line-height: 13px;
+  margin: 0 10px;
+  padding: 0;
+  width: 44px;
+}
+
+.controls .control-btn:disabled {
+  opacity: 0.6;
+}
+
+.controls .control-btn.active {
+  background-color: var(--CallControlBtn-backgroundColor--active);
+}
+
+.controls .control-btn .icon {
+  height: 20px;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.controls .control-btn.active .icon path {
+  fill: var(--CallControlBtnIcon-fill--active);
+  opacity: 0.5;
+}
+
+.controls .control-btn.end-call {
+  background-color: var(--CallControlBtnEndCall-backgroundColor);
+  font-weight: bold;
+  padding: 0 1.2em;
+  width: auto;
+}
+
+.controls .control-btn.end-call .icon {
+  fill: var(--CallControlBtnEndCallIcon-fill);
+}
+
+@keyframes pulsating {
+  0%    { transform: none; }
+  50%   { transform: scale(1.2); }
+  100%  { transform: none; }
+}
+
+@media screen and (max-width: 768px) {
+
+  .controls {
+    padding-top: 15px;
+  }
+
+}

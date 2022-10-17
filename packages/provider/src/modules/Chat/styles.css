@@ -1,0 +1,36 @@
+.chat-container {
+  background-color: var(--ChatContainer-backgroundColor);
+  border-radius: 0 5px 5px 0;
+  box-shadow: var(--ChatContainer-boxShadow);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 1px 12px 12px 0;
+  max-width: 600px;
+  overflow: hidden;
+}
+
+.chat-container main {
+  background-color: var(--ChatContainerMain-backgroundColor);
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+
+  .chat-container {
+    border-radius: 0;
+    margin: 0;
+  }
+
+}
+
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+
+  .main-screen.on-call .chat-container {
+    border-radius: 0;
+    margin: 0;
+  }
+
+}

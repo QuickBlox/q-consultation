@@ -1,0 +1,21 @@
+{
+  "name": "q-consultation",
+  "license": "MIT",
+  "author": {
+    "name": "Injoit LTD",
+    "email": "sales@quickblox.com"
+  },
+  "scripts": {
+    "start": "lerna run start",
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "prepare": "node ./bin/prepare.js"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.0.1",
+    "prettier": "^2.4.0"
+  }
+}

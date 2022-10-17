@@ -1,0 +1,162 @@
+.chat-header {
+  align-items: center;
+  border-bottom: 1px solid var(--ChatHeader-borderBottomColor);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: var(--ChatHeader-color)
+}
+
+.chat-header .muted {
+  color: var(--ChatHeaderText-color--muted);
+  flex: 1;
+  font-size: var(--font-size-md);
+  line-height: 15px;
+}
+
+.chat-header .section {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+  width: 100%;
+}
+
+.chat-header .section.assignee-info {
+  border: none;
+}
+
+.chat-header .assignee-info .priority-and-name,
+.chat-header .assignee-info .assignee {
+  align-items: flex-start;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.chat-header .assignee-info .priority-and-name {
+  align-items: center;
+  flex-direction: row;
+  padding: 12px;
+}
+
+.chat-header .assignee-info .priority-and-name .name {
+  color: var(--ChatHeaderDialogName-color);
+  flex: 1;
+  font-size: var(--font-size-xxl);
+  font-weight: bold;
+  line-height: 28px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-header .assignee-info .priority-and-name .priority-label {
+  color: var(--ChatHeaderPriorityLabel-color);
+  font-size: var(--font-size-md);
+  line-height: 15px;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.chat-header .assignee-info .priority-and-name .priority-buttons {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 8px;
+}
+
+.chat-header .assignee-info .priority-and-name .priority {
+  border-radius: 50%;
+  border: none;
+  height: 16px;
+  margin: 0 4px;
+  outline: none;
+  padding: 0;
+  width: 16px;
+}
+
+.chat-header .assignee-info .priority-and-name .priority:disabled {
+  opacity: 0.6;
+}
+
+.chat-header .assignee-info .priority-and-name .priority.low {
+  background-color: var(--priorityLow-backgroundColor);
+}
+
+.chat-header .assignee-info .priority-and-name .priority.med {
+  background-color: var(--priorityMed-backgroundColor);
+}
+
+.chat-header .assignee-info .priority-and-name .priority.high {
+  background-color: var(--priorityHigh-backgroundColor);
+}
+
+.chat-header .assignee-info .priority-and-name .priority .icon {
+  height: 16px;
+  fill: var(--ChatHeaderPriorityIconCheck-fill);
+  width: 10px;
+}
+
+.chat-header .assignee-info .priority-and-name .call {
+  background: transparent;
+  border: none;
+  margin-left: 12px;
+  padding: 4px 5px;
+}
+
+.chat-header .assignee-info .priority-and-name .call .icon {
+  height: 18px;
+  width: 18px;
+}
+
+.chat-header .assignee-info .priority-and-name .call:disabled .icon {
+  opacity: 0.35;
+}
+
+.chat-header .assignee-info .priority-and-name .call .icon path {
+  fill: var(--ChatHeaderCallIcon-fill);
+}
+
+.chat-header .assignee-info .priority-and-name .call:disabled .icon path {
+  fill: var(--ChatHeaderCallIcon-fill--disabled);
+}
+
+.chat-header .assignee-info .assignee {
+  flex-direction: column;
+  padding: 6px 12px 12px;
+}
+
+.chat-header .assignee-info .assignee .label {
+  padding: 0 0 5px 0;
+}
+
+.chat-header .assignee-info .assignee .assignee-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.chat-header .assignee-info .assignee .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+
+  .chat-header .back {
+    display: initial;
+    margin-right: 12px;
+  }
+
+  .chat-header .assignee-info .priority-and-name .priority-label {
+    display: none;
+  }
+
+}

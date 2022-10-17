@@ -1,0 +1,150 @@
+.call-screen {
+  position: fixed;
+  display: flex;
+  height: 100%;
+  max-height: 100vh;
+  width: 100%;
+  top: -100%;
+  transition: top 0.25s ease-in-out;
+  z-index: 999;
+  background-color: var(--VideoCall-backgroundColor);
+}
+
+.call-screen.active {
+  top: 0;
+}
+
+.call-screen .chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--VideoCallChat-backgroundColor);
+}
+
+.call-screen .chat-room {
+  flex: 1;
+}
+
+.call-screen-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-screen .chat {
+  background-color: transparent;
+  border: none;
+  display: none;
+  margin: 0;
+  padding: 4px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+}
+
+.call-screen .chat.unread::after {
+  background-color: var(--VideoCallChatUnreadDot-backgroundColor);
+  border-radius: 50%;
+  border: 1px solid var(--VideoCallChatUnreadDot-borderColor);
+  content: '';
+  height: 8px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8px;
+}
+
+.call-screen .chat .icon {
+  fill: var(--VideoCallChatIcon-fill);
+  height: 20px;
+  width: 20px;
+}
+
+.call-screen .videos {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.call-screen .videos .video-container {
+  display: flex;
+  flex: 1;
+  max-height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.call-screen .videos .video-container .overlay {
+  background: var(--VideoCallOverlay-background);
+  box-sizing: border-box;
+  color: var(--VideoCallOverlay-color);
+  font-size: var(--font-size-lg);
+  left: 0;
+  padding: 20px;
+  position: absolute;
+  right: 0;
+  text-align: start;
+  top: 0;
+}
+
+.call-screen .videos .video-container .overlay p {
+  margin: 0 0 5px 0;
+}
+
+.call-screen .videos .video-container video {
+  max-height: 100%;
+  width: 100%;
+}
+
+.call-screen .videos #local {
+  height: auto;
+  max-height: 25%;
+  max-width: 25%;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: auto;
+  background-color: var(--VideoCallVideoLocal-backgroundColor);
+  box-shadow: 0 9px 20px 0 var(--VideoCallVideoLocal-boxShadowColor);
+}
+
+@media screen and (max-width: 768px) {
+  .offline .call-screen.active {
+    top: 41px;
+    height: calc(100% - 41px);
+  }
+
+  .call-screen {
+    flex-direction: column;
+  }
+
+  .call-screen .chat {
+    display: initial;
+  }
+
+  .call-screen .header-call {
+    display: none;
+  }
+
+  .call-screen .videos #local {
+    bottom: 0;
+    top: auto;
+    right: 0;
+    max-height: 20%;
+    max-width: 20%;
+  }
+
+  .call-screen .videos video[id*="remote"] {
+    object-fit: contain;
+  }
+}

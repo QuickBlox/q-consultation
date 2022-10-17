@@ -1,0 +1,25 @@
+.appointment-screen {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  max-height: calc(100vh - 50px);
+}
+
+.appointment-screen.loading {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .appointment-screen {
+    max-height: unset;
+  }
+}

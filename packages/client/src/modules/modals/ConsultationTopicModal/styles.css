@@ -1,0 +1,118 @@
+.consultation-topic .form {
+  width: 623px;
+  overflow: hidden;
+}
+
+.consultation-topic .form .body {
+  align-items: flex-start;
+}
+
+.consultation-topic .field {
+  width: 100%;
+  resize: none;
+}
+
+.consultation-topic .form-field-label {
+  font-size: var(--font-size-lg);
+  line-height: 19px;
+  color: var(--ConsultationTopicModalLabel-color)
+}
+
+.consultation-topic .back {
+  background-color: transparent;
+  border: none;
+  display: none;
+  height: 28px;
+  padding: 4px;
+  width: 28px;
+  margin-right: 15px;
+}
+
+.consultation-topic .back .icon {
+  height: 20px;
+  width: 20px;
+  fill: var(--ModalHeaderBackIcon-fill--mobile);
+}
+
+.consultation-topic-body {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .consultation-topic {
+    opacity: 1;
+    right: -100%;
+    left: unset;
+    transition: right 0.25s ease-in-out;
+    z-index: 10;
+  }
+
+  .consultation-topic.active {
+    right: 0;
+  }
+
+  .consultation-topic .icon-close {
+    display: none;
+  }
+
+  .consultation-topic .form {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    background-color: var(--root-backgroundColor);
+    transform: scale(1);
+  }
+
+  .consultation-topic .form .body {
+    padding: 0;
+  }
+
+  .consultation-topic .form-field {
+    display: flex;
+    justify-content: center;
+  }
+
+  .consultation-topic .form-field-input {
+    width: 100%;
+  }
+
+  .consultation-topic .consultation-topic-header {
+    display: flex;
+    align-items: center;
+    background-color: var(--ModalHeader-backgroundColor--mobile);
+    box-shadow: var(--ModalHeader-boxShadow--mobile);
+    padding: 17px 13px;
+    width: 100%;
+  }
+
+  .consultation-topic-body {
+    padding: 0 15px;
+  }
+
+  .consultation-topic .form-field-label {
+    font-size: var(--font-size-xl);
+    font-weight: normal;
+    line-height: 22px;
+  }
+
+  .consultation-topic .form-field-input {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .consultation-topic .back {
+    display: inline-block;
+  }
+
+  .consultation-topic .form .btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .consultation-topic .form .btn-group .btn-join {
+    max-width: 350px;
+    width: 100%;
+  }
+}

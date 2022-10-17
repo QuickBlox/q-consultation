@@ -1,0 +1,28 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.list .spinner {
+  display: block;
+  height: 16px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: -16px;
+  transition: all 0.2s ease;
+}
+
+.list .spinner.active {
+  top: 8px;
+}
+
+.list .list-content {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+}

@@ -1,0 +1,9 @@
+.appointments-screen {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}

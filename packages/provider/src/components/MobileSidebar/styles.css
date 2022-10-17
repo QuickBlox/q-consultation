@@ -1,0 +1,47 @@
+.sidebar-wrapper .sidebar-content {
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  height: 100%;
+  width: 280px;
+  background-color: var(--SidebarContent-backgroundColor);
+  transition: all 0.25s ease-in-out;
+}
+
+.sidebar-wrapper .sidebar-left {
+  left: -100%;
+}
+
+.sidebar-wrapper.open .sidebar-left {
+  left: 0;
+}
+
+.sidebar-wrapper .sidebar-right {
+  right: -100%;
+}
+
+.sidebar-wrapper.open .sidebar-right {
+  right: 0;
+}
+
+.sidebar-wrapper .sidebar-background {
+  background-color: var(--SidebarBackground-backgroundColor);
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.25s linear;
+}
+
+.sidebar-wrapper.open .sidebar-background {
+  opacity: 1;
+  z-index: 2;
+}
+
+@media screen and (max-width: 768px) {
+  .offline .sidebar-wrapper .sidebar-content {
+    top: 41px;
+  }
+}

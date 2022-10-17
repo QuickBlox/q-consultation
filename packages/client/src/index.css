@@ -1,0 +1,78 @@
+html, body {
+  height: 100%;
+  min-width: 330px;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+#app-root {
+  background-color: var(--root-backgroundColor);
+  min-height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+#modal-root {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.error-form {
+  font-size: var(--font-size-lg);
+  line-height: 19px;
+  margin-top: 2px;
+  color: var(--error-color);
+  text-align: center;
+  white-space: normal;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--link-color);
+}
+
+.link:hover {
+  color: var(--link-color--hover);
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+input:disabled, button:disabled {
+  cursor: not-allowed;
+}
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+}
+
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+@media screen and (max-width: 768px) {
+  .m-hidden {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .d-hidden {
+    display: none;
+  }
+}
