@@ -15,12 +15,12 @@ i18n.use(initReactI18next).init({
     en: {
       translation: translations.en,
     },
-    ru: {
-      translation: translations.ru,
+    ua: {
+      translation: translations.ua,
     },
   },
   debug: __DEV__,
-  supportedLngs: ['en', 'ru'],
+  supportedLngs: ['en', 'ua'],
   lng: currentLocale,
   fallbackLng: DEFAULT_LANGUAGE,
   defaultNS: 'translation',
