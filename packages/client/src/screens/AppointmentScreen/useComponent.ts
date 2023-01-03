@@ -47,99 +47,20 @@ export default createUseComponent(() => {
   const isOffline = useIsOffLine()
   const { appointment, myAccountId } = store
   const history = useHistory()
-  const { provider } = useQuery()
   const [chatOpen, setChatOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (
-      (appointment &&
+      appointment &&
         ((appointment.date_end && !appointment.conclusion) ||
-          appointment.client_id !== myAccountId)) ||
-      (!appointmentId && !provider)
+          appointment.client_id !== myAccountId)
     ) {
       history.push(ROOT_ROUTE)
     }
-  }, [appointment, myAccountId, appointmentId, provider])
+  }, [appointment, myAccountId, appointmentId])
 
   useEffect(() => {
-    if (appointmentId) {
-      const path = generatePath(APPOINTMENT_ROUTE, {
-        appointmentId,
-      })
-
-      history.push(path)
-    } else if (!isOffline && provider) {
-      const providerId = Number(provider)
-
-      actions.getAppointments(
-        {
-          client_id: myAccountId,
-          provider_id: providerId,
-          date_end: null,
-          date_start: null,
-          limit: 1,
-        },
-        (actionGetAppointment: QBAppointmentGetSuccessAction) => {
-          const [currentAppointmentId] = Object.keys(
-            actionGetAppointment.payload.entries,
-          )
-
-          if (currentAppointmentId) {
-            const path = generatePath(APPOINTMENT_ROUTE, {
-              appointmentId: currentAppointmentId,
-            })
-
-            history.push(path)
-          } else {
-            actions.createDialog({
-              userId: providerId,
-              then: (actionDialog: QBDialogCreateSuccessAction) => {
-                actions.createAppointment({
-                  client_id: myAccountId,
-                  provider_id: providerId,
-                  dialog_id: actionDialog.payload._id,
-                  description: '',
-                  then: (
-                    actionAppointment: QBAppointmentCreateSuccessAction,
-                  ) => {
-                    const systemMessages = [
-                      {
-                        extension: {
-                          notification_type: DIALOG_NOTIFICATION,
-                          dialog_id: actionDialog.payload._id,
-                        },
-                      },
-                      {
-                        extension: {
-                          notification_type: APPOINTMENT_NOTIFICATION,
-                          appointment_id: actionAppointment.payload._id,
-                        },
-                      },
-                    ]
-
-                    systemMessages.forEach((systemMessage) => {
-                      actions.sendSystemMessage({
-                        dialogId: QB.chat.helpers.getUserJid(providerId),
-                        message: systemMessage,
-                      })
-                    })
-                    const path = generatePath(APPOINTMENT_ROUTE, {
-                      appointmentId: actionAppointment.payload._id,
-                    })
-
-                    history.push(path)
-                  },
-                })
-              },
-            })
-          }
-        },
-      )
-    }
-  }, [isOffline, provider])
-
-  useEffect(() => {
-    if (!isOffline) {
+    if (!isOffline && appointmentId) {
       actions.getAppointments({
         _id: appointmentId,
       })

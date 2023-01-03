@@ -1,0 +1,28 @@
+---
+qb_schema:
+  custom_class_Appointment:
+    name: Appointment
+    fields:
+      provider_id: Integer
+      description: String
+      priority: Integer
+      notes: String
+      dialog_id: String
+      records: Integer_add
+      conclusion: String
+      language: String
+      date_end: Date
+      client_id: Integer
+      date_start: Date
+    permissions:
+      read:
+        access: open
+        primary: true
+      update:
+        access: open
+        primary: true
+      delete:
+        access: open
+      create:
+        access: open
+        primary: true

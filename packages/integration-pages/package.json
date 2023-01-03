@@ -1,0 +1,16 @@
+{
+  "name": "integration-pages",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Injoit LTD",
+    "email": "sales@quickblox.com"
+  },
+  "main": "index.js",
+  "scripts": {
+    "dev": "serve -l 8000 ."
+  },
+  "devDependencies": {
+    "serve": "^14.1.2"
+  }
+}

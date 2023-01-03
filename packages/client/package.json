@@ -1,7 +1,6 @@
 {
-  "name": "queue-demo-client-web",
+  "name": "q-consultation-client",
   "version": "1.2.4",
-  "description": "QuickBlox queue demo (client)",
   "license": "MIT",
   "author": {
     "name": "Injoit LTD",
@@ -11,8 +10,7 @@
   "private": true,
   "scripts": {
     "start": "webpack serve",
-    "build": "node ./bin/build.js",
-    "ci": "npm ci && npm run build",
+    "build": "cross-env NODE_ENV=production webpack",
     "lint": "eslint ./src"
   },
   "lint-staged": {
@@ -53,6 +51,7 @@
     "@types/redux-state-sync": "^3.1.2",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -67,17 +66,17 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "html-webpack-plugin": "^5.3.2",
+    "html-webpack-plugin": "^5.5.0",
     "lint-staged": "^11.1.2",
     "mini-css-extract-plugin": "^2.2.2",
     "style-loader": "^3.2.1",
     "ts-loader": "^9.2.5",
     "typescript": "^4.4.2",
-    "webpack": "^5.52.1",
-    "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.2.0",
-    "webpack-manifest-plugin": "^4.0.2",
-    "workbox-webpack-plugin": "^6.3.0"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1",
+    "webpack-manifest-plugin": "^5.0.0",
+    "workbox-webpack-plugin": "^6.5.4"
   },
   "browserslist": {
     "production": [

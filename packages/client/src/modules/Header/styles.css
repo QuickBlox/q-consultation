@@ -25,7 +25,6 @@
 
 .header .logo .icon {
   height: var(--HeaderLogo-height);
-  width: var(--HeaderLogo-width);
 }
 
 .header .logo a {

@@ -1,5 +1,6 @@
 {
-  "name": "q-consultation",
+  "name": "q-consultation-lite",
+  "version": "1.2.4",
   "license": "MIT",
   "author": {
     "name": "Injoit LTD",
@@ -9,7 +10,7 @@
     "start": "lerna run start",
     "build": "lerna run build",
     "lint": "lerna run lint",
-    "prepare": "node ./bin/prepare.js"
+    "pages": "lerna run --scope integration-pages dev"
   },
   "workspaces": [
     "packages/*"
