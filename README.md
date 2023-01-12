@@ -67,6 +67,10 @@ Main screen:
 Video call:
 ![](/documentation/assets/005.png)
 
+## How to contribute
+
+See more information at [CONTRIBUTING](/documentation/CONTRIBUTING.md)
+
 ## License
 
 See the [LICENSE](/LICENSE) file for licensing information.
