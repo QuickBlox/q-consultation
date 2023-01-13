@@ -11,6 +11,7 @@
   - [Connect to Chat server](#connect-to-chat-server)
   - [Send System message](#send-system-message)
 - [App styling](#app-styling)
+- [Translations](#translations)
 - [Integration pages](#integration-pages)
 
 ## Authentication
@@ -203,6 +204,7 @@ You can fully customize the application style settings. Most used colors are def
 - [packages/provider/src/variables.css](/packages/provider/src/variables.css)
 
 The main set of variables are the following:
+
 Variable | Value | Description
 ---------- | ------------------ | -----------------------------------------------
 --grey-10 | rgba(0, 0, 0, 0.4) | Shadow for header and notifications
@@ -216,6 +218,29 @@ Variable | Value | Description
 --red-5 | #FF4B4B | Color for high priority button / notification
 --green-5 | #00C248 | Color for medium priority button / notification
 --orange-4 | #FFBE30 | Color for low priority button / notification
+
+Svg file is used as a logo. This file can be found in "icons" directory in every packages.
+
+- [packages/client/src/icons/logo.svg](/packages/client/src/icons/logo.svg)
+- [packages/provider/src/icons/logo.svg](/packages/provider/src/icons/logo.svg)
+
+The logo is only used in the Header component.
+When replacing a logo, it may be necessary to change the height of this logo.
+To change the height of the logo, you need to change the value of the css variable `--HeaderLogo-height`
+
+## Translations
+
+The [react-i18next](https://react.i18next.com) library was used to implement the translations.
+
+Translations can be found in "translations" directory in every packages.​
+
+- [packages/client/src/translations](/packages/client/src/translations)
+- [packages/provider/src/translations](/packages/provider/src/translations)
+
+You can add text here with new languages. After adding new languages, be sure to include them in the i18next configuration files.
+
+- [packages/client/src/i18n.ts](/packages/client/src/i18n.ts)
+- [packages/provider/src/i18n.ts](/packages/provider/src/i18n.ts)
 
 ## Integration pages
 
