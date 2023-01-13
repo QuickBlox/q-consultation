@@ -30,7 +30,7 @@ To integrate with Q-Consultation, you first need to initialize the **QuickBlox S
 
 ### Create session
 
-The next step is to create a session. This must be done before login or create user.
+The next step is to create a session. This must be done before login or creating a user.
 
 - iOS: <https://docs.quickblox.com/docs/ios-users#create-user>
 - Android: <https://docs.quickblox.com/docs/android-users#create-user>
@@ -47,14 +47,14 @@ Routes:
 
 `[pathname]` is the path to a specific Q-Consultation page
 
-`[session_token]` is the token from session (<https://docs.quickblox.com/reference/session-model>)
+`[session_token]` is the token from the session (<https://docs.quickblox.com/reference/session-model>)
 
 ### Create user
 
 ![](/documentation/assets/integration/005.png)
 **Sign Up** page in the client application
 
-You can **create a user** on the **Sign Up** page in the client application, but you can create it outside the application using the API or SDK.
+You can **create a user** on the **Sign Up** page in the client application, but you can also create it outside the application using the API or SDK.
 
 Routes:
 
@@ -70,7 +70,7 @@ To create a `provider`, you need to set `user_tags` to `provider` value. For a `
 
 To create a client, you need to leave the `user_tags` field empty. For a client, you can fill in the `custom_data` fields (optional): `address`, `birthdate`, `gender`, `language`, `avatar`.
 
-`custom_data` is an JSON object converted to a string
+`custom_data` is an JSON object converted to a string.
 
 - iOS: <https://docs.quickblox.com/docs/ios-users#create-user>
 - Android: <https://docs.quickblox.com/docs/android-users#create-user>
@@ -95,7 +95,7 @@ Routes:
 - **https://client-website.com/login**
 - **https://provider-website.com/login**
 
-To be able to work with all the data, you need to log in as a user.
+To be able to work with all the data, you need to login as a user.
 
 - iOS: <https://docs.quickblox.com/docs/ios-authentication#log-in-user>
 - Android: <https://docs.quickblox.com/docs/android-authentication#log-in-user>
@@ -120,7 +120,7 @@ Routes:
 - **https://client-website.com/appointment/[appointment_id]**
 - **https://provider-website.com/queue/[appointment_id]**
 
-To create an **Appointment** in Q-Consultation, it is imperative to create a `Dialog`, then create a `Custom object (Appointment)`. If you need to notify your opponent about the created `Appointment`, then you need to send `System messages` to your opponent (for this you need to be connected to the chat)
+To create an **Appointment** in Q-Consultation, it is imperative to create a `Dialog`, then create a `Custom object (Appointment)`. If you need to notify your opponent about the created `Appointment`, then you need to send `System messages` to your opponent (for this you need to be connected to the chat).
 
 ![](/documentation/assets/integration/011.png)
 
@@ -174,7 +174,7 @@ When creating an `Appointment`, it is necessary to specify the fields: `client_i
 
 ### Connect to Chat server
 
-In order to send **System messages** and **Messages to Dialog**, you need to connect to the chat
+In order to send **System messages** and **Messages to Dialog**, you need to connect to the chat.
 
 - iOS: <https://docs.quickblox.com/docs/ios-chat-connection#connect-to-chat-server-with-quickblox-session-token>
 - Android: <https://docs.quickblox.com/docs/android-chat-connection#connect-to-chat-server-with-quickblox-session-token>
@@ -225,7 +225,7 @@ Svg file is used as a logo. This file can be found in "icons" directory in every
 - [packages/provider/src/icons/logo.svg](/packages/provider/src/icons/logo.svg)
 
 The logo is only used in the Header component.
-When replacing a logo, it may be necessary to change the height of this logo.
+When replacing a logo, it may be necessary to change the height of your logo.
 To change the height of the logo, you need to change the value of the css variable `--HeaderLogo-height`
 
 ## Translations
@@ -244,13 +244,15 @@ You can add text here with new languages. After adding new languages, be sure to
 
 ## Integration pages
 
-Integration pages are examples of how you can interact with the Q-Consultation application.
+Integration pages are examples of how your application/website can interact with the Q-Consultation application.
 Now the integration pages use links that lead to the provider's profile.
 
 Link: https://localhost:3001/providers/[provider_id]
 
 In this link, you need to replace `[provider_id]` with the id of the previously created provider.
 
-To run the integration pages locally, you need to run the command: `npm run pages`
+To run the integration pages locally, you need to run the command: `npm run pages`.
 
-This command will run integration pages on <http://localhost:8000> 
+This command will run integration pages on <http://localhost:8000> .
+
+Currently, there are available two integration examples. The source code can be found in the 'packages' folder >> 'integration-pages' (/packages/integration-pages).
