@@ -2,7 +2,6 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const https = require('https');
 const crypto = require('crypto');
-const {EOL} = require('os');
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout,
