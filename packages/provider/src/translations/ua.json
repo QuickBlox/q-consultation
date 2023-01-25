@@ -126,7 +126,6 @@
   "ConfirmPassword": "Підтвердити пароль",
   "RemovePhoto": "Видалити фото",
   "BrowserNotCompatible": "Ваш браузер несумісний з {{name}}",
-  "CompatibleBrowsers": "Сумісні браузери: {{browsers}}",
   "PublicHolidays": "Святкові дні",
   "Appointments": "Призначення",
   "AppointmentDuration": "Тривалість зустрічі",

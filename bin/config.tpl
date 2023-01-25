@@ -10,8 +10,7 @@
   "ENABLE_REDUX_LOGGER": false,
   "CLIENT_APP_URL": "",
   "DEFAULT_PROVIDER_ID": -1,
-  "PROVIDER_TAG": "provider",
   "DEFAULT_LANGUAGE": "en",
-  "FILE_SIZE_LIMIT": 104857600,
+  "FILE_SIZE_LIMIT": 10485760,
   "FILE_EXTENSIONS_WHITELIST": "gif jpeg jpg mov mp4 png csv docx pdf pptx txt xls xlsx zip webm heic heif"
 }

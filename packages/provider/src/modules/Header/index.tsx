@@ -63,7 +63,7 @@ export default function Header(props: HeaderProps) {
         </Link>
       </div>
       <div className={cn('header-nav', 'header-nav-right', { call: onCall })}>
-        {myAccount && (
+        {myAccount && CLIENT_APP_URL && (
           <button
             type="button"
             className="share"

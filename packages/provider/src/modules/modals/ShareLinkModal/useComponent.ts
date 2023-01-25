@@ -1,6 +1,5 @@
 import { MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { generatePath } from 'react-router-dom'
 
 import { createUseComponent, useActions } from '../../../hooks'
 import { toggleShowModal } from '../../../actionCreators'
@@ -8,7 +7,6 @@ import {
   authMyAccountSelector,
   modalShareLinkSelector,
 } from '../../../selectors'
-import { PROVIDERS_CLIENT_ROUTE } from '../../../constants/routes'
 import { createMapStateSelector } from '../../../utils/selectors'
 import useIsOffLine from '../../../hooks/useIsOffLine'
 
@@ -34,7 +32,7 @@ export default createUseComponent((props: ShareLinkModalProps) => {
   const isOffline = useIsOffLine()
 
   const url = myAccount?.id
-    ? generatePath(PROVIDERS_CLIENT_ROUTE, { providerId: myAccount?.id })
+    ? `${CLIENT_APP_URL}/providers/${myAccount.id}`
     : CLIENT_APP_URL
 
   const onCopyButtonClick = async () => {

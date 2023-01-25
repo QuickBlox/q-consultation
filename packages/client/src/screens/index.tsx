@@ -14,7 +14,6 @@ import {
 } from '../selectors'
 import Modal from '../components/Modal'
 import WaitingForNetwork from '../modules/WaitingForNetwork'
-import BrowserCompatibilityModal from '../modules/modals/BrowserCompatibilityModal'
 import { createMapStateSelector } from '../utils/selectors'
 import LanguageModal from '../modules/modals/LanguageModal'
 import Loader from '../components/Loader'
@@ -90,7 +89,6 @@ export default function RootRoute() {
       <WaitingForNetwork />
       {hasSession && myAccount ? <RootScreen /> : <AuthScreen />}
       <Modal>
-        <BrowserCompatibilityModal />
         <LanguageModal />
       </Modal>
     </>

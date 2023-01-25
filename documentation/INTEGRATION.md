@@ -205,19 +205,19 @@ You can fully customize the application style settings. Most used colors are def
 
 The main set of variables are the following:
 
-Variable | Value | Description
----------- | ------------------ | -----------------------------------------------
---grey-10 | rgba(0, 0, 0, 0.4) | Shadow for header and notifications
---grey-11 | rgba(0, 0, 0, 0.8) | Backdrop color for modal dialogs
---blue-3 | #CCD0D9 | Border color
---blue-9 | #3978FC | Theme main color
---blue-5 | #99A9C6 | Theme secondary color
---grey-8 | #333333 | Primary text
---blue-7 | #6C7A92 | Secondary text
---red-4 | red | Errors text
---red-5 | #FF4B4B | Color for high priority button / notification
---green-5 | #00C248 | Color for medium priority button / notification
---orange-4 | #FFBE30 | Color for low priority button / notification
+| Variable   | Value              | Description                                     |
+| ---------- | ------------------ | ----------------------------------------------- |
+| --grey-10  | rgba(0, 0, 0, 0.4) | Shadow for header and notifications             |
+| --grey-11  | rgba(0, 0, 0, 0.8) | Backdrop color for modal dialogs                |
+| --blue-3   | #CCD0D9            | Border color                                    |
+| --blue-9   | #3978FC            | Theme main color                                |
+| --blue-5   | #99A9C6            | Theme secondary color                           |
+| --grey-8   | #333333            | Primary text                                    |
+| --blue-7   | #6C7A92            | Secondary text                                  |
+| --red-4    | red                | Errors text                                     |
+| --red-5    | #FF4B4B            | Color for high priority button / notification   |
+| --green-5  | #00C248            | Color for medium priority button / notification |
+| --orange-4 | #FFBE30            | Color for low priority button / notification    |
 
 Svg file is used as a logo. This file can be found in "icons" directory in every packages.
 

@@ -18,6 +18,7 @@ module.exports = () => {
     SECOND: JSON.stringify(1000),
     MINUTE: JSON.stringify(60000),
     HOUR: JSON.stringify(3600000),
+    PROVIDER_TAG: JSON.stringify("provider"),
   }
   Object.keys(appConfig).forEach((key) => {
     if (

@@ -13,7 +13,6 @@ import {
   qbLoadingSelector,
 } from '../selectors'
 import Modal from '../components/Modal'
-import BrowserCompatibilityModal from '../modules/modals/BrowserCompatibilityModal'
 import LanguageModal from '../modules/modals/LanguageModal'
 import Sound from '../modules/Sound'
 import { init } from '../actionCreators'
@@ -98,7 +97,6 @@ export default function RootRoute() {
       </Switch>
       <Sound />
       <Modal>
-        <BrowserCompatibilityModal />
         <LanguageModal />
       </Modal>
     </>
