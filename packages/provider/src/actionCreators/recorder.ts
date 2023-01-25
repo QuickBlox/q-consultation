@@ -47,7 +47,7 @@ export function getRecordsFailure(error: string): Types.GetRecordsFailure {
 }
 
 export function uploadRecord(payload: {
-  blob: Blob
+  file: File
   appointmentId?: QBAppointment['_id']
 }): Types.UploadRecordRequest {
   return { type: Types.UPLOAD_RECORD_REQUEST, payload }

@@ -6,6 +6,7 @@ export type ModalReducer = {
   providerId?: QBUser['id']
   clientId?: QBUser['id']
   appointmentId?: QBAppointment['_id']
+  file?: File
 }
 
 const initialState: ModalReducer = {
@@ -21,6 +22,7 @@ const initialState: ModalReducer = {
   LanguageModal: false,
   CameraModal: false,
   AppointmentDetailsModal: false,
+  SaveRecordModal: false,
 }
 
 type ModalAction =
@@ -37,6 +39,7 @@ export default (state = initialState, action: ModalAction) => {
         providerId: action.payload.providerId,
         clientId: action.payload.clientId,
         appointmentId: action.payload.appointmentId,
+        file: action.payload.file,
       }
     case Types.LOGOUT_SUCCESS:
     case Types.QB_INIT_FAILURE:

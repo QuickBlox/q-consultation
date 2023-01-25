@@ -27,6 +27,7 @@ import {
   recordError,
   uploadRecordFailure,
   uploadRecordSuccess,
+  toggleShowModal,
 } from '../actionCreators'
 import {
   callAppointmentIdSelector,
@@ -53,7 +54,7 @@ function* getRecords(action: Types.GetRecordsRequest) {
 
 function* uploadRecord(action: Types.UploadRecordRequest) {
   try {
-    const { appointmentId, blob } = action.payload
+    const { appointmentId, file } = action.payload
     const selector = createAppointmentByIdSelector(appointmentId)
     const selectedAppointment: ReturnType<typeof selector> = yield select(
       selector,
@@ -68,12 +69,6 @@ function* uploadRecord(action: Types.UploadRecordRequest) {
           position: 'bottom-center',
         }),
       )
-      const lastModified = new Date()
-      const name = `${lastModified.toISOString()}.webm`
-      const file = new File([blob], name, {
-        type: 'video/webm',
-        lastModified: lastModified.valueOf(),
-      })
 
       yield put(uploadFile(file, 'record'))
       const { success } = yield race({
@@ -107,22 +102,33 @@ function createQBRecorderEventChannel(
   recorder: QBMediaRecorder,
   appointmentId?: QBAppointment['_id'],
 ) {
-  return eventChannel<Types.RecordError | Types.UploadRecordRequest>(
-    (emitter) => {
-      // eslint-disable-next-line no-param-reassign
-      recorder.callbacks.onerror = (e) => {
-        const errorMessage = stringifyError(e)
+  return eventChannel<
+    Types.RecordError | Types.UploadRecordRequest | Types.ToggleShowModalAction
+  >((emitter) => {
+    // eslint-disable-next-line no-param-reassign
+    recorder.callbacks.onerror = (e) => {
+      const errorMessage = stringifyError(e)
 
-        emitter(recordError(errorMessage))
-      }
-      // eslint-disable-next-line no-param-reassign
-      recorder.callbacks.onstop = (blob) => {
-        emitter(uploadRecordRequest({ appointmentId, blob }))
-      }
+      emitter(recordError(errorMessage))
+    }
+    // eslint-disable-next-line no-param-reassign
+    recorder.callbacks.onstop = (blob) => {
+      const lastModified = new Date()
+      const name = `${lastModified.toISOString()}.webm`
+      const file = new File([blob], name, {
+        type: 'video/webm',
+        lastModified: lastModified.valueOf(),
+      })
 
-      return () => undefined
-    },
-  )
+      if (file.size > FILE_SIZE_LIMIT) {
+        emitter(toggleShowModal({ modal: 'SaveRecordModal', file }))
+      } else {
+        emitter(uploadRecordRequest({ appointmentId, file }))
+      }
+    }
+
+    return () => undefined
+  })
 }
 
 function* handleQBMediaRecorderEvents(recorder: QBMediaRecorder) {

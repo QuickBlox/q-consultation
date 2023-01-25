@@ -29,6 +29,7 @@ import HistoryScreen from '../HistoryScreen'
 import useComponent from './useComponent'
 import './styles.css'
 import EditNotesModal from '../../modules/modals/EditNotesModal'
+import SaveRecordModal from '../../modules/modals/SaveRecordModal'
 
 export default function MainScreen() {
   const {
@@ -84,6 +85,7 @@ export default function MainScreen() {
         <FinishModal />
         <Notifications />
         <SkipModal />
+        <SaveRecordModal />
         <AppointmentDetailsModal />
       </Modal>
     </main>

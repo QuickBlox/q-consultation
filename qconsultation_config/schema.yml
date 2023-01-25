@@ -8,7 +8,7 @@ qb_schema:
       priority: Integer
       notes: String
       dialog_id: String
-      records: Integer_add
+      records: Integer_a
       conclusion: String
       language: String
       date_end: Date

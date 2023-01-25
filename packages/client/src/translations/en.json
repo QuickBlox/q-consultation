@@ -94,7 +94,6 @@
   "ConclusionReady": "Your appointment summary is available!",
   "PleaseRegister": "If you liked Q-consultation, please register to access the application's full functionality.",
   "BackToMainScreen": "Back to main screen",
-  "BrowserNotCompatible": "Your browser isn't compatible with {{name}}",
   "ActivateSoundNotification": "Due to the web browser restricting audio playback if the user has not interacted with the site, this notification will be shown the next time the page is refreshed.",
   "StartChatNow": "Start chat now",
   "SeeMore": "See full biography",

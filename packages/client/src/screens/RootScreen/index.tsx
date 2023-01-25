@@ -18,7 +18,6 @@ import LeaveQueueModal from '../../modules/modals/LeaveQueueModal'
 import CallModal from '../../modules/modals/CallModal'
 import ConsultationTopicModal from '../../modules/modals/ConsultationTopicModal'
 import ProviderBiographyModal from '../../modules/modals/ProviderBiographyModal'
-import Sound from '../../modules/Sound'
 
 import AppointmentScreen from '../AppointmentScreen'
 import ProvidersScreen from '../ProvidersScreen'
@@ -55,7 +54,6 @@ export default function RootScreen() {
         <Header />
         {renderContent()}
       </div>
-      <Sound />
       <Modal>
         <LeaveQueueModal />
         <CallModal />

@@ -61,7 +61,7 @@ export interface GetRecordsFailure extends Action {
 export interface UploadRecordRequest extends Action {
   type: typeof UPLOAD_RECORD_REQUEST
   payload: {
-    blob: Blob
+    file: File
     appointmentId?: QBAppointment['_id']
   }
 }

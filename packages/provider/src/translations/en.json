@@ -122,7 +122,6 @@
   "NewPassword": "New password",
   "ConfirmPassword": "Confirm password",
   "RemovePhoto": "Remove photo",
-  "BrowserNotCompatible": "Your browser isn't compatible with {{name}}",
   "PublicHolidays": "Public holidays",
   "Appointments": "Appointments",
   "AppointmentDuration": "Appointment duration",
@@ -133,6 +132,9 @@
   "GetConsultationLinkFormSMS": "Hello! To start your consultation with \"{name}\", please follow the link {link} and fill out the form.",
   "LinkVariableMissing": "{link} variable is missing. Without it user will not be able to start conversation with provider.",
   "UploadNotClose": "Don’t close the window until the recording is uploaded.",
+  "DownloadConsultationRecording": "Download consultation recording?",
+  "VideoRecordingNotBeSaved": "The video recording exceeds the file size available for storage in {{name}}, but you can download it.",
+  "RecordingName": "Recording name",
 
   "UNAUTHORIZED": "Unauthorized",
   "REQUIRED": "Required",

@@ -18,6 +18,7 @@ import { createMapStateSelector } from '../utils/selectors'
 import LanguageModal from '../modules/modals/LanguageModal'
 import Loader from '../components/Loader'
 import Header from '../modules/Header'
+import Sound from '../modules/Sound'
 
 const selector = createMapStateSelector({
   ready: qbReadySelector,
@@ -88,6 +89,7 @@ export default function RootRoute() {
     <>
       <WaitingForNetwork />
       {hasSession && myAccount ? <RootScreen /> : <AuthScreen />}
+      <Sound />
       <Modal>
         <LanguageModal />
       </Modal>

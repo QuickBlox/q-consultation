@@ -125,7 +125,6 @@
   "NewPassword": "Новий пароль",
   "ConfirmPassword": "Підтвердити пароль",
   "RemovePhoto": "Видалити фото",
-  "BrowserNotCompatible": "Ваш браузер несумісний з {{name}}",
   "PublicHolidays": "Святкові дні",
   "Appointments": "Призначення",
   "AppointmentDuration": "Тривалість зустрічі",
@@ -135,6 +134,10 @@
   "GetConsultationLinkWithNameSMS": "Доброго дня! Щоб розпочати консультацію \"{name}\", перейдіть за посиланням {{link}}",
   "GetConsultationLinkFormSMS": "Доброго дня! Щоб розпочати консультацію \"{name}\", перейдіть за посиланням {{link}} та заповніть форму.",
   "LinkVariableMissing": "Змінна {link} відсутня. Без неї користувач не зможе розпочати розмову із провайдером.",
+  "DownloadConsultationRecording": "Завантажити запис консультації?",
+  "VideoRecordingNotBeSaved": "Відеозапис перевищує розмір файлу, доступний для зберігання в {{name}}, але ви можете завантажити його.",
+  "RecordingName": "Ім'я запису",
+
   "UploadNotClose": "Не закривайте вікно, поки запис не буде завантажено.",
   "UNAUTHORIZED": "Неавторизований",
   "REQUIRED": "Обов'язково",
