@@ -10,12 +10,14 @@
     "start": "lerna run start",
     "build": "lerna run build",
     "lint": "lerna run lint",
-    "pages": "lerna run --scope integration-pages dev"
+    "pages": "lerna run --scope integration-pages dev",
+    "configure": "node ./bin/configure.js"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
+    "js-yaml": "^4.1.0",
     "lerna": "^6.0.1",
     "prettier": "^2.4.0"
   }
