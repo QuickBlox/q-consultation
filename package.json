@@ -11,7 +11,7 @@
     "build": "lerna run build",
     "lint": "lerna run lint",
     "pages": "lerna run --scope integration-pages dev",
-    "configure": "node ./configure.js"
+    "configure": "node ./bin/configure.js"
   },
   "workspaces": [
     "packages/*"
