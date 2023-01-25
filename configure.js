@@ -18,7 +18,7 @@ const qcAppointmentSchemaFileLocation = './qconsultation_config/schema.yml';
         let credentials = await getAccountOwnerCredentials();
         let token = await authorize(credentials, config);
         await createAppointmentSchema(schema, token, config);
-        console.log('Appointment data scheme created successfully.');
+        console.log('Appointment data schema created successfully.');
     } catch (e) {
         console.log("Error:");
         console.error(e);
