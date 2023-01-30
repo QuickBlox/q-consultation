@@ -9,7 +9,6 @@
   "QB_SDK_CONFIG_ICE_SERVERS": [],
   "ENABLE_REDUX_LOGGER": false,
   "CLIENT_APP_URL": "",
-  "DEFAULT_PROVIDER_ID": -1,
   "DEFAULT_LANGUAGE": "en",
   "FILE_SIZE_LIMIT": 10485760,
   "FILE_EXTENSIONS_WHITELIST": "gif jpeg jpg mov mp4 png csv docx pdf pptx txt xls xlsx zip webm heic heif"

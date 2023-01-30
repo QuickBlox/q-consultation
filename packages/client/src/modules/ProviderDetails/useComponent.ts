@@ -8,6 +8,7 @@ import {
   authMyAccountIdSelector,
   createAppointmentWaitingByProviderIdSelector,
   createUsersByIdSelector,
+  usersListSelector,
   usersLoadingSelector,
 } from '../../selectors'
 import {
@@ -18,7 +19,7 @@ import {
 import { createUseComponent, useActions } from '../../hooks'
 import { APPOINTMENT_ROUTE } from '../../constants/routes'
 import { parseUserCustomData } from '../../utils/user'
-import { createMapStateSelector } from '../../utils/selectors'
+import { combineSelectors } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
 
 export interface ProviderDetailsProps {
@@ -26,17 +27,23 @@ export interface ProviderDetailsProps {
   onBack: VoidFunction
 }
 
-const createSelector = (providerId: QBUser['id']) =>
-  createMapStateSelector({
+const createSelector = (providerId?: QBUser['id']) =>
+  combineSelectors({
     myAccountId: authMyAccountIdSelector,
-    user: createUsersByIdSelector(providerId),
-    appointment: createAppointmentWaitingByProviderIdSelector(providerId),
     usersLoading: usersLoadingSelector,
     appointmentLoading: appointmentLoadingSelector,
+    providers: usersListSelector,
+  }, ({ providers }) => {
+    const [firstProvider] = providers
+
+    return {
+      user: createUsersByIdSelector(providerId || firstProvider?.id),
+      appointment: createAppointmentWaitingByProviderIdSelector(providerId || firstProvider?.id),
+    }
   })
 
 export default createUseComponent((props: ProviderDetailsProps) => {
-  const { providerId = DEFAULT_PROVIDER_ID } = props
+  const { providerId } = props
   const selector = createSelector(providerId)
   const store = useSelector(selector)
   const actions = useActions({

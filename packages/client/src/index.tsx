@@ -58,7 +58,6 @@ declare global {
   export const QB_SDK_CONFIG_ICE_SERVERS: Array<RTCIceServer>
 
   export const ENABLE_REDUX_LOGGER: boolean
-  export const DEFAULT_PROVIDER_ID: number
   export const PROVIDER_TAG: string
   export const DEFAULT_LANGUAGE: string
   export const FILE_SIZE_LIMIT: number

@@ -135,8 +135,6 @@ You will need to update the following keys with your credentials:
  "ENABLE_REDUX_LOGGER": false,
  // URL of the client application. Used by Share Link modal. (If not set, then Share Link will not be displayed in the application)
  "CLIENT_APP_URL": "",
- // [Required] userId of the provider that will be opened by default on the main page
- "DEFAULT_PROVIDER_ID": -1,
  // [Required] Default language (en / ua)
  "DEFAULT_LANGUAGE": "en",
  // [Required] File upload limit in bytes
