@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const util = require('util')
 const yaml = require('js-yaml')
 const https = require('https')
 const crypto = require('crypto')
@@ -7,78 +8,52 @@ const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 })
+const getConfig = require('./config')
 
-const qbDefaultApiEndpoint = 'api.quickblox.com'
-const qcConfigFileLocation = path.resolve(__dirname, '..', 'qconsultation_config', 'config.json')
+const readFile = util.promisify(fs.readFile)
+
 const qcAppointmentSchemaFileLocation = path.resolve(__dirname, '..','qconsultation_config','schema.yml')
 
-function getAccountOwnerCredentials() {
+function readlineQuestion(text, writeToOutput) {
   return new Promise((resolve) => {
-    readline.question(
-      `Please enter your QuickBlox account owner email:\n`,
-      (email) => {
-        readline.question(
-          `Please enter your QuickBlox account owner password:\n`,
-          (password) => {
-            readline.close()
-            resolve({ email, password })
-          },
-        )
-        // Hide password
-        readline._writeToOutput = function _writeToOutput(stringToWrite) {
-          if (stringToWrite !== '\r\n') {
-            readline.output.write('*')
-          } else {
-            readline.output.write(stringToWrite)
-          }
-        }
-      },
-    )
+    readline.question(text, (res) => {
+      resolve(res)
+    })
+    if (writeToOutput) {
+      readline._writeToOutput = writeToOutput
+    }
   })
 }
 
-function getConfigFromConfigFile(configLocation) {
-  const rawConfig = fs.readFileSync(configLocation)
-  const config = JSON.parse(rawConfig)
+async function getAccountOwnerCredentials() {
+  const email = await readlineQuestion(`Please enter your QuickBlox account owner email:\n`)
+  const password = await readlineQuestion(`Please enter your QuickBlox account owner password:\n`, (stringToWrite) => {
+    if (stringToWrite !== '\r\n') {
+      readline.output.write('*')
+    } else {
+      readline.output.write(stringToWrite)
+    }
+  })
 
-  // Check config
-  if (
-    config.QB_SDK_CONFIG_APP_ID === -1 ||
-    config.QB_SDK_CONFIG_AUTH_KEY.length === 0 ||
-    config.QB_SDK_CONFIG_AUTH_SECRET.length === 0
-  ) {
-    console.error(`${qcConfigFileLocation} file is empty.`)
-    process.exit(1)
-  }
-
-  // Check api endpoint
-  if (config.QB_SDK_CONFIG_ENDPOINTS_API.length === 0) {
-    config.QB_SDK_CONFIG_ENDPOINTS_API = qbDefaultApiEndpoint
-  }
-
-  return {
-    appId: config.QB_SDK_CONFIG_APP_ID,
-    authKey: config.QB_SDK_CONFIG_AUTH_KEY,
-    authSecret: config.QB_SDK_CONFIG_AUTH_SECRET,
-    apiEndpoint: config.QB_SDK_CONFIG_ENDPOINTS_API,
-  }
+  return { email, password }
 }
 
-function getAppointmentsSchema(schemaLocation) {
-  const doc = yaml.load(fs.readFileSync(schemaLocation, 'utf8'))
+async function getAppointmentsSchema(schemaLocation) {
+  const schema = await readFile(schemaLocation, 'utf8')
+  const doc = yaml.load(schema)
 
   return doc.qb_schema.custom_class_Appointment
 }
 
-function generateAuthMsg(authCreds, config) {
+function generateAuthMsg(authCredentials, config) {
   return {
-    application_id: config.appId,
-    auth_key: config.authKey,
+    application_id: config.QB_SDK_CONFIG_APP_ID,
+    auth_key: config.QB_SDK_CONFIG_AUTH_KEY,
     nonce: Math.floor(Math.random() * 10000),
     timestamp: Math.floor(Date.now() / 1000),
     user: {
-      email: authCreds.email,
-      password: authCreds.password,
+      email: authCredentials.email,
+      password: authCredentials.password,
     },
   }
 }
@@ -109,15 +84,15 @@ function signMessage(message, secret) {
   return signedMessage
 }
 
-function authorize(authCreds, config) {
-  const message = generateAuthMsg(authCreds, config)
-  const signedMessage = signMessage(message, config.authSecret)
+function authorize(authCredentials, config) {
+  const message = generateAuthMsg(authCredentials, config)
+  const signedMessage = signMessage(message, config.QB_SDK_CONFIG_AUTH_SECRET)
 
   message.signature = signedMessage
 
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: config.apiEndpoint,
+      hostname: config.QB_SDK_CONFIG_ENDPOINT_API,
       port: 443,
       path: '/session.json',
       method: 'POST',
@@ -146,10 +121,10 @@ function authorize(authCreds, config) {
   })
 }
 
-function createAppointmentSchema(schema, token, config) {
+function uploadAppointmentSchema(schema, token, config) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: config.apiEndpoint,
+      hostname: config.QB_SDK_CONFIG_ENDPOINT_API,
       port: 443,
       path: '/class.json',
       method: 'POST',
@@ -190,18 +165,28 @@ function createAppointmentSchema(schema, token, config) {
 
 async function bootstrap() {
   try {
-    const config = getConfigFromConfigFile(qcConfigFileLocation)
-    const schema = getAppointmentsSchema(qcAppointmentSchemaFileLocation)
+    const config = getConfig()
     const credentials = await getAccountOwnerCredentials()
-    const token = await authorize(credentials, config)
 
-    await createAppointmentSchema(schema, token, config)
-    console.log('Appointment data schema created successfully.')
+    const [schema, token] = await Promise.all([
+      getAppointmentsSchema(qcAppointmentSchemaFileLocation),
+      authorize(credentials, config)
+    ])
+    await uploadAppointmentSchema(schema, token, config)
+
+    process.exit(0)
   } catch (e) {
     console.log('Error:')
-    console.error(e)
-  } finally {
-    process.exit(0)
+
+    if (typeof e === 'object' && e.statusCode === 422) {
+      console.error('Appointment schema is already taken!')
+    } else if (typeof e === 'object' && e.statusCode === 401) {
+      console.error('Incorrect email or password!')
+    } else {
+      console.error(e.message)
+    }
+
+    process.exit(1)
   }
 }
 

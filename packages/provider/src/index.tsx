@@ -53,8 +53,8 @@ declare global {
   export const QB_SDK_CONFIG_AUTH_SECRET: string
   export const QB_SDK_CONFIG_ACCOUNT_KEY: string
   export const QB_SDK_CONFIG_DEBUG: boolean
-  export const QB_SDK_CONFIG_ENDPOINTS_API: string | undefined
-  export const QB_SDK_CONFIG_ENDPOINTS_CHAT: string | undefined
+  export const QB_SDK_CONFIG_ENDPOINT_API: string | undefined
+  export const QB_SDK_CONFIG_ENDPOINT_CHAT: string | undefined
   export const QB_SDK_CONFIG_ICE_SERVERS: Array<RTCIceServer>
 
   export const ENABLE_REDUX_LOGGER: boolean

@@ -5,9 +5,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 
+const getConfig = require('../../bin/config')
 const packageInfo = require('./package.json')
-const appConfig = require('../../bin/config')
 const manifest = require('./public/manifest.json')
+
+let appConfig
+
+try {
+  appConfig = getConfig()
+} catch (error) {
+  console.error(error.message);
+  process.exit(1)
+}
 
 module.exports = () => {
   const isProduction = process.env.NODE_ENV === 'production'

@@ -41,12 +41,12 @@ export default function RootRoute() {
         webrtc: {},
       }
 
-      if (QB_SDK_CONFIG_ENDPOINTS_API) {
-        config.endpoints.api = QB_SDK_CONFIG_ENDPOINTS_API
+      if (QB_SDK_CONFIG_ENDPOINT_API) {
+        config.endpoints.api = QB_SDK_CONFIG_ENDPOINT_API
       }
 
-      if (QB_SDK_CONFIG_ENDPOINTS_CHAT) {
-        config.endpoints.chat = QB_SDK_CONFIG_ENDPOINTS_CHAT
+      if (QB_SDK_CONFIG_ENDPOINT_CHAT) {
+        config.endpoints.chat = QB_SDK_CONFIG_ENDPOINT_CHAT
       }
 
       if (QB_SDK_CONFIG_ICE_SERVERS.length) {

@@ -4,9 +4,8 @@
   - [II - Install dependencies](#ii---install-dependencies)
   - [III - Register QuickBlox account](#iii---register-quickblox-account)
   - [IV - Create QuickBlox application](#iv---create-quickblox-application)
-  - [V - Create a default provider](#v---create-a-default-provider)
-  - [VI - Configure application](#vi---configure-application)
-  - [VII - Appointments](#vii---appointments)
+  - [V - Configure application](#v---configure-application)
+  - [VI - Appointments](#vi---appointments)
 - [Available Scripts](#available-scripts)
   - [Start dev server](#start-dev-server-npm-start)
   - [Build application for Production](#build-application-for-production-npm-run-build)
@@ -80,37 +79,21 @@ Once done, you will be redirected to the **Overview** page of your newly created
 
 > You can read more about working with applications here: <https://docs.quickblox.com/docs/application>
 
-### V - Create a default provider
-
-The Q-Consultation app has two roles: Provider and Client.
-Clients can register their own accounts via the Q-Consultation application.
-However, the app doesn’t originally provide self-registration features for Providers.
-A Provider should be created by the app administrator, you, via QuickBlox admin panel or QuickBlox API.
-
-Currently, it’s important that you create one Provider for being a default Provider. If there is no default Provider, then the Client web application will constantly send API requests to the the QuickBlox server for the Provider to show as a default. Later, you are free to change this logic in the code.
-
-In order to create a Provider, complete the steps bellow:
-
-1. If you are on the **Overview** page of your QuickBlox application, go to the tab **Users**;
-2. Choose **Add new user**.
-3. Fill in user data (Full Name, email address or login, password, confirm password) and set a Tag `provider`, choose **Yes** for **I’m over 16** and click **Add user**.
-
-When a user is created, it will show its ID. You will need this `user_id` later.
-
-![](/documentation/assets/start/004.png)
-![](/documentation/assets/start/005.png)
-![](/documentation/assets/start/006.png)
-![](/documentation/assets/start/007.png)
-
-> You can read more about working with users here: <https://docs.quickblox.com/docs/users-dashboard>
-
-### VI - Configure application
+### V - Configure application
 
 Now, let’s get back to the application credentials which you saw in the QuickBlox admin panel. In order to work correctly application need to know a set of configs.
 
-In the project directory, you will find a **"qconsultation_config"** folder, and there is [**"config.json"**](/qconsultation_config/config.json) file.
+You can create a configuration file by running this command and following the instructions in the terminal:
 
-You will need to update the following keys with your credentials:
+```bash
+npm run init:config
+```
+
+![](/documentation/assets/start/config.jpeg)
+
+You can also manually add the [**"config.json"**](/qconsultation_config/config.json) file to the **"qconsultation_config"** folder.
+
+You will need to set the following keys with your credentials:
 
 ```json
 {
@@ -125,13 +108,13 @@ You will need to update the following keys with your credentials:
  // Should QuickBlox JS SDK work in debug mode (logging enabled)
  "QB_SDK_CONFIG_DEBUG": false,
  // [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom API endpoint
- "QB_SDK_CONFIG_ENDPOINTS_API": "",
+ "QB_SDK_CONFIG_ENDPOINT_API": "",
  // [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom chat endpoint
- "QB_SDK_CONFIG_ENDPOINTS_CHAT": "",
+ "QB_SDK_CONFIG_ENDPOINT_CHAT": "",
  // [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom ICE servers
  "QB_SDK_CONFIG_ICE_SERVERS": [],
 ​
- // enable redux-logger
+ // Enable redux-logger
  "ENABLE_REDUX_LOGGER": false,
  // URL of the client application. Used by Share Link modal. (If not set, then Share Link will not be displayed in the application)
  "CLIENT_APP_URL": "",
@@ -171,17 +154,17 @@ If you have QuickBlox Basic plan (Shared server), you can skip the following ste
 
 For more details on the format see [RTCIceServer docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer).
 
-### VII - Appointments
+### VI - Appointments
 
 To make online appointments work in the Q-Consultation app, it’s necessary to import an appointment schema file to the QuickBlox admin panel.
 
 You can add the schema automatically by running this command and following the instructions in the terminal.
 
 ```bash
-npm run configure
+npm run init:schema
 ```
 
-![](/documentation/assets/start/configure.jpeg)
+![](/documentation/assets/start/schema.jpeg)
 
 You can also add a scheme manually through the [Admin Panel](https://admin.quickblox.com).
 

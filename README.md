@@ -17,6 +17,7 @@ Q-Consultation is a web application for online chat and video consultations. The
 
 - [Start guide](/documentation/START.md)
 - [Integration guide](/documentation/INTEGRATION.md)
+- [Contributing](/documentation/CONTRIBUTING.md)
 
 ## Features list
 
