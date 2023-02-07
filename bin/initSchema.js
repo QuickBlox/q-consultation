@@ -173,6 +173,7 @@ async function bootstrap() {
       authorize(credentials, config)
     ])
     await uploadAppointmentSchema(schema, token, config)
+    console.log('Appointment data schema created successfully.')
 
     process.exit(0)
   } catch (e) {

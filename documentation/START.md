@@ -166,6 +166,8 @@ npm run init:schema
 
 ![](/documentation/assets/start/schema.jpeg)
 
+> If you have created a QuickBlox account via Google or GitHub and you do not have a password, then this option for adding a schema is not suitable for you and you need to add it manually.
+
 You can also add a scheme manually through the [Admin Panel](https://admin.quickblox.com).
 
 You will find the [**schema.yml**](/qconsultation_config/schema.yml) file in the **qconsultation_config** folder of the project directory.
