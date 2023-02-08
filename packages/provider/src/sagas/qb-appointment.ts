@@ -77,11 +77,16 @@ function* updateAppointment(action: Types.QBAppointmentUpdateRequestAction) {
       _id,
       data,
     )
+    const myAccountId: SagaReturnType<typeof authMyAccountIdSelector> =
+      yield select(authMyAccountIdSelector)
 
     const history: Array<QBAppointment['_id']> = []
     const liveQueue: Array<QBAppointment['_id']> = []
+    const filterIds: Array<QBAppointment['_id']> = []
 
-    if (response.date_end) {
+    if (response.provider_id !== myAccountId) {
+      filterIds.push(response._id)
+    } else if (response.date_end) {
       history.push(response._id)
     } else if (!response.date_start) {
       liveQueue.push(response._id)
@@ -91,6 +96,7 @@ function* updateAppointment(action: Types.QBAppointmentUpdateRequestAction) {
       appointment: response,
       history,
       liveQueue,
+      filterIds,
     })
 
     yield put(success)

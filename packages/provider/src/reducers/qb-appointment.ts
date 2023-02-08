@@ -79,7 +79,7 @@ export default (
       return newState
     }
     case Types.QB_APPOINTMENT_UPDATE_SUCCESS: {
-      const { appointment, liveQueue, history } = action.payload
+      const { appointment, liveQueue, history, filterIds } = action.payload
 
       const newState = {
         ...state,
@@ -94,7 +94,11 @@ export default (
         newState.liveQueue,
       )
 
-      newState.liveQueue = difference(newState.liveQueue, historyIntersaction)
+      newState.liveQueue = difference(
+        newState.liveQueue,
+        historyIntersaction,
+        filterIds,
+      )
 
       return newState
     }

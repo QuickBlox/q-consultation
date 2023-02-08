@@ -44,6 +44,7 @@ export function updateAppointmentSuccess(payload: {
   myAccountId?: QBUser['id']
   history: Array<QBAppointment['_id']>
   liveQueue: Array<QBAppointment['_id']>
+  filterIds: Array<QBAppointment['_id']>
 }): Types.QBAppointmentUpdateSuccessAction {
   return { type: Types.QB_APPOINTMENT_UPDATE_SUCCESS, payload }
 }
