@@ -12,7 +12,7 @@
   - [Check code](#check-code-npm-run-lint)
 - [What to do next?](#⏩-what-to-do-next)
 
-[![Q-Consultation Lite: Application Launch Tutorial](/documentation/assets/start/video-tutorial.jpg)](https://www.youtube.com/watch?v=BOJZS_LFGFE)
+[![Q-Consultation Lite: Application Launch Tutorial](/documentation/assets/start/video-tutorial.jpg)](https://youtu.be/-nEoba8vq_I)
 
 Before you start, there are a few things you need to know ahead.
 
