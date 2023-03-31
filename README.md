@@ -11,7 +11,9 @@
 
 ## Introduction
 
-Q-Consultation is a web application for online chat and video consultations. The application is built on React JS and consists of three major parts: QuickBlox back-end and two web applications for [Client](#client-application-interface) and [Provider](#provider-application-interface).
+Q-Consultation is a web application for online chat and video consultations. The app provides code to build a secure means to hold virtual private meetings and video calls and messaging across a multitude of use cases including telehealth, recruitment, social engagement, finance, online education, e-commerce, and more. The application is built on React JS and consists of three major parts: QuickBlox back-end and two web applications for [Client](#client-application-interface) and [Provider](#provider-application-interface).
+
+To learn more about the app features visit: <https://quickblox.com/products/qconsultation>.
 
 ## Documentation
 
