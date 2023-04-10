@@ -69,5 +69,18 @@ export default function MessageBody({ message }: MessageBodyProps) {
     )
   }
 
-  return <div className="body">{message.message}</div>
-}
+  return (
+    <div
+      className="body"
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: message.message.replace(
+          /(https?:\/\/)?([\p{L}\p{N}_-]+(?:(?:\.[\p{L}\p{N}_-]+)+)[\p{L}\p{N}.,@?^=%&:/~+#-]*[\p{L}\p{N}@?^=%&/~+#-])/gu,
+          (url, protocol, path) =>
+            `<a href="${
+              protocol || typeof path !== 'string' ? url : `http://${path}`
+            }" rel="noopener noreferrer" target="_blank">${url}</a>`,
+        ),
+      }}
+    />
+  )}

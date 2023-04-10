@@ -91,6 +91,11 @@
   word-break: break-word;
 }
 
+.messages-container .message .body > a:any-link {
+  text-decoration: underline;
+  color: inherit;
+}
+
 .messages-container .my.message .body {
   background-color: var(--ChatMessageBody-backgroundColor--my);
   border-radius: 22px 22px 0 22px;
