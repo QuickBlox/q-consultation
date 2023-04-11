@@ -1,15 +1,5 @@
 import * as Types from '../actions'
 
-export function getAppointments(payload: {
-  filters: Dictionary<unknown>
-  reset?: Types.AppointmentReset
-}): Types.QBAppointmentGetRequestAction {
-  return {
-    type: Types.QB_APPOINTMENT_GET_REQUEST,
-    payload: { className: 'Appointment', ...payload },
-  }
-}
-
 export function getAppointmentsSuccess(payload: {
   entries: Dictionary<QBAppointment>
   history: Array<QBAppointment['_id']>
@@ -21,10 +11,43 @@ export function getAppointmentsSuccess(payload: {
   return { type: Types.QB_APPOINTMENT_GET_SUCCESS, payload }
 }
 
+export function getAppointments(
+  payload: {
+    filters: Dictionary<unknown>
+    reset?: Types.AppointmentReset
+  },
+  then?: (
+    data: Types.QBAppointmentGetSuccessAction
+  ) => void
+): Types.QBAppointmentGetRequestAction {
+  return {
+    type: Types.QB_APPOINTMENT_GET_REQUEST,
+    payload: { className: 'Appointment', ...payload, then },
+  }
+}
+
 export function getAppointmentsFailure(
   error: string,
 ): Types.QBAppointmentGetFailureAction {
   return { type: Types.QB_APPOINTMENT_GET_FAILURE, error }
+}
+
+export function createAppointment(
+  payload: Types.QBAppointmentCreateRequestAction['payload'],
+): Types.QBAppointmentCreateRequestAction {
+  return { type: Types.QB_APPOINTMENT_CREATE_REQUEST, payload }
+}
+
+export function createAppointmentSuccess(
+  appointment: QBAppointment,
+): Types.QBAppointmentCreateSuccessAction {
+  return { type: Types.QB_APPOINTMENT_CREATE_SUCCESS, payload: appointment }
+}
+
+export function createAppointmentFailure(
+  error: string,
+): Types.QBAppointmentCreateFailureAction {
+  return { type: Types.QB_APPOINTMENT_CREATE_FAILURE, error }
 }
 
 export function updateAppointment(payload: {

@@ -41,6 +41,11 @@ export const modalAssignSelector = createSelector(
   (modal) => modal.AssignModal,
 )
 
+export const modalCreateAppointmentSelector = createSelector(
+  modalSelector,
+  (modal) => modal.CreateAppointmentModal,
+)
+
 export const modalConclusionSelector = createSelector(
   modalSelector,
   (modal) => modal.ConclusionModal,

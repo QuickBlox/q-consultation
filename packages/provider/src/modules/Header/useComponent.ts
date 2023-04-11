@@ -51,6 +51,8 @@ export default createUseComponent(() => {
     actions.toggleShowModal({ modal: 'ShareLinkModal' })
   const toggleLogoutModal = () =>
     actions.toggleShowModal({ modal: 'LogoutModal' })
+  const toggleCreateAppointmentModal = () =>
+    actions.toggleShowModal({ modal: 'CreateAppointmentModal' })
 
   const menuOptions = [
     { label: t('History'), path: HISTORY_ROUTE },
@@ -60,6 +62,7 @@ export default createUseComponent(() => {
   ]
 
   const menuMobileOptions = [
+    { label: t('CreateAppointment'), onClick: toggleCreateAppointmentModal },
     { label: t('ShareLink'), onClick: toggleShareLinkModal, hide: !CLIENT_APP_URL },
     { divider: true, hide: !CLIENT_APP_URL },
     { label: t('History'), path: HISTORY_ROUTE },
@@ -84,6 +87,7 @@ export default createUseComponent(() => {
     },
     handlers: {
       toggleMenuSidebarOpen,
+      toggleCreateAppointmentModal,
       toggleLanguageModal,
       toggleShareLinkModal,
       toggleLogoutModal,

@@ -13,6 +13,7 @@ export type ModalType =
   | 'CameraModal'
   | 'AppointmentDetailsModal'
   | 'SaveRecordModal'
+  | 'CreateAppointmentModal'
 
 export const TOGGLE_SHOW_MODAL = 'TOGGLE_SHOW_MODAL'
 

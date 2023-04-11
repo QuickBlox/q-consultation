@@ -21,6 +21,7 @@ import Notifications from '../../modules/Notification'
 import SkipModal from '../../modules/modals/SkipModal'
 import LogoutModal from '../../modules/modals/LogoutModal'
 import ShareLinkModal from '../../modules/modals/ShareLinkModal'
+import CreateAppointmentModal from '../../modules/modals/CreateAppointmentModal'
 
 import ProfileScreen from '../ProfileScreen'
 import AppointmentsScreen from '../AppointmentsScreen'
@@ -87,6 +88,7 @@ export default function MainScreen() {
         <SkipModal />
         <SaveRecordModal />
         <AppointmentDetailsModal />
+        <CreateAppointmentModal />
       </Modal>
     </main>
   )

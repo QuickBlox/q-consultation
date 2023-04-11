@@ -23,6 +23,7 @@ const initialState: ModalReducer = {
   CameraModal: false,
   AppointmentDetailsModal: false,
   SaveRecordModal: false,
+  CreateAppointmentModal: false,
 }
 
 type ModalAction =

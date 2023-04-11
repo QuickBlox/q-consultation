@@ -10,6 +10,7 @@ import {
   MenuSvg,
   LanguageSvg,
   DropdownSvg,
+  PlusSvg,
   UserSvg,
   ClientsSvg,
 } from '../../icons'
@@ -38,6 +39,7 @@ export default function Header(props: HeaderProps) {
       toggleMenuSidebarOpen,
       toggleLanguageModal,
       toggleShareLinkModal,
+      toggleCreateAppointmentModal,
       handleSelectLanguage,
       selectedLanguageOption,
     },
@@ -63,6 +65,17 @@ export default function Header(props: HeaderProps) {
         </Link>
       </div>
       <div className={cn('header-nav', 'header-nav-right', { call: onCall })}>
+        {myAccount && (
+          <button
+            type="button"
+            className="share"
+            onClick={toggleCreateAppointmentModal}
+            title={t('CreateAppointment')}
+          >
+            <PlusSvg className="icon" />
+            <span className="text">{t('CreateAppointment')}</span>
+          </button>
+        )}
         {myAccount && CLIENT_APP_URL && (
           <button
             type="button"

@@ -9,12 +9,14 @@ import {
 import * as Types from '../actions'
 import {
   clearAppointmentsOfDeletedUsers,
+  createAppointmentFailure,
+  createAppointmentSuccess,
   getAppointmentsFailure,
   getAppointmentsSuccess,
   updateAppointmentFailure,
   updateAppointmentSuccess,
 } from '../actionCreators'
-import { QBDataDelete, QBDataGet, QBDataUpdate } from '../qb-api-calls'
+import { QBDataCreate, QBDataDelete, QBDataGet, QBDataUpdate } from '../qb-api-calls'
 import { normalize } from '../utils/normalize'
 import { isQBError, stringifyError } from '../utils/parse'
 import { authMyAccountIdSelector } from '../selectors'
@@ -27,7 +29,7 @@ interface AppointmentResponse {
 }
 
 function* getAppointments(action: Types.QBAppointmentGetRequestAction) {
-  const { className, filters, reset } = action.payload
+  const { className, filters, reset, then } = action.payload
 
   try {
     const { items, limit, skip }: AppointmentResponse = yield call(
@@ -50,16 +52,19 @@ function* getAppointments(action: Types.QBAppointmentGetRequestAction) {
       }
     })
 
-    yield put(
-      getAppointmentsSuccess({
-        entries,
-        limit,
-        skip,
-        history,
-        liveQueue,
-        reset,
-      }),
-    )
+    const result = getAppointmentsSuccess({
+      entries,
+      limit,
+      skip,
+      history,
+      liveQueue,
+      reset,
+    })
+    yield put(result)
+
+    if (then) {
+      then(result)
+    }
   } catch (e) {
     const errorMessage = stringifyError(e)
 
@@ -147,8 +152,36 @@ export function* clearAppointmentsOfDeletedUsersSaga(
   }
 }
 
+function* createAppointment(action: Types.QBAppointmentCreateRequestAction) {
+  const { then, ...data } = action.payload
+
+  try {
+    const customObject: QBAppointment = yield call(
+      QBDataCreate,
+      'Appointment',
+      {
+        priority: 0,
+        ...data,
+      },
+    )
+
+    const result = createAppointmentSuccess(customObject)
+
+    yield put(result)
+
+    if (then) {
+      then(result)
+    }
+  } catch (e) {
+    const errorMessage = stringifyError(e)
+
+    yield put(createAppointmentFailure(errorMessage))
+  }
+}
+
 export default [
   takeEvery(Types.QB_USER_LIST_SUCCESS, clearAppointmentsOfDeletedUsersSaga),
   takeEvery(Types.QB_APPOINTMENT_GET_REQUEST, getAppointments),
   takeEvery(Types.QB_APPOINTMENT_UPDATE_REQUEST, updateAppointment),
+  takeEvery(Types.QB_APPOINTMENT_CREATE_REQUEST, createAppointment),
 ]

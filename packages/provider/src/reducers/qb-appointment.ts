@@ -34,6 +34,7 @@ export default (
 ) => {
   switch (action.type) {
     case Types.QB_APPOINTMENT_GET_REQUEST:
+    case Types.QB_APPOINTMENT_CREATE_REQUEST:
     case Types.QB_APPOINTMENT_UPDATE_REQUEST:
       return { ...state, error: undefined, loading: true }
     case Types.QB_APPOINTMENT_GET_SUCCESS: {
@@ -60,6 +61,7 @@ export default (
       return newState
     }
     case Types.QB_APPOINTMENT_GET_FAILURE:
+    case Types.QB_APPOINTMENT_CREATE_FAILURE:
       return { ...state, loading: false, error: action.error }
     case Types.QB_APPOINTMENT_UPDATE_FAILURE: {
       const { id, code } = action.payload.data || {}
@@ -74,6 +76,18 @@ export default (
         newState.entries = omit(state.entries, id)
         newState.liveQueue = difference(state.liveQueue, [id])
         newState.history = difference(state.history, [id])
+      }
+
+      return newState
+    }
+    case Types.QB_APPOINTMENT_CREATE_SUCCESS: {
+      const appointment = action.payload
+
+      const newState = {
+        ...state,
+        loading: false,
+        entries: { ...state.entries, [appointment._id]: appointment },
+        liveQueue: [ ...state.liveQueue, appointment._id ],
       }
 
       return newState
