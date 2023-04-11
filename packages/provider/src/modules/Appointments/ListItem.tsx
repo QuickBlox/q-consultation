@@ -12,7 +12,6 @@ interface AppointmentListItemProps {
   index: number
   onCall?: boolean
   onItemClick?: (item: QBAppointment) => void
-  onRemoveClick?: (item: QBAppointment) => void
   selected?: QBAppointment['_id']
   users: Dictionary<QBUser>
   loading?: boolean
@@ -62,7 +61,6 @@ export default function AppointmentListItem(props: AppointmentListItemProps) {
     index,
     onCall,
     onItemClick,
-    onRemoveClick,
     selected,
     users,
     loading,
@@ -85,12 +83,6 @@ export default function AppointmentListItem(props: AppointmentListItemProps) {
   const itemClickHandler = () => {
     if (onItemClick) {
       onItemClick(appointment)
-    }
-  }
-
-  const removeClickHandler = () => {
-    if (onRemoveClick) {
-      onRemoveClick(appointment)
     }
   }
 
@@ -139,14 +131,6 @@ export default function AppointmentListItem(props: AppointmentListItemProps) {
           <ChatSvg className="icon" />
         </button>
       )}
-      <button
-        className="remove"
-        onClick={removeClickHandler}
-        type="button"
-        disabled={disabled}
-      >
-        <SkipSvg className="icon" />
-      </button>
     </div>
   )
 }

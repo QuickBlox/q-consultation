@@ -116,6 +116,7 @@
   justify-content: center;
   line-height: 22px;
   overflow: hidden;
+  margin-right: 10px;
 }
 
 .appointments-container .appointment .contact .name {

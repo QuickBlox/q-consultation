@@ -12,7 +12,6 @@ import Modal from '../../components/Modal'
 import Header from '../../modules/Header'
 import VideoCall from '../../modules/VideoCall'
 import UploadIndicator from '../../modules/UploadIndicator'
-import AppointmentActionModal from '../../modules/modals/AppointmentActionModal'
 import AssignModal from '../../modules/modals/AssignModal'
 import ConclusionModal from '../../modules/modals/ConclusionModal'
 import FinishModal from '../../modules/modals/FinishModal'
@@ -78,7 +77,6 @@ export default function MainScreen() {
       <Modal>
         <LogoutModal />
         <ShareLinkModal />
-        <AppointmentActionModal />
         <AssignModal />
         <ConclusionModal />
         <EditNotesModal />

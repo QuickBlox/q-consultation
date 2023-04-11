@@ -32,7 +32,7 @@ export default function Appointments(props: AppointmentsProps) {
       appointmentActiveList,
       appointmentLoading,
     },
-    handlers: { onRemoveClick, handleSelect, loadMoreAppointments },
+    handlers: { handleSelect, loadMoreAppointments },
   } = useComponent(props)
   const { t } = useTranslation()
 
@@ -48,7 +48,6 @@ export default function Appointments(props: AppointmentsProps) {
         key={item._id}
         onCall={isCall}
         onItemClick={handleSelect}
-        onRemoveClick={onRemoveClick}
         selected={selected}
         users={users}
         loading={usersLoading}
