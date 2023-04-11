@@ -7,7 +7,7 @@ export interface SectionItem<T> {
   // Title for section
   title: string
   // List of section elements
-  data: T[]
+  data: Dictionary<T[]>
 }
 
 export interface SectionListProps<T> {
@@ -29,7 +29,7 @@ export interface SectionListProps<T> {
    */
   onEndReachedThreshold?: number
   // Default renderer for every item in every section. Can be over-ridden on a per-section basis.
-  renderItem: (item: T) => ReactNode
+  renderItem: (item: [string, T[]]) => ReactNode
   // Rendered at the top of each section.
   renderSectionHeader?: (section: SectionItem<T>) => ReactNode
   // Rendered at the bottom of each section.
