@@ -9,7 +9,6 @@ import {
   toggleShowModal,
 } from '../../../actionCreators'
 import {
-  appointmentLoadingSelector,
   authMyAccountIdSelector,
   modalCreateAppointmentSelector,
 } from '../../../selectors'
@@ -34,7 +33,6 @@ export interface CreateAppointmentModalProps {
 
 const selector = createMapStateSelector(
   {
-    loading: appointmentLoadingSelector,
     opened: modalCreateAppointmentSelector,
     myAccountId: authMyAccountIdSelector,
   }
@@ -42,7 +40,6 @@ const selector = createMapStateSelector(
 
 export default createUseComponent((props: CreateAppointmentModalProps) => {
   const { onClose } = props
-  const [error, setError] = useState('')
   const store = useSelector(selector)
   const actions = useActions({
     getAppointments,
@@ -53,6 +50,8 @@ export default createUseComponent((props: CreateAppointmentModalProps) => {
   })
   const { myAccountId, opened } = store
   const backdrop = useRef<HTMLDivElement>(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'CreateAppointmentModal' })
@@ -83,6 +82,7 @@ export default createUseComponent((props: CreateAppointmentModalProps) => {
 
   const handleSubmit = (values: FormValues) => {
     setError('')
+    setLoading(true)
 
     if (values.client_id) {
       const clientId = values.client_id
@@ -96,6 +96,7 @@ export default createUseComponent((props: CreateAppointmentModalProps) => {
         }
       }, ({ payload: { liveQueue } }: QBAppointmentGetSuccessAction) => {
         if (liveQueue.length) {
+          setLoading(false)
           setError('AppointmentAlreadyExists')
         } else {
           actions.createDialog({
@@ -129,6 +130,7 @@ export default createUseComponent((props: CreateAppointmentModalProps) => {
                     })
                   })
 
+                  setLoading(false)
                   onCancelClick()
                 },
               })
@@ -166,7 +168,7 @@ export default createUseComponent((props: CreateAppointmentModalProps) => {
   return {
     store,
     actions,
-    data: { error },
+    data: { error, loading },
     refs: { backdrop },
     forms: { appointmentForm },
     handlers: {

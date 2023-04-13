@@ -122,10 +122,10 @@ export default createUseComponent((props: UserSelectProps) => {
   }
 
   useEffect(() => {
-    const selectedUser = users.find((user) => user.id === value)
+    const selectedUser = value && users.find((user) => user.id === value)
 
     setSelected(selectedUser ? getOption(selectedUser) : undefined)
-  }, [users])
+  }, [users, value])
 
   return {
     data: {

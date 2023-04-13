@@ -10,8 +10,8 @@ import useComponent, { CreateAppointmentModalProps } from './useComponent'
 
 export default function CreateAppointmentModal(props: CreateAppointmentModalProps) {
   const {
-    data: { error },
-    store: { opened, loading },
+    data: { error, loading },
+    store: { opened },
     forms: { appointmentForm },
     refs: { backdrop },
     handlers: {

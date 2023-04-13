@@ -28,6 +28,7 @@ export default function Autocomplete<T>(props: AutocompleteProps<T>) {
 
   return (
     <AsyncPaginate
+      key={selected?.label}
       inputId={inputId}
       className="select-container"
       classNamePrefix="select"
