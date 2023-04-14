@@ -10,7 +10,7 @@ import {
   createMessagesListByDialogIdSelector,
   createMessagesHasMoreByDialogIdSelector,
 } from '../../selectors'
-import { formatDateMessage } from '../../utils/calendar'
+import { formatDateMessage, getSentTime } from '../../utils/calendar'
 import { createUseComponent, useActions, usePrevious } from '../../hooks'
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
@@ -46,10 +46,19 @@ export default createUseComponent((props: ChatMessagesProps) => {
   const resetScroll = chatOpen !== prevChatOpen
 
   const groupMessages = dialogId
-    ? messages.reduce((res: { [date: string]: QBChatMessage[] }, msg) => {
-        const dateMsg = formatDateMessage(i18n, msg.created_at)
+    ? messages.reduce((res: { [date: string]: Dictionary<QBChatMessage[]> }, message) => {
+        const { created_at, date_sent, sender_id } = message
+        const date = formatDateMessage(i18n, created_at)
+        const sentTime = getSentTime(date_sent * 1000)
+        const groupKey = `${sentTime}-${sender_id}`
 
-        res[dateMsg] = [...(res[dateMsg] || []), msg]
+        res[date] = {
+          ...(res[date] || {}),
+          [groupKey]: [
+            ...(res[date]?.[groupKey] || []),
+            message,
+          ]
+        }
 
         return res
       }, {})

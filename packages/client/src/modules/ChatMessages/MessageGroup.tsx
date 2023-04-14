@@ -4,50 +4,44 @@ import cn from 'classnames'
 
 import { markMessageRead as markMessageReadAction } from '../../actionCreators'
 import { useMobileLayout } from '../../hooks'
+import { getSentTime } from '../../utils/calendar';
 
 import MessageBody from './MessageBody'
 
-interface ChatMessageProps {
+interface MessageGroupProps {
   myAccountId: QBUser['id']
-  message: QBChatMessage
+  messages: QBChatMessage[]
   users: Dictionary<QBUser>
   chatOpen?: boolean
   markMessageRead: typeof markMessageReadAction
 }
 
-function getSentTime(timestamp: number) {
-  const date = new Date(timestamp)
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-
-  return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`
-}
-
-export default function ChatMessage(props: ChatMessageProps) {
-  const { myAccountId, message, markMessageRead, users, chatOpen } = props
+export default function MessageGroup(props: MessageGroupProps) {
+  const { myAccountId, messages, markMessageRead, users, chatOpen } = props
   const { t } = useTranslation()
   const RESOLUTION_XS = useMobileLayout()
-  const messageIsMine = message.sender_id === myAccountId
+  const lastMessage = messages.at(-1)!
+  const messageIsMine = lastMessage.sender_id === myAccountId
   const messageIsRead = messageIsMine
     ? true
-    : typeof message.read_ids !== 'undefined' &&
-      message.read_ids !== null &&
-      message.read_ids.includes(myAccountId)
+    : typeof lastMessage.read_ids !== 'undefined' &&
+      lastMessage.read_ids !== null &&
+      lastMessage.read_ids.includes(myAccountId)
 
   useEffect(() => {
     if (RESOLUTION_XS ? chatOpen && !messageIsRead : !messageIsRead) {
       markMessageRead({
         myAccountId,
-        dialogId: message.chat_dialog_id,
-        messageId: message._id,
-        userId: message.sender_id,
+        dialogId: lastMessage.chat_dialog_id,
+        messageId: lastMessage._id,
+        userId: lastMessage.sender_id,
       })
     }
-  }, [RESOLUTION_XS, chatOpen, messageIsRead, message])
+  }, [RESOLUTION_XS, chatOpen, messageIsRead, lastMessage])
 
   const sender = messageIsMine
     ? { full_name: t('You') }
-    : users[message.sender_id]
+    : users[lastMessage.sender_id]
 
   let senderName = null
 
@@ -57,16 +51,18 @@ export default function ChatMessage(props: ChatMessageProps) {
         ? sender.full_name || sender.login || sender.email
         : sender.full_name
   } else {
-    senderName = message.sender_id
+    senderName = lastMessage.sender_id
   }
 
   return (
     <div className={cn('message', { my: messageIsMine })}>
       <div className="info">
         <span className="sender">{senderName}</span>
-        <span className="sent-at">{getSentTime(message.date_sent * 1000)}</span>
+        <span className="sent-at">{getSentTime(lastMessage.date_sent * 1000)}</span>
       </div>
-      <MessageBody message={message} />
+      {messages.map((message) => (
+        <MessageBody key={message._id} message={message} />
+      ))}
     </div>
   )
 }
