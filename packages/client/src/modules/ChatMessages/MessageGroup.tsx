@@ -20,7 +20,7 @@ export default function MessageGroup(props: MessageGroupProps) {
   const { myAccountId, messages, markMessageRead, users, chatOpen } = props
   const { t } = useTranslation()
   const RESOLUTION_XS = useMobileLayout()
-  const lastMessage = messages.at(-1)!
+  const lastMessage = messages[messages.length - 1]
   const messageIsMine = lastMessage.sender_id === myAccountId
   const messageIsRead = messageIsMine
     ? true
