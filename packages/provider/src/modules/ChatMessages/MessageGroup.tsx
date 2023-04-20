@@ -17,7 +17,7 @@ interface ChatMessageProps {
 
 export default function ChatMessage(props: ChatMessageProps) {
   const { myAccountId, messages, users, markMessageRead, chatOpen } = props
-  const lastMessage = messages.at(-1)!
+  const lastMessage = messages[messages.length - 1]
   const { t } = useTranslation()
 
   const messageIsMine = lastMessage.sender_id === myAccountId
