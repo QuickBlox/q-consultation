@@ -11,7 +11,7 @@ import Modal from '../../components/Modal'
 
 import Header from '../../modules/Header'
 import VideoCall from '../../modules/VideoCall'
-import UploadIndicator from '../../modules/UploadIndicator'
+import UploadRecordIndicator from '../../modules/UploadRecordIndicator'
 import AppointmentActionModal from '../../modules/modals/AppointmentActionModal'
 import AssignModal from '../../modules/modals/AssignModal'
 import ConclusionModal from '../../modules/modals/ConclusionModal'
@@ -30,6 +30,7 @@ import useComponent from './useComponent'
 import './styles.css'
 import EditNotesModal from '../../modules/modals/EditNotesModal'
 import SaveRecordModal from '../../modules/modals/SaveRecordModal'
+import RecordModal from '../../modules/modals/RecordModal'
 
 export default function MainScreen() {
   const {
@@ -63,7 +64,7 @@ export default function MainScreen() {
       className="main-screen-wrapper"
       style={appointmentsRouteMatch ? { height: `${height}px` } : undefined}
     >
-      <UploadIndicator type="record" />
+      <UploadRecordIndicator />
       <div className={cn('main-screen', { 'on-call': onCall })}>
         <div className="column">
           <Header toggleMenu={handleToggleMenu} />
@@ -87,6 +88,7 @@ export default function MainScreen() {
         <SkipModal />
         <SaveRecordModal />
         <AppointmentDetailsModal />
+        <RecordModal />
       </Modal>
     </main>
   )

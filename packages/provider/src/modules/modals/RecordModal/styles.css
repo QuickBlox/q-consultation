@@ -1,0 +1,128 @@
+.record-modal .container {
+  background-color: var(--AppointmentDetailsModal-backgroundColor);
+  border-radius: 6px;
+  color: var(--AppointmentDetailsModal-color);
+  font-size: var(--font-size-xl);
+  letter-spacing: 0;
+  line-height: 22px;
+  width: 100%;
+  max-width: 1140px;
+  max-height: 800px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+}
+
+.record-modal .record-col-video {
+  background-color: var(--RecordModalVideo-backgroundColor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.record-modal .record-col-video video {
+  width: 100%;
+  height: 100%;
+}
+
+.record-modal .record-col-info {
+  max-width: 400px;
+  width: 100%;
+}
+
+.record-modal .back {
+  background-color: transparent;
+  border: none;
+  display: none;
+  height: 28px;
+  padding: 4px;
+  width: 28px;
+  margin-right: 15px;
+}
+
+.record-modal .back .icon {
+  height: 20px;
+  width: 20px;
+  fill: var(--ModalHeaderBackIcon-fill--mobile);
+}
+
+.record-modal .header-nav {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.record-modal .header-card {
+  display: none;
+  padding: 12px 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--AppointmentDetailsModalHeader-borderBottomColor);
+}
+
+.record-modal .record-tabs {
+  height: 100%;
+}
+
+.record-modal .record-info-text {
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.record-modal .video-unavailable {
+  text-align: center;
+  color: var(--RecordModalVideoUnavailable-color);
+}
+
+.record-modal .video-unavailable .icon {
+  width: 40px;
+  height: 40px;
+  fill: var(--RecordModalVideoUnavailableIcon-fill);
+}
+
+.record-modal .video-unavailable .message {
+  font-size: 16px;
+  margin: 20px;
+}
+
+.record-modal .video-unavailable .description {
+  font-size: 13px;
+  margin: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .record-modal {
+    padding: 0;
+  }
+
+  .record-modal .container {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    max-height: none;
+    flex-direction: column;
+  }
+
+  .record-modal .header-card {
+    display: flex;
+    padding: 17px 13px;
+  }
+
+  .record-modal .back {
+    display: inline-block;
+  }
+
+  .record-modal .icon-close {
+    display: none;
+  }
+
+  .record-modal .record-col-info {
+    max-width: unset;
+    height: calc(100% - 63px - 300px);
+  }
+
+  .record-modal .record-col-video {
+    height: 300px;
+  }
+}

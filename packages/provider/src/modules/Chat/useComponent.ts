@@ -21,7 +21,7 @@ import {
   dialogsEntriesSelector,
   dialogsLoadingSelector,
   qbReadySelector,
-  recorderDataSelector,
+  createRecordsByAppointmentIdSelector,
   usersEntriesSelector,
   usersLoadingSelector,
 } from '../../selectors'
@@ -48,7 +48,7 @@ const createSelector = (appointmentId?: QBAppointment['_id']) =>
     myAccount: authMyAccountSelector,
     users: usersEntriesSelector,
     usersLoading: usersLoadingSelector,
-    records: recorderDataSelector,
+    records: createRecordsByAppointmentIdSelector(appointmentId),
     connected: chatConnectedSelector,
   })
 

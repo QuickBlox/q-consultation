@@ -13,6 +13,7 @@ export type ModalType =
   | 'CameraModal'
   | 'AppointmentDetailsModal'
   | 'SaveRecordModal'
+  | 'RecordModal'
 
 export const TOGGLE_SHOW_MODAL = 'TOGGLE_SHOW_MODAL'
 
@@ -23,6 +24,7 @@ export interface ToggleShowModalAction extends Action {
     providerId?: QBUser['id']
     clientId?: QBUser['id']
     appointmentId?: QBAppointment['_id']
+    recordId?: QBRecord['_id']
     file?: File
   }
 }

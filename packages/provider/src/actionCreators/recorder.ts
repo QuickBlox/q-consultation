@@ -30,16 +30,12 @@ export function stopRecordFailure(
   return { type: Types.RECORD_STOP_FAILURE, error }
 }
 
-export function getRecords(
-  fileIds: Array<QBContentObject['id']>,
-): Types.GetRecordsRequest {
-  return { type: Types.GET_RECORDS_REQUEST, payload: fileIds }
+export function getRecords(appointmentId:  QBAppointment['_id']): Types.GetRecordsRequest {
+  return { type: Types.GET_RECORDS_REQUEST, payload: appointmentId }
 }
 
-export function getRecordsSuccess(dataFiles: {
-  [key: string]: QBContentObject
-}): Types.GetRecordsSuccess {
-  return { type: Types.GET_RECORDS_SUCCESS, payload: dataFiles }
+export function getRecordsSuccess(payload: Types.GetRecordsSuccess['payload']): Types.GetRecordsSuccess {
+  return { type: Types.GET_RECORDS_SUCCESS, payload }
 }
 
 export function getRecordsFailure(error: string): Types.GetRecordsFailure {
@@ -47,18 +43,29 @@ export function getRecordsFailure(error: string): Types.GetRecordsFailure {
 }
 
 export function uploadRecord(payload: {
-  file: File
-  appointmentId?: QBAppointment['_id']
+  blob: Blob
+  appointmentId: QBAppointment['_id']
 }): Types.UploadRecordRequest {
   return { type: Types.UPLOAD_RECORD_REQUEST, payload }
 }
 
-export function uploadRecordSuccess(): Types.UploadRecordSuccess {
-  return { type: Types.UPLOAD_RECORD_SUCCESS }
+export function createVoice(payload: {
+  blob: Blob
+  appointmentId: QBAppointment['_id']
+}): Types.CreateVoice {
+  return { type: Types.CREATE_VOICE, payload }
+}
+
+export function uploadRecordSuccess(payload?: QBRecord): Types.UploadRecordSuccess {
+  return { type: Types.UPLOAD_RECORD_SUCCESS, payload }
 }
 
 export function uploadRecordFailure(error: string): Types.UploadRecordFailure {
   return { type: Types.UPLOAD_RECORD_FAILURE, error }
+}
+
+export function uploadRecordProgress(payload: number): Types.UploadRecordProgress {
+  return { type: Types.UPLOAD_RECORD_PROGRESS, payload }
 }
 
 export function recordError(error: string): Types.RecordError {

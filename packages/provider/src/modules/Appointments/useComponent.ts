@@ -22,7 +22,6 @@ import {
   chatConnectedSelector,
   dialogsEntriesSelector,
   qbReadySelector,
-  recorderDataSelector,
   usersEntriesSelector,
   usersLoadingSelector,
 } from '../../selectors'
@@ -50,7 +49,6 @@ const selector = createMapStateSelector({
   ready: qbReadySelector,
   users: usersEntriesSelector,
   usersLoading: usersLoadingSelector,
-  records: recorderDataSelector,
   appointmentActiveList: appointmentActiveListSelector,
   appointmentLoading: appointmentLoadingSelector,
   appointmentHasMore: appointmentHasMoreSelector,
@@ -79,15 +77,14 @@ export default createUseComponent((props: AppointmentsProps) => {
 
   const {
     connected,
-    appointmentActiveList,
     providerId,
     ready,
     users,
-    records,
     appointmentLoading,
     appointmentHasMore,
     appointmentSkip,
     appointmentEntries,
+    appointmentActiveList,
   } = store
 
   const appointmentsList = search ? appointmentActiveList.filter(
@@ -149,17 +146,10 @@ export default createUseComponent((props: AppointmentsProps) => {
   }
 
   useEffect(() => {
-    if (selected && appointmentActiveList && !isOffline) {
-      const selectedAppointment = appointmentEntries[selected]
-      const missingRecordsIds = selectedAppointment?.records?.filter(
-        (fileId) => !records[fileId],
-      )
-
-      if (missingRecordsIds?.length) {
-        actions.getRecords(missingRecordsIds)
-      }
+    if (selected && !isOffline) {
+      actions.getRecords(selected)
     }
-  }, [selected, appointmentActiveList, isOffline])
+  }, [selected, isOffline])
 
   useEffect(() => {
     if (ready && connected) {

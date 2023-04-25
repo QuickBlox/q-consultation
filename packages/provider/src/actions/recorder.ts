@@ -12,6 +12,8 @@ export const GET_RECORDS_FAILURE = 'GET_RECORDS_FAILURE'
 export const UPLOAD_RECORD_REQUEST = 'UPLOAD_RECORD_REQUEST'
 export const UPLOAD_RECORD_SUCCESS = 'UPLOAD_RECORD_SUCCESS'
 export const UPLOAD_RECORD_FAILURE = 'UPLOAD_RECORD_FAILURE'
+export const UPLOAD_RECORD_PROGRESS = 'UPLOAD_RECORD_PROGRESS'
+export const CREATE_VOICE = 'CREATE_VOICE'
 export const RECORD_ERROR = 'RECORD_ERROR'
 
 export interface StartRecordRequestAction extends Action {
@@ -43,13 +45,15 @@ export interface StopRecordFailureAction extends Action {
 
 export interface GetRecordsRequest extends Action {
   type: typeof GET_RECORDS_REQUEST
-  payload: Array<QBContentObject['id']>
+  payload: QBAppointment['_id']
 }
 
 export interface GetRecordsSuccess extends Action {
   type: typeof GET_RECORDS_SUCCESS
   payload: {
-    [key: string]: QBContentObject
+    appointmentId: QBAppointment['_id']
+    entries: Dictionary<QBRecord>
+    list: Array<QBRecord['_id']>
   }
 }
 
@@ -61,18 +65,32 @@ export interface GetRecordsFailure extends Action {
 export interface UploadRecordRequest extends Action {
   type: typeof UPLOAD_RECORD_REQUEST
   payload: {
-    file: File
-    appointmentId?: QBAppointment['_id']
+    blob: Blob
+    appointmentId: QBAppointment['_id']
   }
 }
 
 export interface UploadRecordSuccess extends Action {
   type: typeof UPLOAD_RECORD_SUCCESS
+  payload?: QBRecord
 }
 
 export interface UploadRecordFailure extends Action {
   type: typeof UPLOAD_RECORD_FAILURE
   error: string
+}
+
+export interface UploadRecordProgress extends Action {
+  type: typeof UPLOAD_RECORD_PROGRESS
+  payload: number
+}
+
+export interface CreateVoice extends Action {
+  type: typeof CREATE_VOICE
+  payload: {
+    blob: Blob
+    appointmentId: QBAppointment['_id']
+  }
 }
 
 export interface RecordError extends Action {
@@ -93,4 +111,6 @@ export type RecorderAction =
   | UploadRecordRequest
   | UploadRecordSuccess
   | UploadRecordFailure
+  | UploadRecordProgress
+  | CreateVoice
   | RecordError

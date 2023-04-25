@@ -9,7 +9,7 @@ type FieldType = 'user-info' | 'description' | 'notes' | 'records'
 export interface AppointmentInfoProps {
   appointment?: QBAppointment
   user?: QBUser
-  records?: Dictionary<QBContentObject>
+  records?: QBRecord[]
 }
 
 export default createUseComponent((props: AppointmentInfoProps) => {
@@ -23,11 +23,13 @@ export default createUseComponent((props: AppointmentInfoProps) => {
   const userInfo = user?.custom_data
     ? parseUserCustomData(user.custom_data)
     : {}
-  const appointmentRecords =
-    appointment?.records && [...appointment.records].reverse()
 
   const toggleField = (fieldName: FieldType) => {
     setFieldActive(fieldName === fieldActive ? undefined : fieldName)
+  }
+
+  const handleOpenRecordModal = (recordId: QBRecord['_id']) => {
+    actions.toggleShowModal({ modal: 'RecordModal', recordId })
   }
 
   const startEditingNotes = (e: ReactMouseEvent<SVGElement>) => {
@@ -42,10 +44,11 @@ export default createUseComponent((props: AppointmentInfoProps) => {
   }
 
   return {
-    data: { description, userInfo, appointmentRecords, fieldActive },
+    data: { description, userInfo, fieldActive },
     handlers: {
       toggleField,
       startEditingNotes,
+      handleOpenRecordModal,
     },
   }
 })

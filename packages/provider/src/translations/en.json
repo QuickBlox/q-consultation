@@ -136,6 +136,11 @@
   "VideoRecordingNotBeSaved": "The video recording exceeds the file size available for storage in {{name}}, but you can download it.",
   "RecordingName": "Recording name",
   "QuickAnswer": "Quick answer",
+  "Transcript": "Transcript",
+  "Summary": "Summary",
+  "VideoUnavailable": "Video unavailable",
+  "VideoNotSavedMessage": "The video was not saved because it exceeded the file size limit.",
+  "LimitVideoRecords": "There is a {{limit}} limit for video records",
 
   "UNAUTHORIZED": "Unauthorized",
   "REQUIRED": "Required",

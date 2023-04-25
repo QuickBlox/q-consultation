@@ -25,12 +25,9 @@ export default function AppointmentDetailsModal(
       RESOLUTION_XS,
     },
     refs: { backdrop },
-    handlers: { toggleAccordeon, onBackdropClick, onCancelClick, setActiveTab },
+    handlers: { toggleAccordeon, onBackdropClick, onCancelClick, setActiveTab, handleOpenRecordModal },
   } = useComponent(props)
   const { t } = useTranslation()
-
-  const appointmentRecords =
-    appointment?.records && [...appointment.records].reverse()
 
   const renderDropList = () => (
     <>
@@ -81,21 +78,15 @@ export default function AppointmentDetailsModal(
             title={t('VideoRecords')}
             open={accordeonActive === 'video-records'}
           >
-            {appointment?.records?.length !== undefined && (
+            {records?.length !== undefined && (
               <ul className="record-list">
-                {appointmentRecords?.map(
-                  (id) =>
-                    records?.[id] && (
-                      <li key={id} className="record-item">
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="link"
-                          href={QB.content.privateUrl(records[id].uid)}
-                        >
+                {records.map(
+                  (record) => (
+                      <li key={record._id} className="record-item">
+                        <div onClick={() => handleOpenRecordModal(record._id)}>
                           <FileVideoSvg className="icon file-video" />
-                          {records[id].name}
-                        </a>
+                          {record.name}
+                        </div>
                       </li>
                     ),
                 )}

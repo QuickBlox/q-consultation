@@ -21,6 +21,7 @@ type TabComponent = FunctionComponent<{
 }>
 
 interface TabsProps<V> {
+  className?: string
   value: V
   onChange?: (value: V) => void
   children:
@@ -29,12 +30,13 @@ interface TabsProps<V> {
 }
 
 function Tabs<V extends string>({
+  className,
   value: activeName,
   onChange,
   children,
 }: TabsProps<V>) {
   return (
-    <div className="tabs">
+    <div className={cn('tabs', className)}>
       <div className="tabs-container">
         {Children.map(children, (child) => {
           if (isValidElement(child)) {

@@ -42,13 +42,13 @@ async function getBaseConfiguration() {
 
   const AI_QUICK_ANSWER = await getCorrectAnswer(`Enable AI Quick answer? [y/n]\n`, ['y', 'n'])
   const AI_SUGGEST_PROVIDER = await getCorrectAnswer(`Enable AI Suggest provider? [y/n]\n`, ['y', 'n'])
+  const AI_RECORD_ANALYTICS = await getCorrectAnswer(`Enable AI Record analytics? [y/n]\n`, ['y', 'n'])
   const ENABLE_REDUX_LOGGER = await getCorrectAnswer(`Enable Redux logger? [y/n]\n`, ['y', 'n'])
   const CLIENT_APP_URL = await readlineQuestion(`Enter Client app URL:\n`)
   const SERVER_APP_URL = await readlineQuestion(`Enter Server app URL:\n`)
   const DEFAULT_LANGUAGE = await getCorrectAnswer(`Enter default language [en/ua]:\n`, ['en', 'ua'])
   const FILE_SIZE_LIMIT = await readlineQuestion(`Enter a file size limit in bytes (optional):\n`)
   const FILE_EXTENSIONS_WHITELIST = await readlineQuestion(`Enter a space-separated list of available file extensions (optional):\n`)
-
 
   return {
     QB_SDK_CONFIG_APP_ID: parseInt(QB_SDK_CONFIG_APP_ID),
@@ -61,6 +61,7 @@ async function getBaseConfiguration() {
     QB_SDK_CONFIG_ICE_SERVERS: QB_SDK_CONFIG_ICE_SERVERS ? JSON.parse(QB_SDK_CONFIG_ICE_SERVERS) : [],
     AI_QUICK_ANSWER: AI_QUICK_ANSWER === 'y',
     AI_SUGGEST_PROVIDER: AI_SUGGEST_PROVIDER === 'y',
+    AI_RECORD_ANALYTICS: AI_RECORD_ANALYTICS === 'y',
     ENABLE_REDUX_LOGGER: ENABLE_REDUX_LOGGER === 'y',
     CLIENT_APP_URL,
     SERVER_APP_URL,

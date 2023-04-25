@@ -376,6 +376,14 @@ interface QBAppointment extends QBCustomObject {
   records?: Array<QBContentObject['id']>
 }
 
+interface QBRecord extends QBCustomObject {
+  uid?: string;
+  name?: string;
+  summary?: string;
+  transcription?: string;
+  appointment_id: QBAppointment['_id']
+}
+
 type CreateAndUploadParams = {
   file: File
   name: File['name']
