@@ -91,7 +91,26 @@
   word-break: break-word;
 }
 
-.messages-container .message .body + .body {
+.messages-container .message .message-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.messages-container .message-body .ai-quick-answer {
+  background: transparent;
+  border: none;
+  line-height: 0;
+  padding: 0;
+}
+
+.messages-container .message-body .ai-quick-answer svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--ChatMessageRobotIcon-fill);
+}
+
+.messages-container .message .message-body + .message-body {
   margin-top: 5px;
 }
 

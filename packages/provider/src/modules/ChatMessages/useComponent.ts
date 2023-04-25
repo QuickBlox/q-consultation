@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useTranslation } from 'react-i18next'
-import { getMessages, markMessageRead } from '../../actionCreators'
+import { getMessages, markMessageRead, getQuickAnswer } from '../../actionCreators'
 import {
   authMyAccountIdSelector,
   messagesLoadingSelector,
@@ -18,6 +18,7 @@ import useIsOffLine from '../../hooks/useIsOffLine'
 export interface ChatMessagesProps {
   dialogId?: QBChatDialog['_id']
   chatOpen?: boolean
+  setInputValue?: (value: string) => void
 }
 
 const createSelector = (dialogId?: QBChatDialog['_id']) =>
@@ -38,6 +39,7 @@ export default createUseComponent((props: ChatMessagesProps) => {
   const actions = useActions({
     getMessages,
     markMessageRead,
+    getQuickAnswer,
   })
   const { i18n } = useTranslation()
   const prevDialogId = usePrevious(dialogId) || dialogId

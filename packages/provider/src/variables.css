@@ -237,6 +237,7 @@
   --ChatMessageBody-color: var(--grey-13);
   --ChatMessageBody-backgroundColor--my: var(--blue-9);
   --ChatMessageBody-color--my: var(--grey-1);
+  --ChatMessageRobotIcon-fill: var(--grey-7);
 
   --DailyScheduleBtnUpdate-color: var(--blue-9);
   --DailyScheduleBtnUpdateIcon-fill: var(--blue-9);

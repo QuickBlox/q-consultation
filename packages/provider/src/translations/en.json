@@ -135,6 +135,7 @@
   "DownloadConsultationRecording": "Download consultation recording?",
   "VideoRecordingNotBeSaved": "The video recording exceeds the file size available for storage in {{name}}, but you can download it.",
   "RecordingName": "Recording name",
+  "QuickAnswer": "Quick answer",
 
   "UNAUTHORIZED": "Unauthorized",
   "REQUIRED": "Required",

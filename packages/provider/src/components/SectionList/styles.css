@@ -6,7 +6,7 @@
   width: 100%;
 }
 
-.section-list .spinner {
+.section-list > .spinner {
   display: block;
   height: 16px;
   left: 0;
@@ -16,7 +16,7 @@
   transition: all 0.2s ease;
 }
 
-.section-list .spinner.active {
+.section-list > .spinner.active {
   top: 8px;
 }
 

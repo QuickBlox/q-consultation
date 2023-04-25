@@ -107,3 +107,29 @@ export function userIsTyping(payload: {
 }): Types.QBChatUserTypingAction {
   return { type: Types.QB_CHAT_USER_TYPING, payload }
 }
+
+export function getQuickAnswer(
+  question: string,
+  then?: (action: Types.QBGetQuickAnswerSuccessAction | Types.QBGetQuickAnswerFailureAction) => void
+): Types.QBGetQuickAnswerRequestAction {
+  return {
+    type: Types.QB_GET_QUICK_ANSWER_REQUEST,
+    payload: {
+      question,
+      then
+    },
+  }
+}
+
+export function getQuickAnswerSuccess(
+  payload: Types.QBGetQuickAnswerSuccessAction['payload'],
+): Types.QBGetQuickAnswerSuccessAction {
+  return { type: Types.QB_GET_QUICK_ANSWER_SUCCESS, payload }
+}
+
+export function getQuickAnswerFailure(
+  error: string,
+): Types.QBGetQuickAnswerFailureAction {
+  return { type: Types.QB_GET_QUICK_ANSWER_FAILURE, error }
+}
+

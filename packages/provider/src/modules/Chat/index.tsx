@@ -29,7 +29,7 @@ export default function Chat(props: ChatProps) {
       usersLoading,
     },
     actions: { updateAppointment, startCall },
-    refs: { callTabRef },
+    refs: { callTabRef, chatInputRef },
     data: {
       dialogName,
       activeAppointment,
@@ -38,7 +38,10 @@ export default function Chat(props: ChatProps) {
       companion,
       isOffline,
     },
-    handlers: { setActiveTab },
+    handlers: {
+      setActiveTab,
+      handleSetInputValue,
+    },
   } = useComponent(props)
   const { t } = useTranslation()
 
@@ -71,9 +74,12 @@ export default function Chat(props: ChatProps) {
             <ChatMessages
               dialogId={activeAppointment?.dialog_id}
               chatOpen={activeTab === CHAT_TAB}
+              setInputValue={handleSetInputValue}
             />
             <UploadIndicator type="chat" />
-            <ChatInput dialogId={activeAppointment?.dialog_id} />
+            <ChatInput
+              dialogId={activeAppointment?.dialog_id}
+              texboxRef={chatInputRef} />
           </Tabs.Tab>
           {RESOLUTION_XS && (
             <Tabs.Tab

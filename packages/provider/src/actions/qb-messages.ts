@@ -12,6 +12,12 @@ export const QB_CHAT_SEND_SYSTEM_MESSAGE_SUCCESS =
   'QB_CHAT_SEND_SYSTEM_MESSAGE_SUCCESS'
 export const QB_CHAT_SEND_SYSTEM_MESSAGE_FAILURE =
   'QB_CHAT_SEND_SYSTEM_MESSAGE_FAILURE'
+export const QB_GET_QUICK_ANSWER_REQUEST =
+  'QB_GET_QUICK_ANSWER_REQUEST'
+export const QB_GET_QUICK_ANSWER_SUCCESS =
+  'QB_GET_QUICK_ANSWER_SUCCESS'
+export const QB_GET_QUICK_ANSWER_FAILURE =
+  'QB_GET_QUICK_ANSWER_FAILURE'
 export const QB_CHAT_MARK_MESSAGE_READ = 'QB_CHAT_MARK_MESSAGE_READ'
 // QB Chat module events
 export const QB_CHAT_MESSAGE = '@QB/MESSAGE'
@@ -91,6 +97,24 @@ export interface QBSendSystemMessageFailureAction extends Action {
   error: string
 }
 
+export interface QBGetQuickAnswerSuccessAction extends Action {
+  type: typeof QB_GET_QUICK_ANSWER_SUCCESS
+  payload: { answer: string }
+}
+
+export interface QBGetQuickAnswerFailureAction extends Action {
+  type: typeof QB_GET_QUICK_ANSWER_FAILURE
+  error: string
+}
+
+export interface QBGetQuickAnswerRequestAction extends Action {
+  type: typeof QB_GET_QUICK_ANSWER_REQUEST
+  payload: {
+    question: string
+    then?: (action: QBGetQuickAnswerSuccessAction | QBGetQuickAnswerFailureAction) => void
+  }
+}
+
 export interface QBMarkMessageReadAction extends Action {
   type: typeof QB_CHAT_MARK_MESSAGE_READ
   payload: QBMessageStatusParams & { myAccountId: QBUser['id'] }
@@ -147,6 +171,9 @@ export type QBMessageAction =
   | QBSendSystemMessageRequestAction
   | QBSendSystemMessageSuccessAction
   | QBSendSystemMessageFailureAction
+  | QBGetQuickAnswerRequestAction
+  | QBGetQuickAnswerSuccessAction
+  | QBGetQuickAnswerFailureAction
   | QBMarkMessageReadAction
   | QBChatIncomingMessageAction
   | QBChatIncomingSystemMessageAction

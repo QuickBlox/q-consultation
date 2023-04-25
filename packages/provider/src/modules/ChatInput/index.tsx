@@ -8,7 +8,7 @@ import './styles.css'
 export default function ChatInput(props: ChatInputProps) {
   const {
     refs: { texboxRef },
-    data: { disableControls, messageBody },
+    data: { disableControls },
     handlers: {
       handleChangeMessage,
       handleSendMessage,
@@ -49,9 +49,7 @@ export default function ChatInput(props: ChatInputProps) {
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
         />
-        {!messageBody && (
-          <span className="textbox-placeholder">{t('SendMessage')}</span>
-        )}
+        <span className="textbox-placeholder">{t('SendMessage')}</span>
       </div>
       <button
         className="send"

@@ -2,10 +2,10 @@ import {
   ChangeEvent,
   FormEvent,
   KeyboardEvent,
-  useRef,
   useEffect,
   useState,
   ClipboardEvent,
+  RefObject,
 } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -23,6 +23,7 @@ import IS_MOBILE from '../../utils/isMobile'
 
 export interface ChatInputProps {
   dialogId?: QBChatDialog['_id']
+  texboxRef: RefObject<HTMLDivElement>
 }
 
 const createSelector = (dialogId?: QBChatDialog['_id']) =>
@@ -32,7 +33,7 @@ const createSelector = (dialogId?: QBChatDialog['_id']) =>
   })
 
 export default createUseComponent((props: ChatInputProps) => {
-  const { dialogId } = props
+  const { dialogId, texboxRef } = props
   const selector = createSelector(dialogId)
   const store = useSelector(selector)
   const actions = useActions({
@@ -42,7 +43,6 @@ export default createUseComponent((props: ChatInputProps) => {
   })
   const { t } = useTranslation()
   const { connected, currentDialog } = store
-  const texboxRef = useRef<HTMLDivElement>(null)
   const [messageBody, setMessageBody] = useState<string | null>(null)
 
   const disableControls = !currentDialog?.joined || !connected
@@ -184,7 +184,7 @@ export default createUseComponent((props: ChatInputProps) => {
     store,
     actions,
     refs: { texboxRef },
-    data: { disableControls, messageBody },
+    data: { disableControls },
     handlers: {
       handleChangeMessage,
       handleSendMessage,

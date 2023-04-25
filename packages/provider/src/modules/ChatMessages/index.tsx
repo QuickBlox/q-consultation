@@ -4,10 +4,11 @@ import useComponent, { ChatMessagesProps } from './useComponent'
 import './styles.css'
 
 export default function ChatMessages(props: ChatMessagesProps) {
+  const { chatOpen, setInputValue } = props
   const {
     data: { sections, resetScroll },
     store: { myAccountId, loading, users },
-    actions: { markMessageRead },
+    actions: { markMessageRead, getQuickAnswer },
     handlers: { loadMoreMessages },
   } = useComponent(props)
 
@@ -27,8 +28,10 @@ export default function ChatMessages(props: ChatMessagesProps) {
           users={users}
           messages={groupMessages}
           myAccountId={myAccountId}
+          chatOpen={chatOpen}
           markMessageRead={markMessageRead}
-          chatOpen={props.chatOpen}
+          getQuickAnswer={getQuickAnswer}
+          setInputValue={setInputValue}
         />
       )}
       sections={sections}
