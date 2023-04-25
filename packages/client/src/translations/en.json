@@ -45,7 +45,10 @@
   "Calling": "Calling",
   "Accept": "Accept",
   "Decline": "Decline",
+  "Agent": "Agent",
 
+  "SearchAnAgent": "Search an agent",
+  "YouNeedSelectAgent": "You need to select an agent",
   "JoinedQueue": "You joined the queue",
   "WaitDoctor": "Your video consultation will begin shortly, please wait",
   "WhileWaiting": "The video call will begin automatically. In the meantime feel free to ask us any questions while you are waiting.",

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -15,6 +15,8 @@ const selector = createMapStateSelector({
 export default createUseComponent(() => {
   const store = useSelector(selector)
   const actions = useActions({ getAppointments, selectProvider })
+  const [consultationTopic, setConsultationTopic] = useState('')
+
   const { providerId } = store
 
   const history = useHistory()
@@ -40,10 +42,11 @@ export default createUseComponent(() => {
   return {
     store,
     actions,
-    data: { selectedProvider, defaultProviderId },
+    data: { selectedProvider, defaultProviderId, consultationTopic },
     handlers: {
       handleChangeProvider,
       handleResetProvider,
+      setConsultationTopic,
     },
   }
 })

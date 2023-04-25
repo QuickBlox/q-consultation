@@ -24,6 +24,11 @@ export const modalCallDataSelector = createSelector(
   (modal) => modal.callData,
 )
 
+export const modalConsultationTopicValueSelector = createSelector(
+  modalSelector,
+  (modal) => modal.consultationTopic,
+)
+
 export const modalAppointmentChatSelector = createSelector(
   modalSelector,
   (modal) => modal.AppointmentDetailsModal,

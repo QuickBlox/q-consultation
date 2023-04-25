@@ -37,3 +37,19 @@ export function listUsersSuccess(
 export function listUsersFailure(error: string): Types.QBUserListFailureAction {
   return { type: Types.QB_USER_LIST_FAILURE, error }
 }
+
+export function providersSuggestions(
+  payload: string,
+): Types.QBProvidersByTopicRequestAction {
+  return { type: Types.QB_PROVIDERS_SUGGESTIONS_REQUEST, payload }
+}
+
+export function providersSuggestionsSuccess(
+  payload: Array<QBUser['id']>,
+): Types.QBProvidersByTopicSuccessAction {
+  return { type: Types.QB_PROVIDERS_SUGGESTIONS_SUCCESS, payload }
+}
+
+export function providersSuggestionsFailure(error: string): Types.QBProvidersByTopicFailureAction {
+  return { type: Types.QB_PROVIDERS_SUGGESTIONS_FAILURE, error }
+}

@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import * as Types from '../actions'
 import {
@@ -7,10 +7,14 @@ import {
   getUserSuccess,
   listUsersFailure,
   listUsersSuccess,
+  providersSuggestionsFailure,
+  providersSuggestionsSuccess,
 } from '../actionCreators'
 import { QBUserGet, QBUserList } from '../qb-api-calls'
 import { normalize } from '../utils/normalize'
 import { isQBError, stringifyError } from '../utils/parse'
+import { authSessionSelector } from '../selectors'
+import { ajax } from './ajax'
 
 function* getUser(action: Types.QBUserGetRequestAction) {
   const { data, then } = action.payload
@@ -110,7 +114,42 @@ function* listUsers(action: Types.QBUserListRequestAction) {
   }
 }
 
+function* getProvidersSuggestions(
+  action: Types.QBProvidersByTopicRequestAction,
+) {
+  try {
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
+    )
+    const url = `${SERVER_APP_URL}/ai/providers/suggestions`
+
+    const {
+      response,
+    }: {
+      response: { providers: QBUser[] }
+      // @ts-ignore
+    } = yield call(ajax, {
+      method: 'POST',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': session?.token && `Bearer ${session.token}`,
+      },
+      body: JSON.stringify({ topic: action.payload }),
+      responseType: 'json',
+    })
+    const providersIds = response.providers.map(({ id }) => id)
+
+    yield put(providersSuggestionsSuccess(providersIds))
+  } catch (e) {
+    const errorMessage = stringifyError(e)
+
+    yield put(providersSuggestionsFailure(errorMessage))
+  }
+}
+
 export default [
   takeEvery(Types.QB_USER_GET_REQUEST, getUser),
   takeEvery(Types.QB_USER_LIST_REQUEST, listUsers),
+  takeEvery(Types.QB_PROVIDERS_SUGGESTIONS_REQUEST, getProvidersSuggestions),
 ]

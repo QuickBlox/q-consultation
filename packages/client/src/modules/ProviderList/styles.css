@@ -9,6 +9,11 @@
   margin-top: 1px;
 }
 
+.provider-list-wide {
+  flex: 1;
+  max-width: 430px;
+}
+
 .provider-list .header-block {
   display: flex;
   align-items: center;
@@ -26,6 +31,14 @@
 .provider-list .icon {
   height: 15px;
   width: 15px;
+}
+
+.provider-list .consultation-topic-field {
+  margin: 12px 12px 20px;
+}
+
+.provider-list .consultation-topic-field .field {
+  resize: none;
 }
 
 .provider-list .provider-search {
@@ -96,5 +109,9 @@
     border: none;
     width: 100%;
     margin: 0;
+  }
+
+  .provider-list-wide {
+    max-width: 100%;
   }
 }

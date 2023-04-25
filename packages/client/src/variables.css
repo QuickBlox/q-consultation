@@ -220,6 +220,7 @@
   --ProviderDetails-boxShadow: 0 1px 4px 0 var(--grey-8);
   --ProviderDetailsBiographyMore-color: var(--blue-9);
   --ProviderDetails-color: inherit;
+  --ProviderDetailsSelect-color: var(--blue-7);
 
   --ProviderList-backgroundColor: var(--grey-1);
   --ProviderList-borderRightColor: var(--blue-3);

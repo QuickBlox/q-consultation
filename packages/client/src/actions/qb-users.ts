@@ -6,6 +6,9 @@ export const QB_USER_GET_FAILURE = 'QB_USER_GET_FAILURE'
 export const QB_USER_LIST_REQUEST = 'QB_USER_LIST_REQUEST'
 export const QB_USER_LIST_SUCCESS = 'QB_USER_LIST_SUCCESS'
 export const QB_USER_LIST_FAILURE = 'QB_USER_LIST_FAILURE'
+export const QB_PROVIDERS_SUGGESTIONS_REQUEST = 'QB_PROVIDERS_SUGGESTIONS_REQUEST'
+export const QB_PROVIDERS_SUGGESTIONS_SUCCESS = 'QB_PROVIDERS_SUGGESTIONS_SUCCESS'
+export const QB_PROVIDERS_SUGGESTIONS_FAILURE = 'QB_PROVIDERS_SUGGESTIONS_FAILURE'
 
 type GetUserParam =
   | { login: string }
@@ -67,6 +70,21 @@ export interface QBUserListFailureAction extends Action {
   error: string
 }
 
+export interface QBProvidersByTopicRequestAction extends Action {
+  type: typeof QB_PROVIDERS_SUGGESTIONS_REQUEST
+  payload: string
+}
+
+export interface QBProvidersByTopicSuccessAction extends Action {
+  type: typeof QB_PROVIDERS_SUGGESTIONS_SUCCESS
+  payload: Array<QBUser['id']>
+}
+
+export interface QBProvidersByTopicFailureAction extends Action {
+  type: typeof QB_PROVIDERS_SUGGESTIONS_FAILURE
+  error: string
+}
+
 export type QBUserAction =
   | QBUserGetRequestAction
   | QBUserGetSuccessAction
@@ -74,3 +92,6 @@ export type QBUserAction =
   | QBUserListRequestAction
   | QBUserListSuccessAction
   | QBUserListFailureAction
+  | QBProvidersByTopicRequestAction
+  | QBProvidersByTopicSuccessAction
+  | QBProvidersByTopicFailureAction

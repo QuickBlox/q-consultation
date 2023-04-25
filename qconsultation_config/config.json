@@ -8,6 +8,7 @@
   "QB_SDK_CONFIG_ENDPOINT_CHAT": "",
   "QB_SDK_CONFIG_ICE_SERVERS": [],
   "AI_QUICK_ANSWER": true,
+  "AI_SUGGEST_PROVIDER": true,
   "ENABLE_REDUX_LOGGER": true,
   "CLIENT_APP_URL": "https://localhost:3001",
   "SERVER_APP_URL": "http://localhost:4000",

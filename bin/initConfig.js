@@ -41,6 +41,7 @@ async function getBaseConfiguration() {
   const QB_SDK_CONFIG_ICE_SERVERS = await readlineQuestion(`Enter ICE servers in one line (optional):\n`)
 
   const AI_QUICK_ANSWER = await getCorrectAnswer(`Enable AI Quick answer? [y/n]\n`, ['y', 'n'])
+  const AI_SUGGEST_PROVIDER = await getCorrectAnswer(`Enable AI Suggest provider? [y/n]\n`, ['y', 'n'])
   const ENABLE_REDUX_LOGGER = await getCorrectAnswer(`Enable Redux logger? [y/n]\n`, ['y', 'n'])
   const CLIENT_APP_URL = await readlineQuestion(`Enter Client app URL:\n`)
   const SERVER_APP_URL = await readlineQuestion(`Enter Server app URL:\n`)
@@ -59,6 +60,7 @@ async function getBaseConfiguration() {
     QB_SDK_CONFIG_ENDPOINT_CHAT: QB_SDK_CONFIG_ENDPOINT_CHAT,
     QB_SDK_CONFIG_ICE_SERVERS: QB_SDK_CONFIG_ICE_SERVERS ? JSON.parse(QB_SDK_CONFIG_ICE_SERVERS) : [],
     AI_QUICK_ANSWER: AI_QUICK_ANSWER === 'y',
+    AI_SUGGEST_PROVIDER: AI_SUGGEST_PROVIDER === 'y',
     ENABLE_REDUX_LOGGER: ENABLE_REDUX_LOGGER === 'y',
     CLIENT_APP_URL,
     SERVER_APP_URL,

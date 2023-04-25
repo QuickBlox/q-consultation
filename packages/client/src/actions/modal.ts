@@ -22,6 +22,7 @@ export interface ToggleShowModalAction extends Action {
     providerId?: QBUser['id']
     appointmentId?: QBAppointment['_id']
     userData?: UpdateMyAccount
+    consultationTopic?: string
   }
 }
 
