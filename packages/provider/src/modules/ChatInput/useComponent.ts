@@ -43,15 +43,15 @@ export default createUseComponent((props: ChatInputProps) => {
   })
   const { t } = useTranslation()
   const { connected, currentDialog } = store
-  const [messageBody, setMessageBody] = useState<string | null>(null)
 
   const disableControls = !currentDialog?.joined || !connected
 
   const submitMessage = (attachment?: ChatMessageAttachment) => {
+    const messageBody = texboxRef.current?.innerText || ''
     if (dialogId && (messageBody?.trim().length || attachment)) {
       const message: QBChatNewMessage = {
         type: 'groupchat',
-        body: messageBody?.trim() || '',
+        body: messageBody?.trim(),
         extension: {
           save_to_history: 1,
           dialog_id: dialogId,
@@ -66,18 +66,11 @@ export default createUseComponent((props: ChatInputProps) => {
         dialogId: QB.chat.helpers.getRoomJidFromDialogId(dialogId),
         message,
       })
-      setMessageBody('')
 
       if (texboxRef.current) {
         texboxRef.current.innerText = ''
       }
     }
-  }
-
-  const handleChangeMessage = ({
-    currentTarget,
-  }: FormEvent<HTMLDivElement>) => {
-    setMessageBody(currentTarget.outerText)
   }
 
   const handleSendMessage = () => submitMessage()
@@ -101,10 +94,6 @@ export default createUseComponent((props: ChatInputProps) => {
 
       selection?.removeAllRanges()
       selection?.addRange(range)
-
-      if (texboxRef.current?.innerText) {
-        setMessageBody(texboxRef.current?.innerText)
-      }
     }
   }
 
@@ -173,8 +162,6 @@ export default createUseComponent((props: ChatInputProps) => {
   }
 
   useEffect(() => {
-    setMessageBody('')
-
     if (texboxRef.current) {
       texboxRef.current.innerText = ''
     }
@@ -186,7 +173,6 @@ export default createUseComponent((props: ChatInputProps) => {
     refs: { texboxRef },
     data: { disableControls },
     handlers: {
-      handleChangeMessage,
       handleSendMessage,
       handleKeyDown,
       handlePaste,

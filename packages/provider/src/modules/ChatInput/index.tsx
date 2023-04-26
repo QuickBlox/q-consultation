@@ -10,7 +10,6 @@ export default function ChatInput(props: ChatInputProps) {
     refs: { texboxRef },
     data: { disableControls },
     handlers: {
-      handleChangeMessage,
       handleSendMessage,
       handleFileChange,
       handleKeyDown,
@@ -45,7 +44,6 @@ export default function ChatInput(props: ChatInputProps) {
           role="textbox"
           ref={texboxRef}
           onFocus={handleInputFocus}
-          onInput={handleChangeMessage}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
         />
