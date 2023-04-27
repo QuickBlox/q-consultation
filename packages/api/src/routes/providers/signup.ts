@@ -32,7 +32,7 @@ export const signUpSchema = {
 
 const signup: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('/signup', { schema: signUpSchema }, async (request) => {
-    const { description } = request.body;
+    const { description, full_name } = request.body;
     const userData = pick(request.body, 'full_name', 'email', 'password');
     const customData = pick(
       request.body,
@@ -41,17 +41,15 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       'language',
     );
     const session = await qbCreateSession();
-    let keywords = '';
+    let keywords = `${full_name}, `;
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-      if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords = await getCompletion(
-          `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
-            '\n',
-            ' ',
-          )}\n\n`,
-        );
-      }
+      keywords += await getCompletion(
+        `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
+          '\n',
+          ' ',
+        )}\n\n`,
+      );
     }
 
     const user = await qbCreateUser<QBCreateUserWithEmail>({

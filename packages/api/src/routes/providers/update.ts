@@ -99,7 +99,7 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.ProviderSessionToken),
     },
     async (request) => {
-      const { description, avatar } = request.body;
+      const { description, avatar, full_name } = request.body;
       const userData = pick(request.body, 'full_name', 'email', 'password', 'old_password');
       const customData = pick(
         request.body,
@@ -127,10 +127,10 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
         avatarData = undefined
       }
 
-      let keywords = '';
+      let keywords = `${full_name}, `;
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords = await getCompletion(
+        keywords += await getCompletion(
           `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
             '\n',
             ' ',
@@ -157,7 +157,7 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request) => {
-      const { description, avatar } = request.body;
+      const { description, avatar, full_name } = request.body;
       const userData = pick(request.body, 'full_name', 'email', 'password');
       const customData = pick(
         request.body,
@@ -185,10 +185,10 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
         avatarData = undefined
       }
 
-      let keywords = '';
+      let keywords = `${full_name}, `;
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords = await getCompletion(
+        keywords += await getCompletion(
           `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
             '\n',
             ' ',
