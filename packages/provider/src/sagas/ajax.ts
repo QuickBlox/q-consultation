@@ -60,7 +60,11 @@ export function ajax<T>(params: AjaxParams): Promise<AjaxResponse<T>> {
           response: xhr.response,
         }
 
-        resolve(response)
+        if (xhr.statusText === 'OK') {
+          resolve(response)
+        } else {
+          reject(xhr.response)
+        }
       }
     }
     function onError() {

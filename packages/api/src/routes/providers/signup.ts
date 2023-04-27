@@ -3,10 +3,10 @@ import { Type } from '@sinclair/typebox';
 import { pick } from 'lodash';
 import { QBCreateUserWithEmail } from 'quickblox';
 
-import { QBSession, QCProvider } from '@/models';
+import { QBSession, QBUser, QCProvider } from '@/models';
 import { qbCreateSession } from '@/services/auth';
 import { qbCreateUser } from '@/services/users';
-import { parseProvider } from '@/utils/user';
+// import { parseProvider } from '@/utils/user';
 import { getCompletion } from '@/services/openai';
 
 export const signUpSchema = {
@@ -25,7 +25,7 @@ export const signUpSchema = {
   response: {
     200: Type.Object({
       session: Type.Ref(QBSession),
-      data: Type.Ref(QCProvider),
+      data: Type.Ref(QBUser),
     }),
   },
 };
@@ -59,9 +59,9 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       custom_data: JSON.stringify({ ...customData, keywords }),
       tag_list: ['provider'],
     });
-    const provider = parseProvider(user)!;
+    // const provider = parseProvider(user)!;
 
-    return { session, data: provider };
+    return { session, data: user };
   });
 };
 

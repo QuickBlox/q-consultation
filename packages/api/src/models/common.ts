@@ -9,7 +9,7 @@ export const Error = Type.Object(
   { $id: 'Error' },
 );
 
-const QBUser = Type.Object({
+export const QBUser = Type.Object({
   id: Type.Integer(),
   full_name: Type.String(),
   email: Type.String({ format: 'email' }),
@@ -18,13 +18,15 @@ const QBUser = Type.Object({
   created_at: Type.String({ format: 'date-time' }),
   updated_at: Type.String({ format: 'date-time' }),
   last_request_at: Type.String({ format: 'date-time' }),
-  // custom_data: Type.Union([Type.Ref(QBUserCustomData), Type.Null()]),
-  // user_tags: Type.Union([Type.String(), Type.Null()]),
-});
+  custom_data: Type.Union([Type.String(), Type.Null()]),
+  user_tags: Type.Union([Type.String(), Type.Null()]),
+}, { $id: 'QBUser' });
+
+const QBBaseUserData = Type.Omit(QBUser, ['custom_data', 'user_tags'], { $id: '' })
 
 export const QCProvider = Type.Intersect(
   [
-    QBUser,
+    QBBaseUserData,
     Type.Object({
       full_name: Type.String(),
       description: Type.Optional(Type.String()),
@@ -36,7 +38,7 @@ export const QCProvider = Type.Intersect(
 
 export const QCClient = Type.Intersect(
   [
-    QBUser,
+    QBBaseUserData,
     Type.Object({
       full_name: Type.String(),
       address: Type.Optional(Type.String()),
@@ -131,17 +133,3 @@ export const QCRecord = Type.Intersect(
   ],
   { $id: 'QCRecord' },
 );
-
-// export const QCCalendarEvent = Type.Intersect(
-//   [
-//     QBCustomObject,
-//     Type.Object({
-//       date: Type.String(),
-//       duration: Type.Number(),
-//       provider_id: QBUser.properties.id,
-//       client_id: QBUser.properties.id,
-//       appointment_id: QCAppointment.properties._id,
-//     }),
-//   ],
-//   { $id: 'QCCalendarEvent' },
-// );

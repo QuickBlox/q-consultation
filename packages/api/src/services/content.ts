@@ -64,3 +64,15 @@ export const qbUploadFile = async (
 
   return fileData;
 };
+
+export function qbDeleteFile(contentId: QBContentObject['id']) {
+  return new Promise((resolve, reject) => {
+    QB.content.delete(contentId, (error, response) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(response)
+      }
+    })
+  })
+}

@@ -1,11 +1,11 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { Type } from '@sinclair/typebox';
+import { QBUser as TQBUser } from 'quickblox';
 
 import { getCompletion } from '@/services/openai';
 import { qbGetUsersByTags } from '@/services/users';
-import { parseProvider, parseUserCustomData } from '@/utils/user';
-import { QBUser } from 'quickblox';
-import { QCProvider } from '@/models';
+import { parseUserCustomData } from '@/utils/user';
+import { QBUser } from '@/models';
 
 export const searchByTopicSchema = {
   tags: ['ai', 'providers'],
@@ -14,7 +14,7 @@ export const searchByTopicSchema = {
   }),
   response: {
     200: Type.Object({
-      providers: Type.Array(Type.Ref(QCProvider)),
+      providers: Type.Array(Type.Ref(QBUser)),
     }),
   },
   security: [
@@ -24,14 +24,14 @@ export const searchByTopicSchema = {
   ],
 };
 
-const getAllProviders = async (page = 1): Promise<Dictionary<QBUser>> => {
+const getAllProviders = async (page = 1): Promise<Dictionary<TQBUser>> => {
   const PER_PAGE = 100;
   const { total_entries, items } = await qbGetUsersByTags('provider', {
     per_page: PER_PAGE,
     page,
   });
 
-  const providersDictionary = items.reduce<Dictionary<QBUser>>(
+  const providersDictionary = items.reduce<Dictionary<TQBUser>>(
     (res, { user }) => ({ ...res, [user.id]: user }),
     {},
   );
@@ -45,7 +45,7 @@ const getAllProviders = async (page = 1): Promise<Dictionary<QBUser>> => {
   return providersDictionary;
 };
 
-const getProvidersKeywords = (providrs: Dictionary<QBUser>) => {
+const getProvidersKeywords = (providrs: Dictionary<TQBUser>) => {
   const providersList = Object.values(providrs);
   const keywordsList = providersList.reduce<string[]>((res, user) => {
     const { keywords } = parseUserCustomData(user.custom_data);
@@ -79,7 +79,7 @@ const searchByTopic: FastifyPluginAsyncTypebox = async (fastify) => {
       const providerIds = res === 'No specialists found.' ? [] : res.split(',');
 
       const providers = providerIds.map(
-        (id) => parseProvider(users[id.trim()])!,
+        (id) => users[id.trim()],
       );
 
       return {

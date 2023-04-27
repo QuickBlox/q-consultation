@@ -21,18 +21,18 @@ declare module 'quickblox' {
     id: number;
     full_name: string;
     email: string;
-    login: string;
-    phone: string;
-    website: string;
+    // login: string;
+    // phone: string;
+    // website: string;
     /** Date ISO string */
     created_at: string;
     /** Date ISO string */
     updated_at: string;
     /** Date ISO string */
     last_request_at: string;
-    external_user_id: null;
-    facebook_id: string | null;
-    blob_id: null;
+    // external_user_id: null;
+    // facebook_id: string | null;
+    // blob_id: null;
     custom_data: string | null;
     user_tags: string | null;
     password?: string;

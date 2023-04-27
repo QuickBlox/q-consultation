@@ -2,8 +2,8 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { Type } from '@sinclair/typebox';
 import pick from 'lodash/pick';
 
-import { QCClient } from '@/models';
-import { parseClient, stringifyUserCustomData } from '@/utils/user';
+import { QBUser, QCClient } from '@/models';
+import { stringifyUserCustomData } from '@/utils/user';
 import { qbUpdateUser } from '@/services/users';
 
 export const updateSchema = {
@@ -15,7 +15,7 @@ export const updateSchema = {
     Type.Omit(QCClient, ['id', 'created_at', 'updated_at', 'last_request_at']),
   ),
   response: {
-    200: Type.Ref(QCClient),
+    200: Type.Ref(QBUser),
   },
   security: [
     {
@@ -45,7 +45,7 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
         custom_data: stringifyUserCustomData(customData),
       });
 
-      return parseClient(updatedUser)!;
+      return updatedUser;
     },
   );
 };

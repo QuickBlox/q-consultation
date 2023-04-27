@@ -284,7 +284,6 @@ function* uploadRecord(
       },
     )
 
-    debugger
     if (videoFile.size > FILE_SIZE_LIMIT) {
       yield put(toggleShowModal({ modal: 'SaveRecordModal', file: videoFile }))
     }

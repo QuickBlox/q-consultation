@@ -60,6 +60,8 @@ export const getTranscription = async (fileName: string, audioFile: Buffer) => {
   return data.text;
 };
 
+const completeSentence = (text?: string) => text?.replace(/([^.!?;]+)[^.!?;]*$/, ' ...') || '';
+
 export const getCompletion = async (
   prompt: string,
   config: Partial<CompletionConfig> = {},
@@ -70,7 +72,7 @@ export const getCompletion = async (
     prompt,
   });
 
-  return res.data.choices[0].text?.trim() || '';
+  return completeSentence(res.data.choices[0].text);
 };
 
 export const getChatCompletion = async (
@@ -83,5 +85,5 @@ export const getChatCompletion = async (
     messages,
   });
 
-  return res.data.choices[0].message?.content?.trim() || '';
+  return completeSentence(res.data.choices[0].message?.content);
 };

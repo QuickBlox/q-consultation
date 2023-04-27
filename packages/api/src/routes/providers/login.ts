@@ -3,7 +3,8 @@ import { Type } from '@sinclair/typebox';
 
 import { QBSession, QCProvider } from '@/models';
 import { qbCreateSession, qbLogin } from '@/services/auth';
-import { parseProvider } from '@/utils/user';
+import { userHasTag } from '@/utils/user';
+// import { parseProvider } from '@/utils/user';
 
 export const loginSchema = {
   tags: ['users', 'providers'],
@@ -23,10 +24,10 @@ const login: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('/login', { schema: loginSchema }, async (request, reply) => {
     const session = await qbCreateSession();
     const user = await qbLogin(request.body.email, request.body.password);
-    const provider = parseProvider(user);
+    // const provider = parseProvider(user);
 
-    if (provider) {
-      return { session, data: provider };
+    if (userHasTag(user, 'provider')) {
+      return { session, data: user };
     }
 
     return reply.unauthorized();

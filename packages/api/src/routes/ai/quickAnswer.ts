@@ -39,7 +39,7 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
         ],
         {
           max_tokens: 512,
-          temperature: 0.2,
+          temperature: 0.5,
         },
       );
 
