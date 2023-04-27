@@ -225,6 +225,48 @@
   width: 20px;
 }
 
+.appointments-container .appointment-search {
+  display: flex;
+  background-color: var(--AppointmentsSearch-backgroundColor);
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid var(--AppointmentsSearch-borderColor);;
+  box-sizing: border-box;
+  height: 45px;
+  margin: 12px;
+  padding-right: 10px;
+}
+
+.appointments-container .appointment-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: var(--font-size-xl);
+  line-height: 22px;
+}
+
+.appointments-container .appointment-search input::placeholder {
+  color: var(--AppointmentsSearchPlaceholder-color);
+}
+
+.appointments-container .appointment-search .icon {
+  fill: var(--AppointmentsSearchIcon-fill);
+  margin: 10px;
+  height: 15px;
+  width: 15px;
+}
+
+.appointments-container .appointments {
+  border-top: 1px solid var(--AppointmentsList-borderColor);
+  overflow: hidden;
+  height: 100%;
+}
+
+.appointments-container .appointments .list {
+  height: 100%;
+}
+
 @media screen and (max-width: 768px) {
   .appointments-container {
     border-radius: 0;

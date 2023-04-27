@@ -1,10 +1,9 @@
 import SectionList from '../../components/SectionList'
-import ChatMessage from './ChatMessage'
+import MessageGroup from './MessageGroup'
 import useComponent, { ChatMessagesProps } from './useComponent'
 import './styles.css'
 
 export default function ChatMessages(props: ChatMessagesProps) {
-  const { chatOpen } = props
   const {
     data: { sections, resetScroll },
     store: { myAccountId, loading, users },
@@ -22,14 +21,14 @@ export default function ChatMessages(props: ChatMessagesProps) {
       renderSectionHeader={(section) => (
         <div className="date">{section.title}</div>
       )}
-      renderItem={(item) => (
-        <ChatMessage
-          key={item._id}
+      renderItem={([key, groupMessages]) => (
+        <MessageGroup
+          key={key}
           users={users}
-          message={item}
+          messages={groupMessages}
           myAccountId={myAccountId}
           markMessageRead={markMessageRead}
-          chatOpen={chatOpen}
+          chatOpen={props.chatOpen}
         />
       )}
       sections={sections}

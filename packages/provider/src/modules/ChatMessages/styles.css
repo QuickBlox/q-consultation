@@ -91,6 +91,10 @@
   word-break: break-word;
 }
 
+.messages-container .message .body + .body {
+  margin-top: 5px;
+}
+
 .messages-container .message .body > a:any-link {
   text-decoration: underline;
   color: inherit;

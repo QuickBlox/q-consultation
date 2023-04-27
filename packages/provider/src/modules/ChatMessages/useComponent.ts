@@ -10,7 +10,7 @@ import {
   createMessagesListByDialogIdSelector,
   createMessagesHasMoreByDialogIdSelector,
 } from '../../selectors'
-import { formatDateMessage } from '../../utils/calendar'
+import { formatDateMessage, getSentTime } from '../../utils/calendar'
 import { createUseComponent, useActions, usePrevious } from '../../hooks'
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
@@ -45,15 +45,29 @@ export default createUseComponent((props: ChatMessagesProps) => {
   const { loading, hasMore, messages } = store
   const resetScroll = dialogId !== prevDialogId
 
-  const groupMessages = dialogId
-    ? messages.reduce((res: { [date: string]: QBChatMessage[] }, msg) => {
-        const dateMsg = formatDateMessage(i18n, msg.created_at)
+  const groupMessages: { [date: string]: Dictionary<QBChatMessage[]> } = {}
 
-        res[dateMsg] = [...(res[dateMsg] || []), msg]
+  if (dialogId) {
+    let groupIndex = 0
 
-        return res
-      }, {})
-    : {}
+    messages.forEach((message, index) => {
+      const { created_at, date_sent, sender_id } = message
+      const prevMessage = messages[index - 1]
+
+      if (sender_id !== prevMessage?.sender_id) {
+        groupIndex += 1
+      }
+
+      const date = formatDateMessage(i18n, created_at)
+      const sentTime = getSentTime(date_sent * 1000)
+      const groupKey = `${sentTime}-${sender_id}-${groupIndex}`
+
+      groupMessages[date] = {
+        ...(groupMessages[date] || {}),
+        [groupKey]: [...(groupMessages[date]?.[groupKey] || []), message],
+      }
+    })
+  }
 
   const sections = Object.keys(groupMessages).map((title) => ({
     title,

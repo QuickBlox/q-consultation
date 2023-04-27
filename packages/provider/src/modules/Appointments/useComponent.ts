@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
@@ -71,6 +71,11 @@ export default createUseComponent((props: AppointmentsProps) => {
     sendSystemMessage,
   })
   const isOffline = useIsOffLine()
+  const [search, setSearch] = useState('')
+
+  const handleChangeSearch = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => setSearch(value)
 
   const {
     connected,
@@ -84,6 +89,10 @@ export default createUseComponent((props: AppointmentsProps) => {
     appointmentSkip,
     appointmentEntries,
   } = store
+
+  const appointmentsList = search ? appointmentActiveList.filter(
+      ({ client_id }) => users[client_id]?.full_name.toLowerCase().includes(search.toLowerCase())
+    ) : appointmentActiveList
 
   const handleSelect = (item: QBAppointment) => {
     if (isOpenMenu) toggleMenu()
@@ -131,11 +140,6 @@ export default createUseComponent((props: AppointmentsProps) => {
     }
   }
 
-  const loadMoreAppointments = () => {
-    if (appointmentLoading || !appointmentHasMore) return
-    handleGetAppointments(appointmentSkip + PER_PAGE)
-  }
-
   useEffect(() => {
     if (selected && appointmentActiveList && !isOffline) {
       const selectedAppointment = appointmentEntries[selected]
@@ -154,6 +158,12 @@ export default createUseComponent((props: AppointmentsProps) => {
       handleGetAppointments()
     }
   }, [ready && connected])
+
+  useEffect(() => {
+    if (!appointmentLoading && appointmentHasMore) {
+      handleGetAppointments(appointmentSkip + PER_PAGE)
+    }
+  }, [appointmentLoading, appointmentHasMore, appointmentSkip])
 
   useEffect(() => {
     const handleSiteFocus = () => {
@@ -188,10 +198,10 @@ export default createUseComponent((props: AppointmentsProps) => {
   return {
     store,
     actions,
-    data: { isOffline },
+    data: { isOffline, search, appointmentsList },
     handlers: {
       handleSelect,
-      loadMoreAppointments,
+      handleChangeSearch,
     },
   }
 })
