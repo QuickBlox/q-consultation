@@ -6,6 +6,7 @@ import FlatList from '../../components/FlatList'
 import AppointmentListItem from './ListItem'
 import useComponent, { AppointmentsProps } from './useComponent'
 import './styles.css'
+import { SearchSvg } from '../../icons'
 
 function hasUnreadMessage(
   appointment: QBAppointment,
@@ -22,17 +23,20 @@ function hasUnreadMessage(
 export default function Appointments(props: AppointmentsProps) {
   const { isOpenMenu, selected } = props
   const {
-    data: { isOffline },
+    data: { isOffline, search, appointmentsList },
     store: {
       callAppointmentId,
       callDuration,
       dialogs,
       users,
       usersLoading,
-      appointmentActiveList,
       appointmentLoading,
     },
-    handlers: { onRemoveClick, handleSelect, loadMoreAppointments },
+    handlers: {
+      onRemoveClick,
+      handleSelect,
+      handleChangeSearch,
+    },
   } = useComponent(props)
   const { t } = useTranslation()
 
@@ -61,13 +65,22 @@ export default function Appointments(props: AppointmentsProps) {
     <aside className={cn('appointments-container', { open: isOpenMenu })}>
       <Tabs value="queue">
         <Tabs.Tab name="queue" title={t('WaitingRoom')} disabled={isOffline}>
-          <FlatList
-            data={appointmentActiveList}
-            refreshing={appointmentLoading}
-            renderItem={renderListItem}
-            onEndReachedThreshold={0.8}
-            onEndReached={loadMoreAppointments}
-          />
+          <div className="appointment-search">
+            <SearchSvg className="icon" />
+            <input
+              onChange={handleChangeSearch}
+              placeholder={t('Search')}
+              type="search"
+              value={search}
+            />
+          </div>
+          <div className="appointments">
+            <FlatList
+              data={appointmentsList}
+              refreshing={appointmentLoading}
+              renderItem={renderListItem}
+            />
+          </div>
         </Tabs.Tab>
       </Tabs>
     </aside>

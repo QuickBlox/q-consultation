@@ -22,3 +22,11 @@ export const formatDateMessage = (i18next: i18n, date: string) => {
 
   return moment(date).calendar()
 }
+
+export const getSentTime = (timestamp: number) => {
+  const date = new Date(timestamp)
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+
+  return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`
+}

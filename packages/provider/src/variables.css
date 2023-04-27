@@ -202,6 +202,11 @@
   --AppointmentsItemChatUnreadDot-borderColor: var(--blue-1);
   --AppointmentsItemOnCallDots-color: var(--grey-13);
   --AppointmentsItemOnCallDots-color--selected: var(--grey-1);
+  --AppointmentsSearch-backgroundColor: var(--grey-1);
+  --AppointmentsSearch-borderColor: var(--blue-3);
+  --AppointmentsSearchPlaceholder-color: var(--blue-3);
+  --AppointmentsSearchIcon-fill: var(--blue-3);
+  --AppointmentsList-borderColor: var(--blue-3);
 
   --CallControlBtn-backgroundColor: var(--grey-1);
   --CallControlBtn-color: var(--grey-1);
