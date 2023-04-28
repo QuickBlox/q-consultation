@@ -1,6 +1,6 @@
 {
   "name": "q-consultation-provider",
-  "version": "1.2.4",
+  "version": "1.2.4-plus",
   "license": "MIT",
   "author": {
     "name": "Injoit LTD",
@@ -8,7 +8,7 @@
   },
   "main": "src/index.ts",
   "scripts": {
-    "start": "webpack serve",
+    "dev": "webpack serve",
     "build": "cross-env NODE_ENV=production webpack",
     "lint": "eslint ./src"
   },

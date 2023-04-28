@@ -1,22 +1,25 @@
 {
   "name": "q-consultation-lite",
-  "version": "1.2.4",
+  "version": "1.2.4-plus",
   "license": "MIT",
   "author": {
     "name": "Injoit LTD",
     "email": "sales@quickblox.com"
   },
   "scripts": {
-    "start": "lerna run start",
+    "dev": "lerna run dev",
     "build": "lerna run build",
     "lint": "lerna run lint",
-    "pages": "lerna run --scope integration-pages dev",
+    "pages": "lerna run --scope integration-pages demo",
     "init:config": "node ./bin/initConfig.js",
     "init:schema": "node ./bin/initSchema.js"
   },
   "workspaces": [
     "packages/*"
   ],
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  },
   "devDependencies": {
     "js-yaml": "^4.1.0",
     "lerna": "^6.0.1",

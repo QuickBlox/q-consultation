@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
+const dotenv = require('dotenv')
 
-const CONFIG_PATH = path.resolve(__dirname, '..', 'qconsultation_config', 'config.json')
+const CONFIG_PATH = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
 
 const QB_DEFAULT_API_ENDPOINT = 'api.quickblox.com'
 const QB_DEFAULT_CHAT_ENDPOINT = 'chat.quickblox.com'
@@ -26,9 +27,22 @@ const fields = [
   'FILE_EXTENSIONS_WHITELIST'
 ]
 
+const parseValue = (value) => {
+  try {
+    if (/^(true|false)$/i.test(value)) {
+      return JSON.parse(value.toLowerCase())
+    }
+
+    return JSON.parse(value)
+  } catch (error) {
+    return value
+  }
+}
+
 function getConfig() {
   if (fs.existsSync(CONFIG_PATH)) {
-    const appConfig = require(CONFIG_PATH)
+    const dotenvFile = fs.readFileSync(CONFIG_PATH)
+    const appConfig = dotenv.parse(dotenvFile)
 
     let isInvalid = typeof appConfig !== "object"
 
@@ -57,7 +71,10 @@ function getConfig() {
       appConfig.QB_SDK_CONFIG_ENDPOINT_CHAT = QB_DEFAULT_CHAT_ENDPOINT
     }
 
-    return appConfig
+    return Object.entries(appConfig).reduce(
+      (res, [key, value]) => fields.includes(key) ? { ...res, [key]: parseValue(value) } : res,
+      {},
+    )
   } else {
     throw new Error(`Config was not found at path: ${CONFIG_PATH}`)
   }
