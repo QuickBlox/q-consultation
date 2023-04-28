@@ -7,7 +7,7 @@ import { qbGetUsersByTags } from '@/services/users';
 import { parseUserCustomData } from '@/utils/user';
 import { QBUser } from '@/models';
 
-export const searchByTopicSchema = {
+export const suggestProviderSchema = {
   tags: ['ai', 'providers'],
   body: Type.Object({
     topic: Type.String(),
@@ -56,11 +56,11 @@ const getProvidersKeywords = (providrs: Dictionary<TQBUser>) => {
   return keywordsList;
 };
 
-const searchByTopic: FastifyPluginAsyncTypebox = async (fastify) => {
+const suggestProvider: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post(
     '/suggestions',
     {
-      schema: searchByTopicSchema,
+      schema: suggestProviderSchema,
       onRequest: fastify.verify(fastify.BearerToken, fastify.SessionToken),
     },
     async (request) => {
@@ -76,10 +76,10 @@ const searchByTopic: FastifyPluginAsyncTypebox = async (fastify) => {
           `User wrote:\n${topic.replaceAll('\n', ' ')}\n\n` +
           'Select specialists for the user by keywords. Print their id separated by commas.\n\n',
       );
-      const providerIds = res === 'No specialists found.' ? [] : res.split(',');
+      const providerIds = res === 'No specialists found.' ? [] : res.split(', ');
 
       const providers = providerIds.map(
-        (id) => users[id.trim()],
+        (id) => users[id],
       );
 
       return {
@@ -91,4 +91,4 @@ const searchByTopic: FastifyPluginAsyncTypebox = async (fastify) => {
 
 export const autoload = JSON.parse<boolean>(process.env.AI_SUGGEST_PROVIDER!);
 
-export default searchByTopic;
+export default suggestProvider;

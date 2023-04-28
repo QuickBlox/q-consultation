@@ -55,8 +55,6 @@ export const getTranscription = async (fileName: string, audioFile: Buffer) => {
     },
   ).then((res) => res.json());
 
-  console.log('data', data);
-
   return data.text;
 };
 
@@ -65,6 +63,7 @@ const completeSentence = (text?: string) => text?.replace(/([^.!?;]+)[^.!?;]*$/,
 export const getCompletion = async (
   prompt: string,
   config: Partial<CompletionConfig> = {},
+  isCompleteSentence?: boolean
 ) => {
   const res = await openai.createCompletion({
     ...baseCompletionConfig,
@@ -72,12 +71,15 @@ export const getCompletion = async (
     prompt,
   });
 
-  return completeSentence(res.data.choices[0].text);
+  return isCompleteSentence
+    ? completeSentence(res.data.choices[0].text)
+    : res.data.choices[0].text?.trim() || '';
 };
 
 export const getChatCompletion = async (
   messages: ChatCompletionRequestMessage[],
   config: Partial<ChatCompletionConfig> = {},
+  isCompleteSentence?: boolean
 ) => {
   const res = await openai.createChatCompletion({
     ...baseChatCompletionConfig,
@@ -85,5 +87,7 @@ export const getChatCompletion = async (
     messages,
   });
 
-  return completeSentence(res.data.choices[0].message?.content);
+  return isCompleteSentence
+    ? completeSentence(res.data.choices[0].message?.content)
+    : res.data.choices[0].message?.content.trim() || '';
 };
