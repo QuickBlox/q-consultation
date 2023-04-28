@@ -31,7 +31,6 @@ import {
 import {
   authSessionSelector,
   callAppointmentIdSelector,
-  createAppointmentByIdSelector,
 } from '../selectors'
 import { stringifyError } from '../utils/parse'
 import { normalize } from '../utils/normalize'
@@ -41,7 +40,7 @@ import { ajax } from './ajax'
 
 const mediaRecorders = {
   video: new QBMediaRecorder({
-    mimeType: 'video/webm;codecs=vp8',
+    mimeType: 'video/webm',
   }),
   audio: AI_RECORD_ANALYTICS
     ? new QBMediaRecorder({
