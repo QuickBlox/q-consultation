@@ -60,7 +60,11 @@ export default createUseComponent(() => {
   ]
 
   const menuMobileOptions = [
-    { label: t('ShareLink'), onClick: toggleShareLinkModal, hide: !CLIENT_APP_URL },
+    {
+      label: t('ShareLink'),
+      onClick: toggleShareLinkModal,
+      hide: !CLIENT_APP_URL,
+    },
     { divider: true, hide: !CLIENT_APP_URL },
     { label: t('History'), path: HISTORY_ROUTE },
     { label: t('Profile'), path: PROFILE_ROUTE },

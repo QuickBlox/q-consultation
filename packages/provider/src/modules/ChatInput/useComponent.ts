@@ -1,9 +1,7 @@
 import {
   ChangeEvent,
-  FormEvent,
   KeyboardEvent,
   useEffect,
-  useState,
   ClipboardEvent,
   RefObject,
 } from 'react'
@@ -48,6 +46,7 @@ export default createUseComponent((props: ChatInputProps) => {
 
   const submitMessage = (attachment?: ChatMessageAttachment) => {
     const messageBody = texboxRef.current?.innerText || ''
+
     if (dialogId && (messageBody?.trim().length || attachment)) {
       const message: QBChatNewMessage = {
         type: 'groupchat',

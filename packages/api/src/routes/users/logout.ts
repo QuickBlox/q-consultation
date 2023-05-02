@@ -1,6 +1,6 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 
-import { QBLogout } from '@/services/auth';
+import { QBLogout } from '@/services/auth'
 
 export const logoutSchema = {
   tags: ['users'],
@@ -9,7 +9,7 @@ export const logoutSchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const logout: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.delete(
@@ -19,9 +19,9 @@ const logout: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.SessionToken),
     },
     async () => {
-      await QBLogout();
+      await QBLogout()
     },
-  );
-};
+  )
+}
 
-export default logout;
+export default logout

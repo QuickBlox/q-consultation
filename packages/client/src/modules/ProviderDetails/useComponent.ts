@@ -67,7 +67,11 @@ export default createUseComponent((props: ProviderDetailsProps) => {
 
         history.push(path)
       } else {
-        actions.toggleShowModal({ modal: 'ConsultationTopicModal', providerId, consultationTopic })
+        actions.toggleShowModal({
+          modal: 'ConsultationTopicModal',
+          providerId,
+          consultationTopic,
+        })
       }
     }
   }

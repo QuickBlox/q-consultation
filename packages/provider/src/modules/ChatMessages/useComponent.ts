@@ -2,7 +2,11 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useTranslation } from 'react-i18next'
-import { getMessages, markMessageRead, getQuickAnswer } from '../../actionCreators'
+import {
+  getMessages,
+  markMessageRead,
+  getQuickAnswer,
+} from '../../actionCreators'
 import {
   authMyAccountIdSelector,
   messagesLoadingSelector,

@@ -127,13 +127,12 @@ function* getProvidersSuggestions(
       response,
     }: {
       response: { providers: QBUser[] }
-      // @ts-ignore
     } = yield call(ajax, {
       method: 'POST',
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': session?.token && `Bearer ${session.token}`,
+        Authorization: `Bearer ${session!.token}`,
       },
       body: JSON.stringify({ topic: action.payload }),
       responseType: 'json',

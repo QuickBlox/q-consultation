@@ -1,7 +1,7 @@
-import path from 'path';
-import fp from 'fastify-plugin';
-import fastifyEnv, { FastifyEnvOptions } from '@fastify/env';
-import { Static, Type } from '@sinclair/typebox';
+import path from 'path'
+import fp from 'fastify-plugin'
+import fastifyEnv, { FastifyEnvOptions } from '@fastify/env'
+import { Static, Type } from '@sinclair/typebox'
 
 const schema = Type.Object({
   QB_SDK_CONFIG_APP_ID: Type.Integer(),
@@ -21,24 +21,24 @@ const schema = Type.Object({
   AI_SUGGEST_PROVIDER: Type.Boolean({ default: false }),
   AI_CHAT_ASSISTANT: Type.Boolean({ default: false }),
   AI_RECORD_ANALYTICS: Type.Boolean({ default: false }),
-});
+})
 
 const options = {
   dotenv: {
-    path: path.resolve(__dirname, '../../../../qconsultation_config/.env')
+    path: path.resolve(__dirname, '../../../../qconsultation_config/.env'),
   },
   schema,
-};
+}
 
 export default fp<FastifyEnvOptions>(
   async (fastify) => {
-    fastify.register(fastifyEnv, options);
+    fastify.register(fastifyEnv, options)
   },
   { name: 'env' },
-);
+)
 
 declare module 'fastify' {
   interface FastifyInstance {
-    config: Static<typeof schema>;
+    config: Static<typeof schema>
   }
 }

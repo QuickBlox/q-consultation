@@ -1,6 +1,6 @@
-import { Type } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox'
 
-export * from './common';
+export * from './common'
 
 export const MultipartFile = Type.Object(
   {
@@ -10,4 +10,4 @@ export const MultipartFile = Type.Object(
     mimetype: Type.String(),
   },
   { description: 'File' },
-);
+)

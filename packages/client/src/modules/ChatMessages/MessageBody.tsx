@@ -83,4 +83,5 @@ export default function MessageBody({ message }: MessageBodyProps) {
         ),
       }}
     />
-  )}
+  )
+}

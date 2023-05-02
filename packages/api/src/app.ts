@@ -1,13 +1,13 @@
-import { join } from 'path';
-import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
-import { FastifyPluginAsync } from 'fastify';
+import { join } from 'path'
+import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload'
+import { FastifyPluginAsync } from 'fastify'
 
 export type AppOptions = {
   // Place your custom options for app below here.
-} & Partial<AutoloadPluginOptions>;
+} & Partial<AutoloadPluginOptions>
 
 // Pass --options via CLI arguments in command to enable these options.
-const options: AppOptions = {};
+const options: AppOptions = {}
 
 const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
@@ -23,7 +23,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   fastify.register(AutoLoad, {
     dir: join(__dirname, 'plugins'),
     options: opts,
-  });
+  })
 
   // This loads all plugins defined in routes
   // define your routes in one of these
@@ -31,8 +31,8 @@ const app: FastifyPluginAsync<AppOptions> = async (
     dir: join(__dirname, 'routes'),
     options: opts,
     routeParams: true,
-  });
-};
+  })
+}
 
-export default app;
-export { app, options };
+export default app
+export { app, options }

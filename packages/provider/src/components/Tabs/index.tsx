@@ -52,11 +52,15 @@ function Tabs<V extends string>({
       <div className="tab-content">
         {Children.map(children, (child) => {
           if (typeof child === 'boolean' || child === null) return null
-          const { name, className, children: tabContent } = child.props
+          const {
+            name,
+            className: tabClassName,
+            children: tabContent,
+          } = child.props
 
           return (
             <div
-              className={cn('tab-content-item', className, {
+              className={cn('tab-content-item', tabClassName, {
                 active: activeName === name,
               })}
             >

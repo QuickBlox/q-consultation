@@ -1,5 +1,5 @@
-import fetch from 'node-fetch';
-import QB, { QBCustomObject } from 'quickblox';
+import fetch from 'node-fetch'
+import QB, { QBCustomObject } from 'quickblox'
 
 export const qbCreateCustomObject = <T extends QBCustomObject>(
   className: string,
@@ -8,31 +8,31 @@ export const qbCreateCustomObject = <T extends QBCustomObject>(
   new Promise<T>((resolve, reject) => {
     QB.data.create<T>(className, data, (error, result) => {
       if (error) {
-        reject(error);
+        reject(error)
       } else {
-        resolve(result);
+        resolve(result)
       }
-    });
-  });
+    })
+  })
 
 export const qbGetCustomObject = <T extends QBCustomObject>(
   className: string,
   filters: Dictionary<unknown>,
 ) =>
   new Promise<{
-    class_name: string;
-    items: T[];
-    limit: number;
-    skip: number;
+    class_name: string
+    items: T[]
+    limit: number
+    skip: number
   }>((resolve, reject) => {
     QB.data.list<T>(className, filters, (error, result) => {
       if (error) {
-        reject(error);
+        reject(error)
       } else {
-        resolve(result);
+        resolve(result)
       }
-    });
-  });
+    })
+  })
 
 export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
   parentClassName: string,
@@ -40,7 +40,7 @@ export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
   childClassName: string,
   data: Dictionary<unknown>,
 ) => {
-  const { config, session } = QB.service.qbInst;
+  const { config, session } = QB.service.qbInst
   const resData: T = await fetch(
     `https://${config.endpoints.api}/data/${parentClassName}/${parentId}/${childClassName}`,
     {
@@ -51,29 +51,7 @@ export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
       },
       body: JSON.stringify(data),
     },
-  ).then((res) => res.json());
+  ).then((res) => res.json())
 
-  return resData;
-};
-
-// export const qbUpdateCustomObject = (className, data) =>
-//   new Promise((resolve, reject) => {
-//     QB.data.update(className, data, (error, result) => {
-//       if (error) {
-//         reject(error)
-//       } else {
-//         resolve(result)
-//       }
-//     })
-//   })
-
-// export const qbDeleteCustomObject = (className, idOrParams) =>
-//   new Promise((resolve, reject) => {
-//     QB.data.delete(className, idOrParams, (error, result) => {
-//       if (error) {
-//         reject(error)
-//       } else {
-//         resolve(result)
-//       }
-//     })
-//   })
+  return resData
+}

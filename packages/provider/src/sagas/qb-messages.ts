@@ -25,7 +25,11 @@ import {
   QBChatSendSystemMessage,
 } from '../qb-api-calls'
 import { normalize } from '../utils/normalize'
-import { authMyAccountIdSelector, authSessionSelector, chatConnectedSelector } from '../selectors'
+import {
+  authMyAccountIdSelector,
+  authSessionSelector,
+  chatConnectedSelector,
+} from '../selectors'
 import { stringifyError } from '../utils/parse'
 import { ajax } from './ajax'
 
@@ -143,9 +147,7 @@ function* sendReadStatus(action: Types.QBMarkMessageReadAction) {
   yield call(QBChatMarkMessageRead, action.payload)
 }
 
-function* getQuickAnswer(
-  action: Types.QBGetQuickAnswerRequestAction,
-) {
+function* getQuickAnswer(action: Types.QBGetQuickAnswerRequestAction) {
   const { question, then } = action.payload
 
   try {
@@ -158,13 +160,12 @@ function* getQuickAnswer(
       response,
     }: {
       response: { answer: string }
-      // @ts-ignore
-    } = yield call(ajax, {
+    } = yield call<typeof ajax>(ajax, {
       method: 'POST',
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': session?.token && `Bearer ${session.token}`,
+        Authorization: `Bearer ${session!.token}`,
       },
       body: JSON.stringify({ question }),
       responseType: 'json',

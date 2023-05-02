@@ -6,9 +6,7 @@ import Tabs from '../../../components/Tabs'
 import useComponent, { RecordModalProps } from './useComponent'
 import './styles.css'
 
-export default function RecordModal(
-  props: RecordModalProps,
-) {
+export default function RecordModal(props: RecordModalProps) {
   const {
     store: { record, opened },
     refs: { backdrop },
@@ -45,16 +43,16 @@ export default function RecordModal(
         </div>
         {AI_RECORD_ANALYTICS && (
           <div className="record-col-info">
-            <Tabs value={activeTab} onChange={setActiveTab} className="record-tabs">
+            <Tabs
+              value={activeTab}
+              onChange={setActiveTab}
+              className="record-tabs"
+            >
               <Tabs.Tab name="summary" title={t('Summary')}>
-                <div className="record-info-text">
-                  {record?.summary}
-                </div>
+                <div className="record-info-text">{record?.summary}</div>
               </Tabs.Tab>
               <Tabs.Tab name="transcript" title={t('Transcript')}>
-                <div className="record-info-text">
-                  {record?.transcription}
-                </div>
+                <div className="record-info-text">{record?.transcription}</div>
               </Tabs.Tab>
             </Tabs>
           </div>

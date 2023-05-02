@@ -29,14 +29,18 @@ export const recorderProgressSelector = createSelector(
   (recorder: RecorderReducer) => recorder.progress,
 )
 
-export const createRecordsByAppointmentIdSelector = (appointmentId?: QBAppointment['_id']) =>
+export const createRecordsByAppointmentIdSelector = (
+  appointmentId?: QBAppointment['_id'],
+) =>
   createSelector(
     [recorderEntriesSelector, recorderRecordsSelector],
-    (entries, records): QBRecord[] => appointmentId && records[appointmentId]?.map(recordId => entries[recordId]) || [],
+    (entries, records): QBRecord[] =>
+      (appointmentId &&
+        records[appointmentId]?.map((recordId) => entries[recordId])) ||
+      [],
   )
 
 export const createRecordsByIdSelector = (recordId?: QBRecord['_id']) =>
-  createSelector(
-    recorderEntriesSelector,
-    (entries) => recordId ? entries[recordId] : undefined,
+  createSelector(recorderEntriesSelector, (entries) =>
+    recordId ? entries[recordId] : undefined,
   )

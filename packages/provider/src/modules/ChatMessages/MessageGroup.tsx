@@ -2,7 +2,10 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
-import { getQuickAnswer, markMessageRead as markMessageReadAction } from '../../actionCreators'
+import {
+  getQuickAnswer as getQuickAnswerAction,
+  markMessageRead as markMessageReadAction,
+} from '../../actionCreators'
 import { getSentTime } from '../../utils/calendar'
 
 import MessageBody from './MessageBody'
@@ -13,12 +16,20 @@ interface ChatMessageProps {
   messages: QBChatMessage[]
   users: Dictionary<QBUser>
   markMessageRead: typeof markMessageReadAction
-  getQuickAnswer: typeof getQuickAnswer
+  getQuickAnswer: typeof getQuickAnswerAction
   setInputValue?: (value: string) => void
 }
 
 export default function ChatMessage(props: ChatMessageProps) {
-  const { myAccountId, messages, users, markMessageRead, chatOpen, setInputValue, getQuickAnswer } = props
+  const {
+    myAccountId,
+    messages,
+    users,
+    markMessageRead,
+    chatOpen,
+    setInputValue,
+    getQuickAnswer,
+  } = props
   const lastMessage = messages[messages.length - 1]
   const { t } = useTranslation()
 
@@ -58,7 +69,9 @@ export default function ChatMessage(props: ChatMessageProps) {
     <div className={cn('message', { my: messageIsMine })}>
       <div className="info">
         <span className="sender">{senderName}</span>
-        <span className="sent-at">{getSentTime(lastMessage.date_sent * 1000)}</span>
+        <span className="sent-at">
+          {getSentTime(lastMessage.date_sent * 1000)}
+        </span>
       </div>
       {messages.map((message) => (
         <MessageBody

@@ -1,6 +1,6 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
-import { getChatCompletion } from '@/services/openai';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import { getChatCompletion } from '@/services/openai'
 
 export const quickAnswerSchema = {
   tags: ['ai', 'providers'],
@@ -17,7 +17,7 @@ export const quickAnswerSchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post(
@@ -30,25 +30,25 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
       ),
     },
     async (request) => {
-      const { question } = request.body;
+      const { question } = request.body
 
       const answer = await getChatCompletion(
         [
           { role: 'system', content: 'You are consulting the user.' },
-          { role: 'user', content: question }
+          { role: 'user', content: question },
         ],
         {
           max_tokens: 512,
           temperature: 0.5,
         },
         true,
-      );
+      )
 
-      return { answer };
+      return { answer }
     },
-  );
-};
+  )
+}
 
-export const autoload = JSON.parse<boolean>(process.env.AI_QUICK_ANSWER!);
+export const autoload = JSON.parse<boolean>(process.env.AI_QUICK_ANSWER!)
 
-export default quickAnswer;
+export default quickAnswer

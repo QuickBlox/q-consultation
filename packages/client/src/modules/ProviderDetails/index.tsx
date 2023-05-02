@@ -41,7 +41,7 @@ export default function ProviderDetails(props: ProviderDetailsProps) {
             {userData?.description}
           </pre>
         ) : (
-          <div className='provider-select'>{t('YouNeedSelectAgent')}</div>
+          <div className="provider-select">{t('YouNeedSelectAgent')}</div>
         )}
         {refBiography.current?.clientHeight === 198 && (
           <div className="biography-controls">

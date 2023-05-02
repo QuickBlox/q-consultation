@@ -1,10 +1,10 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
-import pick from 'lodash/pick';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import pick from 'lodash/pick'
 
-import { QBUser, QCClient } from '@/models';
-import { stringifyUserCustomData } from '@/utils/user';
-import { qbUpdateUser } from '@/services/users';
+import { QBUser, QCClient } from '@/models'
+import { stringifyUserCustomData } from '@/utils/user'
+import { qbUpdateUser } from '@/services/users'
 
 export const updateSchema = {
   tags: ['users', 'clients'],
@@ -22,7 +22,7 @@ export const updateSchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.put(
@@ -39,15 +39,15 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
         'birthdate',
         'gender',
         'language',
-      );
+      )
 
       const updatedUser = await qbUpdateUser(parseInt(request.params.id, 10), {
         custom_data: stringifyUserCustomData(customData),
-      });
+      })
 
-      return updatedUser;
+      return updatedUser
     },
-  );
-};
+  )
+}
 
-export default updateById;
+export default updateById

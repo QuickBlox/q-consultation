@@ -22,7 +22,7 @@ export const usersListSelector = createSelector(usersEntriesSelector, (users) =>
 
 export const usersListBySuggestionsSelector = createSelector(
   [usersEntriesSelector, usersSuggestionsSelector],
-  (users, suggestions) => suggestions.map(id => users[id]),
+  (users, suggestions) => suggestions.map((id) => users[id]),
 )
 
 export const usersLoadingSelector = createSelector(

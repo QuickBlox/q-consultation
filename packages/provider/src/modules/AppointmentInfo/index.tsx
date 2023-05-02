@@ -69,16 +69,14 @@ export default function AppointmentInfo(props: AppointmentInfoProps) {
       >
         {records?.length !== undefined && (
           <ul className="record-list">
-            {records?.map(
-              (record) => (
-                  <li key={record._id} className="record-item">
-                    <div onClick={() => handleOpenRecordModal(record._id)}>
-                      <FileVideoSvg className="icon file-video" />
-                      {record.name}
-                    </div>
-                  </li>
-                ),
-            )}
+            {records?.map((record) => (
+              <li key={record._id} className="record-item">
+                <div onClick={() => handleOpenRecordModal(record._id)}>
+                  <FileVideoSvg className="icon file-video" />
+                  {record.name}
+                </div>
+              </li>
+            ))}
           </ul>
         )}
       </Accordeon>

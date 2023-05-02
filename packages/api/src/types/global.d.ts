@@ -1,5 +1,5 @@
-type Dictionary<T> = Record<string, T>;
+type Dictionary<T> = Record<string, T>
 
 interface JSON {
-  parse<T>(text: string): T;
+  parse<T>(text: string): T
 }

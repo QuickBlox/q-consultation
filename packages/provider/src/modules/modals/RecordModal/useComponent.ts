@@ -1,9 +1,4 @@
-import {
-  MouseEvent as ReactMouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { createUseComponent, useActions, useMobileLayout } from '../../../hooks'
@@ -25,7 +20,7 @@ type TabsList = 'summary' | 'transcript'
 const selector = combineSelectors(
   {
     opened: modalRecordSelector,
-    recordId: modalRecordIdSelector
+    recordId: modalRecordIdSelector,
   },
   ({ recordId }) => ({
     record: createRecordsByIdSelector(recordId),

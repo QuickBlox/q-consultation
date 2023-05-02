@@ -1,10 +1,10 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
-import { MultipartFile, QCRecord } from '@/models';
-import { getCompletion, getTranscription } from '@/services/openai';
-import { qbCreateChildCustomObject } from '@/services/customObject';
-import { qbUploadFile } from '@/services/content';
-import { QBRecord } from 'quickblox';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import { MultipartFile, QCRecord } from '@/models'
+import { getCompletion, getTranscription } from '@/services/openai'
+import { qbCreateChildCustomObject } from '@/services/customObject'
+import { qbUploadFile } from '@/services/content'
+import { QBRecord } from 'quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
   const createRecordSchema = {
@@ -29,7 +29,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         apiKey: [],
       },
     ],
-  };
+  }
 
   fastify.post(
     '',
@@ -41,12 +41,12 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
       ),
     },
     async (request) => {
-      const { id } = request.params;
+      const { id } = request.params
       const audio =
         fastify.config.AI_RECORD_ANALYTICS && 'audio' in request.body
           ? request.body.audio
-          : null;
-      const video = 'video' in request.body ? request.body.video : null;
+          : null
+      const video = 'video' in request.body ? request.body.video : null
 
       const videoData =
         video &&
@@ -55,16 +55,16 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
           video.buffer,
           video.mimetype,
           Buffer.byteLength(video.buffer),
-        ));
+        ))
 
       const transcription =
-        audio && (await getTranscription(audio.filename, audio.buffer));
+        audio && (await getTranscription(audio.filename, audio.buffer))
 
       const summary =
         transcription &&
         (await getCompletion(
           `Convert this shorthand into a first-hand account of the meeting:\n\n${transcription}\n`,
-        ));
+        ))
 
       const record = await qbCreateChildCustomObject<QBRecord>(
         'Appointment',
@@ -77,11 +77,11 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
           summary,
           transcription,
         },
-      );
+      )
 
-      return record;
+      return record
     },
-  );
-};
+  )
+}
 
-export default createRecord;
+export default createRecord

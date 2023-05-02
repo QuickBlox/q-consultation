@@ -1,13 +1,12 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
-import { pick } from 'lodash';
-import { QBCreateUserWithEmail } from 'quickblox';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import { pick } from 'lodash'
+import { QBCreateUserWithEmail } from 'quickblox'
 
-import { QBSession, QBUser, QCProvider } from '@/models';
-import { qbCreateSession } from '@/services/auth';
-import { qbCreateUser } from '@/services/users';
-// import { parseProvider } from '@/utils/user';
-import { getCompletion } from '@/services/openai';
+import { QBSession, QBUser, QCProvider } from '@/models'
+import { qbCreateSession } from '@/services/auth'
+import { qbCreateUser } from '@/services/users'
+import { getCompletion } from '@/services/openai'
 
 export const signUpSchema = {
   tags: ['users', 'providers'],
@@ -28,20 +27,20 @@ export const signUpSchema = {
       data: Type.Ref(QBUser),
     }),
   },
-};
+}
 
 const signup: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('/signup', { schema: signUpSchema }, async (request) => {
-    const { description, full_name } = request.body;
-    const userData = pick(request.body, 'full_name', 'email', 'password');
+    const { description, full_name } = request.body
+    const userData = pick(request.body, 'full_name', 'email', 'password')
     const customData = pick(
       request.body,
       'full_name',
       'description',
       'language',
-    );
-    const session = await qbCreateSession();
-    let keywords = `${full_name}, `;
+    )
+    const session = await qbCreateSession()
+    let keywords = `${full_name}, `
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
       keywords += await getCompletion(
@@ -49,18 +48,17 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
           '\n',
           ' ',
         )}\n\n`,
-      );
+      )
     }
 
     const user = await qbCreateUser<QBCreateUserWithEmail>({
       ...userData,
       custom_data: JSON.stringify({ ...customData, keywords }),
       tag_list: ['provider'],
-    });
-    // const provider = parseProvider(user)!;
+    })
 
-    return { session, data: user };
-  });
-};
+    return { session, data: user }
+  })
+}
 
-export default signup;
+export default signup

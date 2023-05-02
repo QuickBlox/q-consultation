@@ -38,10 +38,7 @@ export default function Chat(props: ChatProps) {
       companion,
       isOffline,
     },
-    handlers: {
-      setActiveTab,
-      handleSetInputValue,
-    },
+    handlers: { setActiveTab, handleSetInputValue },
   } = useComponent(props)
   const { t } = useTranslation()
 
@@ -79,7 +76,8 @@ export default function Chat(props: ChatProps) {
             <UploadIndicator type="chat" />
             <ChatInput
               dialogId={activeAppointment?.dialog_id}
-              texboxRef={chatInputRef} />
+              texboxRef={chatInputRef}
+            />
           </Tabs.Tab>
           {RESOLUTION_XS && (
             <Tabs.Tab

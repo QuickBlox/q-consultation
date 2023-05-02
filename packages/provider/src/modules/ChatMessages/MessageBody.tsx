@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next'
 
+import { useState } from 'react'
 import ImageLoader from '../../components/ImageLoader'
 import { AttachSvg, RobotSvg } from '../../icons'
-import { getQuickAnswer } from '../../actionCreators'
-import { useState } from 'react'
+import { getQuickAnswer as getQuickAnswerAction } from '../../actionCreators'
 import Loader from '../../components/Loader'
 
 interface MessageBodyProps {
   message: QBChatMessage
   isMine: boolean
   setInputValue?: (value: string) => void
-  getQuickAnswer: typeof getQuickAnswer
+  getQuickAnswer: typeof getQuickAnswerAction
 }
 
 export default function MessageBody(props: MessageBodyProps) {
@@ -89,7 +89,7 @@ export default function MessageBody(props: MessageBodyProps) {
   }
 
   return (
-    <div className='message-body'>
+    <div className="message-body">
       <div
         className="body"
         // eslint-disable-next-line react/no-danger
@@ -105,10 +105,10 @@ export default function MessageBody(props: MessageBodyProps) {
       />
       {AI_QUICK_ANSWER && !isMine && setInputValue && (
         <button
-          type='button'
+          type="button"
           disabled={loading}
-          title={t("QuickAnswer")}
-          className='ai-quick-answer'
+          title={t('QuickAnswer')}
+          className="ai-quick-answer"
           onClick={handleGetQuickAnswer}
         >
           {loading ? <Loader size={20} /> : <RobotSvg />}

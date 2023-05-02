@@ -1,4 +1,4 @@
-import { Type } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox'
 
 export const Error = Type.Object(
   {
@@ -7,22 +7,27 @@ export const Error = Type.Object(
     message: Type.String(),
   },
   { $id: 'Error' },
-);
+)
 
-export const QBUser = Type.Object({
-  id: Type.Integer(),
-  full_name: Type.String(),
-  email: Type.String({ format: 'email' }),
-  // login: Type.String(),
-  // phone: Type.String(),
-  created_at: Type.String({ format: 'date-time' }),
-  updated_at: Type.String({ format: 'date-time' }),
-  last_request_at: Type.String({ format: 'date-time' }),
-  custom_data: Type.Union([Type.String(), Type.Null()]),
-  user_tags: Type.Union([Type.String(), Type.Null()]),
-}, { $id: 'QBUser' });
+export const QBUser = Type.Object(
+  {
+    id: Type.Integer(),
+    full_name: Type.String(),
+    email: Type.String({ format: 'email' }),
+    // login: Type.String(),
+    // phone: Type.String(),
+    created_at: Type.String({ format: 'date-time' }),
+    updated_at: Type.String({ format: 'date-time' }),
+    last_request_at: Type.String({ format: 'date-time' }),
+    custom_data: Type.Union([Type.String(), Type.Null()]),
+    user_tags: Type.Union([Type.String(), Type.Null()]),
+  },
+  { $id: 'QBUser' },
+)
 
-const QBBaseUserData = Type.Omit(QBUser, ['custom_data', 'user_tags'], { $id: '' })
+const QBBaseUserData = Type.Omit(QBUser, ['custom_data', 'user_tags'], {
+  $id: '',
+})
 
 export const QCProvider = Type.Intersect(
   [
@@ -34,7 +39,7 @@ export const QCProvider = Type.Intersect(
     }),
   ],
   { $id: 'QCProvider' },
-);
+)
 
 export const QCClient = Type.Intersect(
   [
@@ -48,7 +53,7 @@ export const QCClient = Type.Intersect(
     }),
   ],
   { $id: 'QCClient' },
-);
+)
 
 export const QBSession = Type.Object(
   {
@@ -63,7 +68,7 @@ export const QBSession = Type.Object(
     user_id: QBUser.properties.id,
   },
   { $id: 'QBSession' },
-);
+)
 
 export const QBDialog = Type.Object(
   {
@@ -85,7 +90,7 @@ export const QBDialog = Type.Object(
     joined: Type.Optional(Type.Boolean()),
   },
   { $id: 'QBDialog' },
-);
+)
 
 const QBCustomObject = Type.Object({
   _id: Type.String({ format: 'uuid' }),
@@ -93,7 +98,7 @@ const QBCustomObject = Type.Object({
   _parent_id: Type.Union([Type.String(), Type.Null()]),
   created_at: Type.Number(),
   updated_at: Type.Number(),
-});
+})
 
 export const QCAppointment = Type.Intersect(
   [
@@ -116,7 +121,7 @@ export const QCAppointment = Type.Intersect(
     }),
   ],
   { $id: 'QCAppointment' },
-);
+)
 
 export const QCRecord = Type.Intersect(
   [
@@ -132,4 +137,4 @@ export const QCRecord = Type.Intersect(
     ),
   ],
   { $id: 'QCRecord' },
-);
+)

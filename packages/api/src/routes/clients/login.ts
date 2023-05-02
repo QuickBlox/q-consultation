@@ -1,10 +1,9 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
 
-import { QBSession, QBUser } from '@/models';
-import { qbCreateSession, qbLogin } from '@/services/auth';
-import { userHasTag } from '@/utils/user';
-// import { parseClient } from '@/utils/user';
+import { QBSession, QBUser } from '@/models'
+import { qbCreateSession, qbLogin } from '@/services/auth'
+import { userHasTag } from '@/utils/user'
 
 export const loginSchema = {
   tags: ['users', 'clients'],
@@ -18,20 +17,19 @@ export const loginSchema = {
       data: Type.Ref(QBUser),
     }),
   },
-};
+}
 
 const login: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('/login', { schema: loginSchema }, async (request, reply) => {
-    const session = await qbCreateSession();
-    const user = await qbLogin(request.body.email, request.body.password);
-    // const client = parseClient(user);
+    const session = await qbCreateSession()
+    const user = await qbLogin(request.body.email, request.body.password)
 
     if (!userHasTag(user, 'provider')) {
-      return { session, data: user };
+      return { session, data: user }
     }
 
-    return reply.unauthorized('Unauthorized');
-  });
-};
+    return reply.unauthorized('Unauthorized')
+  })
+}
 
-export default login;
+export default login

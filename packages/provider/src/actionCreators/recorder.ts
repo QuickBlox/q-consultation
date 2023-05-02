@@ -30,11 +30,15 @@ export function stopRecordFailure(
   return { type: Types.RECORD_STOP_FAILURE, error }
 }
 
-export function getRecords(appointmentId:  QBAppointment['_id']): Types.GetRecordsRequest {
+export function getRecords(
+  appointmentId: QBAppointment['_id'],
+): Types.GetRecordsRequest {
   return { type: Types.GET_RECORDS_REQUEST, payload: appointmentId }
 }
 
-export function getRecordsSuccess(payload: Types.GetRecordsSuccess['payload']): Types.GetRecordsSuccess {
+export function getRecordsSuccess(
+  payload: Types.GetRecordsSuccess['payload'],
+): Types.GetRecordsSuccess {
   return { type: Types.GET_RECORDS_SUCCESS, payload }
 }
 
@@ -56,7 +60,9 @@ export function createVoice(payload: {
   return { type: Types.CREATE_VOICE, payload }
 }
 
-export function uploadRecordSuccess(payload?: QBRecord): Types.UploadRecordSuccess {
+export function uploadRecordSuccess(
+  payload?: QBRecord,
+): Types.UploadRecordSuccess {
   return { type: Types.UPLOAD_RECORD_SUCCESS, payload }
 }
 
@@ -64,7 +70,9 @@ export function uploadRecordFailure(error: string): Types.UploadRecordFailure {
   return { type: Types.UPLOAD_RECORD_FAILURE, error }
 }
 
-export function uploadRecordProgress(payload: number): Types.UploadRecordProgress {
+export function uploadRecordProgress(
+  payload: number,
+): Types.UploadRecordProgress {
   return { type: Types.UPLOAD_RECORD_PROGRESS, payload }
 }
 

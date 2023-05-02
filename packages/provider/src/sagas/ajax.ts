@@ -53,7 +53,7 @@ export function ajax<T>(params: AjaxParams): Promise<AjaxResponse<T>> {
       xhr.addEventListener('progress', onProgress)
       xhr.upload.addEventListener('progress', onProgress)
     }
-    function onLoad() {
+    const onLoad = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         const response: AjaxResponse<T> = {
           status: xhr.status,
@@ -67,9 +67,10 @@ export function ajax<T>(params: AjaxParams): Promise<AjaxResponse<T>> {
         }
       }
     }
-    function onError() {
+    const onError = () => {
       reject(new Error('An error occurred during the transaction'))
     }
+
     xhr.addEventListener('load', onLoad)
     xhr.addEventListener('error', onError)
     xhr.upload.addEventListener('load', onLoad)

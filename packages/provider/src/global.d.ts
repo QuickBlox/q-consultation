@@ -377,10 +377,10 @@ interface QBAppointment extends QBCustomObject {
 }
 
 interface QBRecord extends QBCustomObject {
-  uid?: string;
-  name?: string;
-  summary?: string;
-  transcription?: string;
+  uid?: string
+  name?: string
+  summary?: string
+  transcription?: string
   appointment_id: QBAppointment['_id']
 }
 

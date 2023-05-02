@@ -27,7 +27,7 @@ export default (
     case Types.GET_RECORDS_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
       }
     case Types.UPLOAD_RECORD_REQUEST:
       return {
@@ -52,11 +52,8 @@ export default (
         },
         records: {
           ...state.records,
-          [appointmentId]: currentRecords ? [
-            ...currentRecords,
-            ...list
-          ] : list
-        }
+          [appointmentId]: currentRecords ? [...currentRecords, ...list] : list,
+        },
       }
     }
     case Types.UPLOAD_RECORD_SUCCESS: {
@@ -74,11 +71,10 @@ export default (
           },
           records: {
             ...state.records,
-            [appointment_id]: currentRecords ? [
-              ...currentRecords,
-              action.payload._id
-            ] : [action.payload._id]
-          }
+            [appointment_id]: currentRecords
+              ? [...currentRecords, action.payload._id]
+              : [action.payload._id],
+          },
         }
       }
 

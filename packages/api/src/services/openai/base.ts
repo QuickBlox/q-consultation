@@ -5,19 +5,19 @@ import {
   CreateChatCompletionRequest,
   CreateTranscriptionResponse,
   ChatCompletionRequestMessage,
-} from 'openai';
-import { BASE_PATH } from 'openai/dist/base';
-import fetch from 'node-fetch';
-import FormData from 'form-data';
+} from 'openai'
+import { BASE_PATH } from 'openai/dist/base'
+import fetch from 'node-fetch'
+import FormData from 'form-data'
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
-});
+})
 
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration)
 
-type CompletionConfig = Omit<CreateCompletionRequest, 'prompt'>;
-type ChatCompletionConfig = Omit<CreateChatCompletionRequest, 'messages'>;
+type CompletionConfig = Omit<CreateCompletionRequest, 'prompt'>
+type ChatCompletionConfig = Omit<CreateChatCompletionRequest, 'messages'>
 
 const baseCompletionConfig: CompletionConfig = {
   model: 'text-davinci-003',
@@ -26,25 +26,25 @@ const baseCompletionConfig: CompletionConfig = {
   top_p: 1,
   frequency_penalty: 0,
   presence_penalty: 0,
-};
+}
 
 const baseChatCompletionConfig: ChatCompletionConfig = {
   model: 'gpt-3.5-turbo',
-};
+}
 
 export const createChatMessage = (
   role: ChatCompletionRequestMessage['role'],
   content: ChatCompletionRequestMessage['content'],
-): ChatCompletionRequestMessage => ({ role, content });
+): ChatCompletionRequestMessage => ({ role, content })
 
 export const getTranscription = async (fileName: string, audioFile: Buffer) => {
   const { Authorization }: Record<string, string> =
-    configuration.baseOptions.headers;
+    configuration.baseOptions.headers
 
-  const form = new FormData();
+  const form = new FormData()
 
-  form.append('file', audioFile, fileName);
-  form.append('model', 'whisper-1');
+  form.append('file', audioFile, fileName)
+  form.append('model', 'whisper-1')
 
   const data: CreateTranscriptionResponse = await fetch(
     `${BASE_PATH}/audio/transcriptions`,
@@ -53,41 +53,42 @@ export const getTranscription = async (fileName: string, audioFile: Buffer) => {
       headers: { Authorization },
       body: form,
     },
-  ).then((res) => res.json());
+  ).then((res) => res.json())
 
-  return data.text;
-};
+  return data.text
+}
 
-const completeSentence = (text?: string) => text?.replace(/([^.!?;]+)[^.!?;]*$/, ' ...') || '';
+const completeSentence = (text?: string) =>
+  text?.replace(/([^.!?;]+)[^.!?;]*$/, ' ...') || ''
 
 export const getCompletion = async (
   prompt: string,
   config: Partial<CompletionConfig> = {},
-  isCompleteSentence?: boolean
+  isCompleteSentence = false,
 ) => {
   const res = await openai.createCompletion({
     ...baseCompletionConfig,
     ...config,
     prompt,
-  });
+  })
 
   return isCompleteSentence
     ? completeSentence(res.data.choices[0].text)
-    : res.data.choices[0].text?.trim() || '';
-};
+    : res.data.choices[0].text?.trim() || ''
+}
 
 export const getChatCompletion = async (
   messages: ChatCompletionRequestMessage[],
   config: Partial<ChatCompletionConfig> = {},
-  isCompleteSentence?: boolean
+  isCompleteSentence = false,
 ) => {
   const res = await openai.createChatCompletion({
     ...baseChatCompletionConfig,
     ...config,
     messages,
-  });
+  })
 
   return isCompleteSentence
     ? completeSentence(res.data.choices[0].message?.content)
-    : res.data.choices[0].message?.content.trim() || '';
-};
+    : res.data.choices[0].message?.content.trim() || ''
+}

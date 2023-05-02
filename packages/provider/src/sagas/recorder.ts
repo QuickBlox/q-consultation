@@ -10,6 +10,7 @@ import {
   takeEvery,
 } from 'redux-saga/effects'
 
+import { Action, AnyAction } from 'redux'
 import { QBDataGet } from '../qb-api-calls'
 import * as Types from '../actions'
 import {
@@ -28,13 +29,9 @@ import {
   toggleShowModal,
   createVoice,
 } from '../actionCreators'
-import {
-  authSessionSelector,
-  callAppointmentIdSelector,
-} from '../selectors'
+import { authSessionSelector, callAppointmentIdSelector } from '../selectors'
 import { stringifyError } from '../utils/parse'
 import { normalize } from '../utils/normalize'
-import { Action, AnyAction } from 'redux'
 import { takeEveryAll } from '../utils/saga'
 import { ajax } from './ajax'
 
@@ -60,17 +57,15 @@ interface RecordResponse {
 
 function* getRecords(action: Types.GetRecordsRequest) {
   try {
-    const { items }: RecordResponse = yield call(
-      QBDataGet,
-      'Record',
-      {
-        appointment_id: action.payload,
-        sort_asc: 'created_at'
-      },
-    )
+    const { items }: RecordResponse = yield call(QBDataGet, 'Record', {
+      appointment_id: action.payload,
+      sort_asc: 'created_at',
+    })
     const { entries, list } = normalize(items, '_id')
 
-    yield put(getRecordsSuccess({ appointmentId: action.payload, entries, list }))
+    yield put(
+      getRecordsSuccess({ appointmentId: action.payload, entries, list }),
+    )
   } catch (e) {
     const errorMessage = stringifyError(e)
 
@@ -174,11 +169,11 @@ function* recordStart(action: Types.StartRecordRequestAction) {
   if (QBMediaRecorder.isAvailable() && appointmentId) {
     yield all([
       fork(handleQBMediaRecorderEvents, mediaRecorders.video, (blob) =>
-        uploadRecordRequest({ appointmentId, blob })
+        uploadRecordRequest({ appointmentId, blob }),
       ),
       mediaRecorders.audio &&
         fork(handleQBMediaRecorderEvents, mediaRecorders.audio, (blob) =>
-          createVoice({ appointmentId, blob })
+          createVoice({ appointmentId, blob }),
         ),
     ])
 
@@ -203,18 +198,21 @@ function* recordStart(action: Types.StartRecordRequestAction) {
   }
 }
 
-function createUploadChannel(
-  token: string,
+function* createUploadChannel(
   appointmentId: QBAppointment['_id'],
   videoFile: File | null,
   voiceFile: File | null,
 ) {
+  const session: ReturnType<typeof authSessionSelector> = yield select(
+    authSessionSelector,
+  )
   const url = `${SERVER_APP_URL}/appointments/${appointmentId}/records`
   const body = new FormData()
 
   if (videoFile) {
     body.append('video', videoFile, videoFile.name)
   }
+
   if (voiceFile) {
     body.append('audio', voiceFile, voiceFile.name)
   }
@@ -224,7 +222,7 @@ function createUploadChannel(
       method: 'POST',
       url,
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${session!.token}`,
       },
       onProgress: (event) => {
         emitter(uploadRecordProgress(event.loaded / event.total))
@@ -274,14 +272,12 @@ function* uploadRecord(
         lastModified: lastModified.valueOf(),
       },
     )
-    const voiceFile = voiceRecord && new File(
-      [voiceRecord],
-      `${lastModified.toISOString()}.webm`,
-      {
-        type: 'audio/webm',
-        lastModified: lastModified.valueOf(),
-      },
-    )
+    const voiceFile = voiceRecord
+      ? new File([voiceRecord], `${lastModified.toISOString()}.webm`, {
+          type: 'audio/webm',
+          lastModified: lastModified.valueOf(),
+        })
+      : null
 
     if (videoFile.size > FILE_SIZE_LIMIT) {
       yield put(toggleShowModal({ modal: 'SaveRecordModal', file: videoFile }))
@@ -290,13 +286,10 @@ function* uploadRecord(
     if (!AI_RECORD_ANALYTICS && videoFile.size > FILE_SIZE_LIMIT) {
       yield put(uploadRecordSuccess())
     } else {
-      const session: ReturnType<typeof authSessionSelector> = yield select(
-        authSessionSelector,
-      )
-      const channel: EventChannel<AnyAction> = yield call(
-        // @ts-ignore
+      const channel: EventChannel<AnyAction> = yield call<
+        typeof createUploadChannel
+      >(
         createUploadChannel,
-        session!.token,
         appointmentId,
         videoFile.size > FILE_SIZE_LIMIT ? null : videoFile,
         AI_RECORD_ANALYTICS ? voiceFile : null,

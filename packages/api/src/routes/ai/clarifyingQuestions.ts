@@ -1,7 +1,7 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
-import { ChatCompletionResponseMessageRoleEnum } from 'openai';
-import { getChatCompletion } from '@/services/openai';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import { ChatCompletionResponseMessageRoleEnum } from 'openai'
+import { getChatCompletion } from '@/services/openai'
 
 export const clarifyingQuestionsSchema = {
   tags: ['ai', 'providers'],
@@ -24,7 +24,7 @@ export const clarifyingQuestionsSchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const clarifyingQuestions: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post(
@@ -37,7 +37,7 @@ const clarifyingQuestions: FastifyPluginAsyncTypebox = async (fastify) => {
       ),
     },
     async (request) => {
-      const { topic, messages } = request.body;
+      const { topic, messages } = request.body
 
       const message = await getChatCompletion([
         {
@@ -46,11 +46,11 @@ const clarifyingQuestions: FastifyPluginAsyncTypebox = async (fastify) => {
         },
         { role: 'user', content: topic },
         ...messages,
-      ]);
+      ])
 
-      return { message };
+      return { message }
     },
-  );
-};
+  )
+}
 
-export default clarifyingQuestions;
+export default clarifyingQuestions

@@ -1,7 +1,7 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
 
-import { qbDeleteUser } from '@/services/users';
+import { qbDeleteUser } from '@/services/users'
 
 export const deleteSchema = {
   tags: ['users'],
@@ -13,7 +13,7 @@ export const deleteSchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.delete(
@@ -23,13 +23,13 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request, reply) => {
-      const { id } = request.params;
+      const { id } = request.params
 
-      await qbDeleteUser(parseInt(id, 10));
+      await qbDeleteUser(parseInt(id, 10))
 
-      reply.code(204);
+      reply.code(204)
     },
-  );
-};
+  )
+}
 
-export default deleteById;
+export default deleteById

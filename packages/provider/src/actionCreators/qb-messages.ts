@@ -110,13 +110,17 @@ export function userIsTyping(payload: {
 
 export function getQuickAnswer(
   question: string,
-  then?: (action: Types.QBGetQuickAnswerSuccessAction | Types.QBGetQuickAnswerFailureAction) => void
+  then?: (
+    action:
+      | Types.QBGetQuickAnswerSuccessAction
+      | Types.QBGetQuickAnswerFailureAction,
+  ) => void,
 ): Types.QBGetQuickAnswerRequestAction {
   return {
     type: Types.QB_GET_QUICK_ANSWER_REQUEST,
     payload: {
       question,
-      then
+      then,
     },
   }
 }
@@ -132,4 +136,3 @@ export function getQuickAnswerFailure(
 ): Types.QBGetQuickAnswerFailureAction {
   return { type: Types.QB_GET_QUICK_ANSWER_FAILURE, error }
 }
-

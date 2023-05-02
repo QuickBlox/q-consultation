@@ -1,8 +1,8 @@
-import fp from 'fastify-plugin';
-import swagger, { SwaggerOptions } from '@fastify/swagger';
-import swaggerUI, { FastifySwaggerUiOptions } from '@fastify/swagger-ui';
-import { Type } from '@sinclair/typebox';
-import * as commonModels from '@/models/common';
+import fp from 'fastify-plugin'
+import swagger, { SwaggerOptions } from '@fastify/swagger'
+import swaggerUI, { FastifySwaggerUiOptions } from '@fastify/swagger-ui'
+import { Type } from '@sinclair/typebox'
+import * as commonModels from '@/models/common'
 
 const swaggerOptions: SwaggerOptions = {
   swagger: {
@@ -20,20 +20,13 @@ const swaggerOptions: SwaggerOptions = {
     },
     consumes: ['application/json', 'multipart/form-data'],
     produces: ['application/json'],
-    // tags: [
-    //   {
-    //     name: 'providers',
-    //     description: 'providers',
-    //   },
-    // ],
-    // @ts-ignore
-    // definitions: models,
   },
   refResolver: {
     buildLocalReference: (json, baseUri, fragment, i) => {
-      return typeof json.$id === 'string' ? json.$id : `def-${i}`;
+      return typeof json.$id === 'string' ? json.$id : `def-${i}`
     },
   },
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   transform: ({ url, schema }) => {
     return {
@@ -50,22 +43,22 @@ const swaggerOptions: SwaggerOptions = {
           ...(schema?.response || {}),
         },
       },
-    };
+    }
   },
-};
+}
 
 const swaggerUIOptions: FastifySwaggerUiOptions = {
   routePrefix: '/swagger',
-};
+}
 
 export default fp(
   async (fastify) => {
     Object.values(commonModels).forEach((schema) => {
-      fastify.addSchema(schema);
-    });
+      fastify.addSchema(schema)
+    })
 
-    await fastify.register(swagger, swaggerOptions);
-    await fastify.register(swaggerUI, swaggerUIOptions);
+    await fastify.register(swagger, swaggerOptions)
+    await fastify.register(swaggerUI, swaggerUIOptions)
   },
   { name: 'swagger' },
-);
+)

@@ -8,7 +8,11 @@ import './styles.css'
 export default function ProvidersScreen() {
   const {
     data: { selectedProvider, defaultProviderId, consultationTopic },
-    handlers: { handleChangeProvider, handleResetProvider, setConsultationTopic },
+    handlers: {
+      handleChangeProvider,
+      handleResetProvider,
+      setConsultationTopic,
+    },
   } = useComponent()
 
   return (

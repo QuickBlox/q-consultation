@@ -1,13 +1,12 @@
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
-import { Type } from '@sinclair/typebox';
-import pick from 'lodash/pick';
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import pick from 'lodash/pick'
 
-import { MultipartFile, QBUser, QCProvider } from '@/models';
-import { stringifyUserCustomData } from '@/utils/user';
-import { findUserById, qbUpdateUser } from '@/services/users';
-import { getCompletion } from '@/services/openai';
-import { parseUserCustomData } from '@/utils/user';
-import { qbDeleteFile, qbUploadFile } from '@/services/content';
+import { MultipartFile, QBUser, QCProvider } from '@/models'
+import { stringifyUserCustomData, parseUserCustomData } from '@/utils/user'
+import { findUserById, qbUpdateUser } from '@/services/users'
+import { getCompletion } from '@/services/openai'
+import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
   tags: ['users', 'providers'],
@@ -25,11 +24,8 @@ const updateByIdSchema = {
     Type.Partial(
       Type.Object({
         password: Type.String(),
-        avatar: Type.Union([
-          MultipartFile,
-          Type.Literal('none')
-        ]),
-      })
+        avatar: Type.Union([MultipartFile, Type.Literal('none')]),
+      }),
     ),
   ]),
   response: {
@@ -40,7 +36,7 @@ const updateByIdSchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const updateMySchema = {
   tags: ['users', 'providers'],
@@ -55,10 +51,7 @@ const updateMySchema = {
       ]),
       Type.Object({
         avatar: Type.Optional(
-          Type.Union([
-            MultipartFile,
-            Type.Literal('none')
-          ]),
+          Type.Union([MultipartFile, Type.Literal('none')]),
         ),
       }),
     ]),
@@ -71,10 +64,7 @@ const updateMySchema = {
       ]),
       Type.Object({
         avatar: Type.Optional(
-          Type.Union([
-            MultipartFile,
-            Type.Literal('none')
-          ]),
+          Type.Union([MultipartFile, Type.Literal('none')]),
         ),
         password: Type.String(),
         old_password: Type.String(),
@@ -89,7 +79,7 @@ const updateMySchema = {
       apiKey: [],
     },
   ],
-};
+}
 
 const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.put(
@@ -99,16 +89,22 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.ProviderSessionToken),
     },
     async (request) => {
-      const { description, avatar, full_name } = request.body;
-      const userData = pick(request.body, 'full_name', 'email', 'password', 'old_password');
+      const { description, avatar, full_name } = request.body
+      const userData = pick(
+        request.body,
+        'full_name',
+        'email',
+        'password',
+        'old_password',
+      )
       const customData = pick(
         request.body,
         'full_name',
         'description',
         'language',
-      );
-      const prevUserData = await findUserById(request.session!.user_id);
-      const prevUserCustomData = parseUserCustomData(prevUserData.custom_data);
+      )
+      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserCustomData = parseUserCustomData(prevUserData.custom_data)
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
@@ -121,13 +117,14 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
           avatar.buffer,
           avatar.mimetype,
           Buffer.byteLength(avatar.buffer),
-        );
-        avatarData = { id: file.id, uid: file.uid };
+        )
+
+        avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
         avatarData = undefined
       }
 
-      let keywords = `${full_name}, `;
+      let keywords = `${full_name}, `
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
         keywords += await getCompletion(
@@ -135,7 +132,7 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
             '\n',
             ' ',
           )}\n\n`,
-        );
+        )
       }
 
       const updatedUser = await qbUpdateUser(request.session!.user_id, {
@@ -143,12 +140,12 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
         custom_data: stringifyUserCustomData(
           avatarData
             ? { ...customData, keywords, avatar: avatarData }
-            : { ...customData, keywords }
+            : { ...customData, keywords },
         ),
-      });
+      })
 
       return updatedUser
-    }
+    },
   )
   fastify.put(
     '/:id',
@@ -157,16 +154,16 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request) => {
-      const { description, avatar, full_name } = request.body;
-      const userData = pick(request.body, 'full_name', 'email', 'password');
+      const { description, avatar, full_name } = request.body
+      const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
         request.body,
         'full_name',
         'description',
         'language',
-      );
-      const prevUserData = await findUserById(request.session!.user_id);
-      const prevUserCustomData = parseUserCustomData(prevUserData.custom_data);
+      )
+      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserCustomData = parseUserCustomData(prevUserData.custom_data)
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
@@ -179,13 +176,14 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
           avatar.buffer,
           avatar.mimetype,
           Buffer.byteLength(avatar.buffer),
-        );
-        avatarData = { id: file.id, uid: file.uid };
+        )
+
+        avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
         avatarData = undefined
       }
 
-      let keywords = `${full_name}, `;
+      let keywords = `${full_name}, `
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
         keywords += await getCompletion(
@@ -193,7 +191,7 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
             '\n',
             ' ',
           )}\n\n`,
-        );
+        )
       }
 
       const updatedUser = await qbUpdateUser(parseInt(request.params.id, 10), {
@@ -201,13 +199,13 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
         custom_data: stringifyUserCustomData(
           avatarData
             ? { ...customData, keywords, avatar: avatarData }
-            : { ...customData, keywords }
+            : { ...customData, keywords },
         ),
-      });
+      })
 
-      return updatedUser;
+      return updatedUser
     },
-  );
-};
+  )
+}
 
-export default updateById;
+export default updateById

@@ -7,7 +7,6 @@ import {
   fork,
   put,
   race,
-  SagaReturnType,
   select,
   take,
   takeEvery,
@@ -25,19 +24,16 @@ import {
   sessionUpdatedAt,
   updateMyAccountFailure,
   updateMyAccountSuccess,
-  uploadFile,
 } from '../actionCreators'
 import {
   QBChatConnect,
   QBLogin,
   QBLogout,
   QBChatDisconnect,
-  QBUserUpdate,
-  QBDeleteContent,
 } from '../qb-api-calls'
 import { authMyAccountSelector, authSessionSelector } from '../selectors'
 import { getExpiresDate, isSessionExpired } from '../utils/session'
-import { isQBError, stringifyError } from '../utils/parse'
+import { stringifyError } from '../utils/parse'
 import { userIsProvider } from '../utils/user'
 import { ajax } from './ajax'
 
@@ -191,6 +187,7 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
 
       const url = `${SERVER_APP_URL}/providers`
       const form = new FormData()
+
       form.append('full_name', newMyAccount.full_name || '')
       form.append('email', newMyAccount.email || '')
       form.append('description', newCustomData.description || '')
@@ -215,7 +212,7 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
         method: 'PUT',
         url,
         headers: {
-          'Authorization': `Bearer ${session!.token}`,
+          Authorization: `Bearer ${session!.token}`,
         },
         body: form,
         responseType: 'json',

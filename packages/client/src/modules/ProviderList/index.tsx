@@ -47,7 +47,11 @@ export default function ProviderList(props: ProviderListProps) {
   }
 
   return (
-    <div className={cn('provider-list', { 'provider-list-wide': AI_SUGGEST_PROVIDER })}>
+    <div
+      className={cn('provider-list', {
+        'provider-list-wide': AI_SUGGEST_PROVIDER,
+      })}
+    >
       {AI_SUGGEST_PROVIDER ? (
         <>
           <div className="header-block">
@@ -89,8 +93,7 @@ export default function ProviderList(props: ProviderListProps) {
       <ul className="providers">
         {suggestions.length
           ? suggestions.map(renderProvider)
-          : providers.filter(filterSearchedProviders).map(renderProvider)
-        }
+          : providers.filter(filterSearchedProviders).map(renderProvider)}
         {loading && (
           <li>
             <Loader theme="primary" />

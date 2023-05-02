@@ -50,6 +50,8 @@ export function providersSuggestionsSuccess(
   return { type: Types.QB_PROVIDERS_SUGGESTIONS_SUCCESS, payload }
 }
 
-export function providersSuggestionsFailure(error: string): Types.QBProvidersByTopicFailureAction {
+export function providersSuggestionsFailure(
+  error: string,
+): Types.QBProvidersByTopicFailureAction {
   return { type: Types.QB_PROVIDERS_SUGGESTIONS_FAILURE, error }
 }

@@ -19,7 +19,7 @@ const initialState: UsersReducer = {
   total_entries: 0,
   entries: {},
   not_found: [],
-  suggestions: []
+  suggestions: [],
 }
 
 export default (
