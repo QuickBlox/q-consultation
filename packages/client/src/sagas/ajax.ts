@@ -60,7 +60,7 @@ export function ajax<T>(params: AjaxParams): Promise<AjaxResponse<T>> {
           response: xhr.response,
         }
 
-        if (xhr.statusText === 'OK') {
+        if (xhr.status >= 200 && xhr.status < 300) {
           resolve(response)
         } else {
           reject(xhr.response)

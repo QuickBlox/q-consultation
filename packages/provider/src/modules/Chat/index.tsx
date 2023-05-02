@@ -73,7 +73,7 @@ export default function Chat(props: ChatProps) {
               chatOpen={activeTab === CHAT_TAB}
               setInputValue={handleSetInputValue}
             />
-            <UploadIndicator type="chat" />
+            <UploadIndicator />
             <ChatInput
               dialogId={activeAppointment?.dialog_id}
               texboxRef={chatInputRef}

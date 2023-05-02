@@ -136,16 +136,12 @@ export default createUseComponent((props: ChatInputProps) => {
         }),
       })
     } else {
-      actions.uploadFile(
-        file,
-        'chat',
-        (action: QBContentUploadSuccessAction) => {
-          const { id, name, size, uid, content_type } = action.payload
-          const type = content_type.replace(/(\/.*)$/, '')
+      actions.uploadFile(file, (action: QBContentUploadSuccessAction) => {
+        const { id, name, size, uid, content_type } = action.payload
+        const type = content_type.replace(/(\/.*)$/, '')
 
-          submitMessage({ id, name, size, type, uid })
-        },
-      )
+        submitMessage({ id, name, size, type, uid })
+      })
     }
     e.target.value = ''
   }
