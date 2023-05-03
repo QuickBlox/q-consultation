@@ -6,6 +6,7 @@ import {
   getMessages,
   markMessageRead,
   getQuickAnswer,
+  getQuickAnswerCancel,
 } from '../../actionCreators'
 import {
   authMyAccountIdSelector,
@@ -13,6 +14,7 @@ import {
   usersEntriesSelector,
   createMessagesListByDialogIdSelector,
   createMessagesHasMoreByDialogIdSelector,
+  messagesLoadMessageIdSelector,
 } from '../../selectors'
 import { formatDateMessage, getSentTime } from '../../utils/calendar'
 import { createUseComponent, useActions, usePrevious } from '../../hooks'
@@ -30,6 +32,7 @@ const createSelector = (dialogId?: QBChatDialog['_id']) =>
     myAccountId: authMyAccountIdSelector,
     loading: messagesLoadingSelector,
     users: usersEntriesSelector,
+    loadMessageId: messagesLoadMessageIdSelector,
     hasMore: createMessagesHasMoreByDialogIdSelector(dialogId),
     messages: createMessagesListByDialogIdSelector(dialogId),
   })
@@ -44,6 +47,7 @@ export default createUseComponent((props: ChatMessagesProps) => {
     getMessages,
     markMessageRead,
     getQuickAnswer,
+    getQuickAnswerCancel,
   })
   const { i18n } = useTranslation()
   const prevDialogId = usePrevious(dialogId) || dialogId

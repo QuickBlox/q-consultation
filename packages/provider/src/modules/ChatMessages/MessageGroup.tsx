@@ -2,13 +2,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
-import {
-  getQuickAnswer as getQuickAnswerAction,
-  markMessageRead as markMessageReadAction,
-} from '../../actionCreators'
+import { markMessageRead as markMessageReadAction } from '../../actionCreators'
 import { getSentTime } from '../../utils/calendar'
-
-import MessageBody from './MessageBody'
 
 interface ChatMessageProps {
   chatOpen?: boolean
@@ -16,8 +11,7 @@ interface ChatMessageProps {
   messages: QBChatMessage[]
   users: Dictionary<QBUser>
   markMessageRead: typeof markMessageReadAction
-  getQuickAnswer: typeof getQuickAnswerAction
-  setInputValue?: (value: string) => void
+  renderMessage: (message: QBChatMessage, isMine: boolean) => JSX.Element
 }
 
 export default function ChatMessage(props: ChatMessageProps) {
@@ -27,8 +21,7 @@ export default function ChatMessage(props: ChatMessageProps) {
     users,
     markMessageRead,
     chatOpen,
-    setInputValue,
-    getQuickAnswer,
+    renderMessage,
   } = props
   const lastMessage = messages[messages.length - 1]
   const { t } = useTranslation()
@@ -73,15 +66,7 @@ export default function ChatMessage(props: ChatMessageProps) {
           {getSentTime(lastMessage.date_sent * 1000)}
         </span>
       </div>
-      {messages.map((message) => (
-        <MessageBody
-          key={message._id}
-          message={message}
-          isMine={messageIsMine}
-          setInputValue={setInputValue}
-          getQuickAnswer={getQuickAnswer}
-        />
-      ))}
+      {messages.map((message) => renderMessage(message, messageIsMine))}
     </div>
   )
 }

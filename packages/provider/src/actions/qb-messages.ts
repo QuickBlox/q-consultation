@@ -15,6 +15,7 @@ export const QB_CHAT_SEND_SYSTEM_MESSAGE_FAILURE =
 export const QB_GET_QUICK_ANSWER_REQUEST = 'QB_GET_QUICK_ANSWER_REQUEST'
 export const QB_GET_QUICK_ANSWER_SUCCESS = 'QB_GET_QUICK_ANSWER_SUCCESS'
 export const QB_GET_QUICK_ANSWER_FAILURE = 'QB_GET_QUICK_ANSWER_FAILURE'
+export const QB_GET_QUICK_ANSWER_CANCEL = 'QB_GET_QUICK_ANSWER_CANCEL'
 export const QB_CHAT_MARK_MESSAGE_READ = 'QB_CHAT_MARK_MESSAGE_READ'
 // QB Chat module events
 export const QB_CHAT_MESSAGE = '@QB/MESSAGE'
@@ -104,9 +105,14 @@ export interface QBGetQuickAnswerFailureAction extends Action {
   error: string
 }
 
+export interface QBGetQuickAnswerCancelAction extends Action {
+  type: typeof QB_GET_QUICK_ANSWER_CANCEL
+}
+
 export interface QBGetQuickAnswerRequestAction extends Action {
   type: typeof QB_GET_QUICK_ANSWER_REQUEST
   payload: {
+    messageId: QBChatMessage['_id']
     question: string
     then?: (
       action: QBGetQuickAnswerSuccessAction | QBGetQuickAnswerFailureAction,
@@ -173,6 +179,7 @@ export type QBMessageAction =
   | QBGetQuickAnswerRequestAction
   | QBGetQuickAnswerSuccessAction
   | QBGetQuickAnswerFailureAction
+  | QBGetQuickAnswerCancelAction
   | QBMarkMessageReadAction
   | QBChatIncomingMessageAction
   | QBChatIncomingSystemMessageAction

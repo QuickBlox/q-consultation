@@ -1,6 +1,6 @@
 import type { Action } from 'redux'
 import type { ActionType } from '@redux-saga/types'
-import { all, fork, take } from 'redux-saga/effects'
+import { all, call, fork, race, take } from 'redux-saga/effects'
 
 export function takeEveryAll<P extends ActionType[]>(
   patterns: P,
@@ -13,6 +13,20 @@ export function takeEveryAll<P extends ActionType[]>(
       )
 
       yield fork(worker, actions)
+    }
+  })
+}
+
+export function takeOrCancel<P extends ActionType>(
+  takePattern: P,
+  cancelPattern: P,
+  worker: (...args: any[]) => any,
+) {
+  return fork(function* saga() {
+    while (true) {
+      const action: Action = yield take(takePattern)
+
+      yield race([call(worker, action), take(cancelPattern)])
     }
   })
 }

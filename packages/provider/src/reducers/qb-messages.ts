@@ -1,19 +1,23 @@
 import omit from 'lodash/omit'
 import * as Types from '../actions'
 
+type Dialogs = Dictionary<{
+  entries: Dictionary<QBChatMessage>
+  limit: number
+  skip: number
+}>
+
 export interface MessagesReducer {
   error?: string
   loading: boolean
-  dialogs: Dictionary<{
-    entries: Dictionary<QBChatMessage>
-    limit: number
-    skip: number
-  }>
+  loadMessageId: QBChatMessage['_id'] | null
+  dialogs: Dialogs
 }
 
 const initialState: MessagesReducer = {
   error: undefined,
   loading: false,
+  loadMessageId: null,
   dialogs: {},
 }
 
@@ -81,6 +85,18 @@ export default (state = initialState, action: ActionType) => {
         },
       }
     }
+    case Types.QB_GET_QUICK_ANSWER_REQUEST:
+      return {
+        ...state,
+        loadMessageId: action.payload.messageId,
+      }
+    case Types.QB_GET_QUICK_ANSWER_SUCCESS:
+    case Types.QB_GET_QUICK_ANSWER_FAILURE:
+    case Types.QB_GET_QUICK_ANSWER_CANCEL:
+      return {
+        ...state,
+        loadMessageId: null,
+      }
     case Types.QB_CHAT_SEND_SYSTEM_MESSAGE_SUCCESS:
     case Types.QB_FILE_UPLOAD_SUCCESS:
     case Types.QB_FILE_UPLOAD_CANCEL:
@@ -133,7 +149,7 @@ export default (state = initialState, action: ActionType) => {
     case Types.QB_DIALOG_LEAVE_SUCCESS: {
       return {
         ...state,
-        dialogs: omit(state.dialogs, action.payload),
+        dialogs: omit(state.dialogs, action.payload) as Dialogs,
       }
     }
     case Types.QB_CHAT_MARK_MESSAGE_READ:

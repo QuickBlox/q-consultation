@@ -109,6 +109,7 @@ export function userIsTyping(payload: {
 }
 
 export function getQuickAnswer(
+  messageId: QBChatMessage['_id'],
   question: string,
   then?: (
     action:
@@ -119,6 +120,7 @@ export function getQuickAnswer(
   return {
     type: Types.QB_GET_QUICK_ANSWER_REQUEST,
     payload: {
+      messageId,
       question,
       then,
     },
@@ -135,4 +137,8 @@ export function getQuickAnswerFailure(
   error: string,
 ): Types.QBGetQuickAnswerFailureAction {
   return { type: Types.QB_GET_QUICK_ANSWER_FAILURE, error }
+}
+
+export function getQuickAnswerCancel(): Types.QBGetQuickAnswerCancelAction {
+  return { type: Types.QB_GET_QUICK_ANSWER_CANCEL }
 }

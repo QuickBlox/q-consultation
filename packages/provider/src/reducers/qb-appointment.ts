@@ -105,7 +105,10 @@ export default (
     case Types.QB_CLEAR_APPOINTMENT_OF_DELETED_USERS:
       return {
         ...state,
-        entries: omit(state.entries, action.payload),
+        entries: omit(
+          state.entries,
+          action.payload,
+        ) as Dictionary<QBAppointment>,
         liveQueue: difference(state.liveQueue, action.payload),
         history: difference(state.history, action.payload),
       }

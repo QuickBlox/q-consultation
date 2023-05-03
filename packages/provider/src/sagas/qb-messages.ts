@@ -32,6 +32,7 @@ import {
 } from '../selectors'
 import { stringifyError } from '../utils/parse'
 import { ajax } from './ajax'
+import { takeOrCancel } from '../utils/saga'
 
 function* getChatMessages(action: Types.QBGetMessageRequestAction) {
   const { dialogId, skip, limit } = action.payload
@@ -196,5 +197,9 @@ export default [
   takeEvery(Types.QB_CHAT_SEND_MESSAGE_REQUEST, sendMessage),
   takeEvery(Types.QB_CHAT_SEND_SYSTEM_MESSAGE_REQUEST, sendSystemMessage),
   takeEvery(Types.QB_CHAT_MARK_MESSAGE_READ, sendReadStatus),
-  takeEvery(Types.QB_GET_QUICK_ANSWER_REQUEST, getQuickAnswer),
+  takeOrCancel(
+    Types.QB_GET_QUICK_ANSWER_REQUEST,
+    Types.QB_GET_QUICK_ANSWER_CANCEL,
+    getQuickAnswer,
+  ),
 ]

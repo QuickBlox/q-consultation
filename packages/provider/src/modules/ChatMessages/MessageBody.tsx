@@ -1,33 +1,41 @@
 import { useTranslation } from 'react-i18next'
 
-import { useState } from 'react'
 import ImageLoader from '../../components/ImageLoader'
 import { AttachSvg, RobotSvg } from '../../icons'
-import { getQuickAnswer as getQuickAnswerAction } from '../../actionCreators'
+import {
+  getQuickAnswer as getQuickAnswerAction,
+  getQuickAnswerCancel,
+} from '../../actionCreators'
 import Loader from '../../components/Loader'
 
 interface MessageBodyProps {
   message: QBChatMessage
   isMine: boolean
+  loading: boolean
   setInputValue?: (value: string) => void
   getQuickAnswer: typeof getQuickAnswerAction
+  cancelQuickAnswer: typeof getQuickAnswerCancel
 }
 
 export default function MessageBody(props: MessageBodyProps) {
-  const { message, isMine, setInputValue, getQuickAnswer } = props
-  const [loading, setLoading] = useState(false)
+  const {
+    message,
+    loading,
+    isMine,
+    setInputValue,
+    getQuickAnswer,
+    cancelQuickAnswer,
+  } = props
   const { t } = useTranslation()
 
   const handleGetQuickAnswer = () => {
-    setLoading(true)
-    getQuickAnswer(message.message, (action) => {
+    cancelQuickAnswer()
+    getQuickAnswer(message._id, message.message, (action) => {
       const answer = 'payload' in action ? action.payload.answer : null
 
       if (setInputValue && answer) {
         setInputValue(answer)
       }
-
-      setLoading(false)
     })
   }
 

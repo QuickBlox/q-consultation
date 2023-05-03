@@ -9,6 +9,7 @@ import {
   listUsers,
   startCall,
   updateAppointment,
+  getQuickAnswerCancel,
 } from '../../actionCreators'
 import {
   appointmentDialogIdListSelector,
@@ -61,6 +62,7 @@ export default createUseComponent((props: ChatProps) => {
     startCall,
     listUsers,
     updateAppointment,
+    getQuickAnswerCancel,
   })
   const {
     ready,
@@ -176,6 +178,8 @@ export default createUseComponent((props: ChatProps) => {
   useEffect(() => {
     if (isOffline) {
       setActiveTab(ABOUT_TAB)
+    } else {
+      actions.getQuickAnswerCancel()
     }
   }, [appointmentId])
 

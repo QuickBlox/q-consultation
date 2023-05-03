@@ -63,7 +63,10 @@ export default (
     case Types.QB_CLEAR_APPOINTMENT_OF_DELETED_USERS:
       return {
         ...state,
-        entries: omit(state.entries, action.payload),
+        entries: omit(
+          state.entries,
+          action.payload,
+        ) as Dictionary<QBAppointment>,
       }
     case Types.LOGOUT_SUCCESS:
     case Types.QB_INIT_FAILURE:

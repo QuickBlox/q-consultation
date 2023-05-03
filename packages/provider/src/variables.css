@@ -230,7 +230,7 @@
   --ChatHistoryTab-backgroundColor: var(--grey-1);
 
   --ChatInput-boxShadow: 0 -1px 6px 0 var(--blue-3);
-  --ChatInput-backgroundColor: var(--grey-1);
+  --ChatInput-backgroundColor: inherit;
   --ChatInputTextarea-backgroundColor: var(--grey-1);
   --ChatInputTextareaPlaceholder-color: var(--blue-3);
   --ChatInputTextarea-color: var(--grey-13);
