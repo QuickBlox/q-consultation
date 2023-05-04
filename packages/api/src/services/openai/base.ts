@@ -3,7 +3,6 @@ import {
   OpenAIApi,
   CreateCompletionRequest,
   CreateChatCompletionRequest,
-  CreateTranscriptionResponse,
   ChatCompletionRequestMessage,
 } from 'openai'
 import { BASE_PATH } from 'openai/dist/base'
@@ -45,17 +44,23 @@ export const getTranscription = async (fileName: string, audioFile: Buffer) => {
 
   form.append('file', audioFile, fileName)
   form.append('model', 'whisper-1')
+  form.append('response_format', 'srt')
 
-  const data: CreateTranscriptionResponse = await fetch(
-    `${BASE_PATH}/audio/transcriptions`,
-    {
-      method: 'POST',
-      headers: { Authorization },
-      body: form,
-    },
-  ).then((res) => res.json())
+  const srtText = await fetch(`${BASE_PATH}/audio/transcriptions`, {
+    method: 'POST',
+    headers: { Authorization },
+    body: form,
+  }).then((res) => res.text())
 
-  return data.text
+  const data = Array.from(
+    srtText.matchAll(/^([\d:]+),\d+ --> ([\d:]+),\d+\s+(.*)$/gm),
+  ).reduce<Array<{ start: string; end: string; text: string }>>((res, item) => {
+    const [, start, end, text] = item
+
+    return [...res, { start, end, text }]
+  }, [])
+
+  return data
 }
 
 const completeSentence = (text?: string) =>

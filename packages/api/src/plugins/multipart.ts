@@ -4,6 +4,9 @@ import multipart, { FastifyMultipartOptions } from '@fastify/multipart'
 
 export default fp<FastifyMultipartOptions>(async (fastify) => {
   fastify.register(multipart, {
+    limits: {
+      fileSize: fastify.config.FILE_SIZE_LIMIT,
+    },
     attachFieldsToBody: 'keyValues',
     onFile: async (file) => {
       const { filename, encoding, mimetype } = file

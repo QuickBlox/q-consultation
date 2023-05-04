@@ -220,6 +220,9 @@
   --CallControlTooltip-backgroundColor: var(--grey-11);
 
   --RecordModalVideo-backgroundColor: var(--grey-12);
+  --RecordModalActions-borderColor: var(--blue-3);
+  --RecordModalActionsTitle-color: var(--blue-7);
+  --RecordModalTranscriptTime-color: var(--blue-7);
   --RecordModalVideoUnavailable-color: var(--grey-9);
   --RecordModalVideoUnavailableIcon-fill: var(--grey-9);
 

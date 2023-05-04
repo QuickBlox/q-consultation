@@ -362,7 +362,8 @@ declare module 'quickblox' {
     uid?: string
     name?: string
     summary?: string
-    transcription?: string
+    transcription?: string[]
+    actions?: string
     appointment_id: QBAppointment['_id']
   }
 

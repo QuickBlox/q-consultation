@@ -70,6 +70,32 @@
   overflow-y: auto;
 }
 
+.record-modal .record-actions-title {
+  color: var(--RecordModalActionsTitle-color);
+  font-size: 13px;
+  line-height: 15px;
+  margin-bottom: 10px;
+}
+
+.record-modal .record-actions-info {
+  white-space: pre-wrap;
+}
+
+.record-modal .record-info-text:not(:first-child) {
+  border-top: 1px solid var(--RecordModalActions-borderColor);
+}
+
+.record-modal .record-transcript:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.record-modal .record-transcript-time {
+  color: var(--RecordModalTranscriptTime-color);
+  font-size: 13px;
+  line-height: 15px;
+  margin-bottom: 10px;
+}
+
 .record-modal .video-unavailable {
   text-align: center;
   color: var(--RecordModalVideoUnavailable-color);

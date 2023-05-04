@@ -3,6 +3,7 @@ import cn from 'classnames'
 
 import { BackSvg, CamSvg, CloseSvg } from '../../../icons'
 import Tabs from '../../../components/Tabs'
+import Button from '../../../components/Button'
 import useComponent, { RecordModalProps } from './useComponent'
 import './styles.css'
 
@@ -10,8 +11,14 @@ export default function RecordModal(props: RecordModalProps) {
   const {
     store: { record, opened },
     refs: { backdrop },
-    data: { activeTab },
-    handlers: { onBackdropClick, onCancelClick, setActiveTab },
+    data: { activeTab, isSupportedVideo, isDownloading },
+    handlers: {
+      onBackdropClick,
+      onCancelClick,
+      setActiveTab,
+      handleVideoError,
+      handleDownloadRecord,
+    },
   } = useComponent(props)
   const { t } = useTranslation()
 
@@ -31,13 +38,22 @@ export default function RecordModal(props: RecordModalProps) {
           </button>
         </div>
         <div className="record-col-video">
-          {record?.uid ? (
-            <video src={QB.content.privateUrl(record.uid)} controls />
+          {isSupportedVideo && record?.uid ? (
+            <video
+              src={QB.content.privateUrl(record.uid)}
+              onError={handleVideoError}
+              controls
+            />
           ) : (
             <div className="video-unavailable">
               <CamSvg className="icon" />
               <p className="message">{t('VideoUnavailable')}</p>
-              <p className="description">{t('VideoNotSavedMessage')}</p>
+              <p className="description">{t(isSupportedVideo ? 'VideoNotSavedMessage' : 'VideoNotSupportedMessage')}</p>
+              {!isSupportedVideo && record?.uid && (
+                <Button onClick={handleDownloadRecord} loading={isDownloading}>
+                  {t('Download')}
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -50,9 +66,26 @@ export default function RecordModal(props: RecordModalProps) {
             >
               <Tabs.Tab name="summary" title={t('Summary')}>
                 <div className="record-info-text">{record?.summary}</div>
+                <div className="record-info-text">
+                  <div className="record-actions-title">
+                    {t('ActionPoints')}
+                  </div>
+                  <div className="record-actions-info">{record?.actions}</div>
+                </div>
               </Tabs.Tab>
               <Tabs.Tab name="transcript" title={t('Transcript')}>
-                <div className="record-info-text">{record?.transcription}</div>
+                <div className="record-info-text">
+                  {record?.transcription?.map((transcription) => {
+                    const [time, text] = transcription.split('|')
+
+                    return (
+                      <div key={time} className="record-transcript">
+                        <div className="record-transcript-time">{time}</div>
+                        <div className="record-transcript-text">{text}</div>
+                      </div>
+                    )
+                  })}
+                </div>
               </Tabs.Tab>
             </Tabs>
           </div>

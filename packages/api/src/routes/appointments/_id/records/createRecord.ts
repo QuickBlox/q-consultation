@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { MultipartFile, QCRecord } from '@/models'
-import { getCompletion, getTranscription } from '@/services/openai'
+import { getAudioInfo } from '@/services/openai'
 import { qbCreateChildCustomObject } from '@/services/customObject'
 import { qbUploadFile } from '@/services/content'
 import { QBRecord } from 'quickblox'
@@ -57,14 +57,11 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
           Buffer.byteLength(video.buffer),
         ))
 
-      const transcription =
-        audio && (await getTranscription(audio.filename, audio.buffer))
-
-      const summary =
-        transcription &&
-        (await getCompletion(
-          `Convert this shorthand into a first-hand account of the meeting:\n\n${transcription}\n`,
-        ))
+      const audioInfo =
+        audio && (await getAudioInfo(audio.filename, audio.buffer))
+      const transcription = audioInfo?.transcription.map(
+        ({ start, text }) => `${start}|${text}`,
+      )
 
       const record = await qbCreateChildCustomObject<QBRecord>(
         'Appointment',
@@ -74,8 +71,9 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
           appointment_id: id,
           name: video?.filename || audio?.filename,
           uid: videoData?.uid,
-          summary,
           transcription,
+          summary: audioInfo?.summary,
+          actions: audioInfo?.actions,
         },
       )
 

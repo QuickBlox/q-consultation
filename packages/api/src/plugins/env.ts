@@ -17,6 +17,7 @@ const schema = Type.Object({
   QB_ADMIN_PASSWORD: Type.String(),
   BEARER_TOKEN: Type.String(),
   OPENAI_API_KEY: Type.String(),
+  FILE_SIZE_LIMIT: Type.Integer(),
   AI_QUICK_ANSWER: Type.Boolean({ default: false }),
   AI_SUGGEST_PROVIDER: Type.Boolean({ default: false }),
   AI_CHAT_ASSISTANT: Type.Boolean({ default: false }),

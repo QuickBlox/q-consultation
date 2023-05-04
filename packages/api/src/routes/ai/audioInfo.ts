@@ -12,7 +12,13 @@ export const audioInfoSchema = {
   response: {
     200: Type.Partial(
       Type.Object({
-        transcription: Type.String(),
+        transcription: Type.Array(
+          Type.Object({
+            start: Type.String(),
+            end: Type.String(),
+            text: Type.String(),
+          }),
+        ),
         summary: Type.String(),
         notes: Type.String(),
         actions: Type.String(),

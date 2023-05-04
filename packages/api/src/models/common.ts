@@ -130,8 +130,9 @@ export const QCRecord = Type.Intersect(
       Type.Object({
         uid: Type.String({ format: 'uuid' }),
         name: Type.String(),
-        transcription: Type.String(),
+        transcription: Type.Array(Type.String()),
         summary: Type.String(),
+        actions: Type.String(),
         appointment_id: QBCustomObject.properties._id,
       }),
     ),
