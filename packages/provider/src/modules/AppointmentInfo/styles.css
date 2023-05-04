@@ -23,8 +23,17 @@
   width: 50%;
 }
 
+.appointment-info .user-info .body .email,
+.appointment-info .user-info .body .address {
+  width: 100%;
+}
+
 .appointment-info .user-info .body .item .value {
   text-transform: capitalize;
+}
+
+.appointment-info .user-info .body .email .value {
+  text-transform: lowercase;
 }
 
 .appointment-info .user-info .body .item .label {

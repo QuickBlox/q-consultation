@@ -32,8 +32,17 @@
   width: 50%;
 }
 
+.appointment-details-modal .email,
+.appointment-details-modal .address {
+  width: 100%;
+}
+
 .appointment-details-modal .item .value {
   text-transform: capitalize;
+}
+
+.appointment-details-modal .email .value {
+  text-transform: lowercase;
 }
 
 .appointment-details-modal .item .label {

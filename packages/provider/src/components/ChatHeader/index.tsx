@@ -13,7 +13,8 @@ interface ChatHeaderProps {
   connected: boolean
   appointment?: QBAppointment
   session?: QBWebRTCSession
-  currentUser?: QBUserWithCustomData
+  myAccount?: QBUserWithCustomData
+  companion?: QBUser
   dialogName?: string
   loading?: boolean
   startCall: typeof startCallAction
@@ -30,7 +31,8 @@ export default function ChatHeader(props: ChatHeaderProps) {
   const {
     connected,
     appointment,
-    currentUser,
+    myAccount,
+    companion,
     dialogName = '\u00A0',
     session,
     loading,
@@ -40,8 +42,8 @@ export default function ChatHeader(props: ChatHeaderProps) {
   const { t } = useTranslation()
   const isDisabledButtons = !connected || !appointment
   const currentUserName =
-    dialogName && currentUser
-      ? currentUser.full_name || currentUser.login || currentUser.email
+    dialogName && myAccount
+      ? myAccount.full_name || myAccount.login || myAccount.email
       : '\u00A0'
   const inCallWithCurrentUser =
     appointment && session
@@ -76,7 +78,10 @@ export default function ChatHeader(props: ChatHeaderProps) {
           {appointment && loading ? (
             <Skeleton />
           ) : (
-            <div className="name">{dialogName}</div>
+            <div className="user">
+              <div className="user-name">{dialogName}</div>
+              <div className="user-email">{companion?.email}</div>
+            </div>
           )}
           <span className="priority-label">{t('ChangePriority')}</span>
           <div className="priority-buttons">
@@ -128,7 +133,7 @@ export default function ChatHeader(props: ChatHeaderProps) {
           <span className="label muted">{t('Assignee')}</span>
           <div className="assignee-row">
             <span className="name">{currentUserName}</span>
-            {dialogName && currentUser && (
+            {dialogName && myAccount && (
               <MoreMenu
                 disabled={isDisabledButtons || inCallWithCurrentUser}
                 appointmentId={appointment?._id}

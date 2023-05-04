@@ -47,7 +47,8 @@ export default function Chat(props: ChatProps) {
       <ChatHeader
         connected={connected}
         appointment={activeAppointment}
-        currentUser={myAccount}
+        myAccount={myAccount}
+        companion={companion}
         dialogName={currentDialog ? dialogName : '\u00A0'}
         session={call}
         startCall={startCall}

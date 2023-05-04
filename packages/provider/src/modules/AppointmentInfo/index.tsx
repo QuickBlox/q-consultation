@@ -7,7 +7,7 @@ import useComponent, { AppointmentInfoProps } from './useComponent'
 import './styles.css'
 
 export default function AppointmentInfo(props: AppointmentInfoProps) {
-  const { appointment, records } = props
+  const { appointment, records, user } = props
   const {
     data: { description, userInfo, appointmentRecords, fieldActive },
     handlers: { toggleField, startEditingNotes },
@@ -38,6 +38,10 @@ export default function AppointmentInfo(props: AppointmentInfoProps) {
           <span className="value">
             {userInfo.gender && t(`${userInfo.gender}`)}
           </span>
+        </div>
+        <div className="item email">
+          <label className="label">{t('Email')}:</label>
+          <span className="value">{user?.email}</span>
         </div>
         <div className="item address">
           <label className="label">{t('Address')}:</label>

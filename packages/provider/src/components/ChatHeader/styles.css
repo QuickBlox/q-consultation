@@ -42,12 +42,25 @@
   padding: 12px;
 }
 
-.chat-header .assignee-info .priority-and-name .name {
-  color: var(--ChatHeaderDialogName-color);
+.chat-header .assignee-info .priority-and-name .user {
   flex: 1;
+  overflow: hidden;
+}
+
+.chat-header .assignee-info .priority-and-name .user-name {
+  color: var(--ChatHeaderDialogName-color);
   font-size: var(--font-size-xxl);
   font-weight: bold;
   line-height: 28px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-header .assignee-info .priority-and-name .user-email {
+  color: var(--ChatHeaderText-color--muted);
+  font-size: var(--font-size-lg);
+  line-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

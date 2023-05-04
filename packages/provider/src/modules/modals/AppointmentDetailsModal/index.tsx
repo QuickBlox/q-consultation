@@ -15,7 +15,7 @@ export default function AppointmentDetailsModal(
   props: AppointmentDetailsModalProps,
 ) {
   const {
-    store: { appointment, records, opened },
+    store: { appointment, records, opened, user },
     data: {
       timeRange,
       accordeonActive,
@@ -54,6 +54,10 @@ export default function AppointmentDetailsModal(
             {currentUser?.custom_data?.gender &&
               t(`${currentUser.custom_data.gender.toLowerCase()}`)}
           </span>
+        </div>
+        <div className="item email">
+          <label className="label">{t('Email')}:</label>
+          <span className="value">{user?.email}</span>
         </div>
         <div className="item address">
           <label className="label">{t('Address')}:</label>
