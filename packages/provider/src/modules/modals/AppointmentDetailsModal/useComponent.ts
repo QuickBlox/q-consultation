@@ -22,8 +22,9 @@ import {
 import { parseUser } from '../../../utils/user'
 import { combineSelectors } from '../../../utils/selectors'
 import useIsOffLine from '../../../hooks/useIsOffLine'
-import { TIME_FORMAT } from '../../../constants/dateFormat'
+import { FULL_DATE_SHORT_FORMAT } from '../../../constants/dateFormat'
 import { ABOUT_TAB, AppointmentDetailsTabs } from '../../../constants/tabs'
+import { localizedFormat } from '../../../utils/calendar'
 
 export interface AppointmentDetailsModalProps {
   onClose?: () => void
@@ -74,20 +75,16 @@ export default createUseComponent((props: AppointmentDetailsModalProps) => {
     currentUser?.email ||
     t('Unknown')
 
-  const timeRange = useMemo(() => {
-    if (
-      appointment &&
-      appointment.date_start &&
-      appointment.date_end &&
-      moment(appointment.date_end).isAfter(appointment.date_start)
-    ) {
-      return `${moment(appointment.date_start).format(TIME_FORMAT)} - ${moment(
-        appointment.date_end,
-      ).format(TIME_FORMAT)}`
-    }
-
-    return undefined
-  }, [appointment])
+  const localDate =
+    appointment &&
+    localizedFormat(
+      moment(
+        appointment.date_end ||
+          appointment.date_start ||
+          appointment.updated_at * 1000,
+      ),
+      FULL_DATE_SHORT_FORMAT,
+    )
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'AppointmentDetailsModal' })
@@ -132,7 +129,7 @@ export default createUseComponent((props: AppointmentDetailsModalProps) => {
     store,
     refs: { backdrop },
     data: {
-      timeRange,
+      localDate,
       accordeonActive,
       userName,
       currentUser,

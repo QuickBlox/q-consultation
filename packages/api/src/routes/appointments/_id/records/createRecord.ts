@@ -59,9 +59,10 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
 
       const audioInfo =
         audio && (await getAudioInfo(audio.filename, audio.buffer))
-      const transcription = audioInfo?.transcription.map(
-        ({ start, text }) => `${start}|${text}`,
-      )
+      const transcription =
+        audioInfo?.transcription?.map(
+          ({ start, text }) => `${start}|${text}`,
+        ) || []
 
       const record = await qbCreateChildCustomObject<QBRecord>(
         'Appointment',

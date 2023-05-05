@@ -17,7 +17,7 @@ export default function AppointmentDetailsModal(
   const {
     store: { appointment, records, opened },
     data: {
-      timeRange,
+      localDate,
       accordeonActive,
       userName,
       currentUser,
@@ -127,14 +127,7 @@ export default function AppointmentDetailsModal(
             <button className="back" type="button" onClick={onCancelClick}>
               <BackSvg className="icon" />
             </button>
-            <p className="title">
-              {timeRange && (
-                <>
-                  <span className="date-divider" />
-                  {timeRange}
-                </>
-              )}
-            </p>
+            <p className="title">{localDate}</p>
           </div>
           <div className="header-info">
             <div className="user-info">

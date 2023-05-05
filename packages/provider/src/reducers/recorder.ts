@@ -1,3 +1,4 @@
+import union from 'lodash/union'
 import * as Types from '../actions'
 
 export interface RecorderReducer {
@@ -52,7 +53,9 @@ export default (
         },
         records: {
           ...state.records,
-          [appointmentId]: currentRecords ? [...currentRecords, ...list] : list,
+          [appointmentId]: currentRecords?.length
+            ? union(currentRecords, list)
+            : list,
         },
       }
     }

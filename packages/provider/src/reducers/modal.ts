@@ -11,7 +11,6 @@ export type ModalReducer = {
 }
 
 const initialState: ModalReducer = {
-  appointmentId: undefined,
   AppointmentActionModal: false,
   AssignModal: false,
   ConclusionModal: false,
@@ -36,7 +35,7 @@ export default (state = initialState, action: ModalAction) => {
   switch (action.type) {
     case Types.TOGGLE_SHOW_MODAL:
       return {
-        ...state,
+        ...initialState,
         [action.payload.modal]: !state[action.payload.modal],
         providerId: action.payload.providerId,
         clientId: action.payload.clientId,
