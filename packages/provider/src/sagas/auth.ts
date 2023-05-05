@@ -185,7 +185,7 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
         ? { ...newMyAccount.custom_data }
         : {}
 
-      const url = `${SERVER_APP_URL}/providers`
+      const url = `${SERVER_APP_URL}/users/provider`
       const form = new FormData()
 
       form.append('full_name', newMyAccount.full_name || '')

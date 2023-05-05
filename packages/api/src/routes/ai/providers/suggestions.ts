@@ -8,7 +8,7 @@ import { parseUserCustomData } from '@/utils/user'
 import { QBUser } from '@/models'
 
 export const suggestProviderSchema = {
-  tags: ['ai', 'providers'],
+  tags: ['ai'],
   body: Type.Object({
     topic: Type.String(),
   }),

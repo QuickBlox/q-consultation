@@ -8,7 +8,7 @@ import { QBRecord } from 'quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
   const createRecordSchema = {
-    tags: ['providers'],
+    tags: ['appointments'],
     consumes: ['multipart/form-data'],
     params: Type.Object({
       id: Type.String({ pattern: '^[a-z0-9]{24}$' }),

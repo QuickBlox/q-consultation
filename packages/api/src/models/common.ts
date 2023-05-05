@@ -46,9 +46,9 @@ export const QCClient = Type.Intersect(
     QBBaseUserData,
     Type.Object({
       full_name: Type.String(),
-      address: Type.Optional(Type.String()),
       birthdate: Type.String(),
       gender: Type.Union([Type.Literal('male'), Type.Literal('female')]),
+      address: Type.Optional(Type.String()),
       language: Type.Optional(Type.String()),
     }),
   ],

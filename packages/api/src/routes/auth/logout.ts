@@ -3,7 +3,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { QBLogout } from '@/services/auth'
 
 export const logoutSchema = {
-  tags: ['users'],
+  tags: ['auth'],
   security: [
     {
       apiKey: [],
@@ -12,7 +12,7 @@ export const logoutSchema = {
 }
 
 const logout: FastifyPluginAsyncTypebox = async (fastify) => {
-  fastify.delete(
+  fastify.post(
     '/logout',
     {
       schema: logoutSchema,

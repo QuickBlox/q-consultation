@@ -9,7 +9,7 @@ import { getCompletion } from '@/services/openai'
 import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
-  tags: ['users', 'providers'],
+  tags: ['users'],
   consumes: ['multipart/form-data'],
   params: Type.Object({
     id: Type.String({ pattern: '^[0-9]+$' }),
@@ -39,7 +39,7 @@ const updateByIdSchema = {
 }
 
 const updateMySchema = {
-  tags: ['users', 'providers'],
+  tags: ['users'],
   consumes: ['multipart/form-data'],
   body: Type.Union([
     Type.Intersect([
@@ -81,7 +81,7 @@ const updateMySchema = {
   ],
 }
 
-const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
+const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.put(
     '',
     {
@@ -208,4 +208,4 @@ const updateById: FastifyPluginAsyncTypebox = async (fastify) => {
   )
 }
 
-export default updateById
+export default updateProvider

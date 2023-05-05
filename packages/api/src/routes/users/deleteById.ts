@@ -27,7 +27,7 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
 
       await qbDeleteUser(parseInt(id, 10))
 
-      reply.code(204)
+      return reply.code(204)
     },
   )
 }

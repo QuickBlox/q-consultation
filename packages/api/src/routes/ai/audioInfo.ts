@@ -4,7 +4,7 @@ import { MultipartFile } from '@/models'
 import { getAudioInfo } from '@/services/openai'
 
 export const audioInfoSchema = {
-  tags: ['ai', 'providers'],
+  tags: ['ai'],
   consumes: ['multipart/form-data'],
   body: Type.Object({
     voice: MultipartFile,

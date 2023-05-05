@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox'
 import { getChatCompletion } from '@/services/openai'
 
 export const quickAnswerSchema = {
-  tags: ['ai', 'providers'],
+  tags: ['ai'],
   body: Type.Object({
     question: Type.String(),
   }),
