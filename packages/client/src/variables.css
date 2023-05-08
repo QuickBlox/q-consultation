@@ -222,6 +222,7 @@
   --ProviderDetails-color: inherit;
   --ProviderDetailsSelect-color: var(--blue-7);
 
+  --ProviderListReset-color: var(--blue-9);
   --ProviderList-backgroundColor: var(--grey-1);
   --ProviderList-borderRightColor: var(--blue-3);
   --ProviderList-boxShadow: 0 1px 4px 0 var(--grey-8);

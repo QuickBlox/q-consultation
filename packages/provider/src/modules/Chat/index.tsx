@@ -58,7 +58,7 @@ export default function Chat(props: ChatProps) {
         <Tabs value={activeTab} onChange={setActiveTab}>
           <Tabs.Tab name={ABOUT_TAB} title={t('About')}>
             <AppointmentInfo
-              records={records}
+              records={activeAppointment ? records : undefined}
               appointment={activeAppointment}
               user={
                 activeAppointment

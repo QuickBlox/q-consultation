@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
-import { SearchSvg } from '../../icons'
+import { SearchSvg, UpdateSvg } from '../../icons'
 import Avatar from '../../components/Avatar'
 import Loader from '../../components/Loader'
 import useComponent, { ProviderListProps } from './useComponent'
@@ -9,18 +9,18 @@ import './styles.css'
 import { parseUserCustomData } from '../../utils/user'
 import { TextAreaField } from '../../components/Field'
 import Button from '../../components/Button'
+import FormField from '../../components/FormField'
 
 export default function ProviderList(props: ProviderListProps) {
   const { selected, consultationTopic } = props
   const {
+    data: { search, isOffline },
+    forms: { searchForm },
     store: { loading, providers, suggestions },
-    data: { search },
     handlers: {
       handleChangeSearch,
       handleProviderSelectCreator,
       filterSearchedProviders,
-      handleChangeConsultationTopic,
-      handleSearch,
     },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -53,27 +53,40 @@ export default function ProviderList(props: ProviderListProps) {
       })}
     >
       {AI_SUGGEST_PROVIDER ? (
-        <>
-          <div className="header-block">
-            <span className="title">{t('ConsultationTopic')}</span>
-          </div>
-          <div>
+        <form onSubmit={searchForm.handleSubmit}>
+          <FormField
+            htmlFor="search"
+            label={t('FindYourAgent')}
+            className="find-agent-field"
+            hint={t('FindYourAgentHint')}
+            error={searchForm.touched.search && searchForm.errors.search}
+          >
             <TextAreaField
+              id="search"
+              name="search"
+              placeholder={t('TypeYourIssueOrAgent')}
               disabled={loading}
-              className="consultation-topic-field"
-              onChange={handleChangeConsultationTopic}
-              value={consultationTopic}
+              onChange={searchForm.handleChange}
+              onBlur={searchForm.handleBlur}
+              value={searchForm.values.search}
               rows={7}
             />
-            <Button
-              loading={loading}
-              disabled={!consultationTopic.length}
-              onClick={handleSearch}
-            >
+          </FormField>
+          <div className="find-agent-controls">
+            <Button type="submit" loading={loading}>
               {t('SearchAnAgent')}
             </Button>
+            <button
+              type="button"
+              className="find-agent-reset"
+              disabled={loading || isOffline}
+              onClick={searchForm.reinitialize}
+            >
+              {loading ? <Loader size={14} theme="primary" /> : <UpdateSvg />}
+              <span>{t('RESET')}</span>
+            </button>
           </div>
-        </>
+        </form>
       ) : (
         <>
           <div className="header-block">

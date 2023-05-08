@@ -9,9 +9,15 @@ import {
   usersLoadingSelector,
   usersTotalEntriesSelector,
 } from '../../selectors'
-import { createUseComponent, useActions } from '../../hooks'
+import { createUseComponent, useActions, useForm } from '../../hooks'
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
+
+interface FormValues {
+  search: string
+}
+
+type FormErrors = Partial<DictionaryByKey<FormValues, string>>
 
 export interface ProviderListProps {
   selected?: QBUser['id']
@@ -38,8 +44,18 @@ export default createUseComponent((props: ProviderListProps) => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
 
-  const handleSearch = () => {
-    actions.providersSuggestions(consultationTopic)
+  const handleSearch = (values: FormValues) => {
+    actions.providersSuggestions(values.search)
+  }
+
+  const handleSearchValidate = (values: FormValues) => {
+    const errors: FormErrors = {}
+
+    if (!values.search) {
+      errors.search = t('REQUIRED')
+    }
+
+    return errors
   }
 
   const handleChangeSearch = ({
@@ -60,6 +76,14 @@ export default createUseComponent((props: ProviderListProps) => {
 
     return dialogName.toLocaleLowerCase()?.includes(search.toLocaleLowerCase())
   }
+
+  const searchForm = useForm<FormValues, FormErrors>({
+    initialValues: {
+      search: '',
+    },
+    validate: handleSearchValidate,
+    onSubmit: handleSearch,
+  })
 
   useEffect(() => {
     if (!isOffline) {
@@ -83,6 +107,7 @@ export default createUseComponent((props: ProviderListProps) => {
 
   return {
     store,
+    forms: { searchForm },
     data: { search, isOffline },
     handlers: {
       handleChangeSearch,
