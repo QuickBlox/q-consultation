@@ -17,7 +17,7 @@ export const deleteSchema = {
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.delete(
-    '/:id',
+    '',
     {
       schema: deleteSchema,
       onRequest: fastify.verify(fastify.BearerToken),

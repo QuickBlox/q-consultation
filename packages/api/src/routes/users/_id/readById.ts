@@ -20,13 +20,17 @@ export const deleteSchema = {
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.get(
-    '/:id',
+    '',
     {
       schema: deleteSchema,
       onRequest: fastify.verify(fastify.SessionToken),
     },
-    async (request) => {
+    async (request, reply) => {
       const user = await findUserById(parseInt(request.params.id, 10))
+
+      if (!user) {
+        return reply.notFound()
+      }
 
       return user
     },

@@ -15,6 +15,25 @@ export const qbCreateCustomObject = <T extends QBCustomObject>(
     })
   })
 
+export const qbUpdateCustomObject = <T extends QBCustomObject>(
+  _id: QBCustomObject['_id'],
+  className: string,
+  data: Dictionary<unknown>,
+) =>
+  new Promise<T>((resolve, reject) => {
+    QB.data.update<{ _id: string } & Dictionary<unknown>, T>(
+      className,
+      { _id, ...data },
+      (error, item) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(item)
+        }
+      },
+    )
+  })
+
 export const qbGetCustomObject = <T extends QBCustomObject>(
   className: string,
   filters: Dictionary<unknown>,

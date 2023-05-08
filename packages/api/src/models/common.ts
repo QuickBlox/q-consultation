@@ -111,13 +111,13 @@ export const QCAppointment = Type.Intersect(
       description: Type.String(),
       notes: Type.Union([Type.String(), Type.Null()]),
       conclusion: Type.Optional(Type.String()),
-      date_start: Type.Optional(Type.String()),
+      // date_start: Type.Optional(Type.String()),
       date_end: Type.Optional(Type.String()),
       language: Type.Optional(Type.String()),
-      has_assitant: Type.Optional(Type.Boolean()),
-      records: Type.Optional(
-        Type.Union([Type.Array(Type.Number()), Type.Null()]),
-      ),
+      // has_assitant: Type.Optional(Type.Boolean()),
+      // records: Type.Optional(
+      //   Type.Union([Type.Array(Type.Number()), Type.Null()]),
+      // ),
     }),
   ],
   { $id: 'QCAppointment' },
