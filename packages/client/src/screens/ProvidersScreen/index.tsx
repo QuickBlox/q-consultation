@@ -7,12 +7,8 @@ import './styles.css'
 
 export default function ProvidersScreen() {
   const {
-    data: { selectedProvider, defaultProviderId, consultationTopic },
-    handlers: {
-      handleChangeProvider,
-      handleResetProvider,
-      setConsultationTopic,
-    },
+    data: { selectedProvider, defaultProviderId },
+    handlers: { handleChangeProvider, handleResetProvider },
   } = useComponent()
 
   return (
@@ -20,9 +16,7 @@ export default function ProvidersScreen() {
       {!defaultProviderId && (
         <ProviderList
           selected={selectedProvider}
-          consultationTopic={consultationTopic}
           onSelect={handleChangeProvider}
-          setConsultationTopic={setConsultationTopic}
         />
       )}
       <div
@@ -32,7 +26,6 @@ export default function ProvidersScreen() {
         })}
       >
         <ProviderDetails
-          consultationTopic={consultationTopic}
           providerId={selectedProvider}
           onBack={handleResetProvider}
         />

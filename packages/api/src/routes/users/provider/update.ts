@@ -12,7 +12,7 @@ const updateByIdSchema = {
   tags: ['users'],
   consumes: ['multipart/form-data'],
   params: Type.Object({
-    id: Type.String({ pattern: '^[0-9]+$' }),
+    id: Type.Integer(),
   }),
   body: Type.Intersect([
     Type.Omit(QCProvider, [
@@ -89,7 +89,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.ProviderSessionToken),
     },
     async (request) => {
-      const { description, avatar, full_name } = request.body
+      const { description, avatar } = request.body
       const userData = pick(
         request.body,
         'full_name',
@@ -124,7 +124,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         avatarData = undefined
       }
 
-      let keywords = `${full_name}, `
+      let keywords = ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
         keywords += await getCompletion(
@@ -154,7 +154,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request) => {
-      const { description, avatar, full_name } = request.body
+      const { description, avatar } = request.body
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
         request.body,
@@ -162,7 +162,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'description',
         'language',
       )
-      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserData = await findUserById(request.params.id)
       const prevUserCustomData = parseUserCustomData(prevUserData.custom_data)
       let avatarData = prevUserCustomData.avatar
 
@@ -183,7 +183,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         avatarData = undefined
       }
 
-      let keywords = `${full_name}, `
+      let keywords = ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
         keywords += await getCompletion(
@@ -194,7 +194,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         )
       }
 
-      const updatedUser = await qbUpdateUser(parseInt(request.params.id, 10), {
+      const updatedUser = await qbUpdateUser(request.params.id, {
         ...userData,
         custom_data: stringifyUserCustomData(
           avatarData

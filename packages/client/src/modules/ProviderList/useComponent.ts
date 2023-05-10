@@ -21,8 +21,6 @@ type FormErrors = Partial<DictionaryByKey<FormValues, string>>
 
 export interface ProviderListProps {
   selected?: QBUser['id']
-  consultationTopic: string
-  setConsultationTopic: (value: string) => void
   onSelect: (providerId: QBUser['id']) => void
 }
 
@@ -36,15 +34,17 @@ const selector = createMapStateSelector({
 })
 
 export default createUseComponent((props: ProviderListProps) => {
-  const { onSelect, consultationTopic, setConsultationTopic } = props
+  const { onSelect } = props
   const store = useSelector(selector)
   const actions = useActions({ getUser, providersSuggestions })
   const isOffline = useIsOffLine()
   const { loading, providers, totalEntries } = store
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
+  const [isShowAll, setIsShowAll] = useState(true)
 
   const handleSearch = (values: FormValues) => {
+    setIsShowAll(false)
     actions.providersSuggestions(values.search)
   }
 
@@ -61,10 +61,6 @@ export default createUseComponent((props: ProviderListProps) => {
   const handleChangeSearch = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => setSearch(value)
-
-  const handleChangeConsultationTopic = ({
-    target: { value },
-  }: ChangeEvent<HTMLTextAreaElement>) => setConsultationTopic(value)
 
   const handleProviderSelectCreator = (id: QBUser['id']) => () => {
     onSelect(id)
@@ -84,6 +80,11 @@ export default createUseComponent((props: ProviderListProps) => {
     validate: handleSearchValidate,
     onSubmit: handleSearch,
   })
+
+  const handleResetSearch = () => {
+    searchForm.reinitialize()
+    setIsShowAll(true)
+  }
 
   useEffect(() => {
     if (!isOffline) {
@@ -108,13 +109,12 @@ export default createUseComponent((props: ProviderListProps) => {
   return {
     store,
     forms: { searchForm },
-    data: { search, isOffline },
+    data: { search, isOffline, isShowAll },
     handlers: {
       handleChangeSearch,
       handleProviderSelectCreator,
       filterSearchedProviders,
-      handleChangeConsultationTopic,
-      handleSearch,
+      handleResetSearch,
     },
   }
 })

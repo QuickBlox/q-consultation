@@ -35,7 +35,7 @@ export const signUpSchema = {
 
 const signup: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('', { schema: signUpSchema }, async (request) => {
-    const { description, full_name, avatar } = request.body
+    const { description, avatar } = request.body
     const userData = pick(request.body, 'full_name', 'email', 'password')
     const customData = pick(
       request.body,
@@ -44,7 +44,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       'language',
     )
     const session = await qbCreateSession()
-    let keywords = `${full_name}, `
+    let keywords = ''
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
       keywords += await getCompletion(

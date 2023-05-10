@@ -24,7 +24,6 @@ import useIsOffLine from '../../hooks/useIsOffLine'
 export interface ProviderDetailsProps {
   providerId?: QBUser['id']
   onBack: VoidFunction
-  consultationTopic: string
 }
 
 const createSelector = (providerId?: QBUser['id']) =>
@@ -37,7 +36,7 @@ const createSelector = (providerId?: QBUser['id']) =>
   })
 
 export default createUseComponent((props: ProviderDetailsProps) => {
-  const { providerId, consultationTopic } = props
+  const { providerId } = props
   const selector = createSelector(providerId)
   const store = useSelector(selector)
   const actions = useActions({
@@ -70,7 +69,6 @@ export default createUseComponent((props: ProviderDetailsProps) => {
         actions.toggleShowModal({
           modal: 'ConsultationTopicModal',
           providerId,
-          consultationTopic,
         })
       }
     }

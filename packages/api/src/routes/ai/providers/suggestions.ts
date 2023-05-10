@@ -2,7 +2,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBUser as TQBUser } from 'quickblox'
 
-import { getCompletion } from '@/services/openai'
+import { getChatCompletion } from '@/services/openai'
 import { qbGetUsersByTags } from '@/services/users'
 import { parseUserCustomData } from '@/utils/user'
 import { QBUser } from '@/models'
@@ -50,7 +50,7 @@ const getProvidersKeywords = (providrs: Dictionary<TQBUser>) => {
   const keywordsList = providersList.reduce<string[]>((res, user) => {
     const { keywords } = parseUserCustomData(user.custom_data)
 
-    return keywords ? [...res, `${user.id}: ${keywords}`] : res
+    return [...res, `${user.id} | ${user.full_name} | ${keywords || 'none'}`]
   }, [])
 
   return keywordsList
@@ -69,16 +69,31 @@ const suggestProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       const users = await getAllProviders()
       const usersKeywords = getProvidersKeywords(users)
 
-      const res = await getCompletion(
-        `There is a list of specialists in the format: "id: keywords""\n${usersKeywords.join(
-          '\n',
-        )}\n\n` +
-          `User wrote:\n${topic.replaceAll('\n', ' ')}\n\n` +
-          'Select specialists for the user by keywords. Print their id separated by commas.\n\n',
+      const res = await getChatCompletion(
+        [
+          {
+            role: 'system',
+            content:
+              'You are a receptionist. You have a list of consultants in the format: "id | name | keywords"\n' +
+              `${usersKeywords.join('\n')}\n` +
+              'Keywords describe the consultant. User input issue or name. Select consultants for the user. If there are no suitable consultants, do not display all.',
+          },
+          { role: 'user', content: topic },
+          {
+            role: 'user',
+            content:
+              'Display only list of the id of suitable consultants without explanation of reasons.',
+          },
+        ],
+        {
+          temperature: 0,
+          top_p: 1,
+        },
       )
-      const providerIds = res === 'No specialists found.' ? [] : res.split(', ')
 
-      const providers = providerIds.map((id) => users[id])
+      const providerIds: string[] | null = res.match(/\d+/g)
+
+      const providers = providerIds?.map((id) => users[id]) || []
 
       return {
         providers,

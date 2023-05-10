@@ -51,4 +51,6 @@ const audioInfo: FastifyPluginAsyncTypebox = async (fastify) => {
   )
 }
 
+export const autoload = JSON.parse<boolean>(process.env.AI_RECORD_ANALYTICS!)
+
 export default audioInfo

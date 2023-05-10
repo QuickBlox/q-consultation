@@ -12,15 +12,16 @@ import Button from '../../components/Button'
 import FormField from '../../components/FormField'
 
 export default function ProviderList(props: ProviderListProps) {
-  const { selected, consultationTopic } = props
+  const { selected } = props
   const {
-    data: { search, isOffline },
     forms: { searchForm },
+    data: { search, isOffline, isShowAll },
     store: { loading, providers, suggestions },
     handlers: {
       handleChangeSearch,
       handleProviderSelectCreator,
       filterSearchedProviders,
+      handleResetSearch,
     },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -80,7 +81,7 @@ export default function ProviderList(props: ProviderListProps) {
               type="button"
               className="find-agent-reset"
               disabled={loading || isOffline}
-              onClick={searchForm.reinitialize}
+              onClick={handleResetSearch}
             >
               {loading ? <Loader size={14} theme="primary" /> : <UpdateSvg />}
               <span>{t('RESET')}</span>
@@ -104,7 +105,7 @@ export default function ProviderList(props: ProviderListProps) {
         </>
       )}
       <ul className="providers">
-        {suggestions.length
+        {AI_SUGGEST_PROVIDER && !isShowAll
           ? suggestions.map(renderProvider)
           : providers.filter(filterSearchedProviders).map(renderProvider)}
         {loading && (

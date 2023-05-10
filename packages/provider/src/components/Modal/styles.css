@@ -21,6 +21,10 @@
   z-index: 9;
 }
 
+.modal:not(.active) {
+  pointer-events: none;
+}
+
 .modal .icon-close {
   cursor: pointer;
   position: absolute;
