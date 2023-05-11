@@ -6,11 +6,17 @@ export const getAudioInfo = async (fileName: string, audioFile: Buffer) => {
     .reduce((res, { text }) => `${res}${text} `, '')
     .trimEnd()
 
-  const [summary = '', actions = ''] = /[\p{L}\p{N}]+/gu.test(transcriptionText)
+  const [
+    summary = 'There is no sufficient information to generate a summary',
+    actions = 'There is no sufficient information to generate an action points',
+  ] = /[\p{L}\p{N}]+/gu.test(transcriptionText)
     ? await Promise.all([
         getChatCompletion(
           [
-            { role: 'user', content: 'Generate summary from this dialog' },
+            {
+              role: 'user',
+              content: 'Generate summary in English from this dialog',
+            },
             { role: 'user', content: transcriptionText },
           ],
           { temperature: 0 },
@@ -24,7 +30,7 @@ export const getAudioInfo = async (fileName: string, audioFile: Buffer) => {
             },
             {
               role: 'user',
-              content: `Generate action points that the consultant said to do from my dialog. Display only list without title.`,
+              content: `Generate action points in English that the consultant said to do from my dialog. Display only list without title.`,
             },
             { role: 'user', content: `My dialog:\n${transcriptionText}` },
           ],

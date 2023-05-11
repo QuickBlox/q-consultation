@@ -47,13 +47,13 @@ const getAllProviders = async (page = 1): Promise<Dictionary<TQBUser>> => {
 
 const getProvidersKeywords = (providrs: Dictionary<TQBUser>) => {
   const providersList = Object.values(providrs)
-  const keywordsList = providersList.reduce<string[]>((res, user) => {
+  const keywordsList = providersList.reduce((res, user) => {
     const { keywords } = parseUserCustomData(user.custom_data)
 
-    return [...res, `${user.id} | ${user.full_name} | ${keywords || 'none'}`]
-  }, [])
+    return keywords ? `${res}\n${user.id}: ${keywords}` : res
+  }, '')
 
-  return keywordsList
+  return keywordsList.trim()
 }
 
 const suggestProvider: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -67,6 +67,14 @@ const suggestProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       const { topic } = request.body
 
       const users = await getAllProviders()
+      const usersByFullName = Object.values(users).filter(({ full_name }) =>
+        full_name?.toLowerCase().includes(topic.toLowerCase()),
+      )
+
+      if (usersByFullName.length) {
+        return { providers: usersByFullName }
+      }
+
       const usersKeywords = getProvidersKeywords(users)
 
       const res = await getChatCompletion(
@@ -74,9 +82,9 @@ const suggestProvider: FastifyPluginAsyncTypebox = async (fastify) => {
           {
             role: 'system',
             content:
-              'You are a receptionist. You have a list of consultants in the format: "id | name | keywords"\n' +
-              `${usersKeywords.join('\n')}\n` +
-              'Keywords describe the consultant. User input issue or name. Select consultants for the user. If there are no suitable consultants, do not display all.',
+              'You are a receptionist. You have a list of consultants in the format: "id: keywords"\n' +
+              `${usersKeywords}\n` +
+              'Keywords describe the consultant. User input issue. Select consultants for the user. If there are no suitable consultants, do not display all.',
           },
           { role: 'user', content: topic },
           {
