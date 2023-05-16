@@ -45,7 +45,7 @@ export const getSessionByBearerToken = (
   token: string | undefined,
   config: FastifyInstance['config'],
 ) => {
-  if (token === config.BEARER_TOKEN) {
+  if (config.BEARER_TOKEN && config.BEARER_TOKEN === token) {
     return qbCreateSession(config.QB_ADMIN_EMAIL, config.QB_ADMIN_PASSWORD)
   }
 

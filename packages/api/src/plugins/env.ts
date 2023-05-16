@@ -12,7 +12,6 @@ const schema = Type.Object({
   QB_SDK_CONFIG_ENDPOINT_API: Type.Optional(Type.String()),
   QB_SDK_CONFIG_ENDPOINT_CHAT: Type.Optional(Type.String()),
   QB_SDK_CONFIG_ICE_SERVERS: Type.Optional(Type.String()),
-  QB_ADMIN_ID: Type.Integer(),
   QB_ADMIN_EMAIL: Type.String(),
   QB_ADMIN_PASSWORD: Type.String(),
   BEARER_TOKEN: Type.String(),

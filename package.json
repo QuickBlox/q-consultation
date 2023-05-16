@@ -10,19 +10,19 @@
     "dev": "lerna run dev",
     "build": "lerna run build",
     "lint": "lerna run lint",
-    "pages": "lerna run --scope integration-pages demo",
+    "start:api": "lerna run --scope q-consultation-api start",
+    "start:pages": "lerna run --scope integration-pages demo",
     "init:config": "node ./bin/initConfig.js",
     "init:schema": "node ./bin/initSchema.js"
   },
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {
-    "dotenv": "^16.0.3"
-  },
   "devDependencies": {
+    "dotenv": "^16.0.3",
     "js-yaml": "^4.1.0",
     "lerna": "^6.0.1",
-    "prettier": "^2.4.0"
+    "prettier": "^2.4.0",
+    "readline-sync": "^1.4.10"
   }
 }

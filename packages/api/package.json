@@ -8,11 +8,11 @@
   },
   "main": "app.ts",
   "scripts": {
-    "test": "npm run build:ts && tsc -p test/tsconfig.json && tsc-alias -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
-    "start": "npm run build:ts && fastify start -p 4000 -l info dist/app.js",
-    "build:ts": "tsc && tsc-alias",
-    "watch:ts": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
-    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
+    "test": "npm run build && tsc -p test/tsconfig.json && tsc-alias -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
+    "start": "npm run build && fastify start -p 4000 -l info dist/app.js",
+    "build": "tsc && tsc-alias",
+    "watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+    "dev": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch\" \"npm:dev:start\"",
     "dev:start": "fastify start -p 4000 --ignore-watch=.ts$ -w -l info -P dist/app.js",
     "lint": "eslint ./src"
   },

@@ -4,9 +4,6 @@ const dotenv = require('dotenv')
 
 const CONFIG_PATH = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
 
-const QB_DEFAULT_API_ENDPOINT = 'api.quickblox.com'
-const QB_DEFAULT_CHAT_ENDPOINT = 'chat.quickblox.com'
-
 const fields = [
   'QB_SDK_CONFIG_APP_ID',
   'QB_SDK_CONFIG_AUTH_KEY',
@@ -61,14 +58,6 @@ function getConfig() {
       appConfig.QB_SDK_CONFIG_ACCOUNT_KEY.length === 0
     ) {
       throw new Error(`Config is empty (${CONFIG_PATH})`)
-    }
-
-    if (appConfig.QB_SDK_CONFIG_ENDPOINT_API.length === 0) {
-      appConfig.QB_SDK_CONFIG_ENDPOINT_API = QB_DEFAULT_API_ENDPOINT
-    }
-
-    if (appConfig.QB_SDK_CONFIG_ENDPOINT_CHAT.length === 0) {
-      appConfig.QB_SDK_CONFIG_ENDPOINT_CHAT = QB_DEFAULT_CHAT_ENDPOINT
     }
 
     return Object.entries(appConfig).reduce(
