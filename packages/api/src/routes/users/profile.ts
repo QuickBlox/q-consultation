@@ -5,6 +5,7 @@ import { QBUser } from '@/models'
 
 export const deleteSchema = {
   tags: ['users'],
+  description: '[SessionToken]',
   response: {
     200: Type.Ref(QBUser),
   },

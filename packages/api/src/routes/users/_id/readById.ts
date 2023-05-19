@@ -5,6 +5,7 @@ import { QBUser } from '@/models'
 
 export const deleteSchema = {
   tags: ['users'],
+  description: '[SessionToken]',
   params: Type.Object({
     id: Type.String({ pattern: '^[0-9]+$' }),
   }),

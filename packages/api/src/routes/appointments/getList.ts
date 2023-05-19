@@ -7,6 +7,7 @@ import { qbGetCustomObject } from '@/services/customObject'
 
 const getAppointmentListSchema = {
   tags: ['appointments'],
+  description: '[BearerToken][SessionToken]',
   params: Type.Partial(
     Type.Object({
       limit: Type.Integer(),

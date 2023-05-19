@@ -9,6 +9,7 @@ import { QBUser } from '@/models'
 
 export const suggestProviderSchema = {
   tags: ['ai'],
+  description: '[BearerToken][SessionToken]',
   body: Type.Object({
     topic: Type.String(),
   }),

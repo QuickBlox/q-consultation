@@ -5,6 +5,7 @@ import { qbDeleteUser } from '@/services/users'
 
 export const deleteSchema = {
   tags: ['users'],
+  description: '[BearerToken]',
   params: Type.Object({
     id: Type.String({ pattern: '^[0-9]+$' }),
   }),

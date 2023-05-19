@@ -10,6 +10,7 @@ import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
   tags: ['users'],
+  description: '[BearerToken]',
   consumes: ['multipart/form-data'],
   params: Type.Object({
     id: Type.Integer(),
@@ -40,6 +41,7 @@ const updateByIdSchema = {
 
 const updateMySchema = {
   tags: ['users'],
+  description: '[ProviderSessionToken]',
   consumes: ['multipart/form-data'],
   body: Type.Union([
     Type.Intersect([

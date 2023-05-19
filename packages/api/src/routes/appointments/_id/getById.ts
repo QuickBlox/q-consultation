@@ -7,6 +7,7 @@ import { qbGetCustomObject } from '@/services/customObject'
 
 const getAppointmentSchema = {
   tags: ['appointments'],
+  description: '[BearerToken][SessionToken]',
   params: Type.Object({
     id: Type.String({ pattern: '^[a-z0-9]+$' }),
   }),

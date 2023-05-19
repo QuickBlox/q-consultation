@@ -9,6 +9,7 @@ import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
   tags: ['users'],
+  description: '[BearerToken]',
   consumes: ['multipart/form-data'],
   params: Type.Object({
     id: Type.String({ pattern: '^[0-9]+$' }),
@@ -34,6 +35,7 @@ const updateByIdSchema = {
 
 const updateMySchema = {
   tags: ['users'],
+  description: '[ClientSessionToken]',
   consumes: ['multipart/form-data'],
   body: Type.Union([
     Type.Intersect([

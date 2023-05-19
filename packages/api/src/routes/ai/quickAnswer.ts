@@ -4,6 +4,7 @@ import { getChatCompletion } from '@/services/openai'
 
 export const quickAnswerSchema = {
   tags: ['ai'],
+  description: '[BearerToken][ProviderSessionToken]',
   body: Type.Object({
     question: Type.String(),
   }),

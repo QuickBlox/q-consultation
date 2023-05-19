@@ -8,6 +8,7 @@ import { qbCreateCustomObject } from '@/services/customObject'
 
 export const createAppointmentSchema = {
   tags: ['appointments'],
+  description: '[BearerToken][SessionToken]',
   body: Type.Object({
     provider_id: QBUser.properties.id,
     client_id: QBUser.properties.id,

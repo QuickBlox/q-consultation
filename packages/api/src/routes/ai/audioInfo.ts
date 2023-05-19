@@ -5,6 +5,7 @@ import { getAudioInfo } from '@/services/openai'
 
 export const audioInfoSchema = {
   tags: ['ai'],
+  description: '[BearerToken][ProviderSessionToken]',
   consumes: ['multipart/form-data'],
   body: Type.Object({
     voice: MultipartFile,
