@@ -4,6 +4,8 @@ import {
   useEffect,
   ClipboardEvent,
   RefObject,
+  useState,
+  FormEvent,
 } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -39,10 +41,15 @@ export default createUseComponent((props: ChatInputProps) => {
     uploadFile,
     showNotification,
   })
+  const [isShowPlaceholder, setIsShowPlaceholder] = useState(true)
   const { t } = useTranslation()
   const { connected, currentDialog } = store
 
   const disableControls = !currentDialog?.joined || !connected
+
+  const handleInputMessage = ({ currentTarget }: FormEvent<HTMLDivElement>) => {
+    setIsShowPlaceholder(!currentTarget.outerText.replace(/^\n/, '').length)
+  }
 
   const submitMessage = (attachment?: ChatMessageAttachment) => {
     const messageBody = texboxRef.current?.innerText || ''
@@ -67,6 +74,7 @@ export default createUseComponent((props: ChatInputProps) => {
       })
 
       if (texboxRef.current) {
+        setIsShowPlaceholder(true)
         texboxRef.current.innerText = ''
       }
     }
@@ -93,6 +101,8 @@ export default createUseComponent((props: ChatInputProps) => {
 
       selection?.removeAllRanges()
       selection?.addRange(range)
+
+      setIsShowPlaceholder(false)
     }
   }
 
@@ -166,13 +176,14 @@ export default createUseComponent((props: ChatInputProps) => {
     store,
     actions,
     refs: { texboxRef },
-    data: { disableControls },
+    data: { disableControls, isShowPlaceholder },
     handlers: {
       handleSendMessage,
       handleKeyDown,
       handlePaste,
       handleFileChange,
       handleInputFocus,
+      handleInputMessage,
     },
   }
 })

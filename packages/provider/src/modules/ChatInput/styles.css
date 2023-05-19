@@ -58,10 +58,6 @@
 }
 
 .input-container .textbox-placeholder {
-  display: none;
-}
-
-.input-container .textbox-input:empty + .textbox-placeholder {
   display: inline-block;
   position: absolute;
   pointer-events: none;
