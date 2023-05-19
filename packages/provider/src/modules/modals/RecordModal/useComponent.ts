@@ -68,6 +68,7 @@ export default createUseComponent((props: RecordModalProps) => {
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'RecordModal' })
+    setIsSupportedVideo(true)
 
     if (onClose) {
       onClose()
