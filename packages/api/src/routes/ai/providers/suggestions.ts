@@ -9,7 +9,7 @@ import { QBUser } from '@/models'
 
 export const suggestProviderSchema = {
   tags: ['ai'],
-  description: '[BearerToken][SessionToken]',
+  description: 'Get suggested providers by name or issue',
   body: Type.Object({
     topic: Type.String(),
   }),
@@ -19,10 +19,12 @@ export const suggestProviderSchema = {
     }),
   },
   security: [
-    {
-      apiKey: [],
-    },
-  ],
+    { apiKey: [] },
+    { providerSession: [] },
+    { clientSession: [] },
+  ] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const getAllProviders = async (page = 1): Promise<Dictionary<TQBUser>> => {

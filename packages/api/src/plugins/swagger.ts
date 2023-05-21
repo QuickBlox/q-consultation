@@ -5,21 +5,30 @@ import { Type } from '@sinclair/typebox'
 import * as commonModels from '@/models/common'
 
 const swaggerOptions: SwaggerOptions = {
-  swagger: {
+  openapi: {
     info: {
       version: process.env.npm_package_version || '',
       title: process.env.npm_package_name || '',
     },
-    securityDefinitions: {
-      apiKey: {
-        type: 'apiKey' as const,
-        name: 'Authorization',
-        in: 'header',
-        description: 'Format: "Bearer $TOKEN"',
+    components: {
+      securitySchemes: {
+        apiKey: {
+          type: 'http',
+          scheme: 'bearer',
+          description: 'API Token',
+        },
+        providerSession: {
+          type: 'http',
+          scheme: 'bearer',
+          description: 'Provider session token',
+        },
+        clientSession: {
+          type: 'http',
+          scheme: 'bearer',
+          description: 'Client session token',
+        },
       },
     },
-    consumes: ['application/json', 'multipart/form-data'],
-    produces: ['application/json'],
   },
   refResolver: {
     buildLocalReference: (json, baseUri, fragment, i) => {

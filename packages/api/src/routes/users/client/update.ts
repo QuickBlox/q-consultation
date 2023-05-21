@@ -9,10 +9,10 @@ import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
   tags: ['users'],
-  description: '[BearerToken]',
+  description: 'Update client by id',
   consumes: ['multipart/form-data'],
   params: Type.Object({
-    id: Type.String({ pattern: '^[0-9]+$' }),
+    id: Type.Integer(),
   }),
   body: Type.Intersect([
     Type.Omit(QCClient, ['id', 'created_at', 'updated_at', 'last_request_at']),
@@ -26,16 +26,14 @@ const updateByIdSchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const updateMySchema = {
   tags: ['users'],
-  description: '[ClientSessionToken]',
+  description: 'Update client profile',
   consumes: ['multipart/form-data'],
   body: Type.Union([
     Type.Intersect([
@@ -70,11 +68,9 @@ const updateMySchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ clientSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -170,7 +166,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         avatarData = undefined
       }
 
-      const updatedUser = await qbUpdateUser(parseInt(request.params.id, 10), {
+      const updatedUser = await qbUpdateUser(request.params.id, {
         ...userData,
         custom_data: stringifyUserCustomData(
           avatarData ? { ...customData, avatar: avatarData } : customData,

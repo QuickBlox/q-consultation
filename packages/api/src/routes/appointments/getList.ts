@@ -7,7 +7,7 @@ import { qbGetCustomObject } from '@/services/customObject'
 
 const getAppointmentListSchema = {
   tags: ['appointments'],
-  description: '[BearerToken][SessionToken]',
+  description: 'Get a list of appointments',
   params: Type.Partial(
     Type.Object({
       limit: Type.Integer(),
@@ -20,10 +20,12 @@ const getAppointmentListSchema = {
     200: Type.Array(Type.Ref(QCAppointment)),
   },
   security: [
-    {
-      apiKey: [],
-    },
-  ],
+    { apiKey: [] },
+    { providerSession: [] },
+    { clientSession: [] },
+  ] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const getAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {

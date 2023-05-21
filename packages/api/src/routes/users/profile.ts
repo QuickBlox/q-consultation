@@ -5,15 +5,13 @@ import { QBUser } from '@/models'
 
 export const deleteSchema = {
   tags: ['users'],
-  description: '[SessionToken]',
+  description: 'Get user profile',
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ providerSession: [] }, { clientSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {

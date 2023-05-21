@@ -7,6 +7,7 @@ import { userHasTag } from '@/utils/user'
 
 export const loginSchema = {
   tags: ['auth'],
+  description: 'User login',
   body: Type.Object({
     role: Type.Union([Type.Literal('client'), Type.Literal('provider')]),
     email: Type.String({ format: 'email' }),

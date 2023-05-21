@@ -7,23 +7,22 @@ import { qbGetCustomObject } from '@/services/customObject'
 
 const getRecordSchema = {
   tags: ['appointments'],
-  description: '[BearerToken][ProviderSessionToken]',
+  description: 'Get a record for the appointment',
   params: Type.Object({
-    id: Type.Integer(),
+    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
+    recordId: Type.String({ pattern: '^[a-z0-9]{24}$' }),
   }),
   response: {
     200: Type.Ref(QCRecord),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const getRecordById: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.get(
-    '/:id',
+    '/:recordId',
     {
       schema: getRecordSchema,
       onRequest: fastify.verify(
@@ -32,12 +31,15 @@ const getRecordById: FastifyPluginAsyncTypebox = async (fastify) => {
       ),
     },
     async (request, reply) => {
-      const { id } = request.params
+      const { id, recordId } = request.params
 
       const {
         items: [record],
       } = await qbGetCustomObject<QBRecord>('Record', {
         _id: {
+          in: [recordId],
+        },
+        appointment_id: {
           in: [id],
         },
         limit: 1,

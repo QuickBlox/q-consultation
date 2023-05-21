@@ -8,7 +8,7 @@ import { qbCreateCustomObject } from '@/services/customObject'
 
 export const createAppointmentSchema = {
   tags: ['appointments'],
-  description: '[BearerToken][SessionToken]',
+  description: 'Create new appointment',
   body: Type.Object({
     provider_id: QBUser.properties.id,
     client_id: QBUser.properties.id,
@@ -18,10 +18,12 @@ export const createAppointmentSchema = {
     200: Type.Ref(QCAppointment),
   },
   security: [
-    {
-      apiKey: [],
-    },
-  ],
+    { apiKey: [] },
+    { providerSession: [] },
+    { clientSession: [] },
+  ] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {

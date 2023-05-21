@@ -5,15 +5,13 @@ import { qbDeleteUser } from '@/services/users'
 
 export const deleteSchema = {
   tags: ['users'],
-  description: '[BearerToken]',
+  description: 'Delete user by id',
   params: Type.Object({
-    id: Type.String({ pattern: '^[0-9]+$' }),
+    id: Type.Integer(),
   }),
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -26,7 +24,7 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request, reply) => {
       const { id } = request.params
 
-      await qbDeleteUser(parseInt(id, 10))
+      await qbDeleteUser(id)
 
       return reply.code(204)
     },

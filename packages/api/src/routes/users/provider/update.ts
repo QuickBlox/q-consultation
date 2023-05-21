@@ -10,7 +10,7 @@ import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
   tags: ['users'],
-  description: '[BearerToken]',
+  description: 'Update provider by id',
   consumes: ['multipart/form-data'],
   params: Type.Object({
     id: Type.Integer(),
@@ -32,16 +32,14 @@ const updateByIdSchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const updateMySchema = {
   tags: ['users'],
-  description: '[ProviderSessionToken]',
+  description: 'Update provider profile',
   consumes: ['multipart/form-data'],
   body: Type.Union([
     Type.Intersect([
@@ -76,11 +74,9 @@ const updateMySchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ providerSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {

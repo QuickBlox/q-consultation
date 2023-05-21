@@ -7,23 +7,32 @@ import { qbGetCustomObject } from '@/services/customObject'
 
 const getRecordListSchema = {
   tags: ['appointments'],
-  description: '[BearerToken][ProviderSessionToken]',
-  params: Type.Partial(
+  description: 'Get a list of records for the appointment',
+  params: Type.Object({
+    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
+  }),
+  querystring: Type.Partial(
     Type.Object({
-      limit: Type.Integer(),
-      skip: Type.Integer(),
-      sort_desc: Type.KeyOf(QCRecord),
-      sort_asc: Type.KeyOf(QCRecord),
+      limit: Type.Integer({ default: 100 }),
+      skip: Type.Integer({ default: 0 }),
+      sort_desc: Type.KeyOf(QCRecord, {
+        description: `Available values: ${Type.KeyOf(QCRecord)
+          .anyOf.map(({ const: field }) => field)
+          .join(', ')}`,
+      }),
+      sort_asc: Type.KeyOf(QCRecord, {
+        description: `Available values: ${Type.KeyOf(QCRecord)
+          .anyOf.map(({ const: field }) => field)
+          .join(', ')}`,
+      }),
     }),
   ),
   response: {
     200: Type.Array(Type.Ref(QCRecord)),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const getRecordList: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -37,10 +46,14 @@ const getRecordList: FastifyPluginAsyncTypebox = async (fastify) => {
       ),
     },
     async (request) => {
-      const { items: records } = await qbGetCustomObject<QBRecord>(
-        'Record',
-        request.params,
-      )
+      const { id } = request.params
+
+      const { items: records } = await qbGetCustomObject<QBRecord>('Record', {
+        ...request.query,
+        appointment_id: {
+          in: [id],
+        },
+      })
 
       return records
     },

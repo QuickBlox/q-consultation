@@ -7,7 +7,7 @@ import { qbUpdateCustomObject } from '@/services/customObject'
 
 const updateAppointmentSchema = {
   tags: ['appointments'],
-  description: '[BearerToken][SessionToken]',
+  description: 'Update appointment by id',
   params: Type.Object({
     id: Type.String({ pattern: '^[a-z0-9]+$' }),
   }),
@@ -24,10 +24,12 @@ const updateAppointmentSchema = {
     200: Type.Ref(QCAppointment),
   },
   security: [
-    {
-      apiKey: [],
-    },
-  ],
+    { apiKey: [] },
+    { providerSession: [] },
+    { clientSession: [] },
+  ] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {

@@ -5,7 +5,7 @@ import { getAudioInfo } from '@/services/openai'
 
 export const audioInfoSchema = {
   tags: ['ai'],
-  description: '[BearerToken][ProviderSessionToken]',
+  description: 'Get transcription, summary and actions for the audio',
   consumes: ['multipart/form-data'],
   body: Type.Object({
     voice: MultipartFile,
@@ -26,11 +26,9 @@ export const audioInfoSchema = {
       }),
     ),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const audioInfo: FastifyPluginAsyncTypebox = async (fastify) => {

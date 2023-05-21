@@ -4,7 +4,7 @@ import { getChatCompletion } from '@/services/openai'
 
 export const quickAnswerSchema = {
   tags: ['ai'],
-  description: '[BearerToken][ProviderSessionToken]',
+  description: 'Get Quick answer',
   body: Type.Object({
     question: Type.String(),
   }),
@@ -13,11 +13,9 @@ export const quickAnswerSchema = {
       answer: Type.String(),
     }),
   },
-  security: [
-    {
-      apiKey: [],
-    },
-  ],
+  security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {

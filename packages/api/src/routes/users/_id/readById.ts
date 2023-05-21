@@ -5,18 +5,20 @@ import { QBUser } from '@/models'
 
 export const deleteSchema = {
   tags: ['users'],
-  description: '[SessionToken]',
+  description: 'Get user by id',
   params: Type.Object({
-    id: Type.String({ pattern: '^[0-9]+$' }),
+    id: Type.Integer(),
   }),
   response: {
     200: Type.Ref(QBUser),
   },
   security: [
-    {
-      apiKey: [],
-    },
-  ],
+    { apiKey: [] },
+    { providerSession: [] },
+    { clientSession: [] },
+  ] as Array<{
+    [securityLabel: string]: string[]
+  }>,
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -24,10 +26,10 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
     '',
     {
       schema: deleteSchema,
-      onRequest: fastify.verify(fastify.SessionToken),
+      onRequest: fastify.verify(fastify.BearerToken, fastify.SessionToken),
     },
     async (request, reply) => {
-      const user = await findUserById(parseInt(request.params.id, 10))
+      const user = await findUserById(request.params.id)
 
       if (!user) {
         return reply.notFound()
