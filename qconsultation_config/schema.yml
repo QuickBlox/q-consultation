@@ -4,16 +4,14 @@ qb_schema:
     name: Appointment
     fields:
       provider_id: Integer
+      client_id: Integer
+      dialog_id: String
       description: String
       priority: Integer
       notes: String
-      dialog_id: String
-      records: Integer_a
       conclusion: String
       language: String
       date_end: Date
-      client_id: Integer
-      date_start: Date
     permissions:
       read:
         access: open
@@ -23,6 +21,25 @@ qb_schema:
         primary: true
       delete:
         access: open
+      create:
+        access: open
+        primary: true
+  custom_class_Record:
+    name: Record
+    fields:
+      name: String
+      appointment_id: String
+      transcription: String_a
+      summary: String
+      actions: String
+      uid: String
+    permissions:
+      read:
+        access: open
+      update:
+        access: owner
+      delete:
+        access: owner
       create:
         access: open
         primary: true

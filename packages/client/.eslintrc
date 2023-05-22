@@ -8,8 +8,7 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "project": "tsconfig.json",
-    "tsconfigRootDir": "."
+    "project": "./tsconfig.json"
   },
   "settings": {
     "import/parsers": {

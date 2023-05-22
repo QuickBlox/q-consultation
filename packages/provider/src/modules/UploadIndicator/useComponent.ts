@@ -4,13 +4,11 @@ import { uploadFileCancel } from '../../actionCreators'
 import {
   contentLoadingSelector,
   contentProgressSelector,
-  contentTypeSelector,
 } from '../../selectors'
 import { createUseComponent, useActions } from '../../hooks'
 import { createMapStateSelector } from '../../utils/selectors'
 
 const selector = createMapStateSelector({
-  currentType: contentTypeSelector,
   progress: contentProgressSelector,
   uploading: contentLoadingSelector,
 })

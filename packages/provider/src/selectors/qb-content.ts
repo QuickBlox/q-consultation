@@ -12,8 +12,3 @@ export const contentProgressSelector = createSelector(
   contentSelector,
   (content) => content.progress,
 )
-
-export const contentTypeSelector = createSelector(
-  contentSelector,
-  (content) => content.type,
-)

@@ -16,6 +16,11 @@ export const messagesDialogsSelector = createSelector(
   (messages) => messages.dialogs,
 )
 
+export const messagesLoadMessageIdSelector = createSelector(
+  messagesSelector,
+  (messages) => messages.loadMessageId,
+)
+
 export const createMessagesDialogByIdSelector = (
   dialogId?: QBChatDialog['_id'],
 ) =>

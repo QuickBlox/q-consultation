@@ -156,11 +156,12 @@
   margin: 9px 0;
 }
 
-.appointment-details-modal .record-item a {
-  display: flex;
+.appointment-details-modal .record-item div {
+  display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: var(--AppointmentDetailsModalRecordLink-color)
+  color: var(--AppointmentDetailsModalRecordLink-color);
+  cursor: pointer;
 }
 
 .appointment-details-modal .icon.file-video {

@@ -15,6 +15,7 @@ import IS_MOBILE from '../../utils/isMobile'
 import CameraModal from '../modals/CameraModal'
 import useComponent, { CallControlsProps } from './useComponent'
 import './styles.css'
+import { formatFileSize } from '../../utils/file'
 
 export default function CallControls(props: CallControlsProps) {
   const {
@@ -41,15 +42,20 @@ export default function CallControls(props: CallControlsProps) {
   return (
     <div className="controls">
       {!recorderUnavailable && (
-        <button
-          className={cn('control-btn', { active: recording })}
-          disabled={!session || isOffline}
-          onClick={toggleRecord}
-          title={recording ? t('StopRecord') : t('StartRecord')}
-          type="button"
-        >
-          <div className="record" />
-        </button>
+        <div className="tooltip-container">
+          <div className="tooltip-body">
+            {t('LimitVideoRecords', { limit: formatFileSize(FILE_SIZE_LIMIT) })}
+          </div>
+          <button
+            className={cn('control-btn', { active: recording })}
+            disabled={!session || isOffline}
+            onClick={toggleRecord}
+            title={recording ? t('StopRecord') : t('StartRecord')}
+            type="button"
+          >
+            <div className="record" />
+          </button>
+        </div>
       )}
       <button
         className={cn('control-btn', { active: muteAudio })}

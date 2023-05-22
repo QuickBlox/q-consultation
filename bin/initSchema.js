@@ -1,51 +1,45 @@
 const fs = require('fs')
 const path = require('path')
-const util = require('util')
-const yaml = require('js-yaml')
 const https = require('https')
 const crypto = require('crypto')
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout,
-})
-const getConfig = require('./config')
+const util = require('util')
+const yaml = require('js-yaml')
+const readline = require('readline-sync')
+const dotenv = require('dotenv')
 
 const readFile = util.promisify(fs.readFile)
 
-const qcAppointmentSchemaFileLocation = path.resolve(__dirname, '..','qconsultation_config','schema.yml')
+const qcConfigFileLocation = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
+const qcSchemasFileLocation = path.resolve(__dirname, '..', 'qconsultation_config', 'schema.yml')
+const { parsed: config } = dotenv.config({ path: qcConfigFileLocation })
 
-function readlineQuestion(text, writeToOutput) {
-  return new Promise((resolve) => {
-    readline.question(text, (res) => {
-      resolve(res)
-    })
-    if (writeToOutput) {
-      readline._writeToOutput = writeToOutput
+function getAccountOwnerCredentials() {
+  if (config.QB_ADMIN_EMAIL && config.QB_ADMIN_PASSWORD) {
+    console.log(`QuickBlox account owner credentials found in config file: ${qcConfigFileLocation}`)
+
+    return {
+      email: config.QB_ADMIN_EMAIL,
+      password: config.QB_ADMIN_PASSWORD,
     }
-  })
+  }
+
+  const email = readline.questionEMail(`Please enter your QuickBlox account owner email:\n`)
+  const password = readline.question(`Please enter your QuickBlox account owner password:\n`, { hideEchoBack: true })
+
+  return {
+    email,
+    password,
+  }
 }
 
-async function getAccountOwnerCredentials() {
-  const email = await readlineQuestion(`Please enter your QuickBlox account owner email:\n`)
-  const password = await readlineQuestion(`Please enter your QuickBlox account owner password:\n`, (stringToWrite) => {
-    if (stringToWrite !== '\r\n') {
-      readline.output.write('*')
-    } else {
-      readline.output.write(stringToWrite)
-    }
-  })
-
-  return { email, password }
-}
-
-async function getAppointmentsSchema(schemaLocation) {
+async function getAllSchemas(schemaLocation) {
   const schema = await readFile(schemaLocation, 'utf8')
   const doc = yaml.load(schema)
 
-  return doc.qb_schema.custom_class_Appointment
+  return Object.values(doc.qb_schema)
 }
 
-function generateAuthMsg(authCredentials, config) {
+function generateAuthMsg(authCredentials) {
   return {
     application_id: config.QB_SDK_CONFIG_APP_ID,
     auth_key: config.QB_SDK_CONFIG_AUTH_KEY,
@@ -84,8 +78,8 @@ function signMessage(message, secret) {
   return signedMessage
 }
 
-function authorize(authCredentials, config) {
-  const message = generateAuthMsg(authCredentials, config)
+function authorize(authCredentials) {
+  const message = generateAuthMsg(authCredentials)
   const signedMessage = signMessage(message, config.QB_SDK_CONFIG_AUTH_SECRET)
 
   message.signature = signedMessage
@@ -121,7 +115,7 @@ function authorize(authCredentials, config) {
   })
 }
 
-function uploadAppointmentSchema(schema, token, config) {
+function uploadSchema(schema, token) {
   return new Promise((resolve, reject) => {
     const options = {
       hostname: config.QB_SDK_CONFIG_ENDPOINT_API,
@@ -134,23 +128,27 @@ function uploadAppointmentSchema(schema, token, config) {
       },
     }
     const req = https.request(options, (res) => {
-      res.on('data', (data) => {
+      res.on('data', (chunk) => {
+        const parsedData = JSON.parse(chunk.toString())
+
         if (res.statusCode === 200 || res.statusCode === 201) {
+          console.log(`${schema.name} schema created successfully.`)
           resolve()
         } else if (res.statusCode === 422) {
-          if (JSON.parse(data).name === 'is already taken') {
+          if (parsedData.name.includes('is already taken')) {
+            console.log(`${schema.name} schema is already taken.`)
             resolve()
           } else {
-            const parsedData = JSON.parse(data)
-
-            parsedData.statusCode = res.statusCode
-            reject(parsedData)
+            reject({
+              ...parsedData,
+              statusCode: res.statusCode
+            })
           }
         } else {
-          const parsedData = JSON.parse(data)
-
-          parsedData.statusCode = res.statusCode
-          reject(parsedData)
+          reject({
+            ...parsedData,
+            statusCode: res.statusCode
+          })
         }
       })
     })
@@ -165,23 +163,19 @@ function uploadAppointmentSchema(schema, token, config) {
 
 async function bootstrap() {
   try {
-    const config = getConfig()
-    const credentials = await getAccountOwnerCredentials()
+    const credentials = getAccountOwnerCredentials()
 
-    const [schema, token] = await Promise.all([
-      getAppointmentsSchema(qcAppointmentSchemaFileLocation),
-      authorize(credentials, config)
+    const [token, schemas] = await Promise.all([
+      authorize(credentials),
+      getAllSchemas(qcSchemasFileLocation),
     ])
-    await uploadAppointmentSchema(schema, token, config)
-    console.log('Appointment data schema created successfully.')
+    await Promise.all(schemas.map((schema) => uploadSchema(schema, token)))
 
     process.exit(0)
   } catch (e) {
     console.log('Error:')
 
-    if (typeof e === 'object' && e.statusCode === 422) {
-      console.error('Appointment schema is already taken!')
-    } else if (typeof e === 'object' && e.statusCode === 401) {
+    if (typeof e === 'object' && e.statusCode === 401) {
       console.error('Incorrect email or password!')
     } else {
       console.error(e.message)

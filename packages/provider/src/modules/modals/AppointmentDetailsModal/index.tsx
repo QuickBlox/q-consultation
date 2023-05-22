@@ -17,7 +17,7 @@ export default function AppointmentDetailsModal(
   const {
     store: { appointment, records, opened },
     data: {
-      timeRange,
+      localDate,
       accordeonActive,
       userName,
       currentUser,
@@ -25,12 +25,15 @@ export default function AppointmentDetailsModal(
       RESOLUTION_XS,
     },
     refs: { backdrop },
-    handlers: { toggleAccordeon, onBackdropClick, onCancelClick, setActiveTab },
+    handlers: {
+      toggleAccordeon,
+      onBackdropClick,
+      onCancelClick,
+      setActiveTab,
+      handleOpenRecordModal,
+    },
   } = useComponent(props)
   const { t } = useTranslation()
-
-  const appointmentRecords =
-    appointment?.records && [...appointment.records].reverse()
 
   const renderDropList = () => (
     <>
@@ -81,24 +84,16 @@ export default function AppointmentDetailsModal(
             title={t('VideoRecords')}
             open={accordeonActive === 'video-records'}
           >
-            {appointment?.records?.length !== undefined && (
+            {records?.length !== undefined && (
               <ul className="record-list">
-                {appointmentRecords?.map(
-                  (id) =>
-                    records?.[id] && (
-                      <li key={id} className="record-item">
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="link"
-                          href={QB.content.privateUrl(records[id].uid)}
-                        >
-                          <FileVideoSvg className="icon file-video" />
-                          {records[id].name}
-                        </a>
-                      </li>
-                    ),
-                )}
+                {records.map((record) => (
+                  <li key={record._id} className="record-item">
+                    <div onClick={() => handleOpenRecordModal(record._id)}>
+                      <FileVideoSvg className="icon file-video" />
+                      {record.name}
+                    </div>
+                  </li>
+                ))}
               </ul>
             )}
           </Accordeon>
@@ -132,14 +127,7 @@ export default function AppointmentDetailsModal(
             <button className="back" type="button" onClick={onCancelClick}>
               <BackSvg className="icon" />
             </button>
-            <p className="title">
-              {timeRange && (
-                <>
-                  <span className="date-divider" />
-                  {timeRange}
-                </>
-              )}
-            </p>
+            <p className="title">{localDate}</p>
           </div>
           <div className="header-info">
             <div className="user-info">

@@ -9,6 +9,7 @@ import {
   listUsers,
   startCall,
   updateAppointment,
+  getQuickAnswerCancel,
 } from '../../actionCreators'
 import {
   appointmentDialogIdListSelector,
@@ -21,7 +22,7 @@ import {
   dialogsEntriesSelector,
   dialogsLoadingSelector,
   qbReadySelector,
-  recorderDataSelector,
+  createRecordsByAppointmentIdSelector,
   usersEntriesSelector,
   usersLoadingSelector,
 } from '../../selectors'
@@ -48,7 +49,7 @@ const createSelector = (appointmentId?: QBAppointment['_id']) =>
     myAccount: authMyAccountSelector,
     users: usersEntriesSelector,
     usersLoading: usersLoadingSelector,
-    records: recorderDataSelector,
+    records: createRecordsByAppointmentIdSelector(appointmentId),
     connected: chatConnectedSelector,
   })
 
@@ -61,6 +62,7 @@ export default createUseComponent((props: ChatProps) => {
     startCall,
     listUsers,
     updateAppointment,
+    getQuickAnswerCancel,
   })
   const {
     ready,
@@ -78,6 +80,7 @@ export default createUseComponent((props: ChatProps) => {
   const { tab } = useParams<{ tab: ChatTabs }>()
   const [activeTab, setActiveTab] = useState<ChatTabs>(tab || ABOUT_TAB)
   const callTabRef = useRef<HTMLButtonElement>(null)
+  const chatInputRef = useRef<HTMLDivElement>(null)
   const RESOLUTION_XS = useMobileLayout()
   const isOffline = useIsOffLine()
   const history = useHistory()
@@ -98,6 +101,12 @@ export default createUseComponent((props: ChatProps) => {
       companion?.email ||
       t('Unknown')
     : undefined
+
+  const handleSetInputValue = (value: string) => {
+    if (chatInputRef.current) {
+      chatInputRef.current.innerText = value
+    }
+  }
 
   const handleChangeTab = () => {
     const path = generatePath(APPOINTMENTS_ROUTE, {
@@ -169,13 +178,15 @@ export default createUseComponent((props: ChatProps) => {
   useEffect(() => {
     if (isOffline) {
       setActiveTab(ABOUT_TAB)
+    } else {
+      actions.getQuickAnswerCancel()
     }
   }, [appointmentId])
 
   return {
     store,
     actions,
-    refs: { callTabRef },
+    refs: { callTabRef, chatInputRef },
     data: {
       activeTab,
       dialogName,
@@ -186,6 +197,7 @@ export default createUseComponent((props: ChatProps) => {
     },
     handlers: {
       setActiveTab,
+      handleSetInputValue,
     },
   }
 })

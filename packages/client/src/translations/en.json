@@ -45,7 +45,14 @@
   "Calling": "Calling",
   "Accept": "Accept",
   "Decline": "Decline",
+  "Agent": "Agent",
 
+
+  "FindYourAgent": "Find your agent",
+  "FindYourAgentHint": "Describe your issue if you want the system to find relevant specialists for you, or enter an agent's First/Last name if you want to contact a specific individual.",
+  "TypeYourIssueOrAgent": "Type your issue or agent name",
+  "SearchAnAgent": "Search an agent",
+  "YouNeedSelectAgent": "You need to select an agent",
   "JoinedQueue": "You joined the queue",
   "WaitDoctor": "Your video consultation will begin shortly, please wait",
   "WhileWaiting": "The video call will begin automatically. In the meantime feel free to ask us any questions while you are waiting.",
@@ -113,6 +120,7 @@
   "auth/web-storage-unsupported": "Web storage unsupported",
   "auth/code-expired": "Code expired",
 
+  "RESET": "Reset",
   "REQUIRED": "Required",
   "INVALID_FORMAT": "Invalid format",
   "INVALID_DATE": "Invalid date",

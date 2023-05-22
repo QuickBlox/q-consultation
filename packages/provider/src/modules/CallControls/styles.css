@@ -8,6 +8,49 @@
   padding-top: 10px;
 }
 
+.controls .tooltip-container {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.controls .tooltip-body {
+  font-size: var(--font-size-lg);
+  line-height: 19px;
+  visibility: hidden;
+  position: absolute;
+  width: 230px;
+  height: 60px;
+  color: var(--CallControlTooltip-color);
+  background-color: var(--CallControlTooltip-backgroundColor);
+  transition: opacity 0.25s linear;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  z-index: 1;
+  opacity: 0;
+  box-sizing: border-box;
+  top: calc(-100% - 25px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.controls .tooltip-body::after {
+  content: "";
+  position: absolute;
+  border-width: 5px;
+  border-style: solid;
+  bottom: -10px;
+  right: calc(50% - 10px);
+  transform: translateX(-50%);
+  border-color: var(--CallControlTooltip-backgroundColor) transparent transparent transparent;
+}
+
+.controls .tooltip-container:hover .tooltip-body {
+  visibility: visible;
+  opacity: 1;
+}
+
 .controls .control-btn {
   background-color: var(--CallControlBtn-backgroundColor);
   border-radius: 5px;

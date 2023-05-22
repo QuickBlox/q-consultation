@@ -9,6 +9,11 @@
   margin-top: 1px;
 }
 
+.provider-list-wide {
+  flex: 1;
+  max-width: 430px;
+}
+
 .provider-list .header-block {
   display: flex;
   align-items: center;
@@ -17,7 +22,8 @@
   margin: 12px 20px 0 12px;
 }
 
-.provider-list .title {
+.provider-list .title,
+.provider-list .find-agent-field .form-field-label-text {
   font-size: var(--font-size-lg);
   line-height: 19px;
   color: var(--ProviderListTitle-color);
@@ -26,6 +32,46 @@
 .provider-list .icon {
   height: 15px;
   width: 15px;
+}
+
+.provider-list .find-agent-field {
+  padding: 12px 12px 20px;
+  box-sizing: border-box;
+}
+
+.provider-list .find-agent-field.field .field {
+  resize: none;
+}
+
+.provider-list .find-agent-controls {
+  position: relative;
+  margin: 0 12px;
+}
+
+.provider-list .find-agent-reset {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  border: none;
+  font-size: var(--font-size-xl);
+  line-height: 22px;
+  background: none;
+  color: var(--ProviderListReset-color);
+  display: flex;
+  align-items: center;
+}
+
+.provider-list .find-agent-reset svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--ProviderListReset-color);
+  transform: scaleX(-1);
+}
+
+.provider-list .find-agent-reset span {
+  margin-left: 5px;
 }
 
 .provider-list .provider-search {
@@ -96,5 +142,9 @@
     border: none;
     width: 100%;
     margin: 0;
+  }
+
+  .provider-list-wide {
+    max-width: 100%;
   }
 }

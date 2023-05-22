@@ -1,11 +1,11 @@
 import {
   ChangeEvent,
-  FormEvent,
   KeyboardEvent,
-  useRef,
   useEffect,
-  useState,
   ClipboardEvent,
+  RefObject,
+  useState,
+  FormEvent,
 } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -23,6 +23,7 @@ import IS_MOBILE from '../../utils/isMobile'
 
 export interface ChatInputProps {
   dialogId?: QBChatDialog['_id']
+  texboxRef: RefObject<HTMLDivElement>
 }
 
 const createSelector = (dialogId?: QBChatDialog['_id']) =>
@@ -32,7 +33,7 @@ const createSelector = (dialogId?: QBChatDialog['_id']) =>
   })
 
 export default createUseComponent((props: ChatInputProps) => {
-  const { dialogId } = props
+  const { dialogId, texboxRef } = props
   const selector = createSelector(dialogId)
   const store = useSelector(selector)
   const actions = useActions({
@@ -40,18 +41,23 @@ export default createUseComponent((props: ChatInputProps) => {
     uploadFile,
     showNotification,
   })
+  const [isShowPlaceholder, setIsShowPlaceholder] = useState(true)
   const { t } = useTranslation()
   const { connected, currentDialog } = store
-  const texboxRef = useRef<HTMLDivElement>(null)
-  const [messageBody, setMessageBody] = useState<string | null>(null)
 
   const disableControls = !currentDialog?.joined || !connected
 
+  const handleInputMessage = ({ currentTarget }: FormEvent<HTMLDivElement>) => {
+    setIsShowPlaceholder(!currentTarget.outerText.replace(/^\n/, '').length)
+  }
+
   const submitMessage = (attachment?: ChatMessageAttachment) => {
+    const messageBody = texboxRef.current?.innerText || ''
+
     if (dialogId && (messageBody?.trim().length || attachment)) {
       const message: QBChatNewMessage = {
         type: 'groupchat',
-        body: messageBody?.trim() || '',
+        body: messageBody?.trim(),
         extension: {
           save_to_history: 1,
           dialog_id: dialogId,
@@ -66,18 +72,12 @@ export default createUseComponent((props: ChatInputProps) => {
         dialogId: QB.chat.helpers.getRoomJidFromDialogId(dialogId),
         message,
       })
-      setMessageBody('')
 
       if (texboxRef.current) {
+        setIsShowPlaceholder(true)
         texboxRef.current.innerText = ''
       }
     }
-  }
-
-  const handleChangeMessage = ({
-    currentTarget,
-  }: FormEvent<HTMLDivElement>) => {
-    setMessageBody(currentTarget.outerText)
   }
 
   const handleSendMessage = () => submitMessage()
@@ -102,9 +102,7 @@ export default createUseComponent((props: ChatInputProps) => {
       selection?.removeAllRanges()
       selection?.addRange(range)
 
-      if (texboxRef.current?.innerText) {
-        setMessageBody(texboxRef.current?.innerText)
-      }
+      setIsShowPlaceholder(false)
     }
   }
 
@@ -148,16 +146,12 @@ export default createUseComponent((props: ChatInputProps) => {
         }),
       })
     } else {
-      actions.uploadFile(
-        file,
-        'chat',
-        (action: QBContentUploadSuccessAction) => {
-          const { id, name, size, uid, content_type } = action.payload
-          const type = content_type.replace(/(\/.*)$/, '')
+      actions.uploadFile(file, (action: QBContentUploadSuccessAction) => {
+        const { id, name, size, uid, content_type } = action.payload
+        const type = content_type.replace(/(\/.*)$/, '')
 
-          submitMessage({ id, name, size, type, uid })
-        },
-      )
+        submitMessage({ id, name, size, type, uid })
+      })
     }
     e.target.value = ''
   }
@@ -173,8 +167,6 @@ export default createUseComponent((props: ChatInputProps) => {
   }
 
   useEffect(() => {
-    setMessageBody('')
-
     if (texboxRef.current) {
       texboxRef.current.innerText = ''
     }
@@ -184,14 +176,14 @@ export default createUseComponent((props: ChatInputProps) => {
     store,
     actions,
     refs: { texboxRef },
-    data: { disableControls, messageBody },
+    data: { disableControls, isShowPlaceholder },
     handlers: {
-      handleChangeMessage,
       handleSendMessage,
       handleKeyDown,
       handlePaste,
       handleFileChange,
       handleInputFocus,
+      handleInputMessage,
     },
   }
 })

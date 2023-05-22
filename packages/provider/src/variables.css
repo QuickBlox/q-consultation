@@ -15,6 +15,7 @@
   --grey-6: rgba(255, 255, 255, 0.2);
   --grey-7: #333;
   --grey-8: rgba(0, 0, 0, 0.2);
+  --grey-9: #898989;
   --grey-10: rgba(0, 0, 0, 0.4);
   --grey-11: rgba(0, 0, 0, 0.8);
   --grey-12: #151515;
@@ -215,6 +216,15 @@
   --CallControlBtnRecord-backgroundColor: var(--red-5);
   --CallControlBtnEndCall-backgroundColor: var(--red-5);
   --CallControlBtnEndCallIcon-fill: var(--grey-1);
+  --CallControlTooltip-color: var(--grey-1);
+  --CallControlTooltip-backgroundColor: var(--grey-11);
+
+  --RecordModalVideo-backgroundColor: var(--grey-12);
+  --RecordModalActions-borderColor: var(--blue-3);
+  --RecordModalActionsTitle-color: var(--blue-7);
+  --RecordModalTranscriptTime-color: var(--blue-7);
+  --RecordModalVideoUnavailable-color: var(--grey-9);
+  --RecordModalVideoUnavailableIcon-fill: var(--grey-9);
 
   --ChatContainer-backgroundColor: var(--grey-1);
   --ChatContainer-boxShadow: 0 1px 4px 0 var(--grey-8);
@@ -223,7 +233,7 @@
   --ChatHistoryTab-backgroundColor: var(--grey-1);
 
   --ChatInput-boxShadow: 0 -1px 6px 0 var(--blue-3);
-  --ChatInput-backgroundColor: var(--grey-1);
+  --ChatInput-backgroundColor: inherit;
   --ChatInputTextarea-backgroundColor: var(--grey-1);
   --ChatInputTextareaPlaceholder-color: var(--blue-3);
   --ChatInputTextarea-color: var(--grey-13);
@@ -237,6 +247,7 @@
   --ChatMessageBody-color: var(--grey-13);
   --ChatMessageBody-backgroundColor--my: var(--blue-9);
   --ChatMessageBody-color--my: var(--grey-1);
+  --ChatMessageRobotIcon-fill: var(--grey-7);
 
   --DailyScheduleBtnUpdate-color: var(--blue-9);
   --DailyScheduleBtnUpdateIcon-fill: var(--blue-9);

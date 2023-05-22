@@ -11,6 +11,8 @@ import * as Types from '../actions'
 import {
   getMessagesFailure,
   getMessagesSuccess,
+  getQuickAnswerFailure,
+  getQuickAnswerSuccess,
   sendMessageFailure,
   sendMessageSuccess,
   sendSystemMessageFailure,
@@ -23,8 +25,14 @@ import {
   QBChatSendSystemMessage,
 } from '../qb-api-calls'
 import { normalize } from '../utils/normalize'
-import { authMyAccountIdSelector, chatConnectedSelector } from '../selectors'
+import {
+  authMyAccountIdSelector,
+  authSessionSelector,
+  chatConnectedSelector,
+} from '../selectors'
 import { stringifyError } from '../utils/parse'
+import { ajax } from './ajax'
+import { takeOrCancel } from '../utils/saga'
 
 function* getChatMessages(action: Types.QBGetMessageRequestAction) {
   const { dialogId, skip, limit } = action.payload
@@ -140,9 +148,58 @@ function* sendReadStatus(action: Types.QBMarkMessageReadAction) {
   yield call(QBChatMarkMessageRead, action.payload)
 }
 
+function* getQuickAnswer(action: Types.QBGetQuickAnswerRequestAction) {
+  const { question, then } = action.payload
+
+  try {
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
+    )
+    const url = `${SERVER_APP_URL}/ai/quick-answer`
+
+    const {
+      response,
+    }: {
+      response: { answer: string }
+    } = yield call<typeof ajax>(ajax, {
+      method: 'POST',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session!.token}`,
+      },
+      body: JSON.stringify({ question }),
+      responseType: 'json',
+    })
+
+    const result = getQuickAnswerSuccess(response)
+
+    yield put(result)
+
+    if (then) {
+      then(result)
+    }
+  } catch (e) {
+    const errorMessage = stringifyError(e)
+
+    const result = getQuickAnswerFailure(errorMessage)
+
+    yield put(result)
+
+    if (then) {
+      then(result)
+    }
+  }
+}
+
 export default [
   takeEvery(Types.QB_CHAT_GET_MESSAGE_REQUEST, getChatMessages),
   takeEvery(Types.QB_CHAT_SEND_MESSAGE_REQUEST, sendMessage),
   takeEvery(Types.QB_CHAT_SEND_SYSTEM_MESSAGE_REQUEST, sendSystemMessage),
   takeEvery(Types.QB_CHAT_MARK_MESSAGE_READ, sendReadStatus),
+  takeOrCancel(
+    Types.QB_GET_QUICK_ANSWER_REQUEST,
+    Types.QB_GET_QUICK_ANSWER_CANCEL,
+    getQuickAnswer,
+  ),
 ]

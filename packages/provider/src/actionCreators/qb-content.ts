@@ -2,12 +2,11 @@ import * as Types from '../actions'
 
 export function uploadFile(
   file: File,
-  type?: 'chat' | 'record',
   then?: (data: Types.QBContentUploadSuccessAction) => void,
 ): Types.QBContentUploadRequestAction {
   return {
     type: Types.QB_FILE_UPLOAD_REQUEST,
-    payload: { file, type, then },
+    payload: { file, then },
   }
 }
 

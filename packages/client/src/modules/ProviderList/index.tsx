@@ -1,22 +1,27 @@
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
-import { SearchSvg } from '../../icons'
+import { SearchSvg, UpdateSvg } from '../../icons'
 import Avatar from '../../components/Avatar'
 import Loader from '../../components/Loader'
 import useComponent, { ProviderListProps } from './useComponent'
 import './styles.css'
 import { parseUserCustomData } from '../../utils/user'
+import { TextAreaField } from '../../components/Field'
+import Button from '../../components/Button'
+import FormField from '../../components/FormField'
 
 export default function ProviderList(props: ProviderListProps) {
   const { selected } = props
   const {
-    store: { loading, providers },
-    data: { search },
+    forms: { searchForm },
+    data: { search, isOffline, isShowAll },
+    store: { loading, providers, suggestions },
     handlers: {
       handleChangeSearch,
       handleProviderSelectCreator,
       filterSearchedProviders,
+      handleResetSearch,
     },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -43,21 +48,66 @@ export default function ProviderList(props: ProviderListProps) {
   }
 
   return (
-    <div className="provider-list">
-      <div className="header-block">
-        <span className="title">{t('SelectAnAgent')}</span>
-      </div>
-      <div className="provider-search">
-        <SearchSvg className="icon" />
-        <input
-          onChange={handleChangeSearch}
-          placeholder={t('Search')}
-          type="search"
-          value={search}
-        />
-      </div>
+    <div
+      className={cn('provider-list', {
+        'provider-list-wide': AI_SUGGEST_PROVIDER,
+      })}
+    >
+      {AI_SUGGEST_PROVIDER ? (
+        <form onSubmit={searchForm.handleSubmit}>
+          <FormField
+            htmlFor="search"
+            label={t('FindYourAgent')}
+            className="find-agent-field"
+            hint={t('FindYourAgentHint')}
+            error={searchForm.touched.search && searchForm.errors.search}
+          >
+            <TextAreaField
+              id="search"
+              name="search"
+              placeholder={t('TypeYourIssueOrAgent')}
+              disabled={loading}
+              onChange={searchForm.handleChange}
+              onBlur={searchForm.handleBlur}
+              value={searchForm.values.search}
+              rows={7}
+            />
+          </FormField>
+          <div className="find-agent-controls">
+            <Button type="submit" loading={loading}>
+              {t('SearchAnAgent')}
+            </Button>
+            <button
+              type="button"
+              className="find-agent-reset"
+              disabled={loading || isOffline}
+              onClick={handleResetSearch}
+            >
+              {loading ? <Loader size={14} theme="primary" /> : <UpdateSvg />}
+              <span>{t('RESET')}</span>
+            </button>
+          </div>
+        </form>
+      ) : (
+        <>
+          <div className="header-block">
+            <span className="title">{t('SelectAnAgent')}</span>
+          </div>
+          <div className="provider-search">
+            <SearchSvg className="icon" />
+            <input
+              onChange={handleChangeSearch}
+              placeholder={t('Search')}
+              type="search"
+              value={search}
+            />
+          </div>
+        </>
+      )}
       <ul className="providers">
-        {providers.filter(filterSearchedProviders).map(renderProvider)}
+        {AI_SUGGEST_PROVIDER && !isShowAll
+          ? suggestions.map(renderProvider)
+          : providers.filter(filterSearchedProviders).map(renderProvider)}
         {loading && (
           <li>
             <Loader theme="primary" />

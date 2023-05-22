@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
@@ -22,7 +22,6 @@ import {
   chatConnectedSelector,
   dialogsEntriesSelector,
   qbReadySelector,
-  recorderDataSelector,
   usersEntriesSelector,
   usersLoadingSelector,
 } from '../../selectors'
@@ -50,7 +49,6 @@ const selector = createMapStateSelector({
   ready: qbReadySelector,
   users: usersEntriesSelector,
   usersLoading: usersLoadingSelector,
-  records: recorderDataSelector,
   appointmentActiveList: appointmentActiveListSelector,
   appointmentLoading: appointmentLoadingSelector,
   appointmentHasMore: appointmentHasMoreSelector,
@@ -79,20 +77,23 @@ export default createUseComponent((props: AppointmentsProps) => {
 
   const {
     connected,
-    appointmentActiveList,
     providerId,
     ready,
     users,
-    records,
     appointmentLoading,
     appointmentHasMore,
     appointmentSkip,
     appointmentEntries,
+    appointmentActiveList,
   } = store
 
-  const appointmentsList = search ? appointmentActiveList.filter(
-      ({ client_id }) => users[client_id]?.full_name.toLowerCase().includes(search.toLowerCase())
-    ) : appointmentActiveList
+  const appointmentsList = search
+    ? appointmentActiveList.filter(({ client_id }) =>
+        users[client_id]?.full_name
+          .toLowerCase()
+          .includes(search.toLowerCase()),
+      )
+    : appointmentActiveList
 
   const handleSelect = (item: QBAppointment) => {
     if (isOpenMenu) toggleMenu()
@@ -149,17 +150,10 @@ export default createUseComponent((props: AppointmentsProps) => {
   }
 
   useEffect(() => {
-    if (selected && appointmentActiveList && !isOffline) {
-      const selectedAppointment = appointmentEntries[selected]
-      const missingRecordsIds = selectedAppointment?.records?.filter(
-        (fileId) => !records[fileId],
-      )
-
-      if (missingRecordsIds?.length) {
-        actions.getRecords(missingRecordsIds)
-      }
+    if (selected && !isOffline) {
+      actions.getRecords(selected)
     }
-  }, [selected, appointmentActiveList, isOffline])
+  }, [selected, isOffline])
 
   useEffect(() => {
     if (ready && connected) {

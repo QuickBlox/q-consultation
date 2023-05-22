@@ -11,8 +11,18 @@ export const usersEntriesSelector = createSelector(
   (users) => users.entries,
 )
 
+export const usersSuggestionsSelector = createSelector(
+  usersSelector,
+  (users) => users.suggestions,
+)
+
 export const usersListSelector = createSelector(usersEntriesSelector, (users) =>
   denormalize(users),
+)
+
+export const usersListBySuggestionsSelector = createSelector(
+  [usersEntriesSelector, usersSuggestionsSelector],
+  (users, suggestions) => suggestions.map((id) => users[id]),
 )
 
 export const usersLoadingSelector = createSelector(

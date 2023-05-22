@@ -79,6 +79,11 @@
   text-overflow: ellipsis;
 }
 
+.provider-details .provider-select {
+  color: var(--ProviderDetailsSelect-color);
+  margin: 50px 0;
+}
+
 .provider-details .biography-controls {
   display: flex;
   justify-content: left;

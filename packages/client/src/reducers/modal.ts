@@ -7,6 +7,7 @@ export type ModalReducer = {
   appointmentId?: QBAppointment['_id']
   userData?: Types.UpdateMyAccount
   callData?: Types.CallRequestEvent['payload']
+  consultationTopic?: string
 }
 
 const initialState: ModalReducer = {
@@ -37,6 +38,7 @@ export default (state = initialState, action: ModalAction) => {
         providerId: action.payload.providerId,
         appointmentId: action.payload.appointmentId,
         userData: action.payload.userData,
+        consultationTopic: action.payload.consultationTopic,
       }
     case Types.TOGGLE_CALL_MODAL:
       return {

@@ -4,11 +4,11 @@ import { CANCEL } from 'redux-saga'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'HEAD'
 
-export interface AjaxResponse {
+export interface AjaxResponse<T> {
   /** Status code of the request */
   status: number
   /** Response returned from remote (or `null`) */
-  response: unknown
+  response: T
 }
 
 interface AjaxParams {
@@ -23,7 +23,7 @@ interface AjaxParams {
   async?: boolean
 }
 
-export function ajax(params: AjaxParams): Promise<AjaxResponse> {
+export function ajax<T>(params: AjaxParams): Promise<AjaxResponse<T>> {
   const {
     async = true,
     body,
@@ -36,7 +36,7 @@ export function ajax(params: AjaxParams): Promise<AjaxResponse> {
     username,
   } = params
   const xhr = new XMLHttpRequest()
-  const request = new Promise<AjaxResponse>((resolve, reject) => {
+  const request = new Promise<AjaxResponse<T>>((resolve, reject) => {
     xhr.open(method, url, async, username, password)
 
     if (typeof responseType !== 'undefined') {
@@ -53,19 +53,24 @@ export function ajax(params: AjaxParams): Promise<AjaxResponse> {
       xhr.addEventListener('progress', onProgress)
       xhr.upload.addEventListener('progress', onProgress)
     }
-    function onLoad() {
+    const onLoad = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        const response: AjaxResponse = {
+        const response: AjaxResponse<T> = {
           status: xhr.status,
           response: xhr.response,
         }
 
-        resolve(response)
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(response)
+        } else {
+          reject(xhr.response)
+        }
       }
     }
-    function onError() {
+    const onError = () => {
       reject(new Error('An error occurred during the transaction'))
     }
+
     xhr.addEventListener('load', onLoad)
     xhr.addEventListener('error', onError)
     xhr.upload.addEventListener('load', onLoad)

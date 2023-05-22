@@ -15,7 +15,6 @@ export interface QBContentUploadRequestAction extends Action {
   type: typeof QB_FILE_UPLOAD_REQUEST
   payload: {
     file: File
-    type?: 'chat' | 'record'
     then?: (data: QBContentUploadSuccessAction) => void
   }
 }

@@ -93,45 +93,62 @@ npm run init:config
 
 ![](/documentation/assets/start/config.jpeg)
 
-You can also manually add the [**"config.json"**](/qconsultation_config/config.json) file to the **"qconsultation_config"** folder.
+You can also manually add the [**".env"**](/qconsultation_config/.env) file to the **"qconsultation_config"** folder.
 
 You will need to set the following keys with your credentials:
 
-```json
-{
- // [Required] QuickBlox application Id
- "QB_SDK_CONFIG_APP_ID": -1,
- // [Required] QuickBlox application Auth Key
- "QB_SDK_CONFIG_AUTH_KEY": "",
- // [Required] QuickBlox application Auth Secret
- "QB_SDK_CONFIG_AUTH_SECRET": "",
- // [Required] QuickBlox account key
- "QB_SDK_CONFIG_ACCOUNT_KEY": "",
- // Should QuickBlox JS SDK work in debug mode (logging enabled)
- "QB_SDK_CONFIG_DEBUG": false,
- // [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom API endpoint
- "QB_SDK_CONFIG_ENDPOINT_API": "",
- // [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom chat endpoint
- "QB_SDK_CONFIG_ENDPOINT_CHAT": "",
- // [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom ICE servers
- "QB_SDK_CONFIG_ICE_SERVERS": [],
-​
- // Enable redux-logger
- "ENABLE_REDUX_LOGGER": false,
- // URL of the client application. Used by Share Link modal. (If not set, then Share Link will not be displayed in the application)
- "CLIENT_APP_URL": "",
- // [Required] Default language (en / ua)
- "DEFAULT_LANGUAGE": "en",
- // [Required] File upload limit in bytes
- "FILE_SIZE_LIMIT": 10485760,
- // [Required] Available for upload expansion files
- "FILE_EXTENSIONS_WHITELIST": "gif jpeg jpg mov mp4 png csv docx pdf pptx txt xls xlsx zip webm heic heif"
-}
+```
+ # [Required] QuickBlox application Id
+ QB_SDK_CONFIG_APP_ID=-1
+ # [Required] QuickBlox application Auth Key
+ QB_SDK_CONFIG_AUTH_KEY=""
+ # [Required] QuickBlox application Auth Secret
+ "QB_SDK_CONFIG_AUTH_SECRET=""
+ # [Required] QuickBlox account key
+ QB_SDK_CONFIG_ACCOUNT_KEY=""
+ # Should QuickBlox JS SDK work in debug mode (logging enabled)
+ QB_SDK_CONFIG_DEBUG=false
+ # QuickBlox JS SDK custom API endpoint
+ QB_SDK_CONFIG_ENDPOINT_API="api.quickblox.com"
+ # QuickBlox JS SDK custom chat endpoint
+ QB_SDK_CONFIG_ENDPOINT_CHAT="chat.quickblox.com"
+ # [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom ICE servers
+ QB_SDK_CONFIG_ICE_SERVERS=[]
+ # [Required if you need integration with your API] Bearer token
+ BEARER_TOKEN=""
+ # [Required if you need integration with your API] QuickBlox account owner email
+ QB_ADMIN_EMAIL=""
+ # [Required if you need integration with your API] QuickBlox account owner password
+ QB_ADMIN_PASSWORD=""
+ # [Required if you need AI features] OpenAI API Key
+ OPENAI_API_KEY=""
+ # Enable AI Quick answer feature
+ AI_QUICK_ANSWER=true
+ # Enable AI Suggest provider feature
+ AI_SUGGEST_PROVIDER=true
+ # Enable AI Record analytics feature
+ AI_RECORD_ANALYTICS=true
+ # Enable redux-logger
+ ENABLE_REDUX_LOGGER=false
+ # URL of the client application. Used by Share Link modal. (If not set, then Share Link will not be displayed in the application)
+ CLIENT_APP_URL="https://localhost:3001"
+ # URL API.
+ SERVER_APP_URL="http://localhost:4000"
+ # Default language (en / ua)
+ DEFAULT_LANGUAGE="en"
+ # File upload limit in bytes
+ FILE_SIZE_LIMIT=10485760
+ # Available for upload expansion files
+ FILE_EXTENSIONS_WHITELIST="gif jpeg jpg mov mp4 png csv docx pdf pptx txt xls xlsx zip webm heic heif"
 ```
 
 _`[Required]` denotes that these variables must be set. Without them, the application will not work correctly._
 
 _`[Optional if you use QuickBlox Basic Plan]` denotes that these variables may not be set only for the QuickBlox Basic Plan, otherwise they are required._
+
+_`[Required if you need integration with your API]` denotes that these variables must be set to enable integration with your API. Enabling this integration will make it easier to work with available queries from your API._
+
+_`[Required if you need AI features]` denotes that these variables must be set to enable and operate the AI feature.._
 
 > NOTE: `FILE_SIZE_LIMIT` is used to initially check the size of uploaded files and display an error if it is exceeded. Modify it according to the limitations of your QuickBlox Plan.
 >
@@ -156,9 +173,9 @@ If you have QuickBlox Basic plan (Shared server), you can skip the following ste
 
 For more details on the format see [RTCIceServer docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCIceServer).
 
-### VI - Appointments
+### VI - Schema
 
-To make online appointments work in the Q-Consultation app, it’s necessary to import an appointment schema file to the QuickBlox admin panel.
+To make online appointments and video records work in the Q-Consultation app, it’s necessary to import an appointment schema file to the QuickBlox admin panel.
 
 You can add the schema automatically by running this command and following the instructions in the terminal.
 
@@ -183,39 +200,52 @@ To import this file to the QuickBlox admin panel, follow the steps below:
 
 ![](/documentation/assets/start/008.png)
 
-**provider_id** - QuickBlox user Id to whom Appointment is assigned to
-**dialog_id** - QuickBlox dialog Id created for this Appointment
-**records** - array of QuickBlox Content object Ids (call records for this Appointment)
-
-If something goes wrong, you can also manually create a custom class in the way described below:
+If something goes wrong, you can also manually create a custom class (**Appointment** and **Record**) in the way described below:
 
 1. In the top-right corner, choose **List** of the **Custom** tab.
 2. There, click **Add** and choose **Add new class** from the drop-down menu.
 
 ![](/documentation/assets/start/009.png)
 
-3. A modal window will appear where you need to specify the class name **Appointment** and create the following fields:
+3. A modal window will appear where you need to specify the class name and create and create its fields:
+
+Appointment
 
 ```
   provider_id: Integer
+  client_id: Integer
+  dialog_id: String
   description: String
   priority: Integer
   notes: String
-  dialog_id: String
-  records: Integer_add
   conclusion: String
   language: String
   date_end: Date
-  client_id: Integer
-  date_start: Date
 ```
 
 ![](/documentation/assets/start/010.png)
 
+Record
+
+```
+  name: String
+  appointment_id: String
+  transcription: String_a
+  summary: String
+  actions: String
+  uid: String
+```
+
+![](/documentation/assets/start/012.jpg)
+
 4. After all the fields added, click **Create class**.
 5. Once done, the modal window will close. You need to choose **Edit permission**, set the permissions as shown on the below screenshot and click **Edit permissions**:
 
+Appointment
 ![](/documentation/assets/start/011.png)
+
+Record
+![](/documentation/assets/start/013.jpg)
 
 ## Available Scripts
 
@@ -223,12 +253,13 @@ Now, you set up everything necessary to finally run the project. Below, we provi
 
 In the project directory, you can run:
 
-### Start dev server `npm start`
+### Start dev server `npm run dev`
 
 Runs the app in a development mode.
 
-The application will automatically open in the browser after running the `npm start` script.
+The application will automatically open in the browser after running the `npm run dev` script.
 
+- API: <http://localhost:4000>
 - Provider: <https://localhost:3000>
 - Client: <https://localhost:3001>
 
@@ -244,11 +275,15 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 > NOTE: Be sure to use HTTPS on the server, otherwise video calls will not work for you.
 
+### Start API server for Production `npm run start:api`
+
+Runs the API server in a production mode.
+
 ### Check code `npm run lint`
 
 This will run code linting using [eslint](https://eslint.org) which will analyze code to find problematic patterns or code that doesn't adhere to certain style guidelines.
 
-### Launch of integration pages `npm run pages`
+### Launch of integration pages `npm run start:pages`
 
 This script allows you to run integration pages on <http://localhost:8000>.
 You can read more about how to work with integration pages here: [Integration page](./INTEGRATION.md#integration-pages)

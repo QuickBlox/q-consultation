@@ -7,7 +7,6 @@ import {
   fork,
   put,
   race,
-  SagaReturnType,
   select,
   take,
   takeEvery,
@@ -25,20 +24,18 @@ import {
   sessionUpdatedAt,
   updateMyAccountFailure,
   updateMyAccountSuccess,
-  uploadFile,
 } from '../actionCreators'
 import {
   QBChatConnect,
   QBLogin,
   QBLogout,
   QBChatDisconnect,
-  QBUserUpdate,
-  QBDeleteContent,
 } from '../qb-api-calls'
 import { authMyAccountSelector, authSessionSelector } from '../selectors'
 import { getExpiresDate, isSessionExpired } from '../utils/session'
-import { isQBError, stringifyError } from '../utils/parse'
+import { stringifyError } from '../utils/parse'
 import { userIsProvider } from '../utils/user'
+import { ajax } from './ajax'
 
 function* login(action: Types.QBLoginRequestAction) {
   const { password } = action.payload
@@ -178,6 +175,9 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
   try {
     const currentMyAccount: ReturnType<typeof authMyAccountSelector> =
       yield select(authMyAccountSelector)
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
+    )
 
     if (currentMyAccount) {
       const { then, data: newMyAccount } = action.payload
@@ -185,44 +185,39 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
         ? { ...newMyAccount.custom_data }
         : {}
 
-      try {
-        if (
-          'avatar' in newCustomData &&
-          currentMyAccount?.custom_data?.avatar &&
-          (!newCustomData.avatar || newCustomData.avatar instanceof File)
-        ) {
-          yield call(QBDeleteContent, currentMyAccount.custom_data.avatar.id)
-        }
-      } catch (e) {
-        const isNotFound = isQBError(e) && e.code === 404
+      const url = `${SERVER_APP_URL}/users/provider`
+      const form = new FormData()
 
-        if (!isNotFound) {
-          throw e
-        }
+      form.append('full_name', newMyAccount.full_name || '')
+      form.append('email', newMyAccount.email || '')
+      form.append('description', newCustomData.description || '')
+      form.append('language', newCustomData.language || '')
+
+      if (newMyAccount.password && newMyAccount.old_password) {
+        form.append('password', newMyAccount.password)
+        form.append('old_password', newMyAccount.old_password)
       }
 
-      if (newCustomData?.avatar instanceof File) {
-        yield put(uploadFile(newCustomData.avatar))
-        const {
-          payload: { id, uid },
-        }: Types.QBContentUploadSuccessAction = yield take(
-          Types.QB_FILE_UPLOAD_SUCCESS,
-        )
-
-        newCustomData.avatar = { id, uid }
+      if (currentMyAccount.custom_data.avatar && !newCustomData.avatar) {
+        form.append('avatar', 'none')
+      } else if (newCustomData.avatar instanceof File) {
+        form.append('avatar', newCustomData.avatar)
       }
 
-      const response: SagaReturnType<typeof QBUserUpdate> = yield call(
-        QBUserUpdate,
-        currentMyAccount.id,
-        {
-          ...newMyAccount,
-          custom_data: JSON.stringify({
-            ...currentMyAccount.custom_data,
-            ...newCustomData,
-          }),
+      const {
+        response,
+      }: {
+        response: QBUser
+      } = yield call(ajax, {
+        method: 'PUT',
+        url,
+        headers: {
+          Authorization: `Bearer ${session!.token}`,
         },
-      )
+        body: form,
+        responseType: 'json',
+      })
+
       const result = updateMyAccountSuccess(response)
 
       yield put(result)

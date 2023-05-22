@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "dev": "serve -l 8000 ."
+    "demo": "serve -l 8000 ."
   },
   "devDependencies": {
     "serve": "^14.1.2"

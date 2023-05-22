@@ -15,6 +15,7 @@ const selector = createMapStateSelector({
 export default createUseComponent(() => {
   const store = useSelector(selector)
   const actions = useActions({ getAppointments, selectProvider })
+
   const { providerId } = store
 
   const history = useHistory()

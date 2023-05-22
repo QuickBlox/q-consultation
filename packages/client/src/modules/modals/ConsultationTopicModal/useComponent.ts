@@ -20,6 +20,7 @@ import {
   authMyAccountIdSelector,
   modalProviderIdSelector,
   modalConsultationTopicSelector,
+  modalConsultationTopicValueSelector,
 } from '../../../selectors'
 import { createUseComponent, useActions } from '../../../hooks'
 import {
@@ -44,6 +45,7 @@ const selector = createMapStateSelector({
   dialogsLoading: dialogsLoadingSelector,
   providerId: modalProviderIdSelector,
   opened: modalConsultationTopicSelector,
+  consultationTopic: modalConsultationTopicValueSelector,
 })
 
 export default createUseComponent((props: ConsultationTopicModalProps) => {
@@ -61,6 +63,7 @@ export default createUseComponent((props: ConsultationTopicModalProps) => {
     dialogsLoading,
     providerId,
     opened,
+    consultationTopic,
   } = store
 
   const history = useHistory()
@@ -135,6 +138,12 @@ export default createUseComponent((props: ConsultationTopicModalProps) => {
       })
     }
   }
+
+  useEffect(() => {
+    if (consultationTopic) {
+      setDescription(consultationTopic)
+    }
+  }, [consultationTopic])
 
   useEffect(() => {
     if (!opened) {

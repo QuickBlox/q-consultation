@@ -57,8 +57,12 @@ declare global {
   export const QB_SDK_CONFIG_ENDPOINT_CHAT: string | undefined
   export const QB_SDK_CONFIG_ICE_SERVERS: Array<RTCIceServer>
 
+  export const AI_QUICK_ANSWER: boolean
+  export const AI_RECORD_ANALYTICS: boolean
+
   export const ENABLE_REDUX_LOGGER: boolean
   export const CLIENT_APP_URL: string
+  export const SERVER_APP_URL: string
   export const PROVIDER_TAG: string
   export const DEFAULT_LANGUAGE: string
   export const FILE_SIZE_LIMIT: number

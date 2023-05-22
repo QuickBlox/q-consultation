@@ -25,6 +25,11 @@ export const modalFileSelector = createSelector(
   (modal) => modal.file,
 )
 
+export const modalRecordIdSelector = createSelector(
+  modalSelector,
+  (modal) => modal.recordId,
+)
+
 export const modalAppointmentUserIdSelector = createSelector(
   [modalAppointmentIdSelector, appointmentEntriesSelector],
   (appointmentId, appointmentEntries) =>
@@ -91,6 +96,11 @@ export const modalSaveRecordSelector = createSelector(
   (modal) => modal.SaveRecordModal,
 )
 
+export const modalRecordSelector = createSelector(
+  modalSelector,
+  (modal) => modal.RecordModal,
+)
+
 export const modalOpenedSelector = createSelector(
   modalSelector,
   (modal) =>
@@ -103,5 +113,7 @@ export const modalOpenedSelector = createSelector(
     modal.ShareLinkModal ||
     modal.SkipModal ||
     modal.CameraModal ||
-    modal.AppointmentDetailsModal,
+    modal.AppointmentDetailsModal ||
+    modal.SaveRecordModal ||
+    modal.RecordModal,
 )

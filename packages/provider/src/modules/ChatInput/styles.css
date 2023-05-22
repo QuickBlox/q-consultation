@@ -57,6 +57,16 @@
   white-space: pre-wrap;
 }
 
+.input-container .textbox-placeholder {
+  display: inline-block;
+  position: absolute;
+  pointer-events: none;
+  color: var(--ChatInputTextareaPlaceholder-color);
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+}
+
 .input-container .textbox-input * {
   font-weight: normal;
   font-style: normal;
@@ -65,15 +75,6 @@
 
 .input-container .textbox-input.disabled {
   cursor: not-allowed;
-}
-
-.input-container .textbox-placeholder {
-  position: absolute;
-  pointer-events: none;
-  color: var(--ChatInputTextareaPlaceholder-color);
-  top: 50%;
-  left: 12px;
-  transform: translateY(-50%);
 }
 
 .input-container .icon path {

@@ -14,16 +14,17 @@ import { getRecords, toggleShowModal } from '../../../actionCreators'
 import {
   authMyAccountSelector,
   createAppointmentByIdSelector,
+  createRecordsByAppointmentIdSelector,
   createUsersClientByAppointmentIdSelector,
   modalAppointmentChatSelector,
   modalAppointmentIdSelector,
-  recorderDataSelector,
 } from '../../../selectors'
 import { parseUser } from '../../../utils/user'
 import { combineSelectors } from '../../../utils/selectors'
 import useIsOffLine from '../../../hooks/useIsOffLine'
-import { TIME_FORMAT } from '../../../constants/dateFormat'
+import { FULL_DATE_SHORT_FORMAT } from '../../../constants/dateFormat'
 import { ABOUT_TAB, AppointmentDetailsTabs } from '../../../constants/tabs'
+import { localizedFormat } from '../../../utils/calendar'
 
 export interface AppointmentDetailsModalProps {
   onClose?: () => void
@@ -40,19 +41,19 @@ const selector = combineSelectors(
   {
     appointmentId: modalAppointmentIdSelector,
     myAccount: authMyAccountSelector,
-    records: recorderDataSelector,
     opened: modalAppointmentChatSelector,
   },
   ({ appointmentId }) => ({
     appointment: createAppointmentByIdSelector(appointmentId),
     user: createUsersClientByAppointmentIdSelector(appointmentId),
+    records: createRecordsByAppointmentIdSelector(appointmentId),
   }),
 )
 
 export default createUseComponent((props: AppointmentDetailsModalProps) => {
   const { onClose } = props
   const store = useSelector(selector)
-  const { appointment, user, records } = store
+  const { appointment, user } = store
   const actions = useActions({
     toggleShowModal,
     getRecords,
@@ -74,20 +75,16 @@ export default createUseComponent((props: AppointmentDetailsModalProps) => {
     currentUser?.email ||
     t('Unknown')
 
-  const timeRange = useMemo(() => {
-    if (
-      appointment &&
-      appointment.date_start &&
-      appointment.date_end &&
-      moment(appointment.date_end).isAfter(appointment.date_start)
-    ) {
-      return `${moment(appointment.date_start).format(TIME_FORMAT)} - ${moment(
-        appointment.date_end,
-      ).format(TIME_FORMAT)}`
-    }
-
-    return undefined
-  }, [appointment])
+  const localDate =
+    appointment &&
+    localizedFormat(
+      moment(
+        appointment.date_end ||
+          appointment.date_start ||
+          appointment.updated_at * 1000,
+      ),
+      FULL_DATE_SHORT_FORMAT,
+    )
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'AppointmentDetailsModal' })
@@ -95,6 +92,10 @@ export default createUseComponent((props: AppointmentDetailsModalProps) => {
     if (onClose) {
       onClose()
     }
+  }
+
+  const handleOpenRecordModal = (recordId: QBRecord['_id']) => {
+    actions.toggleShowModal({ modal: 'RecordModal', recordId })
   }
 
   const toggleAccordeon = (name: AccordeonNamesType) => {
@@ -119,22 +120,16 @@ export default createUseComponent((props: AppointmentDetailsModalProps) => {
   }
 
   useEffect(() => {
-    if (appointment) {
-      const missingRecordsIds = appointment?.records?.filter(
-        (fileId) => !records[fileId],
-      )
-
-      if (missingRecordsIds?.length) {
-        actions.getRecords(missingRecordsIds)
-      }
+    if (appointment?._id) {
+      actions.getRecords(appointment._id)
     }
-  }, [appointment, records])
+  }, [appointment?._id])
 
   return {
     store,
     refs: { backdrop },
     data: {
-      timeRange,
+      localDate,
       accordeonActive,
       userName,
       currentUser,
@@ -148,6 +143,7 @@ export default createUseComponent((props: AppointmentDetailsModalProps) => {
       onCancelClick,
       setActiveTab,
       startEditingNotes,
+      handleOpenRecordModal,
     },
   }
 })

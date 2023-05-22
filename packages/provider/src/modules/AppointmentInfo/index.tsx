@@ -9,8 +9,8 @@ import './styles.css'
 export default function AppointmentInfo(props: AppointmentInfoProps) {
   const { appointment, records } = props
   const {
-    data: { description, userInfo, appointmentRecords, fieldActive },
-    handlers: { toggleField, startEditingNotes },
+    data: { description, userInfo, fieldActive },
+    handlers: { toggleField, startEditingNotes, handleOpenRecordModal },
   } = useComponent(props)
   const { t } = useTranslation()
 
@@ -67,24 +67,16 @@ export default function AppointmentInfo(props: AppointmentInfoProps) {
         title={t('VideoRecords')}
         open={fieldActive === 'records'}
       >
-        {appointment?.records?.length !== undefined && (
+        {records?.length !== undefined && (
           <ul className="record-list">
-            {appointmentRecords?.map(
-              (id) =>
-                records?.[id] && (
-                  <li key={id} className="record-item">
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link"
-                      href={QB.content.privateUrl(records[id].uid)}
-                    >
-                      <FileVideoSvg className="icon file-video" />
-                      {records[id].name}
-                    </a>
-                  </li>
-                ),
-            )}
+            {records?.map((record) => (
+              <li key={record._id} className="record-item">
+                <div onClick={() => handleOpenRecordModal(record._id)}>
+                  <FileVideoSvg className="icon file-video" />
+                  {record.name}
+                </div>
+              </li>
+            ))}
           </ul>
         )}
       </Accordeon>

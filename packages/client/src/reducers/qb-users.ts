@@ -8,6 +8,7 @@ export interface UsersReducer {
   total_entries: number
   entries: Dictionary<QBUser>
   not_found: Array<QBUser['id']>
+  suggestions: Array<QBUser['id']>
 }
 
 const initialState: UsersReducer = {
@@ -18,6 +19,7 @@ const initialState: UsersReducer = {
   total_entries: 0,
   entries: {},
   not_found: [],
+  suggestions: [],
 }
 
 export default (
@@ -28,9 +30,16 @@ export default (
     | Types.QBInitFailureAction,
 ) => {
   switch (action.type) {
+    case Types.QB_PROVIDERS_SUGGESTIONS_REQUEST:
     case Types.QB_USER_GET_REQUEST:
     case Types.QB_USER_LIST_REQUEST:
       return { ...state, error: undefined, loading: true }
+    case Types.QB_PROVIDERS_SUGGESTIONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        suggestions: action.payload,
+      }
     case Types.QB_USER_GET_SUCCESS: {
       const { current_page, per_page, total_entries, entries } = action.payload
 
@@ -65,6 +74,7 @@ export default (
     }
     case Types.QB_USER_GET_FAILURE:
       return { ...state, loading: false, error: action.payload.message }
+    case Types.QB_PROVIDERS_SUGGESTIONS_FAILURE:
     case Types.QB_USER_LIST_FAILURE:
       return { ...state, loading: false, error: action.error }
     case Types.LOGOUT_SUCCESS:

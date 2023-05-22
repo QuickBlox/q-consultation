@@ -48,11 +48,12 @@
   margin: 9px 0;
 }
 
-.appointment-info .record-item a {
-  display: flex;
+.appointment-info .record-item div {
+  display: inline-flex;
   align-items: center;
   text-decoration: none;
   color: var(--AppointmentInfoRecordLink-color);
+  cursor: pointer;
 }
 
 .appointment-info .icon.file-video {

@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 import { markMessageRead as markMessageReadAction } from '../../actionCreators'
 import { useMobileLayout } from '../../hooks'
-import { getSentTime } from '../../utils/calendar';
+import { getSentTime } from '../../utils/calendar'
 
 import MessageBody from './MessageBody'
 
@@ -58,7 +58,9 @@ export default function MessageGroup(props: MessageGroupProps) {
     <div className={cn('message', { my: messageIsMine })}>
       <div className="info">
         <span className="sender">{senderName}</span>
-        <span className="sent-at">{getSentTime(lastMessage.date_sent * 1000)}</span>
+        <span className="sent-at">
+          {getSentTime(lastMessage.date_sent * 1000)}
+        </span>
       </div>
       {messages.map((message) => (
         <MessageBody key={message._id} message={message} />

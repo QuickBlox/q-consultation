@@ -5,18 +5,24 @@ import cn from 'classnames'
 import { markMessageRead as markMessageReadAction } from '../../actionCreators'
 import { getSentTime } from '../../utils/calendar'
 
-import MessageBody from './MessageBody'
-
 interface ChatMessageProps {
   chatOpen?: boolean
   myAccountId: QBUser['id']
   messages: QBChatMessage[]
   users: Dictionary<QBUser>
   markMessageRead: typeof markMessageReadAction
+  renderMessage: (message: QBChatMessage, isMine: boolean) => JSX.Element
 }
 
 export default function ChatMessage(props: ChatMessageProps) {
-  const { myAccountId, messages, users, markMessageRead, chatOpen } = props
+  const {
+    myAccountId,
+    messages,
+    users,
+    markMessageRead,
+    chatOpen,
+    renderMessage,
+  } = props
   const lastMessage = messages[messages.length - 1]
   const { t } = useTranslation()
 
@@ -56,11 +62,11 @@ export default function ChatMessage(props: ChatMessageProps) {
     <div className={cn('message', { my: messageIsMine })}>
       <div className="info">
         <span className="sender">{senderName}</span>
-        <span className="sent-at">{getSentTime(lastMessage.date_sent * 1000)}</span>
+        <span className="sent-at">
+          {getSentTime(lastMessage.date_sent * 1000)}
+        </span>
       </div>
-      {messages.map((message) => (
-        <MessageBody key={message._id} message={message} />
-      ))}
+      {messages.map((message) => renderMessage(message, messageIsMine))}
     </div>
   )
 }

@@ -8,7 +8,6 @@ import {
   authMyAccountIdSelector,
   createAppointmentWaitingByProviderIdSelector,
   createUsersByIdSelector,
-  usersListSelector,
   usersLoadingSelector,
 } from '../../selectors'
 import {
@@ -19,7 +18,7 @@ import {
 import { createUseComponent, useActions } from '../../hooks'
 import { APPOINTMENT_ROUTE } from '../../constants/routes'
 import { parseUserCustomData } from '../../utils/user'
-import { combineSelectors } from '../../utils/selectors'
+import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
 
 export interface ProviderDetailsProps {
@@ -28,18 +27,12 @@ export interface ProviderDetailsProps {
 }
 
 const createSelector = (providerId?: QBUser['id']) =>
-  combineSelectors({
+  createMapStateSelector({
     myAccountId: authMyAccountIdSelector,
     usersLoading: usersLoadingSelector,
     appointmentLoading: appointmentLoadingSelector,
-    providers: usersListSelector,
-  }, ({ providers }) => {
-    const [firstProvider] = providers
-
-    return {
-      user: createUsersByIdSelector(providerId || firstProvider?.id),
-      appointment: createAppointmentWaitingByProviderIdSelector(providerId || firstProvider?.id),
-    }
+    user: createUsersByIdSelector(providerId),
+    appointment: createAppointmentWaitingByProviderIdSelector(providerId),
   })
 
 export default createUseComponent((props: ProviderDetailsProps) => {
@@ -61,7 +54,7 @@ export default createUseComponent((props: ProviderDetailsProps) => {
   const isOffline = useIsOffLine()
 
   const dialogName =
-    user?.full_name || user?.login || user?.phone || user?.email || t('Unknown')
+    user?.full_name || user?.login || user?.phone || user?.email || t('Agent')
   const userData = parseUserCustomData(user?.custom_data)
 
   const handleWaitingRoomClick = () => {
@@ -73,7 +66,10 @@ export default createUseComponent((props: ProviderDetailsProps) => {
 
         history.push(path)
       } else {
-        actions.toggleShowModal({ modal: 'ConsultationTopicModal', providerId })
+        actions.toggleShowModal({
+          modal: 'ConsultationTopicModal',
+          providerId,
+        })
       }
     }
   }

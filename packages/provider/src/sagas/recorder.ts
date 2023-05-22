@@ -1,17 +1,17 @@
-import { eventChannel } from 'redux-saga'
+import { END, EventChannel, eventChannel } from 'redux-saga'
 import {
   all,
   call,
   fork,
   put,
   race,
-  SagaReturnType,
   select,
   take,
   takeEvery,
 } from 'redux-saga/effects'
 
-import { QBGetInfoFile } from '../qb-api-calls'
+import { Action, AnyAction } from 'redux'
+import { QBDataGet } from '../qb-api-calls'
 import * as Types from '../actions'
 import {
   getRecordsFailure,
@@ -20,31 +20,52 @@ import {
   startRecordSuccess,
   stopRecordFailure,
   stopRecordSuccess,
-  updateAppointment,
   showNotification,
-  uploadFile,
   uploadRecord as uploadRecordRequest,
   recordError,
   uploadRecordFailure,
   uploadRecordSuccess,
+  uploadRecordProgress,
   toggleShowModal,
+  createVoice,
 } from '../actionCreators'
-import {
-  callAppointmentIdSelector,
-  createAppointmentByIdSelector,
-} from '../selectors'
+import { authSessionSelector, callAppointmentIdSelector } from '../selectors'
 import { stringifyError } from '../utils/parse'
+import { normalize } from '../utils/normalize'
+import { takeEveryAll } from '../utils/saga'
+import { ajax } from './ajax'
+
+const mediaRecorders = {
+  video: new QBMediaRecorder({
+    mimeType: 'video/webm',
+  }),
+  audio: AI_RECORD_ANALYTICS
+    ? new QBMediaRecorder({
+        mimeType: 'audio/webm',
+      })
+    : undefined,
+}
+
+type MediaRecorders = typeof mediaRecorders
+
+interface RecordResponse {
+  class_name: string
+  items: QBRecord[]
+  limit: number
+  skip: number
+}
 
 function* getRecords(action: Types.GetRecordsRequest) {
   try {
-    const records: Array<{ blob: QBContentObject }> = yield all(
-      action.payload.map((id) => call(QBGetInfoFile, id)),
-    )
-    const recordsDictionary = records.reduce<{
-      [key: string]: QBContentObject
-    }>((acc, { blob }) => ({ ...acc, [`${blob.id}`]: blob }), {})
+    const { items }: RecordResponse = yield call(QBDataGet, 'Record', {
+      appointment_id: action.payload,
+      sort_asc: 'created_at',
+    })
+    const { entries, list } = normalize(items, '_id')
 
-    yield put(getRecordsSuccess(recordsDictionary))
+    yield put(
+      getRecordsSuccess({ appointmentId: action.payload, entries, list }),
+    )
   } catch (e) {
     const errorMessage = stringifyError(e)
 
@@ -52,78 +73,22 @@ function* getRecords(action: Types.GetRecordsRequest) {
   }
 }
 
-function* uploadRecord(action: Types.UploadRecordRequest) {
-  try {
-    const { appointmentId, file } = action.payload
-    const selector = createAppointmentByIdSelector(appointmentId)
-    const selectedAppointment: ReturnType<typeof selector> = yield select(
-      selector,
-    )
-
-    if (selectedAppointment) {
-      yield put(
-        showNotification({
-          id: Date.now().toString(),
-          translate: true,
-          message: 'UploadNotClose',
-          position: 'bottom-center',
-        }),
-      )
-
-      yield put(uploadFile(file, 'record'))
-      const { success } = yield race({
-        success: take(Types.QB_FILE_UPLOAD_SUCCESS),
-        failure: take(Types.QB_FILE_UPLOAD_FAILURE),
-      })
-
-      if (success) {
-        const { payload }: Types.QBContentUploadSuccessAction = success
-
-        const records = selectedAppointment.records
-          ? [...selectedAppointment.records, payload.id]
-          : [payload.id]
-        const actionAppointment = updateAppointment({
-          _id: selectedAppointment._id,
-          data: { records },
-        })
-
-        yield put(actionAppointment)
-      }
-    }
-    yield put(uploadRecordSuccess())
-  } catch (e) {
-    const errorMessage = stringifyError(e)
-
-    yield put(uploadRecordFailure(errorMessage))
-  }
-}
-
-function createQBRecorderEventChannel(
+function createQBRecorderEventChannel<T extends Action>(
   recorder: QBMediaRecorder,
-  appointmentId?: QBAppointment['_id'],
+  onStop?: (blob: Blob) => T,
 ) {
-  return eventChannel<
-    Types.RecordError | Types.UploadRecordRequest | Types.ToggleShowModalAction
-  >((emitter) => {
+  return eventChannel<Types.RecordError | T>((emitter) => {
     // eslint-disable-next-line no-param-reassign
     recorder.callbacks.onerror = (e) => {
       const errorMessage = stringifyError(e)
 
       emitter(recordError(errorMessage))
     }
-    // eslint-disable-next-line no-param-reassign
-    recorder.callbacks.onstop = (blob) => {
-      const lastModified = new Date()
-      const name = `${lastModified.toISOString()}.webm`
-      const file = new File([blob], name, {
-        type: 'video/webm',
-        lastModified: lastModified.valueOf(),
-      })
 
-      if (file.size > FILE_SIZE_LIMIT) {
-        emitter(toggleShowModal({ modal: 'SaveRecordModal', file }))
-      } else {
-        emitter(uploadRecordRequest({ appointmentId, file }))
+    if (onStop) {
+      // eslint-disable-next-line no-param-reassign
+      recorder.callbacks.onstop = (blob) => {
+        emitter(onStop(blob))
       }
     }
 
@@ -131,15 +96,17 @@ function createQBRecorderEventChannel(
   })
 }
 
-function* handleQBMediaRecorderEvents(recorder: QBMediaRecorder) {
+function* handleQBMediaRecorderEvents<T extends Action>(
+  recorder: QBMediaRecorder,
+  onStop?: (blob: Blob) => T,
+) {
   try {
-    const appointmentId: ReturnType<typeof callAppointmentIdSelector> =
-      yield select(callAppointmentIdSelector)
-    const channel: SagaReturnType<typeof createQBRecorderEventChannel> =
-      yield call(createQBRecorderEventChannel, recorder, appointmentId)
-    const event: Types.RecordError | Types.UploadRecordRequest = yield take(
-      channel,
+    const channel: EventChannel<Types.RecordError | T> = yield call(
+      createQBRecorderEventChannel,
+      recorder,
+      onStop,
     )
+    const event: Types.RecordError | T = yield take(channel)
 
     yield put(event)
   } catch (e) {
@@ -149,9 +116,19 @@ function* handleQBMediaRecorderEvents(recorder: QBMediaRecorder) {
   }
 }
 
-function* startRecording(recorder: QBMediaRecorder, stream: MediaStream) {
+function* startRecording(recorders: MediaRecorders, stream: MediaStream) {
   try {
-    recorder.start(stream)
+    recorders.video.start(stream)
+
+    if (recorders.audio) {
+      const audioStream = new MediaStream()
+
+      stream.getAudioTracks().forEach((track) => {
+        audioStream.addTrack(track)
+      })
+
+      recorders.audio.start(audioStream)
+    }
     yield put(startRecordSuccess())
   } catch (e) {
     const errorMessage = stringifyError(e)
@@ -160,13 +137,22 @@ function* startRecording(recorder: QBMediaRecorder, stream: MediaStream) {
   }
 }
 
-function* stopRecording(recorder: QBMediaRecorder) {
+function* stopRecording(recorders: MediaRecorders) {
   try {
-    const state = recorder.getState()
+    const videoState = recorders.video.getState()
 
-    if (state === 'paused' || state === 'recording') {
-      recorder.stop()
+    if (videoState === 'paused' || videoState === 'recording') {
+      recorders.video.stop()
     }
+
+    if (recorders.audio) {
+      const audioState = recorders.audio.getState()
+
+      if (audioState === 'paused' || audioState === 'recording') {
+        recorders.audio.stop()
+      }
+    }
+
     yield put(stopRecordSuccess())
   } catch (e) {
     const errorMessage = stringifyError(e)
@@ -175,42 +161,165 @@ function* stopRecording(recorder: QBMediaRecorder) {
   }
 }
 
-function* mediaRecorderEventsFlow() {
-  while (true) {
-    const { payload }: Types.StartRecordRequestAction = yield take(
-      Types.RECORD_START_REQUEST,
-    )
+function* recordStart(action: Types.StartRecordRequestAction) {
+  const stream = action.payload
+  const appointmentId: ReturnType<typeof callAppointmentIdSelector> =
+    yield select(callAppointmentIdSelector)
 
-    if (QBMediaRecorder.isAvailable()) {
-      const recorder = new QBMediaRecorder({
-        mimeType: 'video/webm;codecs="vp8,opus"',
-      })
+  if (QBMediaRecorder.isAvailable() && appointmentId) {
+    yield all([
+      fork(handleQBMediaRecorderEvents, mediaRecorders.video, (blob) =>
+        uploadRecordRequest({ appointmentId, blob }),
+      ),
+      mediaRecorders.audio &&
+        fork(handleQBMediaRecorderEvents, mediaRecorders.audio, (blob) =>
+          createVoice({ appointmentId, blob }),
+        ),
+    ])
 
-      yield fork(handleQBMediaRecorderEvents, recorder)
-      yield call(startRecording, recorder, payload)
+    yield call(startRecording, mediaRecorders, stream)
 
-      const { stop } = yield race({
-        stop: take([
-          Types.LOGOUT_SUCCESS,
-          Types.SESSION_CLOSE,
-          Types.RECORD_STOP_REQUEST,
-          Types.QB_STOP_CALL_REQUEST,
-          Types.CALL_STOP,
-        ]),
-        error: take(Types.RECORD_ERROR),
-      })
+    const { stop } = yield race({
+      stop: take([
+        Types.LOGOUT_SUCCESS,
+        Types.SESSION_CLOSE,
+        Types.RECORD_STOP_REQUEST,
+        Types.QB_STOP_CALL_REQUEST,
+        Types.CALL_STOP,
+      ]),
+      error: take(Types.RECORD_ERROR),
+    })
 
-      if (stop) {
-        yield call(stopRecording, recorder)
-      }
-    } else {
-      yield put(startRecordFailure('Record is not available'))
+    if (stop) {
+      yield call(stopRecording, mediaRecorders)
     }
+  } else {
+    yield put(startRecordFailure('Record is not available'))
+  }
+}
+
+function* createUploadChannel(
+  appointmentId: QBAppointment['_id'],
+  videoFile: File | null,
+  voiceFile: File | null,
+) {
+  const session: ReturnType<typeof authSessionSelector> = yield select(
+    authSessionSelector,
+  )
+  const url = `${SERVER_APP_URL}/appointments/${appointmentId}/records`
+  const body = new FormData()
+
+  if (videoFile) {
+    body.append('video', videoFile, videoFile.name)
+  }
+
+  if (voiceFile) {
+    body.append('audio', voiceFile, voiceFile.name)
+  }
+
+  return eventChannel((emitter) => {
+    ajax<QBRecord>({
+      method: 'POST',
+      url,
+      headers: {
+        Authorization: `Bearer ${session!.token}`,
+      },
+      onProgress: (event) => {
+        emitter(uploadRecordProgress(event.loaded / event.total))
+      },
+      body,
+      responseType: 'json',
+    })
+      .then((response) => {
+        if (response.status < 200 || response.status > 299) {
+          return emitter(
+            uploadRecordFailure(typeof response === 'string' ? response : ''),
+          )
+        }
+
+        return emitter(uploadRecordSuccess(response.response))
+      })
+      .catch(() => emitter(END))
+
+    return () => null
+  })
+}
+
+function* uploadRecord(
+  actions:
+    | [Types.UploadRecordRequest, Types.CreateVoice]
+    | [Types.UploadRecordRequest],
+) {
+  try {
+    const [uploadRecordAction, createVoiceAction] = actions
+    const { appointmentId, blob: videoRecord } = uploadRecordAction.payload
+    const { blob: voiceRecord } = createVoiceAction?.payload || {}
+
+    yield put(
+      showNotification({
+        id: Date.now().toString(),
+        translate: true,
+        message: 'UploadNotClose',
+        position: 'bottom-center',
+      }),
+    )
+    const lastModified = new Date()
+    const videoFile = new File(
+      [videoRecord],
+      `${lastModified.toISOString()}.webm`,
+      {
+        type: 'video/webm',
+        lastModified: lastModified.valueOf(),
+      },
+    )
+    const voiceFile = voiceRecord
+      ? new File([voiceRecord], `${lastModified.toISOString()}.webm`, {
+          type: 'audio/webm',
+          lastModified: lastModified.valueOf(),
+        })
+      : null
+
+    if (videoFile.size > FILE_SIZE_LIMIT) {
+      yield put(toggleShowModal({ modal: 'SaveRecordModal', file: videoFile }))
+    }
+
+    if (!AI_RECORD_ANALYTICS && videoFile.size > FILE_SIZE_LIMIT) {
+      yield put(uploadRecordSuccess())
+    } else {
+      const channel: EventChannel<AnyAction> = yield call<
+        typeof createUploadChannel
+      >(
+        createUploadChannel,
+        appointmentId,
+        videoFile.size > FILE_SIZE_LIMIT ? null : videoFile,
+        AI_RECORD_ANALYTICS ? voiceFile : null,
+      )
+
+      let result:
+        | Types.UploadRecordProgress
+        | Types.UploadRecordSuccess
+        | Types.UploadRecordFailure
+
+      do {
+        result = yield take(channel)
+
+        yield put(result)
+      } while (result.type === Types.UPLOAD_RECORD_PROGRESS)
+    }
+  } catch (e) {
+    const errorMessage = stringifyError(e)
+
+    yield put(uploadRecordFailure(errorMessage))
   }
 }
 
 export default [
   takeEvery(Types.GET_RECORDS_REQUEST, getRecords),
-  takeEvery(Types.UPLOAD_RECORD_REQUEST, uploadRecord),
-  mediaRecorderEventsFlow(),
+  takeEvery(Types.RECORD_START_REQUEST, recordStart),
+  takeEveryAll(
+    AI_RECORD_ANALYTICS
+      ? [Types.UPLOAD_RECORD_REQUEST, Types.CREATE_VOICE]
+      : [Types.UPLOAD_RECORD_REQUEST],
+    uploadRecord,
+  ),
 ]

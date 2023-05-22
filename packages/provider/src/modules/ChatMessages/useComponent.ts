@@ -2,13 +2,19 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useTranslation } from 'react-i18next'
-import { getMessages, markMessageRead } from '../../actionCreators'
+import {
+  getMessages,
+  markMessageRead,
+  getQuickAnswer,
+  getQuickAnswerCancel,
+} from '../../actionCreators'
 import {
   authMyAccountIdSelector,
   messagesLoadingSelector,
   usersEntriesSelector,
   createMessagesListByDialogIdSelector,
   createMessagesHasMoreByDialogIdSelector,
+  messagesLoadMessageIdSelector,
 } from '../../selectors'
 import { formatDateMessage, getSentTime } from '../../utils/calendar'
 import { createUseComponent, useActions, usePrevious } from '../../hooks'
@@ -18,6 +24,7 @@ import useIsOffLine from '../../hooks/useIsOffLine'
 export interface ChatMessagesProps {
   dialogId?: QBChatDialog['_id']
   chatOpen?: boolean
+  setInputValue?: (value: string) => void
 }
 
 const createSelector = (dialogId?: QBChatDialog['_id']) =>
@@ -25,6 +32,7 @@ const createSelector = (dialogId?: QBChatDialog['_id']) =>
     myAccountId: authMyAccountIdSelector,
     loading: messagesLoadingSelector,
     users: usersEntriesSelector,
+    loadMessageId: messagesLoadMessageIdSelector,
     hasMore: createMessagesHasMoreByDialogIdSelector(dialogId),
     messages: createMessagesListByDialogIdSelector(dialogId),
   })
@@ -38,6 +46,8 @@ export default createUseComponent((props: ChatMessagesProps) => {
   const actions = useActions({
     getMessages,
     markMessageRead,
+    getQuickAnswer,
+    getQuickAnswerCancel,
   })
   const { i18n } = useTranslation()
   const prevDialogId = usePrevious(dialogId) || dialogId

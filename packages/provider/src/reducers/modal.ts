@@ -7,10 +7,10 @@ export type ModalReducer = {
   clientId?: QBUser['id']
   appointmentId?: QBAppointment['_id']
   file?: File
+  recordId?: QBRecord['_id']
 }
 
 const initialState: ModalReducer = {
-  appointmentId: undefined,
   AppointmentActionModal: false,
   AssignModal: false,
   ConclusionModal: false,
@@ -23,6 +23,7 @@ const initialState: ModalReducer = {
   CameraModal: false,
   AppointmentDetailsModal: false,
   SaveRecordModal: false,
+  RecordModal: false,
 }
 
 type ModalAction =
@@ -34,12 +35,13 @@ export default (state = initialState, action: ModalAction) => {
   switch (action.type) {
     case Types.TOGGLE_SHOW_MODAL:
       return {
-        ...state,
+        ...initialState,
         [action.payload.modal]: !state[action.payload.modal],
         providerId: action.payload.providerId,
         clientId: action.payload.clientId,
         appointmentId: action.payload.appointmentId,
         file: action.payload.file,
+        recordId: action.payload.recordId,
       }
     case Types.LOGOUT_SUCCESS:
     case Types.QB_INIT_FAILURE:

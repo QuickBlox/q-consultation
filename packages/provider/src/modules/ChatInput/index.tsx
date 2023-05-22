@@ -8,14 +8,14 @@ import './styles.css'
 export default function ChatInput(props: ChatInputProps) {
   const {
     refs: { texboxRef },
-    data: { disableControls, messageBody },
+    data: { disableControls, isShowPlaceholder },
     handlers: {
-      handleChangeMessage,
       handleSendMessage,
       handleFileChange,
       handleKeyDown,
       handlePaste,
       handleInputFocus,
+      handleInputMessage,
     },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -44,12 +44,12 @@ export default function ChatInput(props: ChatInputProps) {
           className={cn('textbox-input', { disabled: disableControls })}
           role="textbox"
           ref={texboxRef}
+          onInput={handleInputMessage}
           onFocus={handleInputFocus}
-          onInput={handleChangeMessage}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
         />
-        {!messageBody && (
+        {isShowPlaceholder && (
           <span className="textbox-placeholder">{t('SendMessage')}</span>
         )}
       </div>
