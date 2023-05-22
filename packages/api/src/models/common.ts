@@ -57,7 +57,7 @@ export const QCClient = Type.Intersect(
 
 export const QBSession = Type.Object(
   {
-    _id: Type.String({ format: 'uuid' }),
+    _id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
     application_id: Type.Integer(),
     created_at: Type.String({ format: 'date-time' }),
     id: Type.Integer(),
@@ -93,7 +93,7 @@ export const QBDialog = Type.Object(
 )
 
 const QBCustomObject = Type.Object({
-  _id: Type.String({ format: 'uuid' }),
+  _id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
   user_id: QBUser.properties.id,
   _parent_id: Type.Union([Type.String(), Type.Null()]),
   created_at: Type.Number(),
@@ -128,9 +128,11 @@ export const QCRecord = Type.Intersect(
     QBCustomObject,
     Type.Partial(
       Type.Object({
-        uid: Type.String({ format: 'uuid' }),
+        uid: Type.String(),
         name: Type.String(),
-        transcription: Type.Array(Type.String()),
+        transcription: Type.Array(
+          Type.String({ description: 'Format: "time|text"' }),
+        ),
         summary: Type.String(),
         actions: Type.String(),
         appointment_id: QBCustomObject.properties._id,
