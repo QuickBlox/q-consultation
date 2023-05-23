@@ -51,6 +51,7 @@
     "@types/redux-state-sync": "^3.1.2",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "eslint": "^7.32.0",
