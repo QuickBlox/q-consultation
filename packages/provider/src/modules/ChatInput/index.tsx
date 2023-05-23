@@ -15,7 +15,6 @@ export default function ChatInput(props: ChatInputProps) {
       handleKeyDown,
       handlePaste,
       handleInputFocus,
-      handleInputMessage,
     },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -44,7 +43,6 @@ export default function ChatInput(props: ChatInputProps) {
           className={cn('textbox-input', { disabled: disableControls })}
           role="textbox"
           ref={texboxRef}
-          onInput={handleInputMessage}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}

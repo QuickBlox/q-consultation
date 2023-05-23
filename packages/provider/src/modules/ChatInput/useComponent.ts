@@ -47,10 +47,6 @@ export default createUseComponent((props: ChatInputProps) => {
 
   const disableControls = !currentDialog?.joined || !connected
 
-  const handleInputMessage = ({ currentTarget }: FormEvent<HTMLDivElement>) => {
-    setIsShowPlaceholder(!currentTarget.outerText.replace(/^\n/, '').length)
-  }
-
   const submitMessage = (attachment?: ChatMessageAttachment) => {
     const messageBody = texboxRef.current?.innerText || ''
 
@@ -74,7 +70,6 @@ export default createUseComponent((props: ChatInputProps) => {
       })
 
       if (texboxRef.current) {
-        setIsShowPlaceholder(true)
         texboxRef.current.innerText = ''
       }
     }
@@ -101,8 +96,6 @@ export default createUseComponent((props: ChatInputProps) => {
 
       selection?.removeAllRanges()
       selection?.addRange(range)
-
-      setIsShowPlaceholder(false)
     }
   }
 
@@ -172,6 +165,24 @@ export default createUseComponent((props: ChatInputProps) => {
     }
   }, [dialogId])
 
+  useEffect(() => {
+    if (texboxRef.current) {
+      const observer = new MutationObserver(([event]) => {
+        const { target } = event
+
+        if (target instanceof HTMLDivElement) {
+          setIsShowPlaceholder(!target.outerText.replace(/^\n/, '').length)
+        }
+      })
+
+      observer.observe(texboxRef.current, {
+        characterData: false,
+        childList: true,
+        attributes: false,
+      })
+    }
+  }, [])
+
   return {
     store,
     actions,
@@ -183,7 +194,6 @@ export default createUseComponent((props: ChatInputProps) => {
       handlePaste,
       handleFileChange,
       handleInputFocus,
-      handleInputMessage,
     },
   }
 })
