@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
@@ -90,9 +90,13 @@ export default createUseComponent((props: AppointmentsProps) => {
     appointmentEntries,
   } = store
 
-  const appointmentsList = search ? appointmentActiveList.filter(
-      ({ client_id }) => users[client_id]?.full_name.toLowerCase().includes(search.toLowerCase())
-    ) : appointmentActiveList
+  const appointmentsList = search
+    ? appointmentActiveList.filter(({ client_id }) =>
+        users[client_id]?.full_name
+          ?.toLowerCase()
+          .includes(search.toLowerCase()),
+      )
+    : appointmentActiveList
 
   const handleSelect = (item: QBAppointment) => {
     if (isOpenMenu) toggleMenu()
