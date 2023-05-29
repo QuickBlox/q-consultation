@@ -26,9 +26,7 @@ const updateByIdSchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [{ apiKey: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ apiKey: [] }] as Security,
 }
 
 const updateMySchema = {
@@ -68,9 +66,7 @@ const updateMySchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [{ clientSession: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ clientSession: [] }] as Security,
 }
 
 const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {

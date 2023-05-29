@@ -9,9 +9,7 @@ export const deleteSchema = {
   params: Type.Object({
     id: Type.Integer(),
   }),
-  security: [{ apiKey: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ apiKey: [] }] as Security,
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {

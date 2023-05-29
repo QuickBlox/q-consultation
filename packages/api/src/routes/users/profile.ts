@@ -9,9 +9,7 @@ export const profileSchema = {
   response: {
     200: Type.Ref(QBUser),
   },
-  security: [{ providerSession: [] }, { clientSession: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ providerSession: [] }, { clientSession: [] }] as Security,
 }
 
 const getProfile: FastifyPluginAsyncTypebox = async (fastify) => {

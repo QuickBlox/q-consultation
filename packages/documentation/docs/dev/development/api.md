@@ -72,7 +72,6 @@ Connected plugins:
 
   The `fastify.verify` performs verification of the authorization strategy.
   Each strategy checks the validity of the token in an `Authorization` HTTP header.
-  Authorization header must be in the format `Bearer <token>`.
 
   Implemented the following strategies:
 
@@ -82,13 +81,18 @@ Connected plugins:
   - `ClientSessionToken` - checks the validity of the client's session token.
   - `SessionToken` - checks the validity of the session token of the provider or client.
 
+  An endpoint can use multiple authorization strategies.
+
   In the following example, you will find a very simple implementation that should help you understand how to use this module:
 
   ```ts
   fastify.get(
     '/',
     {
-      onRequest: fastify.verify(fastify.SessionToken),
+      onRequest: fastify.verify(
+        fastify.BearerToken,
+        fastify.ProviderSessionToken,
+      ),
     },
     async (request, reply) => {
       /* handler */
@@ -106,6 +110,19 @@ The supported validations are:
 - `querystring`: validates the query string.
 - `params`: validates the route params.
 - `headers`: validates the request headers.
+
+In addition, the scheme supports other properties:
+
+- `tags` - allows grouping endpoints by tag
+- `description` - description of the endpoint
+- `consumes` - specifies the MIME Types for the request body.
+  - Default: `["application/json"]`.
+  - To upload files: `["multipart/form-data"]`.
+- `security` - indicates the authorization method.
+  This schema parameter must be used in conjunction with the definition of an authorization strategy.
+  - `{ apiKey: [] }` - matches the `BearerToken` strategy
+  - `{ providerSession: [] }` - matches the `ProviderSessionToken` strategy
+  - `{ clientSession: [] }` - matches the `ClientSessionToken` strategy
 
 Models (`src/models`) are generic TypeBox schemas that are used to validate requests and responses.
 
@@ -138,9 +155,7 @@ const updateUserSchema = {
   response: {
     200: Type.Ref(UserModal),
   },
-  security: [{ apiKey: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ apiKey: [] }] as Security,
 }
 
 // ...
@@ -201,3 +216,32 @@ and eventually extract them.
 If you need to share functionality between routes, place that
 functionality into the `plugins` folder, and share it via
 [decorators](https://www.fastify.io/docs/latest/Reference/Decorators/).
+
+## Endpoints
+
+All information on API endpoints can be found on the [API Server page](/api).
+There you can download the OpenAPI specification and see the description of all available endpoints.
+
+:::tip
+When studying api endpoints, pay attention to Authorization methods, MIME Type and fields of the request body.
+
+The Authorization section specifies the authorization method.
+Each of the methods indicates which token should be passed in an `Authorization` HTTP header.
+Authorization header must be in the format `Bearer <token>`.
+
+There are 3 authorization methods available:
+
+- `apiKey` - `BEARER_TOKEN` set in app config. Used for API integration.
+- `providerSession` - provider session token.
+- `clientSession` - client session token.
+
+The Request section will specify the MIME Type of the request body:
+
+- `application/json` - used to send json in the body of the request.
+  Use header: `"Content-Type": "application/json"`.
+- `multipart/form-data` - used to send files in the body request.
+  Use [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) in JavaScript.
+
+![](/img/api-endpoints.jpg)
+
+:::

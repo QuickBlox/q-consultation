@@ -25,9 +25,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
     response: {
       200: Type.Ref(QCRecord),
     },
-    security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
-      [securityLabel: string]: string[]
-    }>,
+    security: [{ apiKey: [] }, { providerSession: [] }] as Security,
   }
 
   fastify.post(

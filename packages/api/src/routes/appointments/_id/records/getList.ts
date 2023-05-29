@@ -30,9 +30,7 @@ const getRecordListSchema = {
   response: {
     200: Type.Array(Type.Ref(QCRecord)),
   },
-  security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ apiKey: [] }, { providerSession: [] }] as Security,
 }
 
 const getRecordList: FastifyPluginAsyncTypebox = async (fastify) => {

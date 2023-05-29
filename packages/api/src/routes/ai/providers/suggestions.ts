@@ -22,9 +22,7 @@ export const suggestProviderSchema = {
     { apiKey: [] },
     { providerSession: [] },
     { clientSession: [] },
-  ] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  ] as Security,
 }
 
 const getAllProviders = async (page = 1): Promise<Dictionary<TQBUser>> => {
