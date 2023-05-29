@@ -27,9 +27,7 @@ const updateAppointmentSchema = {
     { apiKey: [] },
     { providerSession: [] },
     { clientSession: [] },
-  ] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  ] as Security,
 }
 
 const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {

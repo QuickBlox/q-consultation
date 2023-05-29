@@ -5,9 +5,7 @@ import { QBLogout } from '@/services/auth'
 export const logoutSchema = {
   tags: ['auth'],
   description: 'User logout',
-  security: [{ providerSession: [] }, { clientSession: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ providerSession: [] }, { clientSession: [] }] as Security,
 }
 
 const logout: FastifyPluginAsyncTypebox = async (fastify) => {

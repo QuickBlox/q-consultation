@@ -25,9 +25,7 @@ export const audioInfoSchema = {
       }),
     ),
   },
-  security: [{ apiKey: [] }, { providerSession: [] }] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  security: [{ apiKey: [] }, { providerSession: [] }] as Security,
 }
 
 const audioInfo: FastifyPluginAsyncTypebox = async (fastify) => {

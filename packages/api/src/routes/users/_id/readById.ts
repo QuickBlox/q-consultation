@@ -16,9 +16,7 @@ export const deleteSchema = {
     { apiKey: [] },
     { providerSession: [] },
     { clientSession: [] },
-  ] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  ] as Security,
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {

@@ -31,9 +31,7 @@ const getAppointmentListSchema = {
     { apiKey: [] },
     { providerSession: [] },
     { clientSession: [] },
-  ] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  ] as Security,
 }
 
 const getAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {

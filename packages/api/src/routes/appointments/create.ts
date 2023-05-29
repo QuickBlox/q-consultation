@@ -21,9 +21,7 @@ export const createAppointmentSchema = {
     { apiKey: [] },
     { providerSession: [] },
     { clientSession: [] },
-  ] as Array<{
-    [securityLabel: string]: string[]
-  }>,
+  ] as Security,
 }
 
 const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
