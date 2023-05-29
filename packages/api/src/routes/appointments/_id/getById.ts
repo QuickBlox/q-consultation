@@ -9,7 +9,7 @@ const getAppointmentSchema = {
   tags: ['appointments'],
   description: 'Get appointment by id',
   params: Type.Object({
-    id: Type.String({ pattern: '^[a-z0-9]+$' }),
+    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
   }),
   response: {
     200: Type.Ref(QCAppointment),

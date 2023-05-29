@@ -9,7 +9,7 @@ const updateAppointmentSchema = {
   tags: ['appointments'],
   description: 'Update appointment by id',
   params: Type.Object({
-    id: Type.String({ pattern: '^[a-z0-9]+$' }),
+    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
   }),
   body: Type.Omit(QCAppointment, [
     '_id',

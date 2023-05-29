@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
+const CopyWebpackPlugin = require("copy-webpack-plugin")
 
 const getConfig = require('../../bin/config')
 const packageInfo = require('./package.json')
@@ -49,6 +50,16 @@ module.exports = () => {
     new MiniCssExtractPlugin({
       filename: isProduction ? '[name].[contenthash].css' : '[name].css',
       chunkFilename: 'styles.css',
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: './public',
+          globOptions: {
+            ignore: ['**/*.html', '**/manifest.json'],
+          },
+        }
+      ]
     }),
     new HtmlWebpackPlugin({
       hash: isProduction,

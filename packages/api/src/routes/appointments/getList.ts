@@ -8,12 +8,20 @@ import { qbGetCustomObject } from '@/services/customObject'
 const getAppointmentListSchema = {
   tags: ['appointments'],
   description: 'Get a list of appointments',
-  params: Type.Partial(
+  querystring: Type.Partial(
     Type.Object({
-      limit: Type.Integer(),
-      skip: Type.Integer(),
-      sort_desc: Type.KeyOf(QCAppointment),
-      sort_asc: Type.KeyOf(QCAppointment),
+      limit: Type.Integer({ default: 100 }),
+      skip: Type.Integer({ default: 0 }),
+      sort_desc: Type.KeyOf(QCAppointment, {
+        description: `Available values: ${Type.KeyOf(QCAppointment)
+          .anyOf.map(({ const: field }) => field)
+          .join(', ')}`,
+      }),
+      sort_asc: Type.KeyOf(QCAppointment, {
+        description: `Available values: ${Type.KeyOf(QCAppointment)
+          .anyOf.map(({ const: field }) => field)
+          .join(', ')}`,
+      }),
     }),
   ),
   response: {
@@ -38,7 +46,7 @@ const getAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request) => {
       const { items: appointments } = await qbGetCustomObject<QBAppointment>(
         'Appointment',
-        request.params,
+        request.query,
       )
 
       return appointments
