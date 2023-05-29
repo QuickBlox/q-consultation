@@ -21,7 +21,6 @@ export const audioInfoSchema = {
           }),
         ),
         summary: Type.String(),
-        notes: Type.String(),
         actions: Type.String(),
       }),
     ),

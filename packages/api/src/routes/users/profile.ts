@@ -3,7 +3,7 @@ import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox'
 import { findUserById } from '@/services/users'
 import { QBUser } from '@/models'
 
-export const deleteSchema = {
+export const profileSchema = {
   tags: ['users'],
   description: 'Get user profile',
   response: {
@@ -14,11 +14,11 @@ export const deleteSchema = {
   }>,
 }
 
-const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
+const getProfile: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.get(
     '/profile',
     {
-      schema: deleteSchema,
+      schema: profileSchema,
       onRequest: fastify.verify(fastify.SessionToken),
     },
     async (request) => {
@@ -29,4 +29,4 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   )
 }
 
-export default deleteById
+export default getProfile

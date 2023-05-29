@@ -9,9 +9,10 @@
   "scripts": {
     "dev": "lerna run dev",
     "build": "lerna run build",
-    "lint": "lerna run lint",
     "start:api": "lerna run --scope q-consultation-api start",
-    "start:pages": "lerna run --scope integration-pages demo",
+    "start:doc": "lerna run --scope q-consultation-doc start",
+    "start:pages": "lerna run --scope integration-pages start",
+    "lint": "lerna run lint",
     "init:config": "node ./bin/initConfig.js",
     "init:schema": "node ./bin/initSchema.js"
   },
