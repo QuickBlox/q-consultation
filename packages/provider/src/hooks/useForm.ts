@@ -8,7 +8,8 @@ const isTouched = (value: Primitive) => {
   return Boolean(value)
 }
 
-export const transformObjectTails = <T, R extends Primitive>(
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const transformObjectTails = <T extends object, R extends Primitive>(
   value: T,
   transform: (value: Primitive) => R,
 ) => {

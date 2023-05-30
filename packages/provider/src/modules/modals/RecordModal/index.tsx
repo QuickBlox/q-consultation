@@ -48,7 +48,13 @@ export default function RecordModal(props: RecordModalProps) {
             <div className="video-unavailable">
               <CamSvg className="icon" />
               <p className="message">{t('VideoUnavailable')}</p>
-              <p className="description">{t(isSupportedVideo ? 'VideoNotSavedMessage' : 'VideoNotSupportedMessage')}</p>
+              <p className="description">
+                {t(
+                  isSupportedVideo
+                    ? 'VideoNotSavedMessage'
+                    : 'VideoNotSupportedMessage',
+                )}
+              </p>
               {!isSupportedVideo && record?.uid && (
                 <Button onClick={handleDownloadRecord} loading={isDownloading}>
                   {t('Download')}

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "lerna run dev",
-    "build": "lerna run build",
+    "build": "lerna run --ignore q-consultation-doc build",
     "start:api": "lerna run --scope q-consultation-api start",
     "start:doc": "lerna run --scope q-consultation-doc start",
     "start:pages": "lerna run --scope integration-pages start",

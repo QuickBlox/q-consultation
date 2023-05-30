@@ -1,7 +1,6 @@
 import {
   MouseEvent as ReactMouseEvent,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
