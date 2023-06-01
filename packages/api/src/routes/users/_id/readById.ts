@@ -1,13 +1,13 @@
 import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox'
 
 import { findUserById } from '@/services/users'
-import { QBUser } from '@/models'
+import { QBUser, QBUserId } from '@/models'
 
 export const deleteSchema = {
-  tags: ['users'],
-  description: 'Get user by id',
+  tags: ['Users'],
+  summary: 'Get user by id',
   params: Type.Object({
-    id: Type.Integer(),
+    id: QBUserId,
   }),
   response: {
     200: Type.Ref(QBUser),

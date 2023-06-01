@@ -11,8 +11,8 @@ import { qbUploadFile } from '@/services/content'
 import { stringifyUserCustomData } from '@/utils/user'
 
 export const signUpSchema = {
-  tags: ['users'],
-  description: 'Signup provider',
+  tags: ['Users', 'Provider'],
+  summary: 'Signup provider',
   consumes: ['multipart/form-data'],
   body: Type.Intersect([
     Type.Omit(QCProvider, [

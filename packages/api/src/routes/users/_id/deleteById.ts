@@ -2,13 +2,17 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 
 import { qbDeleteUser } from '@/services/users'
+import { QBUserId } from '@/models'
 
 export const deleteSchema = {
-  tags: ['users'],
-  description: 'Delete user by id',
+  tags: ['Users'],
+  summary: 'Delete user by id',
   params: Type.Object({
-    id: Type.Integer(),
+    id: QBUserId,
   }),
+  response: {
+    204: Type.Null({ description: 'No content' }),
+  },
   security: [{ apiKey: [] }] as Security,
 }
 
@@ -23,8 +27,9 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
       const { id } = request.params
 
       await qbDeleteUser(id)
+      reply.code(204)
 
-      return reply.code(204)
+      return null
     },
   )
 }

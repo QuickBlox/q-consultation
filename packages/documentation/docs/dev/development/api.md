@@ -143,7 +143,7 @@ const UserModal = Type.Object(
 
 // Schema for endpoint
 const updateUserSchema = {
-  tags: ['users'],
+  tags: ['Users'],
   description: 'Update user by id',
   params: Type.Object({
     id: Type.Integer(),

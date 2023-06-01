@@ -6,10 +6,13 @@ import { qbCreateSession, qbLogin } from '@/services/auth'
 import { userHasTag } from '@/utils/user'
 
 export const loginSchema = {
-  tags: ['auth'],
-  description: 'User login',
+  tags: ['Auth'],
+  summary: 'User login',
   body: Type.Object({
-    role: Type.Union([Type.Literal('client'), Type.Literal('provider')]),
+    role: Type.Union([
+      Type.Literal('client', { title: 'Client' }),
+      Type.Literal('provider', { title: 'Provider' }),
+    ]),
     email: Type.String({ format: 'email' }),
     password: Type.String(),
   }),

@@ -331,7 +331,8 @@ declare module 'quickblox' {
     delete: { access: string }
   }
 
-  export interface QBAppointment extends QBCustomObject {
+  export interface QBAppointment extends Omit<QBCustomObject, '_parent_id'> {
+    _parent_id: null
     priority: number
     client_id: QBUser['id']
     provider_id: QBUser['id']
@@ -350,15 +351,8 @@ declare module 'quickblox' {
     permissions: QBAppointmentPermissions
   }
 
-  export interface QBCalendarEvent extends QBCustomObject {
-    date: string
-    duration: number
-    provider_id: QBUser['id']
-    client_id: QBUser['id']
-    appointment_id: QBAppointment['_id']
-  }
-
-  export interface QBRecord extends QBCustomObject {
+  export interface QBRecord extends Omit<QBCustomObject, '_parent_id'> {
+    _parent_id: QBCustomObject['_id']
     uid?: string
     name?: string
     summary?: string
@@ -536,10 +530,7 @@ declare module 'quickblox' {
       params: T,
       callback: (error?: QBError, user: QBUser) => void,
     ): void
-    delete(
-      userId: number,
-      callback: (error?: QBError, user: QBUser) => void,
-    ): void
+    delete(userId: number, callback: (error?: QBError, res?: '') => void): void
     update(
       userId: number,
       user: Partial<Omit<QBUser, 'id'>>,

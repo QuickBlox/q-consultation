@@ -2,7 +2,7 @@ import fp from 'fastify-plugin'
 import swagger, { SwaggerOptions } from '@fastify/swagger'
 import swaggerUI, { FastifySwaggerUiOptions } from '@fastify/swagger-ui'
 import { Type } from '@sinclair/typebox'
-import * as commonModels from '@/models/common'
+import * as models from '@/models'
 
 const swaggerOptions: SwaggerOptions = {
   openapi: {
@@ -15,17 +15,18 @@ const swaggerOptions: SwaggerOptions = {
         apiKey: {
           type: 'http',
           scheme: 'bearer',
-          description: 'API Token',
+          description:
+            'API Token. `BEARER_TOKEN` set in app config. Used for API integration.',
         },
         providerSession: {
           type: 'http',
           scheme: 'bearer',
-          description: 'Provider session token',
+          description: 'Provider session token.',
         },
         clientSession: {
           type: 'http',
           scheme: 'bearer',
-          description: 'Client session token',
+          description: 'Client session token.',
         },
       },
     },
@@ -43,10 +44,10 @@ const swaggerOptions: SwaggerOptions = {
       schema: {
         ...schema,
         response: {
-          '4xx': Type.Ref(commonModels.Error, {
+          '4xx': Type.Ref(models.Error, {
             description: 'Client error responses',
           }),
-          '5xx': Type.Ref(commonModels.Error, {
+          '5xx': Type.Ref(models.Error, {
             description: 'Server error responses',
           }),
           ...(schema?.response || {}),
@@ -62,8 +63,10 @@ const swaggerUIOptions: FastifySwaggerUiOptions = {
 
 export default fp(
   async (fastify) => {
-    Object.values(commonModels).forEach((schema) => {
-      fastify.addSchema(schema)
+    Object.values(models).forEach((schema) => {
+      if (schema.$id) {
+        fastify.addSchema(schema)
+      }
     })
 
     await fastify.register(swagger, swaggerOptions)

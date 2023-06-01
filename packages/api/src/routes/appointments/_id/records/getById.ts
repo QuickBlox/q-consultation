@@ -2,15 +2,15 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBRecord } from 'quickblox'
 
-import { QCRecord } from '@/models'
+import { QBCustomObjectId, QCRecord } from '@/models'
 import { qbGetCustomObject } from '@/services/customObject'
 
 const getRecordSchema = {
-  tags: ['appointments'],
-  description: 'Get a record for the appointment',
+  tags: ['Appointments', 'Records'],
+  summary: 'Get a record for the appointment',
   params: Type.Object({
-    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
-    recordId: Type.String({ pattern: '^[a-z0-9]{24}$' }),
+    id: QBCustomObjectId,
+    recordId: QBCustomObjectId,
   }),
   response: {
     200: Type.Ref(QCRecord),

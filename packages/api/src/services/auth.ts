@@ -81,7 +81,17 @@ export const qbLogin = (email: string, password: string) =>
   })
 
 export function QBLogout() {
-  return new Promise((resolve) => {
-    QB.destroySession(resolve)
+  return new Promise<void>((resolve, reject) => {
+    QB.destroySession((error) => {
+      console.log('[destroySession]')
+
+      if (error) {
+        console.log('[reject]')
+        reject(error)
+      } else {
+        console.log('[resolve]')
+        resolve()
+      }
+    })
   })
 }

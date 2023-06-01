@@ -1,15 +1,17 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import { Type } from '@sinclair/typebox'
+import { Static, Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 
-import { QCAppointment } from '@/models'
+import { QBCustomObjectId, QCAppointment } from '@/models'
 import { qbUpdateCustomObject } from '@/services/customObject'
+import { findUserById } from '@/services/users'
+import { userHasTag } from '@/utils/user'
 
 const updateAppointmentSchema = {
-  tags: ['appointments'],
-  description: 'Update appointment by id',
+  tags: ['Appointments'],
+  summary: 'Update appointment by id',
   params: Type.Object({
-    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
+    id: QBCustomObjectId,
   }),
   body: Type.Omit(QCAppointment, [
     '_id',
@@ -31,11 +33,27 @@ const updateAppointmentSchema = {
 }
 
 const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
+  const handleValidate = async (
+    body: Static<typeof updateAppointmentSchema.body>,
+  ) => {
+    const { provider_id } = body
+    const provider = await findUserById(provider_id)
+
+    if (!provider || !userHasTag(provider, 'provider')) {
+      return new Error('body/provider_id Invalid property')
+    }
+
+    return undefined
+  }
+
   fastify.put(
     '',
     {
       schema: updateAppointmentSchema,
       onRequest: fastify.verify(fastify.BearerToken, fastify.SessionToken),
+      preValidation: (request, reply, done) => {
+        handleValidate(request.body).then(done).catch(done)
+      },
     },
     async (request) => {
       const { id } = request.params

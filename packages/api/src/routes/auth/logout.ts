@@ -1,22 +1,29 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
 
 import { QBLogout } from '@/services/auth'
 
 export const logoutSchema = {
-  tags: ['auth'],
-  description: 'User logout',
+  tags: ['Auth'],
+  summary: 'User logout',
+  response: {
+    204: Type.Null({ description: 'No content' }),
+  },
   security: [{ providerSession: [] }, { clientSession: [] }] as Security,
 }
 
 const logout: FastifyPluginAsyncTypebox = async (fastify) => {
-  fastify.post(
+  fastify.delete(
     '/logout',
     {
       schema: logoutSchema,
       onRequest: fastify.verify(fastify.SessionToken),
     },
-    async () => {
+    async (request, reply) => {
       await QBLogout()
+      reply.code(204)
+
+      return null
     },
   )
 }
