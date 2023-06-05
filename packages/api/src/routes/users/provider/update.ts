@@ -2,18 +2,18 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import pick from 'lodash/pick'
 
-import { MultipartFile, QBUser, QCProvider } from '@/models'
+import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
 import { stringifyUserCustomData, parseUserCustomData } from '@/utils/user'
 import { findUserById, qbUpdateUser } from '@/services/users'
 import { getCompletion } from '@/services/openai'
 import { qbDeleteFile, qbUploadFile } from '@/services/content'
 
 const updateByIdSchema = {
-  tags: ['users'],
-  description: 'Update provider by id',
+  tags: ['Users', 'Provider'],
+  summary: 'Update provider by id',
   consumes: ['multipart/form-data'],
   params: Type.Object({
-    id: Type.Integer(),
+    id: QBUserId,
   }),
   body: Type.Intersect([
     Type.Omit(QCProvider, [
@@ -36,39 +36,45 @@ const updateByIdSchema = {
 }
 
 const updateMySchema = {
-  tags: ['users'],
-  description: 'Update provider profile',
+  tags: ['Users', 'Provider'],
+  summary: 'Update provider profile',
   consumes: ['multipart/form-data'],
-  body: Type.Union([
-    Type.Intersect([
-      Type.Omit(QCProvider, [
-        'id',
-        'created_at',
-        'updated_at',
-        'last_request_at',
+  body: Type.Union(
+    [
+      Type.Intersect(
+        [
+          Type.Omit(QCProvider, [
+            'id',
+            'created_at',
+            'updated_at',
+            'last_request_at',
+          ]),
+          Type.Object({
+            avatar: Type.Optional(
+              Type.Union([MultipartFile, Type.Literal('none')]),
+            ),
+          }),
+        ],
+        { title: 'Without password' },
+      ),
+      Type.Intersect([
+        Type.Omit(QCProvider, [
+          'id',
+          'created_at',
+          'updated_at',
+          'last_request_at',
+        ]),
+        Type.Object({
+          avatar: Type.Optional(
+            Type.Union([MultipartFile, Type.Literal('none')]),
+          ),
+          password: Type.String(),
+          old_password: Type.String(),
+        }),
       ]),
-      Type.Object({
-        avatar: Type.Optional(
-          Type.Union([MultipartFile, Type.Literal('none')]),
-        ),
-      }),
-    ]),
-    Type.Intersect([
-      Type.Omit(QCProvider, [
-        'id',
-        'created_at',
-        'updated_at',
-        'last_request_at',
-      ]),
-      Type.Object({
-        avatar: Type.Optional(
-          Type.Union([MultipartFile, Type.Literal('none')]),
-        ),
-        password: Type.String(),
-        old_password: Type.String(),
-      }),
-    ]),
-  ]),
+    ],
+    { title: 'With password' },
+  ),
   response: {
     200: Type.Ref(QBUser),
   },
@@ -98,7 +104,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'language',
       )
       const prevUserData = await findUserById(request.session!.user_id)
-      const prevUserCustomData = parseUserCustomData(prevUserData.custom_data)
+      const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
@@ -147,7 +153,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       schema: updateByIdSchema,
       onRequest: fastify.verify(fastify.BearerToken),
     },
-    async (request) => {
+    async (request, reply) => {
       const { description, avatar } = request.body
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
@@ -157,6 +163,11 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'language',
       )
       const prevUserData = await findUserById(request.params.id)
+
+      if (!prevUserData) {
+        return reply.notFound()
+      }
+
       const prevUserCustomData = parseUserCustomData(prevUserData.custom_data)
       let avatarData = prevUserCustomData.avatar
 

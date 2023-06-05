@@ -32,7 +32,7 @@ export const getUserAndSessionByUserToken = async (token?: string) => {
     if (session) {
       const user = await findUserById(session.user_id)
 
-      return { user, session }
+      return user ? { user, session } : null
     }
 
     return null

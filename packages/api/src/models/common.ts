@@ -1,138 +1,30 @@
 import { Type } from '@sinclair/typebox'
 
+export const DateISO = Type.String({
+  format: 'date-time',
+  description:
+    'Date in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format according to universal time. Format: `YYYY-MM-DDTHH:mm:ss.sssZ`.',
+})
+
 export const Error = Type.Object(
   {
-    statusCode: Type.Integer(),
-    error: Type.String(),
-    message: Type.String(),
+    statusCode: Type.Integer({ title: 'HTTP response status code' }),
+    error: Type.String({ title: 'HTTP response error' }),
+    message: Type.String({ title: 'Error message' }),
   },
-  { $id: 'Error' },
+  { $id: 'Error', title: 'Error response' },
 )
 
-export const QBUser = Type.Object(
+export const MultipartFile = Type.Object(
   {
-    id: Type.Integer(),
-    full_name: Type.String(),
-    email: Type.String({ format: 'email' }),
-    // login: Type.String(),
-    // phone: Type.String(),
-    created_at: Type.String({ format: 'date-time' }),
-    updated_at: Type.String({ format: 'date-time' }),
-    last_request_at: Type.String({ format: 'date-time' }),
-    custom_data: Type.Union([Type.String(), Type.Null()]),
-    user_tags: Type.Union([Type.String(), Type.Null()]),
+    buffer: Type.Any(),
+    filename: Type.String(),
+    encoding: Type.String(),
+    mimetype: Type.String(),
   },
-  { $id: 'QBUser' },
-)
-
-const QBBaseUserData = Type.Omit(QBUser, ['custom_data', 'user_tags'], {
-  $id: '',
-})
-
-export const QCProvider = Type.Intersect(
-  [
-    QBBaseUserData,
-    Type.Object({
-      full_name: Type.String(),
-      description: Type.Optional(Type.String()),
-      language: Type.Optional(Type.String()),
-    }),
-  ],
-  { $id: 'QCProvider' },
-)
-
-export const QCClient = Type.Intersect(
-  [
-    QBBaseUserData,
-    Type.Object({
-      full_name: Type.String(),
-      birthdate: Type.String(),
-      gender: Type.Union([Type.Literal('male'), Type.Literal('female')]),
-      address: Type.Optional(Type.String()),
-      language: Type.Optional(Type.String()),
-    }),
-  ],
-  { $id: 'QCClient' },
-)
-
-export const QBSession = Type.Object(
   {
-    _id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
-    application_id: Type.Integer(),
-    created_at: Type.String({ format: 'date-time' }),
-    id: Type.Integer(),
-    nonce: Type.String(),
-    token: Type.String(),
-    ts: Type.Integer(),
-    updated_at: Type.String({ format: 'date-time' }),
-    user_id: QBUser.properties.id,
+    title: 'File',
+    description:
+      'This value represents a file submitted using a form with encoding set to `multipart/form-data`.',
   },
-  { $id: 'QBSession' },
-)
-
-export const QBDialog = Type.Object(
-  {
-    _id: Type.String(),
-    created_at: Type.String(),
-    data: Type.Optional(Type.Record(Type.String(), Type.String())),
-    last_message: Type.Union([Type.String(), Type.Null()]),
-    last_message_date_sent: Type.Union([Type.String(), Type.Null()]),
-    last_message_id: Type.Union([Type.String(), Type.Null()]),
-    last_message_user_id: Type.Union([QBUser.properties.id, Type.Null()]),
-    name: Type.String(),
-    occupants_ids: Type.Array(Type.Number()),
-    photo: Type.Null(),
-    type: Type.Number(),
-    updated_at: Type.String(),
-    user_id: QBUser.properties.id,
-    xmpp_room_jid: Type.Union([Type.String(), Type.Null()]),
-    unread_messages_count: Type.Union([Type.Number(), Type.Null()]),
-    joined: Type.Optional(Type.Boolean()),
-  },
-  { $id: 'QBDialog' },
-)
-
-const QBCustomObject = Type.Object({
-  _id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
-  user_id: QBUser.properties.id,
-  _parent_id: Type.Union([Type.String(), Type.Null()]),
-  created_at: Type.Number(),
-  updated_at: Type.Number(),
-})
-
-export const QCAppointment = Type.Intersect(
-  [
-    QBCustomObject,
-    Type.Object({
-      priority: Type.Number(),
-      client_id: QBUser.properties.id,
-      provider_id: QBUser.properties.id,
-      dialog_id: QBDialog.properties._id,
-      description: Type.String(),
-      notes: Type.Union([Type.String(), Type.Null()]),
-      conclusion: Type.Optional(Type.String()),
-      date_end: Type.Optional(Type.String()),
-      language: Type.Optional(Type.String()),
-    }),
-  ],
-  { $id: 'QCAppointment' },
-)
-
-export const QCRecord = Type.Intersect(
-  [
-    QBCustomObject,
-    Type.Partial(
-      Type.Object({
-        uid: Type.String(),
-        name: Type.String(),
-        transcription: Type.Array(
-          Type.String({ description: 'Format: "time|text"' }),
-        ),
-        summary: Type.String(),
-        actions: Type.String(),
-        appointment_id: QBCustomObject.properties._id,
-      }),
-    ),
-  ],
-  { $id: 'QCRecord' },
 )

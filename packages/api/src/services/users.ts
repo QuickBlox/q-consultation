@@ -49,7 +49,9 @@ export const qbGetUsers = (filter: Dictionary<unknown>) =>
     })
   })
 
-export const findUserById = async (userId: QBUser['id']) => {
+export const findUserById = async (
+  userId: QBUser['id'],
+): Promise<QBUser | null> => {
   const userResult = await qbGetUsers({
     field: 'id',
     param: 'in',
@@ -58,11 +60,7 @@ export const findUserById = async (userId: QBUser['id']) => {
 
   const [userData] = userResult?.items || []
 
-  if (!userData?.user) {
-    throw new Error('Error: User not found')
-  }
-
-  return userData.user
+  return userData?.user
 }
 
 export const qbUpdateUser = (
@@ -80,12 +78,12 @@ export const qbUpdateUser = (
   })
 
 export const qbDeleteUser = (userId: QBUser['id']) =>
-  new Promise<QBUser>((resolve, reject) => {
-    QB.users.delete(userId, (error, result) => {
+  new Promise<void>((resolve, reject) => {
+    QB.users.delete(userId, (error) => {
       if (error) {
         reject(error)
       } else {
-        resolve(result)
+        resolve()
       }
     })
   })

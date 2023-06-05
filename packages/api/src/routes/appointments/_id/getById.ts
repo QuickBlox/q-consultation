@@ -2,14 +2,14 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 
-import { QCAppointment } from '@/models'
+import { QBCustomObjectId, QCAppointment } from '@/models'
 import { qbGetCustomObject } from '@/services/customObject'
 
 const getAppointmentSchema = {
-  tags: ['appointments'],
-  description: 'Get appointment by id',
+  tags: ['Appointments'],
+  summary: 'Get appointment by id',
   params: Type.Object({
-    id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
+    id: QBCustomObjectId,
   }),
   response: {
     200: Type.Ref(QCAppointment),

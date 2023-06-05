@@ -143,7 +143,7 @@ const UserModal = Type.Object(
 
 // Schema for endpoint
 const updateUserSchema = {
-  tags: ['users'],
+  tags: ['Users'],
   description: 'Update user by id',
   params: Type.Object({
     id: Type.Integer(),
@@ -166,6 +166,10 @@ const updateUserSchema = {
 A service is a set of functions that implement business logic for a particular entity.
 
 `src/services` directory implements functionality for working with OpenAI and QuickBlox entities.
+
+:::tip
+Read more information on OpenAI integration in the [OpenAI](/dev/development/api/openai) section.
+:::
 
 ## Routing
 

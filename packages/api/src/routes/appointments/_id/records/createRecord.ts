@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { MultipartFile, QCRecord } from '@/models'
+import { MultipartFile, QBCustomObjectId, QCRecord } from '@/models'
 import { getAudioInfo } from '@/services/openai'
 import { qbCreateChildCustomObject } from '@/services/customObject'
 import { qbUploadFile } from '@/services/content'
@@ -8,11 +8,11 @@ import { QBRecord } from 'quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
   const createRecordSchema = {
-    tags: ['appointments'],
-    description: 'Create a record for the appointment',
+    tags: ['Appointments', 'Records'],
+    summary: 'Create a record for the appointment',
     consumes: ['multipart/form-data'],
     params: Type.Object({
-      id: Type.String({ pattern: '^[a-z0-9]{24}$' }),
+      id: QBCustomObjectId,
     }),
     body: fastify.config.AI_RECORD_ANALYTICS
       ? Type.Object({
