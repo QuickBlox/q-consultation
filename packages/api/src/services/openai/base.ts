@@ -15,8 +15,11 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration)
 
-type CompletionConfig = Omit<CreateCompletionRequest, 'prompt'>
-type ChatCompletionConfig = Omit<CreateChatCompletionRequest, 'messages'>
+type CompletionConfig = Omit<CreateCompletionRequest, 'prompt' | 'n' | 'stream'>
+type ChatCompletionConfig = Omit<
+  CreateChatCompletionRequest,
+  'messages' | 'n' | 'stream'
+>
 
 const baseCompletionConfig: CompletionConfig = {
   model: 'text-davinci-003',

@@ -167,6 +167,10 @@ A service is a set of functions that implement business logic for a particular e
 
 `src/services` directory implements functionality for working with OpenAI and QuickBlox entities.
 
+:::tip
+Read more information on OpenAI integration in the [OpenAI](/dev/development/api/openai) section.
+:::
+
 ## Routing
 
 Routes define endpoints within your application.
