@@ -112,8 +112,8 @@ export interface QBGetQuickAnswerCancelAction extends Action {
 export interface QBGetQuickAnswerRequestAction extends Action {
   type: typeof QB_GET_QUICK_ANSWER_REQUEST
   payload: {
+    dialogId: QBChatMessage['chat_dialog_id']
     messageId: QBChatMessage['_id']
-    question: string
     then?: (
       action: QBGetQuickAnswerSuccessAction | QBGetQuickAnswerFailureAction,
     ) => void

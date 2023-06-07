@@ -30,7 +30,7 @@ export default function MessageBody(props: MessageBodyProps) {
 
   const handleGetQuickAnswer = () => {
     cancelQuickAnswer()
-    getQuickAnswer(message._id, message.message, (action) => {
+    getQuickAnswer(message.chat_dialog_id, message._id, (action) => {
       const answer = 'payload' in action ? action.payload.answer : null
 
       if (setInputValue && answer) {

@@ -149,26 +149,25 @@ function* sendReadStatus(action: Types.QBMarkMessageReadAction) {
 }
 
 function* getQuickAnswer(action: Types.QBGetQuickAnswerRequestAction) {
-  const { question, then } = action.payload
+  const { dialogId, messageId, then } = action.payload
 
   try {
     const session: ReturnType<typeof authSessionSelector> = yield select(
       authSessionSelector,
     )
-    const url = `${SERVER_APP_URL}/ai/quick-answer`
+    const url = `${SERVER_APP_URL}/ai/dialog/${dialogId}/messages/${messageId}/answer`
 
     const {
       response,
     }: {
       response: { answer: string }
     } = yield call<typeof ajax>(ajax, {
-      method: 'POST',
+      method: 'GET',
       url,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session!.token}`,
       },
-      body: JSON.stringify({ question }),
       responseType: 'json',
     })
 

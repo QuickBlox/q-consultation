@@ -109,8 +109,8 @@ export function userIsTyping(payload: {
 }
 
 export function getQuickAnswer(
+  dialogId: QBChatMessage['chat_dialog_id'],
   messageId: QBChatMessage['_id'],
-  question: string,
   then?: (
     action:
       | Types.QBGetQuickAnswerSuccessAction
@@ -120,8 +120,8 @@ export function getQuickAnswer(
   return {
     type: Types.QB_GET_QUICK_ANSWER_REQUEST,
     payload: {
+      dialogId,
       messageId,
-      question,
       then,
     },
   }
