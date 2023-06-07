@@ -13,7 +13,7 @@
     "build": "tsc && tsc-alias",
     "watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "dev": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch\" \"npm:dev:start\"",
-    "dev:start": "fastify start -p 4000 --ignore-watch=.ts$ -w -l info -P dist/app.js",
+    "dev:start": "fastify start -p 4000 -d --debug-port=9229 --ignore-watch=.ts$ -w -l info -P dist/app.js",
     "lint": "eslint ./src"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.5.0",
     "form-data": "^4.0.0",
+    "gpt-3-encoder": "^1.1.4",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.9",
     "openai": "^3.2.1",
