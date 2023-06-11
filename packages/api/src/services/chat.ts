@@ -4,6 +4,7 @@ import QB, {
   QBChatDialog,
   QBChatMessage,
   QBChatNewMessage,
+  QBSystemMessage,
 } from 'quickblox'
 
 export const qbChatConnect = (
@@ -62,6 +63,15 @@ export const qbChatJoin = (dialogId: QBChatDialog['_id']) =>
 export const qbChatSendMessage = (to: string, message: QBChatNewMessage) => {
   return new Promise<QBChatMessage['_id']>((resolve) => {
     resolve(QB.chat.send(to, message))
+  })
+}
+
+export const qbChatSendSystemMessage = (
+  to: QBUser['id'] | string,
+  message: { extension: QBSystemMessage['extension'] },
+) => {
+  return new Promise<QBSystemMessage['id']>((resolve) => {
+    resolve(QB.chat.sendSystemMessage(to, message))
   })
 }
 

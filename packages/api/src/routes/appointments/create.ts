@@ -1,12 +1,21 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type, Static } from '@sinclair/typebox'
-import { QBAppointment } from 'quickblox'
+import QB, { QBAppointment, QBSession } from 'quickblox'
+import without from 'lodash/without'
 
 import { QCAppointment, QBUserId } from '@/models'
-import { qbChatCreate } from '@/services/chat'
+import {
+  qbChatConnect,
+  qbChatCreate,
+  qbChatSendSystemMessage,
+} from '@/services/chat'
 import { qbCreateCustomObject } from '@/services/customObject'
 import { findUserById } from '@/services/users'
 import { userHasTag } from '@/utils/user'
+import {
+  APPOINTMENT_NOTIFICATION,
+  DIALOG_NOTIFICATION,
+} from '@/constants/notificationTypes'
 
 export const createAppointmentSchema = {
   tags: ['Appointments'],
@@ -25,6 +34,8 @@ export const createAppointmentSchema = {
     { clientSession: [] },
   ] as Security,
 }
+
+type SuccessResponse = Static<(typeof createAppointmentSchema.response)['200']>
 
 const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleValidate = async (
@@ -48,13 +59,61 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
     return errors.length ? new Error(errors.join(';')) : undefined
   }
 
+  const handleResponse = async (
+    session: QBSession,
+    payload: SuccessResponse | null,
+  ) => {
+    if (payload) {
+      await qbChatConnect(session.user_id, session.token)
+
+      const recipients = without(
+        [payload.provider_id, payload.client_id],
+        session.user_id,
+      )
+
+      recipients.forEach((userId) => {
+        const dialogId = QB.chat.helpers.getUserJid(userId)
+        const systemMessages = [
+          {
+            dialogId,
+            message: {
+              extension: {
+                notification_type: DIALOG_NOTIFICATION,
+                dialog_id: payload.dialog_id,
+              },
+            },
+          },
+          {
+            dialogId,
+            message: {
+              extension: {
+                notification_type: APPOINTMENT_NOTIFICATION,
+                appointment_id: payload._id,
+              },
+            },
+          },
+        ]
+
+        systemMessages.forEach(({ dialogId: to, message }) => {
+          qbChatSendSystemMessage(to, message)
+        })
+      })
+    }
+  }
+
   fastify.post(
     '',
     {
       schema: createAppointmentSchema,
       onRequest: fastify.verify(fastify.BearerToken, fastify.SessionToken),
-      preValidation: (request, reply, done) => {
+      preHandler: (request, reply, done) => {
         handleValidate(request.body).then(done).catch(done)
+      },
+      onResponse: (request, reply, done) => {
+        const data: SuccessResponse | null = reply.payload
+
+        handleResponse(request.session!, data)
+        done()
       },
     },
     async (request) => {

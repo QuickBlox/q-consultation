@@ -2,7 +2,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { ChatCompletionRequestMessage } from 'openai'
 import { QBAppointment } from 'quickblox'
-import { QBDialogId } from '@/models'
+import { QBDialogId, QBMessageId } from '@/models'
 import { qbChatConnect, qbChatGetMessages, qbChatJoin } from '@/services/chat'
 import { qbGetCustomObject } from '@/services/customObject'
 import { getChatCompletion } from '@/services/openai'
@@ -13,7 +13,7 @@ export const quickAnswerSchema = {
   summary: 'Get Quick answer for dialog',
   params: Type.Object({
     dialogId: QBDialogId,
-    clientMessageId: Type.String(),
+    clientMessageId: QBMessageId,
   }),
   response: {
     200: Type.Object({
