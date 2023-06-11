@@ -455,7 +455,7 @@ Files are used to upload documents that can be used with features like [Fine-tun
 :::tip
 We are not currently using Files, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
 
-**API reference**: [Files](https://platform.openai.com/docs/api-reference/files)
+**API reference**: [Files](https://platform.openai.com/docs/api-reference/files?lang=node.js)
 :::
 
 ## Fine-tunes
