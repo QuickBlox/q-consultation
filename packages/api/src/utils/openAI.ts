@@ -22,7 +22,7 @@ export const loopToLimitTokens = <T>(
   if (amountTokens <= limit) {
     const nextData = loopToLimitTokens(limit, lastItems, getValue, amountTokens)
 
-    return [firstItem, ...nextData]
+    return itemTokens === 0 ? nextData : [firstItem, ...nextData]
   }
 
   return []
