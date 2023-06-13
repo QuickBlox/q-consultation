@@ -13,13 +13,13 @@
 
 Q-Consultation is a web application for online chat and video consultations. The app provides code to build a secure means to hold virtual private meetings and video calls and messaging across a multitude of use cases including telehealth, recruitment, social engagement, finance, online education, e-commerce, and more. The application is built on React JS and consists of three major parts: QuickBlox back-end and two web applications for [Client](#client-application-interface) and [Provider](#provider-application-interface).
 
-To learn more about the app features visit: <https://quickblox.com/products/qconsultation>.
+To learn more about the app features visit: <https://quickblox.com/products/q-consultation/open-source/>.
 
 ## Documentation
 
-- [Start guide](/documentation/START.md)
-- [Integration guide](/documentation/INTEGRATION.md)
-- [Contributing](/documentation/CONTRIBUTING.md)
+- [Start guide](https://quickblox.github.io/q-consultation/dev/quick-start)
+- [Integration](https://quickblox.github.io/q-consultation/api) & [Development](https://quickblox.github.io/q-consultation/dev/development)
+- [Contributing](https://quickblox.github.io/q-consultation/dev/contributing)
 
 ## Features list
 
@@ -66,7 +66,7 @@ Video call:
 
 ## How to contribute
 
-See more information at [CONTRIBUTING](/documentation/CONTRIBUTING.md)
+See more information at [CONTRIBUTING](https://quickblox.github.io/q-consultation/dev/contributing)
 
 ## License
 
