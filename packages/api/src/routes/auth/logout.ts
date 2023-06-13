@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 
-import { QBLogout } from '@/services/auth'
+import { qbLogout } from '@/services/auth'
 
 export const logoutSchema = {
   tags: ['Auth'],
@@ -20,7 +20,7 @@ const logout: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.SessionToken),
     },
     async (request, reply) => {
-      await QBLogout()
+      await qbLogout()
       reply.code(204)
 
       return null

@@ -137,6 +137,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request, reply) => {
+      const { id } = request.params
       const { avatar } = request.body
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
@@ -147,7 +148,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'gender',
         'language',
       )
-      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserData = await findUserById(id)
 
       if (!prevUserData) {
         return reply.notFound()

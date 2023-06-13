@@ -58,7 +58,10 @@ export const QCClient = Type.Intersect(
     QBBaseUserData,
     Type.Object({
       full_name: Type.String(),
-      birthdate: Type.String(),
+      birthdate: Type.String({
+        pattern: '^\\d{4}-\\d{2}-\\d{2}$',
+        title: 'Date',
+      }),
       gender: Type.Union([
         Type.Literal('male', { title: 'Male' }),
         Type.Literal('female', { title: 'Female' }),

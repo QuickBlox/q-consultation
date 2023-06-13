@@ -3,6 +3,10 @@ import fp from 'fastify-plugin'
 import multipart, { FastifyMultipartOptions } from '@fastify/multipart'
 
 export default fp<FastifyMultipartOptions>(async (fastify) => {
+  fastify.addHook('preValidation', async (request) => {
+    request.body = request.body || {}
+  })
+
   fastify.register(multipart, {
     limits: {
       fileSize: fastify.config.FILE_SIZE_LIMIT,
