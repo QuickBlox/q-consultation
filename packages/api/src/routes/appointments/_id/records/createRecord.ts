@@ -37,13 +37,28 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         fastify.ProviderSessionToken,
       ),
     },
-    async (request) => {
+    async (request, reply) => {
       const { id } = request.params
       const audio =
         fastify.config.AI_RECORD_ANALYTICS && 'audio' in request.body
           ? request.body.audio
           : null
       const video = 'video' in request.body ? request.body.video : null
+
+      if (
+        audio &&
+        !/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/.test(audio.filename)
+      ) {
+        return reply.badRequest(
+          `body/audio Unsupported file format. The following file types are supported: mp3, mp4, mpeg, mpga, m4a, wav and webm.`,
+        )
+      }
+
+      if (video && !/\.(mp4|mov|avi|mkv|webm)$/.test(video.filename)) {
+        return reply.badRequest(
+          `body/video Unsupported file format. The following file types are supported: mp4, mov, avi, mkv and webm.`,
+        )
+      }
 
       const videoData =
         video &&
