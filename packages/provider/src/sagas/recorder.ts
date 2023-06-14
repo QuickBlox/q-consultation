@@ -273,7 +273,7 @@ function* uploadRecord(
       },
     )
     const voiceFile = voiceRecord
-      ? new File([voiceRecord], `${lastModified.toISOString()}.mp3`, {
+      ? new File([voiceRecord], `${lastModified.toISOString()}.mp4`, {
           type: 'audio/mp4',
           lastModified: lastModified.valueOf(),
         })
