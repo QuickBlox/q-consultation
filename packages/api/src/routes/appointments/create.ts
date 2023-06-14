@@ -56,7 +56,9 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
       errors.push('body/client_id Invalid property')
     }
 
-    return errors.length ? new Error(errors.join(';')) : undefined
+    return errors.length
+      ? fastify.httpErrors.badRequest(errors.join(';'))
+      : undefined
   }
 
   const handleResponse = async (

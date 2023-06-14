@@ -45,7 +45,7 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
     const provider = await findUserById(provider_id)
 
     if (!provider || !userHasTag(provider, 'provider')) {
-      return new Error('body/provider_id Invalid property')
+      return fastify.httpErrors.badRequest('body/provider_id Invalid property')
     }
 
     return undefined
