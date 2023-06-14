@@ -41,7 +41,7 @@ const mediaRecorders = {
   }),
   audio: AI_RECORD_ANALYTICS
     ? new QBMediaRecorder({
-        mimeType: 'audio/webm',
+        mimeType: 'audio/mp4',
       })
     : undefined,
 }
@@ -273,8 +273,8 @@ function* uploadRecord(
       },
     )
     const voiceFile = voiceRecord
-      ? new File([voiceRecord], `${lastModified.toISOString()}.webm`, {
-          type: 'audio/webm',
+      ? new File([voiceRecord], `${lastModified.toISOString()}.mp3`, {
+          type: 'audio/mp4',
           lastModified: lastModified.valueOf(),
         })
       : null
