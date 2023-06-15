@@ -54,16 +54,27 @@ export const getTranscription = async (fileName: string, audioFile: Buffer) => {
     headers: { Authorization },
     body: form,
   }).then((res) => res.text())
+  const validSrtText = srtText.match(/^([\d:]+),\d+ --> ([\d:]+),\d+\s+(.*)$/gm)
+  if (validSrtText) {
+    return Array.from(
+      srtText.matchAll(/^([\d:]+),\d+ --> ([\d:]+),\d+\s+(.*)$/gm),
+    ).reduce<Array<{ start: string; end: string; text: string }>>(
+      (res, item) => {
+        const [, start, end, text] = item
 
-  const data = Array.from(
-    srtText.matchAll(/^([\d:]+),\d+ --> ([\d:]+),\d+\s+(.*)$/gm),
-  ).reduce<Array<{ start: string; end: string; text: string }>>((res, item) => {
-    const [, start, end, text] = item
-
-    return [...res, { start, end, text }]
-  }, [])
-
-  return data
+        return [...res, { start, end, text }]
+      },
+      [],
+    )
+  }
+  const {
+    error: { message },
+  }: {
+    error: {
+      message: string
+    }
+  } = JSON.parse(srtText)
+  throw Error(message)
 }
 
 const completeSentence = (text?: string) =>
