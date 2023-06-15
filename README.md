@@ -18,7 +18,8 @@ To learn more about the app features visit: <https://quickblox.com/products/q-co
 ## Documentation
 
 - [Start guide](https://quickblox.github.io/q-consultation/dev/quick-start)
-- [Integration](https://quickblox.github.io/q-consultation/api) & [Development](https://quickblox.github.io/q-consultation/dev/development)
+- [Development](https://quickblox.github.io/q-consultation/dev/development)
+- [API](https://quickblox.github.io/q-consultation/api)
 - [Contributing](https://quickblox.github.io/q-consultation/dev/contributing)
 
 ## Features list

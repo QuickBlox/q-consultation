@@ -93,7 +93,6 @@ module.exports = () => {
         directory: path.resolve(__dirname, 'public'),
       },
       historyApiFallback: true,
-      host: '0.0.0.0',
       hot: true,
       https: true,
       open: true,

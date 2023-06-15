@@ -14,7 +14,7 @@ npm run init:config
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run init:config
+yarn init:config
 ```
 
 </TabItem>
