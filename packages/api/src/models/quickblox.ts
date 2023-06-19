@@ -1,9 +1,14 @@
 import { Type } from '@sinclair/typebox'
+import { DateISO } from './common'
 
 export const QBUserId = Type.Integer({ title: 'User ID' })
 export const QBDialogId = Type.String({
   pattern: '^[a-z0-9]{24}$',
   title: 'Dialog ID',
+})
+export const QBMessageId = Type.String({
+  pattern: '^[a-z0-9]{24}$',
+  title: 'Message ID',
 })
 export const QBCustomObjectId = Type.String({ pattern: '^[a-z0-9]{24}$' })
 
@@ -14,9 +19,9 @@ export const QBUser = Type.Object(
     email: Type.String({ format: 'email' }),
     // login: Type.String(),
     // phone: Type.String(),
-    created_at: Type.String({ format: 'date-time' }),
-    updated_at: Type.String({ format: 'date-time' }),
-    last_request_at: Type.String({ format: 'date-time' }),
+    created_at: DateISO,
+    updated_at: DateISO,
+    last_request_at: DateISO,
     custom_data: Type.Union([
       Type.String({
         title: 'Additional data',
@@ -53,7 +58,10 @@ export const QCClient = Type.Intersect(
     QBBaseUserData,
     Type.Object({
       full_name: Type.String(),
-      birthdate: Type.String(),
+      birthdate: Type.String({
+        pattern: '^\\d{4}-\\d{2}-\\d{2}$',
+        title: 'Date',
+      }),
       gender: Type.Union([
         Type.Literal('male', { title: 'Male' }),
         Type.Literal('female', { title: 'Female' }),
@@ -69,12 +77,12 @@ export const QBSession = Type.Object(
   {
     _id: Type.String(),
     application_id: Type.Integer(),
-    created_at: Type.String({ format: 'date-time' }),
+    created_at: DateISO,
     id: Type.Integer(),
     nonce: Type.String(),
     token: Type.String(),
     ts: Type.Integer(),
-    updated_at: Type.String({ format: 'date-time' }),
+    updated_at: DateISO,
     user_id: QBUserId,
   },
   { $id: 'QBSession' },
@@ -83,17 +91,17 @@ export const QBSession = Type.Object(
 export const QBDialog = Type.Object(
   {
     _id: QBDialogId,
-    created_at: Type.String({ format: 'date-time' }),
+    created_at: DateISO,
     data: Type.Optional(Type.Record(Type.String(), Type.String())),
     last_message: Type.Union([Type.String(), Type.Null()]),
-    last_message_date_sent: Type.Union([Type.String(), Type.Null()]),
-    last_message_id: Type.Union([Type.String(), Type.Null()]),
+    last_message_date_sent: Type.Union([Type.Integer(), Type.Null()]),
+    last_message_id: Type.Union([QBMessageId, Type.Null()]),
     last_message_user_id: Type.Union([QBUserId, Type.Null()]),
     name: Type.String(),
     occupants_ids: Type.Array(QBUserId),
     photo: Type.Null(),
     type: Type.Integer(),
-    updated_at: Type.String({ format: 'date-time' }),
+    updated_at: DateISO,
     user_id: QBUserId,
     xmpp_room_jid: Type.Union([Type.String(), Type.Null()]),
     unread_messages_count: Type.Union([Type.Integer(), Type.Null()]),
@@ -122,7 +130,7 @@ export const QCAppointment = Type.Intersect(
       description: Type.String(),
       notes: Type.Optional(Type.String()),
       conclusion: Type.Optional(Type.String()),
-      date_end: Type.Optional(Type.String({ format: 'date-time' })),
+      date_end: Type.Optional(DateISO),
       language: Type.Optional(Type.String()),
     }),
   ],

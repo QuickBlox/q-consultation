@@ -82,8 +82,19 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       schema: updateMySchema,
       onRequest: fastify.verify(fastify.ClientSessionToken),
     },
-    async (request) => {
+    async (request, reply) => {
       const { avatar } = request.body
+
+      if (
+        avatar &&
+        avatar !== 'none' &&
+        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+      ) {
+        return reply.badRequest(
+          `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
+        )
+      }
+
       const userData = pick(
         request.body,
         'full_name',
@@ -137,7 +148,19 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request, reply) => {
+      const { id } = request.params
       const { avatar } = request.body
+
+      if (
+        avatar &&
+        avatar !== 'none' &&
+        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+      ) {
+        return reply.badRequest(
+          `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
+        )
+      }
+
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
         request.body,
@@ -147,7 +170,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'gender',
         'language',
       )
-      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserData = await findUserById(id)
 
       if (!prevUserData) {
         return reply.notFound()

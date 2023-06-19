@@ -13,7 +13,7 @@ npm run start:doc
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run start:doc
+yarn start:doc
 ```
 
 </TabItem>

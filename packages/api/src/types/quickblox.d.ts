@@ -141,7 +141,7 @@ declare module 'quickblox' {
     /** Date timestamp */
     date_sent: number
     delivered_ids?: Array<QBUser['id']>
-    message: string
+    message: string | null
     read_ids?: Array<QBUser['id']>
     read: 0 | 1
     recipient_id: QBUser['id'] | null

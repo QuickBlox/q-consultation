@@ -1,6 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { QBRecord } from 'quickblox'
+import { QBAppointment, QBRecord } from 'quickblox'
+import omit from 'lodash/omit'
 
 import { QBCustomObjectId, QCRecord, QCRecordSortKeys } from '@/models'
 import { qbGetCustomObject } from '@/services/customObject'
@@ -55,21 +56,24 @@ const getRecordList: FastifyPluginAsyncTypebox = async (fastify) => {
         fastify.ProviderSessionToken,
       ),
     },
-    async (request) => {
+    async (request, reply) => {
       const { id } = request.params
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { class_name, ...recordsData } = await qbGetCustomObject<QBRecord>(
-        'Record',
-        {
+      const [records, appointments] = await Promise.all([
+        qbGetCustomObject<QBRecord>('Record', {
           ...request.query,
-          appointment_id: {
-            in: [id],
-          },
-        },
-      )
+          appointment_id: id,
+        }),
+        qbGetCustomObject<QBAppointment>('Appointment', {
+          _id: id,
+        }),
+      ])
 
-      return recordsData
+      if (!appointments.items.length) {
+        return reply.notFound()
+      }
+
+      return omit(records, 'class_name')
     },
   )
 }

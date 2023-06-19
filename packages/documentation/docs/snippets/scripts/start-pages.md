@@ -11,7 +11,7 @@ npm run start:pages
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run start:pages
+yarn start:pages
 ```
 
 </TabItem>

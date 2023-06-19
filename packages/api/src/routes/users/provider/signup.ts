@@ -4,7 +4,7 @@ import { pick } from 'lodash'
 import { QBCreateUserWithEmail } from 'quickblox'
 
 import { MultipartFile, QBSession, QBUser, QCProvider } from '@/models'
-import { qbCreateSession } from '@/services/auth'
+import { qbCreateSession, qbLogin } from '@/services/auth'
 import { qbCreateUser, qbUpdateUser } from '@/services/users'
 import { getCompletion } from '@/services/openai'
 import { qbUploadFile } from '@/services/content'
@@ -35,8 +35,15 @@ export const signUpSchema = {
 }
 
 const signup: FastifyPluginAsyncTypebox = async (fastify) => {
-  fastify.post('', { schema: signUpSchema }, async (request) => {
-    const { description, avatar } = request.body
+  fastify.post('', { schema: signUpSchema }, async (request, reply) => {
+    const { description, avatar, email, password } = request.body
+
+    if (avatar && !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)) {
+      return reply.badRequest(
+        `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
+      )
+    }
+
     const userData = pick(request.body, 'full_name', 'email', 'password')
     const customData = pick(
       request.body,
@@ -56,7 +63,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       )
     }
 
-    let user = await qbCreateUser<QBCreateUserWithEmail>({
+    await qbCreateUser<QBCreateUserWithEmail>({
       ...userData,
       custom_data: stringifyUserCustomData({
         ...customData,
@@ -64,6 +71,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       }),
       tag_list: ['provider'],
     })
+    let user = await qbLogin(email, password)
 
     if (avatar) {
       const file = await qbUploadFile(

@@ -2,7 +2,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { ChatCompletionRequestMessage } from 'openai'
 import { QBAppointment } from 'quickblox'
-import { QBDialogId } from '@/models'
+import { QBDialogId, QBMessageId } from '@/models'
 import { qbChatConnect, qbChatGetMessages, qbChatJoin } from '@/services/chat'
 import { qbGetCustomObject } from '@/services/customObject'
 import { getChatCompletion } from '@/services/openai'
@@ -13,7 +13,7 @@ export const quickAnswerSchema = {
   summary: 'Get Quick answer for dialog',
   params: Type.Object({
     dialogId: QBDialogId,
-    clientMessageId: Type.String(),
+    clientMessageId: QBMessageId,
   }),
   response: {
     200: Type.Object({
@@ -62,6 +62,10 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
         return reply.forbidden()
       }
 
+      if (!currentMessage.message) {
+        return reply.badRequest('Message text is missing')
+      }
+
       const { items } = await qbChatGetMessages(dialogId, {
         date_sent: {
           lte: currentMessage.date_sent,
@@ -71,12 +75,12 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
       const messages = loopToLimitTokens(
         MAX_TOKENS,
         items,
-        ({ message }) => message,
+        ({ message }) => message || '',
       ).reverse()
       const chatCompletionMessages: ChatCompletionRequestMessage[] =
         messages.map(({ message, sender_id }) => ({
           role: sender_id === client_id ? 'user' : 'assistant',
-          content: message,
+          content: message!,
         }))
 
       const answer = await getChatCompletion(

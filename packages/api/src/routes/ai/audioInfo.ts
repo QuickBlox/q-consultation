@@ -39,9 +39,16 @@ const audioInfo: FastifyPluginAsyncTypebox = async (fastify) => {
         fastify.ProviderSessionToken,
       ),
     },
-    async (request) => {
+    async (request, reply) => {
       const { voice } = request.body
-      const data = await getAudioInfo(request.body.voice.filename, voice.buffer)
+
+      if (!/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/.test(voice.filename)) {
+        return reply.badRequest(
+          `body/voice Unsupported file format. The following file types are supported: mp3, mp4, mpeg, mpga, m4a, wav and webm.`,
+        )
+      }
+
+      const data = await getAudioInfo(voice.filename, voice.buffer)
 
       return data
     },

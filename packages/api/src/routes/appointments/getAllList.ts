@@ -1,6 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
+import omit from 'lodash/omit'
 
 import {
   DateISO,
@@ -74,11 +75,12 @@ const getAllAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
         },
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { class_name, ...appointmentsData } =
-        await qbGetCustomObject<QBAppointment>('Appointment', filter)
+      const appointments = await qbGetCustomObject<QBAppointment>(
+        'Appointment',
+        filter,
+      )
 
-      return appointmentsData
+      return omit(appointments, 'class_name')
     },
   )
 }
