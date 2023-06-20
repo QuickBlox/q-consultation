@@ -30,7 +30,6 @@ export default function RecordModal(props: RecordModalProps) {
       onClick={onBackdropClick}
       ref={backdrop}
     >
-      <CloseSvg className="icon-close" onClick={onCancelClick} />
       <div className="container">
         <div className="header-card">
           <button className="back" type="button" onClick={onCancelClick}>
@@ -38,6 +37,11 @@ export default function RecordModal(props: RecordModalProps) {
           </button>
         </div>
         <div className="record-col-video">
+          {!AI_RECORD_ANALYTICS && (
+            <div className="record-col-video-close">
+              <CloseSvg className="record-icon-close" onClick={onCancelClick} />
+            </div>
+          )}
           {isSupportedVideo && record?.uid ? (
             <video
               src={QB.content.privateUrl(record.uid)}
@@ -65,6 +69,7 @@ export default function RecordModal(props: RecordModalProps) {
         </div>
         {AI_RECORD_ANALYTICS && (
           <div className="record-col-info">
+            <CloseSvg className="record-icon-close" onClick={onCancelClick} />
             <Tabs
               value={activeTab}
               onChange={setActiveTab}

@@ -8,7 +8,6 @@
   width: 100%;
   max-width: 1140px;
   max-height: 800px;
-  margin-top: 35px;
   height: 100%;
   overflow: hidden;
   display: flex;
@@ -17,8 +16,10 @@
 .record-modal .record-col-video {
   background-color: var(--RecordModalVideo-backgroundColor);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 100%;
 }
 
@@ -118,6 +119,26 @@
   margin: 20px;
 }
 
+.record-modal .record-col-video-close {
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+  background-color: var(--AppointmentDetailsModal-backgroundColor);
+}
+
+.record-modal .record-icon-close {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  padding: 9px 13px;
+  float: right;
+}
+
+.record-modal .record-icon-close path {
+  stroke: var(--Tab-color);
+}
+
 @media screen and (max-width: 768px) {
   .record-modal {
     padding: 0;
@@ -151,5 +172,9 @@
 
   .record-modal .record-col-video {
     height: 300px;
+  }
+
+  .record-modal .record-icon-close {
+    display: none;
   }
 }
