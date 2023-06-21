@@ -28,7 +28,7 @@ const login: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('/login', { schema: loginSchema }, async (request, reply) => {
     const { role, email, password } = request.body
     const session = await qbCreateSession()
-    const user = await qbLogin(email, password)
+    const user = await qbLogin({ email, password })
     const isProvider = userHasTag(user, 'provider')
 
     if (role === 'provider' ? isProvider : !isProvider) {

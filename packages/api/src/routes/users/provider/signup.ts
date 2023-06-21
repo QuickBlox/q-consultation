@@ -71,7 +71,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       }),
       tag_list: ['provider'],
     })
-    let user = await qbLogin(email, password)
+    let user = await qbLogin({ email, password })
 
     if (avatar) {
       const file = await qbUploadFile(

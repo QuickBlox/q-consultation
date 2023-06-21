@@ -54,7 +54,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       ...userData,
       custom_data: stringifyUserCustomData(customData),
     })
-    let user = await qbLogin(email, password)
+    let user = await qbLogin({ email, password })
 
     if (avatar) {
       const file = await qbUploadFile(

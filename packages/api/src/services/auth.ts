@@ -69,9 +69,19 @@ export const qbGetSession = () => {
   })
 }
 
-export const qbLogin = (email: string, password: string) =>
+type LoginCredentials =
+  | {
+      login: string
+      password: string
+    }
+  | {
+      email: string
+      password: string
+    }
+
+export const qbLogin = (credentials: LoginCredentials) =>
   new Promise<QBUser>((resolve, reject) => {
-    QB.login({ email, password }, (error, result) => {
+    QB.login(credentials, (error, result) => {
       if (error) {
         reject(error)
       } else {
