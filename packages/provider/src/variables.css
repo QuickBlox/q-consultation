@@ -20,6 +20,7 @@
   --grey-11: rgba(0, 0, 0, 0.8);
   --grey-12: #151515;
   --grey-13: #000;
+  --grey-14: #57585A;
 
   --blue-1: #FAFAFB;
   --blue-2: #F4F6F9;
@@ -209,10 +210,12 @@
   --AppointmentsSearchIcon-fill: var(--blue-3);
   --AppointmentsList-borderColor: var(--blue-3);
 
-  --CallControlBtn-backgroundColor: var(--grey-1);
+  --CallControlBtn-backgroundColor: var(--grey-14);
   --CallControlBtn-color: var(--grey-1);
-  --CallControlBtn-backgroundColor--active: var(--grey-12);
-  --CallControlBtnIcon-fill--active: var(--grey-1);
+  --CallControlBtn-backgroundColor--active: var(--grey-1);
+  --CallControlBtn-backgroundColor--disable: var(--red-5);
+  --CallControlBtnIcon-fill: var(--grey-1);
+  --CallControlBtnIcon-fill--active: var(--grey-7);
   --CallControlBtnRecord-backgroundColor: var(--red-5);
   --CallControlBtnEndCall-backgroundColor: var(--red-5);
   --CallControlBtnEndCallIcon-fill: var(--grey-1);
