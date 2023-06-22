@@ -30,9 +30,13 @@ export default function RecordModal(props: RecordModalProps) {
       onClick={onBackdropClick}
       ref={backdrop}
     >
-      <CloseSvg className="icon-close" onClick={onCancelClick} />
-      <div className="container">
+      <div className={cn('container', { 'active-ai': !AI_RECORD_ANALYTICS })}>
         <div className="header-card">
+          {!AI_RECORD_ANALYTICS && (
+            <div className="cross-mark">
+              <CloseSvg className="icon-cross-mark" onClick={onCancelClick} />
+            </div>
+          )}
           <button className="back" type="button" onClick={onCancelClick}>
             <BackSvg className="icon" />
           </button>
@@ -65,6 +69,10 @@ export default function RecordModal(props: RecordModalProps) {
         </div>
         {AI_RECORD_ANALYTICS && (
           <div className="record-col-info">
+            <CloseSvg
+              className="record-icon-cross-mark"
+              onClick={onCancelClick}
+            />
             <Tabs
               value={activeTab}
               onChange={setActiveTab}
