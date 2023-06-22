@@ -9,8 +9,7 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+import { qbGetCustomObject, findUserById } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 
 const getMyAppointmentListSchema = {

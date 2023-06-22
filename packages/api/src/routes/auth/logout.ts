@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 
-import { qbLogout } from '@/services/auth'
+import { qbLogout } from '@/services/quickblox'
 
 export const logoutSchema = {
   tags: ['Auth'],
