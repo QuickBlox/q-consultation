@@ -72,15 +72,24 @@
   background-color: var(--CallControlBtn-backgroundColor--active);
 }
 
+.controls .control-btn.disable,
+.control-btn.active-record {
+  background-color: var(--CallControlBtn-backgroundColor--disable);
+}
+
 .controls .control-btn .icon {
-  height: 20px;
+  height: 22px;
   vertical-align: middle;
-  width: 20px;
+  width: 22px;
+}
+
+.controls .control-btn .icon path,
+.icon-device path {
+  fill: var(--CallControlBtnIcon-fill);
 }
 
 .controls .control-btn.active .icon path {
   fill: var(--CallControlBtnIcon-fill--active);
-  opacity: 0.5;
 }
 
 .controls .control-btn .record {
@@ -93,7 +102,7 @@
 }
 
 .controls .control-btn.active .record {
-  animation: pulsating 1s linear infinite;
+  border-radius: 0%;
 }
 
 .controls .control-btn.end-call {
@@ -105,12 +114,6 @@
 
 .controls .control-btn.end-call .icon {
   fill: var(--CallControlBtnEndCallIcon-fill);
-}
-
-@keyframes pulsating {
-  0%    { transform: none; }
-  50%   { transform: scale(1.2); }
-  100%  { transform: none; }
 }
 
 @media screen and (max-width: 768px) {
