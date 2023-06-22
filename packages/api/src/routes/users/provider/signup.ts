@@ -4,10 +4,13 @@ import { pick } from 'lodash'
 import { QBCreateUserWithEmail } from 'quickblox'
 
 import { MultipartFile, QBSession, QBUser, QCProvider } from '@/models'
-import { qbCreateSession } from '@/services/auth'
-import { qbCreateUser, qbUpdateUser } from '@/services/users'
-import { getCompletion } from '@/services/openai'
-import { qbUploadFile } from '@/services/content'
+import {
+  qbCreateSession,
+  qbCreateUser,
+  qbUpdateUser,
+  qbUploadFile,
+} from '@/services/quickblox'
+import { createProviderKeywords } from '@/services/openai'
 import { stringifyUserCustomData } from '@/utils/user'
 
 export const signUpSchema = {
@@ -48,12 +51,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     let keywords = ''
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-      keywords += await getCompletion(
-        `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
-          '\n',
-          ' ',
-        )}\n\n`,
-      )
+      keywords += await createProviderKeywords(description)
     }
 
     let user = await qbCreateUser<QBCreateUserWithEmail>({
@@ -66,12 +64,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     })
 
     if (avatar) {
-      const file = await qbUploadFile(
-        avatar.filename,
-        avatar.buffer,
-        avatar.mimetype,
-        Buffer.byteLength(avatar.buffer),
-      )
+      const file = await qbUploadFile(avatar)
 
       user = await qbUpdateUser(user.id, {
         custom_data: stringifyUserCustomData({

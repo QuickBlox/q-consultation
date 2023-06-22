@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 
-import { qbDeleteUser } from '@/services/users'
+import { qbDeleteUser } from '@/services/quickblox'
 import { QBUserId } from '@/models'
 
 export const deleteSchema = {

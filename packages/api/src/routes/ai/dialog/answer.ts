@@ -3,10 +3,14 @@ import { Type } from '@sinclair/typebox'
 import { ChatCompletionRequestMessage } from 'openai'
 import { QBAppointment } from 'quickblox'
 import { QBDialogId } from '@/models'
-import { qbChatConnect, qbChatGetMessages, qbChatJoin } from '@/services/chat'
-import { qbGetCustomObject } from '@/services/customObject'
-import { getChatCompletion } from '@/services/openai'
-import { loopToLimitTokens } from '@/utils/openAI'
+import {
+  qbChatConnect,
+  qbChatGetMessages,
+  qbChatJoin,
+  qbGetCustomObject,
+} from '@/services/quickblox'
+import { createQuickAnswerForDialog } from '@/services/openai'
+import { loopToLimitTokens } from '@/services/openai/utils'
 
 export const quickAnswerSchema = {
   tags: ['AI', 'Dialog'],
@@ -79,18 +83,9 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
           content: message,
         }))
 
-      const answer = await getChatCompletion(
-        [
-          {
-            role: 'system',
-            content: `You are consulting the user. You were approached with an issue: "${description}".`,
-          },
-          ...chatCompletionMessages,
-        ],
-        {
-          temperature: 0.5,
-        },
-        true,
+      const answer = await createQuickAnswerForDialog(
+        description,
+        chatCompletionMessages,
       )
 
       return { answer }

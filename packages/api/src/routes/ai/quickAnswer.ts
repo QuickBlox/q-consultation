@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { getChatCompletion } from '@/services/openai'
+import { createQuickAnswerForText } from '@/services/openai'
 
 export const quickAnswerSchema = {
   tags: ['AI'],
@@ -29,17 +29,7 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request) => {
       const { question } = request.body
 
-      const answer = await getChatCompletion(
-        [
-          { role: 'system', content: 'You are consulting the user.' },
-          { role: 'user', content: question },
-        ],
-        {
-          max_tokens: 512,
-          temperature: 0.5,
-        },
-        true,
-      )
+      const answer = await createQuickAnswerForText(question)
 
       return { answer }
     },

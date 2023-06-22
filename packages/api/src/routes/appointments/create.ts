@@ -3,9 +3,11 @@ import { Type, Static } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 
 import { QCAppointment, QBUserId } from '@/models'
-import { qbChatCreate } from '@/services/chat'
-import { qbCreateCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+import {
+  qbChatCreate,
+  qbCreateCustomObject,
+  findUserById,
+} from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 
 export const createAppointmentSchema = {

@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { MultipartFile } from '@/models'
-import { getAudioInfo } from '@/services/openai'
+import { createAudioDialogAnalytics } from '@/services/openai'
 
 export const audioInfoSchema = {
   tags: ['AI'],
@@ -41,7 +41,7 @@ const audioInfo: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request) => {
       const { voice } = request.body
-      const data = await getAudioInfo(request.body.voice.filename, voice.buffer)
+      const data = await createAudioDialogAnalytics(voice)
 
       return data
     },

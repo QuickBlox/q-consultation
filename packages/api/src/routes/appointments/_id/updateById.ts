@@ -3,8 +3,7 @@ import { Static, Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
-import { qbUpdateCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+import { qbUpdateCustomObject, findUserById } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 
 const updateAppointmentSchema = {

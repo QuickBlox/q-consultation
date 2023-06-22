@@ -4,9 +4,12 @@ import { pick } from 'lodash'
 import { QBCreateUserWithEmail } from 'quickblox'
 
 import { MultipartFile, QBSession, QBUser, QCClient } from '@/models'
-import { qbCreateSession } from '@/services/auth'
-import { qbCreateUser, qbUpdateUser } from '@/services/users'
-import { qbUploadFile } from '@/services/content'
+import {
+  qbCreateSession,
+  qbCreateUser,
+  qbUpdateUser,
+  qbUploadFile,
+} from '@/services/quickblox'
 import { stringifyUserCustomData } from '@/utils/user'
 
 export const signUpSchema = {
@@ -47,12 +50,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     })
 
     if (avatar) {
-      const file = await qbUploadFile(
-        avatar.filename,
-        avatar.buffer,
-        avatar.mimetype,
-        Buffer.byteLength(avatar.buffer),
-      )
+      const file = await qbUploadFile(avatar)
 
       user = await qbUpdateUser(user.id, {
         custom_data: stringifyUserCustomData({

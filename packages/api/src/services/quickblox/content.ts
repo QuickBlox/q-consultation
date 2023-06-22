@@ -1,7 +1,8 @@
 import QB, { BlobObject, QBContentObject } from 'quickblox'
 import FormData from 'form-data'
-import fetch from 'node-fetch'
 import omit from 'lodash/omit'
+
+import qbApi from './api'
 
 const qbCreateFile = (name: string, content_type: string, isPublic?: boolean) =>
   new Promise<BlobObject>((resolve, reject) => {
@@ -29,32 +30,21 @@ const qbMarkUploaded = (id: number, size: number) =>
   })
 
 export const qbUploadFile = async (
-  name: string,
-  file: Buffer,
-  type: string,
-  size: number,
+  file: File,
   isPublic?: boolean,
 ): Promise<QBContentObject> => {
-  const { session } = QB.service.qbInst
-  const blob = await qbCreateFile(name, type, isPublic)
-
+  const blob = await qbCreateFile(file.filename, file.mimetype, isPublic)
+  const fileSize = Buffer.byteLength(file.buffer)
   const url = new URL(blob.blob_object_access.params)
   const form = new FormData()
 
   url.searchParams.forEach((value, key) => {
     form.append(key, value)
   })
-  form.append('file', file, name)
+  form.append('file', file, file.filename)
 
-  await fetch(`${url.origin}${url.pathname}`, {
-    method: 'POST',
-    headers: {
-      'QB-Token': session?.token || '',
-    },
-    body: form,
-  })
-
-  await qbMarkUploaded(blob.id, size)
+  await qbApi.post(`${url.origin}${url.pathname}`, form)
+  await qbMarkUploaded(blob.id, fileSize)
 
   const fileData = omit(blob, [
     'blob_object_access',
