@@ -30,18 +30,20 @@ export default function RecordModal(props: RecordModalProps) {
       onClick={onBackdropClick}
       ref={backdrop}
     >
-      <div className="container">
-        <div className="header-card">
-          <button className="back" type="button" onClick={onCancelClick}>
-            <BackSvg className="icon" />
-          </button>
-        </div>
-        <div className="record-col-video">
+      <div className={cn('container', { 'active-ai': !AI_RECORD_ANALYTICS })}>
+        <div
+          className={cn('header-card', { 'active-ai': !AI_RECORD_ANALYTICS })}
+        >
           {!AI_RECORD_ANALYTICS && (
             <div className="record-col-video-close">
               <CloseSvg className="record-icon-close" onClick={onCancelClick} />
             </div>
           )}
+          <button className="back" type="button" onClick={onCancelClick}>
+            <BackSvg className="icon" />
+          </button>
+        </div>
+        <div className="record-col-video">
           {isSupportedVideo && record?.uid ? (
             <video
               src={QB.content.privateUrl(record.uid)}
