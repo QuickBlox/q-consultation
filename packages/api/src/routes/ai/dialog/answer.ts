@@ -4,6 +4,7 @@ import { ChatCompletionRequestMessage } from 'openai'
 import { QBAppointment } from 'quickblox'
 import { QBDialogId, QBMessageId } from '@/models'
 import {
+  findUserById,
   qbChatConnect,
   qbChatGetMessages,
   qbChatJoin,
@@ -11,6 +12,7 @@ import {
 } from '@/services/quickblox'
 import { createQuickAnswerForDialog } from '@/services/openai'
 import { loopToLimitTokens } from '@/services/openai/utils'
+import { parseUserCustomData } from '@/utils/user'
 
 export const quickAnswerSchema = {
   tags: ['AI', 'Dialog'],
@@ -43,18 +45,21 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
       await qbChatConnect(user_id, token)
       await qbChatJoin(dialogId)
 
-      const [currentMessageData, currentAppointmentData] = await Promise.all([
-        qbChatGetMessages(dialogId, {
-          _id: clientMessageId,
-        }),
-        qbGetCustomObject<QBAppointment>('Appointment', {
-          dialog_id: dialogId,
-          limit: 1,
-        }),
-      ])
+      const [currentMessageData, currentAppointmentData, myAccount] =
+        await Promise.all([
+          qbChatGetMessages(dialogId, {
+            _id: clientMessageId,
+          }),
+          qbGetCustomObject<QBAppointment>('Appointment', {
+            dialog_id: dialogId,
+            limit: 1,
+          }),
+          findUserById(user_id),
+        ])
 
       const { items: [currentMessage] = [] } = currentMessageData || {}
       const { items: [currentAppointment] = [] } = currentAppointmentData || {}
+      const { profession } = parseUserCustomData(myAccount?.custom_data)
 
       if (!currentMessage || !currentAppointment) {
         return reply.notFound()
@@ -88,6 +93,7 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
         }))
 
       const answer = await createQuickAnswerForDialog(
+        profession || '',
         description,
         chatCompletionMessages,
       )

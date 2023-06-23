@@ -76,29 +76,15 @@ export const createAudioDialogAnalytics = async (audio: File) => {
   }
 }
 
-export const createQuickAnswerForText = async (text: string) => {
-  const messages: ChatCompletionRequestMessage[] = [
-    { role: 'system', content: 'You are consulting the user.' },
-    { role: 'user', content: text },
-  ]
-  const { data } = await openAIApi.createChatCompletion({
-    messages,
-    model: 'gpt-3.5-turbo',
-    max_tokens: 512,
-    temperature: 0.5,
-  })
-
-  return completeSentence(data.choices[0]?.message?.content)
-}
-
 export const createQuickAnswerForDialog = async (
+  profession: string,
   dialogDescription: string,
   dialogMessages: ChatCompletionRequestMessage[],
 ) => {
   const messages: ChatCompletionRequestMessage[] = [
     {
       role: 'system',
-      content: `You are consulting the user. You were approached with an issue: "${dialogDescription}".`,
+      content: `You are a specialist ${profession}. You are consulting the client. You were approached with an issue: "${dialogDescription}".`,
     },
     ...dialogMessages,
   ]
@@ -111,11 +97,14 @@ export const createQuickAnswerForDialog = async (
   return completeSentence(data.choices[0]?.message?.content)
 }
 
-export const createProviderKeywords = async (description: string) => {
-  const prompt = `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
-    '\n',
-    ' ',
-  )}\n\n`
+export const createProviderKeywords = async (
+  profession: string,
+  description: string,
+) => {
+  const parsedDescription = description.replaceAll('\n', ' ')
+  const prompt =
+    `You are a specialist ${profession} with a description: "${parsedDescription}"\n` +
+    'Generate keywords in English by description that will allow customers to search for specialists in the description of the issue, separated by commas.\n\n'
   const { data } = await openAIApi.createCompletion({
     prompt,
     model: 'text-davinci-003',
