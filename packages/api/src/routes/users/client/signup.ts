@@ -45,7 +45,6 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     const userData = pick(request.body, 'full_name', 'email', 'password')
     const customData = pick(
       request.body,
-      'full_name',
       'address',
       'birthdate',
       'gender',

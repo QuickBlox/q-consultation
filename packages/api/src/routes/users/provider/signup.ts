@@ -40,7 +40,7 @@ export const signUpSchema = {
 
 const signup: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('', { schema: signUpSchema }, async (request, reply) => {
-    const { description, avatar, email, password } = request.body
+    const { profession, description, avatar, email, password } = request.body
 
     if (avatar && !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)) {
       return reply.badRequest(
@@ -51,7 +51,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     const userData = pick(request.body, 'full_name', 'email', 'password')
     const customData = pick(
       request.body,
-      'full_name',
+      'profession',
       'description',
       'language',
     )
@@ -59,7 +59,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     let keywords = ''
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-      keywords += await createProviderKeywords(description)
+      keywords += await createProviderKeywords(profession, description)
     }
 
     await qbCreateUser<QBCreateUserWithEmail>({

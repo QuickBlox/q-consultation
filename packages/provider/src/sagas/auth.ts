@@ -190,6 +190,7 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
 
       form.append('full_name', newMyAccount.full_name || '')
       form.append('email', newMyAccount.email || '')
+      form.append('profession', newCustomData.profession || '')
       form.append('description', newCustomData.description || '')
       form.append('language', newCustomData.language || '')
 

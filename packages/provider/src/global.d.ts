@@ -89,6 +89,7 @@ type QBUserCustomData = Partial<{
   full_name: string
   address: string
   birthdate: string
+  profession: string
   description: string
   gender: string
   language: string

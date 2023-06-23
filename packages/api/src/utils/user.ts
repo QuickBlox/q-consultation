@@ -5,7 +5,7 @@ export const userHasTag = (user: QBUser, tag: string) => {
 }
 
 export const parseUserCustomData = (
-  customDataText: string | null,
+  customDataText?: string | null,
 ): QBUserCustomData => {
   try {
     const customData: QBUserCustomData = customDataText

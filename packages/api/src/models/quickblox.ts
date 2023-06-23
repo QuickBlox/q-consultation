@@ -45,7 +45,7 @@ export const QCProvider = Type.Intersect(
   [
     QBBaseUserData,
     Type.Object({
-      full_name: Type.String(),
+      profession: Type.String(),
       description: Type.Optional(Type.String()),
       language: Type.Optional(Type.String()),
     }),
@@ -57,7 +57,6 @@ export const QCClient = Type.Intersect(
   [
     QBBaseUserData,
     Type.Object({
-      full_name: Type.String(),
       birthdate: Type.String({
         pattern: '^\\d{4}-\\d{2}-\\d{2}$',
         title: 'Date',

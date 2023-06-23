@@ -93,7 +93,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.ProviderSessionToken),
     },
     async (request, reply) => {
-      const { description, avatar } = request.body
+      const { profession, description, avatar } = request.body
 
       if (
         avatar &&
@@ -114,7 +114,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       )
       const customData = pick(
         request.body,
-        'full_name',
+        'profession',
         'description',
         'language',
       )
@@ -137,7 +137,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let keywords = ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords += await createProviderKeywords(description)
+        keywords += await createProviderKeywords(profession, description)
       }
 
       const updatedUser = await qbUpdateUser(request.session!.user_id, {
@@ -160,7 +160,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params
-      const { description, avatar } = request.body
+      const { profession, description, avatar } = request.body
 
       if (
         avatar &&
@@ -175,7 +175,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
         request.body,
-        'full_name',
+        'profession',
         'description',
         'language',
       )
@@ -203,7 +203,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let keywords = ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords += await createProviderKeywords(description)
+        keywords += await createProviderKeywords(profession, description)
       }
 
       const updatedUser = await qbUpdateUser(request.params.id, {
