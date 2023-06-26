@@ -41,7 +41,7 @@ export const qbUploadFile = async (
   url.searchParams.forEach((value, key) => {
     form.append(key, value)
   })
-  form.append('file', file, file.filename)
+  form.append('file', file.buffer, file.filename)
 
   await qbApi.post(`${url.origin}${url.pathname}`, form)
   await qbMarkUploaded(blob.id, fileSize)
