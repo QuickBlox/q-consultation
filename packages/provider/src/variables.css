@@ -20,6 +20,7 @@
   --grey-11: rgba(0, 0, 0, 0.8);
   --grey-12: #151515;
   --grey-13: #000;
+  --grey-14: #57585A;
 
   --blue-1: #FAFAFB;
   --blue-2: #F4F6F9;
@@ -44,6 +45,7 @@
   --priorityLow-backgroundColor: var(--green-5);
   --priorityMed-backgroundColor: var(--orange-4);
   --priorityHigh-backgroundColor: var(--red-5);
+  --icon-cross-mark-color: var(--grey-13);
 
   /* Components */
   --Accordeon-borderBottomColor: var(--blue-3);
@@ -209,10 +211,12 @@
   --AppointmentsSearchIcon-fill: var(--blue-3);
   --AppointmentsList-borderColor: var(--blue-3);
 
-  --CallControlBtn-backgroundColor: var(--grey-1);
+  --CallControlBtn-backgroundColor: var(--grey-14);
   --CallControlBtn-color: var(--grey-1);
-  --CallControlBtn-backgroundColor--active: var(--grey-12);
-  --CallControlBtnIcon-fill--active: var(--grey-1);
+  --CallControlBtn-backgroundColor--active: var(--grey-1);
+  --CallControlBtn-backgroundColor--disable: var(--red-5);
+  --CallControlBtnIcon-fill: var(--grey-1);
+  --CallControlBtnIcon-fill--active: var(--grey-7);
   --CallControlBtnRecord-backgroundColor: var(--red-5);
   --CallControlBtnEndCall-backgroundColor: var(--red-5);
   --CallControlBtnEndCallIcon-fill: var(--grey-1);
@@ -225,6 +229,7 @@
   --RecordModalTranscriptTime-color: var(--blue-7);
   --RecordModalVideoUnavailable-color: var(--grey-9);
   --RecordModalVideoUnavailableIcon-fill: var(--grey-9);
+  --RecordModalVideoHeader-backgroundColor: var(--grey-1);
 
   --ChatContainer-backgroundColor: var(--grey-1);
   --ChatContainer-boxShadow: 0 1px 4px 0 var(--grey-8);

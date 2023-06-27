@@ -29,15 +29,24 @@
   background-color: var(--CallControlBtn-backgroundColor--active);
 }
 
+.controls .control-btn.disable,
+.control-btn.active-record {
+  background-color: var(--CallControlBtn-backgroundColor--disable);
+}
+
 .controls .control-btn .icon {
-  height: 20px;
+  height: 22px;
   vertical-align: middle;
-  width: 20px;
+  width: 22px;
+}
+
+.controls .control-btn .icon path,
+.icon-device path {
+  fill: var(--CallControlBtnIcon-fill);
 }
 
 .controls .control-btn.active .icon path {
   fill: var(--CallControlBtnIcon-fill--active);
-  opacity: 0.5;
 }
 
 .controls .control-btn.end-call {

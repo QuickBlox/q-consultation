@@ -2,7 +2,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 
 import { QBSession, QBUser } from '@/models'
-import { qbCreateSession, qbLogin } from '@/services/auth'
+import { qbCreateSession, qbLogin } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 
 export const loginSchema = {

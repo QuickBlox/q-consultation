@@ -6,11 +6,11 @@ import without from 'lodash/without'
 import { QCAppointment, QBUserId } from '@/models'
 import {
   qbChatConnect,
-  qbChatCreate,
   qbChatSendSystemMessage,
-} from '@/services/chat'
-import { qbCreateCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+  qbChatCreate,
+  qbCreateCustomObject,
+  findUserById,
+} from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 import {
   APPOINTMENT_NOTIFICATION,
