@@ -4,9 +4,13 @@ import pick from 'lodash/pick'
 
 import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
 import { stringifyUserCustomData, parseUserCustomData } from '@/utils/user'
-import { findUserById, qbUpdateUser } from '@/services/users'
-import { getCompletion } from '@/services/openai'
-import { qbDeleteFile, qbUploadFile } from '@/services/content'
+import {
+  findUserById,
+  qbUpdateUser,
+  qbDeleteFile,
+  qbUploadFile,
+} from '@/services/quickblox'
+import { createProviderKeywords } from '@/services/openai'
 
 const updateByIdSchema = {
   tags: ['Users', 'Provider'],
@@ -89,7 +93,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.ProviderSessionToken),
     },
     async (request, reply) => {
-      const { description, avatar } = request.body
+      const { profession, description, avatar } = request.body
 
       if (
         avatar &&
@@ -110,7 +114,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       )
       const customData = pick(
         request.body,
-        'full_name',
+        'profession',
         'description',
         'language',
       )
@@ -123,12 +127,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(
-          avatar.filename,
-          avatar.buffer,
-          avatar.mimetype,
-          Buffer.byteLength(avatar.buffer),
-        )
+        const file = await qbUploadFile(avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -138,12 +137,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let keywords = ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords += await getCompletion(
-          `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
-            '\n',
-            ' ',
-          )}\n\n`,
-        )
+        keywords += await createProviderKeywords(profession, description)
       }
 
       const updatedUser = await qbUpdateUser(request.session!.user_id, {
@@ -166,7 +160,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params
-      const { description, avatar } = request.body
+      const { profession, description, avatar } = request.body
 
       if (
         avatar &&
@@ -181,7 +175,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
         request.body,
-        'full_name',
+        'profession',
         'description',
         'language',
       )
@@ -199,12 +193,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(
-          avatar.filename,
-          avatar.buffer,
-          avatar.mimetype,
-          Buffer.byteLength(avatar.buffer),
-        )
+        const file = await qbUploadFile(avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -214,12 +203,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let keywords = ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords += await getCompletion(
-          `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
-            '\n',
-            ' ',
-          )}\n\n`,
-        )
+        keywords += await createProviderKeywords(profession, description)
       }
 
       const updatedUser = await qbUpdateUser(request.params.id, {

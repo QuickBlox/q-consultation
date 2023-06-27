@@ -88,6 +88,24 @@ export default function ProfileScreen() {
             />
           </FormField>
           <FormField
+            htmlFor="profession"
+            label={t('Profession')}
+            error={
+              profileForm.touched.profession && profileForm.errors.profession
+            }
+          >
+            <InputField
+              autoComplete="profession"
+              disabled={loading}
+              id="profession"
+              name="profession"
+              onChange={profileForm.handleChange}
+              onBlur={profileForm.handleBlur}
+              type="text"
+              value={profileForm.values.profession}
+            />
+          </FormField>
+          <FormField
             htmlFor="description"
             label={t('AboutYou')}
             error={

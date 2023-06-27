@@ -9,7 +9,7 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject } from '@/services/customObject'
+import { qbGetCustomObject } from '@/services/quickblox'
 
 const getAllAppointmentListSchema = {
   tags: ['Appointments'],

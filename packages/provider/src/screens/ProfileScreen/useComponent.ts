@@ -22,7 +22,7 @@ import useIsOffLine from '../../hooks/useIsOffLine'
 
 interface FormValues
   extends Pick<QBUser, 'full_name' | 'email' | 'password' | 'old_password'>,
-    Pick<QBUserCustomData, 'description' | 'language'> {
+    Pick<QBUserCustomData, 'profession' | 'description' | 'language'> {
   avatar?: QBUserCustomData['avatar'] | File
   confirm_password: QBUser['password']
 }
@@ -49,6 +49,7 @@ export default createUseComponent(() => {
     const requiredFields: Array<keyof FormValues> = [
       'full_name',
       'email',
+      'profession',
       'description',
       'language',
     ]
@@ -137,6 +138,7 @@ export default createUseComponent(() => {
       email: values.email,
       custom_data: {
         avatar: values.avatar,
+        profession: values.profession,
         description: values.description,
         language: values.language,
       },
@@ -158,6 +160,7 @@ export default createUseComponent(() => {
       avatar: myAccount?.custom_data.avatar,
       full_name: myAccount?.full_name || '',
       email: myAccount?.email || '',
+      profession: myAccount?.custom_data.profession || '',
       description: myAccount?.custom_data.description || '',
       language: myAccount?.custom_data.language || i18n.language,
       password: '',

@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox'
 import { QBRecord } from 'quickblox'
 
 import { QBCustomObjectId, QCRecord } from '@/models'
-import { qbGetCustomObject } from '@/services/customObject'
+import { qbGetCustomObject } from '@/services/quickblox'
 
 const getRecordSchema = {
   tags: ['Appointments', 'Records'],

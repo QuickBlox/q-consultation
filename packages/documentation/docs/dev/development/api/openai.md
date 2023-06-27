@@ -24,6 +24,12 @@ With OpenAI integrated into Q-Consultation Lite,
 developers now have access to a wide range of advanced AI features and capabilities.
 Let's dive into how to use this integration.
 
+To work with the OpenAI API, we use the [OpenAI Node.js Library](https://www.npmjs.com/package/openai).
+In the application, we have implemented our own service that uses this library and has the same API.
+This server is already configured for use with [Fastify](https://www.fastify.io), so we advise you to use it.
+We also implement all cases for working with OpenAI in this service in the file
+[`packages/api/src/services/openai/integration.ts`](https://github.com/QuickBlox/q-consultation/blob/master/packages/api/src/services/openai/integration.ts).
+
 ## Completion
 
 Given a prompt, the model will return one or more predicted completions,
@@ -41,37 +47,12 @@ and can also return the probabilities of alternative tokens at each position.
 
 Creates a completion for the provided prompt and parameters.
 
-To work with Create completion, we use our own service `getCompletion`.
-It is designed to receive 1 non-stream completion.
-
-```ts title="Internal Type"
-const getCompletion: (
-  prompt: string,
-  config?: Partial<CompletionConfig>,
-  isCompleteSentence?: boolean,
-) => Promise<string>
-```
-
-- `prompt`: The prompt to generate completions for encoded as a string.
-- `config`: All other options for Create completion except `n` and `stream`.
-
-  ```json title="Default config"
-  {
-    "model": "text-davinci-003",
-    "temperature": 0,
-    "max_tokens": 256,
-    "top_p": 1,
-    "frequency_penalty": 0,
-    "presence_penalty": 0
-  }
-  ```
-
-- `isCompleteSentence`: Ends a "..." sentence if it was not completed due to `max_tokens`.
+To work with Create completion, we use our own OpenAI service with the method `openAIApi.createChatCompletion`.
 
 ```ts title="Usage example"
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { getCompletion } from '@/services/openai'
+import { openAIApi } from '@/services/openai'
 
 export const completionSchema = {
   tags: ['OpenAI Example'],
@@ -98,13 +79,11 @@ const completion: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request) => {
       const { prompt } = request.body
-      const text = await getCompletion(
+      const { data } = await openAIApi.createCompletion({
+        model: 'text-davinci-003',
         prompt,
-        {
-          temperature: 0.5,
-          max_tokens: 512,
-        }
-      )
+      })
+      const text = data.choices[0]?.text
 
       return {
         text,
@@ -117,9 +96,7 @@ export default completion
 ```
 
 :::tip
-If you need more options for setting up Create completion, you can use the [OpenAI Library](https://www.npmjs.com/package/openai).
-
-**API reference**: [Create completion](https://platform.openai.com/docs/api-reference/completions/create?lang=node.js)
+Read the [OpenAI API reference on Create completion](https://platform.openai.com/docs/api-reference/completions/create?lang=node.js) to learn more.
 :::
 
 ## Chat
@@ -139,32 +116,12 @@ Given a list of messages describing a conversation, the model will return a resp
 
 Creates a model response for the given chat conversation.
 
-To work with Create completion, we use our own service `getChatCompletion`.
-It is designed to receive 1 non-stream completion.
-
-```ts title="Internal Type"
-const getChatCompletion: (
-  messages: ChatCompletionRequestMessage[],
-  config?: Partial<ChatCompletionConfig>,
-  isCompleteSentence?: boolean,
-) => Promise<string>
-```
-
-- `messages`: A list of messages describing the conversation so far.
-- `config`: All other options for Create completion except `n` and `stream`.
-
-  ```json title="Default config"
-  {
-    "model": "gpt-3.5-turbo"
-  }
-  ```
-
-- `isCompleteSentence`: Ends a "..." sentence if it was not completed due to `max_tokens`.
+To work with Create chat completion, we use our own OpenAI service with the method `openAIApi.createChatCompletion`.
 
 ```ts title="Usage example"
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { getChatCompletion } from '@/services/openai'
+import { openAIApi } from '@/services/openai'
 
 export const chatCompletionSchema = {
   tags: ['OpenAI Example'],
@@ -191,21 +148,21 @@ const chatCompletion: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request) => {
       const { prompt } = request.body
-      const text = await getChatCompletion(
-        [
+      const { data } = await openAIApi.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        temperature: 0.5,
+        messages: [
           {
-              role: 'system',
-              content: 'You are a helpful assistant.',
-            },
-            {
-              role: 'user',
-              content: prompt,
-            },
+            role: 'system',
+            content: 'You are a helpful assistant.',
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
         ],
-        {
-          temperature: 0.5,
-        }
-      )
+      })
+      const text = data?.choices?.[0].message?.content
 
       return {
         text,
@@ -218,9 +175,7 @@ export default chatCompletion
 ```
 
 :::tip
-If you need more options for setting up Create chat completion, you can use the [OpenAI Library](https://www.npmjs.com/package/openai).
-
-**API reference**: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create?lang=node.js)
+Read the [OpenAI API reference on Create chat completion](https://platform.openai.com/docs/api-reference/chat/create?lang=node.js) to learn more.
 :::
 
 ## Audio
@@ -235,170 +190,178 @@ Learn how to turn audio into text.
 
 Transcribes audio into the input language.
 
-To work with Create transcription, we use our own service `getTranscription`.
-It is designed to get the transcription with time for an audio file.
+To work with Create transcription, we use our own OpenAI service with methods `createTranscriptionWithTime` or `openAIApi.createTranscription`.
 
-```ts title="Internal Type"
-const getTranscription: (
-  fileName: string,
-  audioFile: Buffer,
-) => Promise<
-  {
-    start: string
-    end: string
-    text: string
-  }[]
->
-```
+- `createTranscriptionWithTime` is designed to get the transcription with time for an audio file.
 
-- `fileName`: Audio filename.
-- `audioFile`: File Buffer.
-
-```ts title="Usage example"
-import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import { Type } from '@sinclair/typebox'
-import { MultipartFile } from '@/models'
-import { getTranscription } from '@/services/openai'
-
-export const transcriptionSchema = {
-  tags: ['OpenAI Example'],
-  summary: 'OpenAI transcription example',
-  consumes: ['multipart/form-data'],
-  body: Type.Object({
-    file: MultipartFile,
-  }),
-  response: {
-    200: Type.Object({
-      transcription: Type.Array(
-        Type.Object({
-          start: Type.String(),
-          end: Type.String(),
-          text: Type.String(),
-        }),
-      ),
-    ),
-  },
-  security: [{ apiKey: [] }] as Security,
-}
-
-const transcription: FastifyPluginAsyncTypebox = async (fastify) => {
-  fastify.post(
-    '/transcription',
+  ```ts title="Internal Type"
+  const createTranscriptionWithTime: (audio: File) => Promise<
     {
-      schema: transcriptionSchema,
-      onRequest: fastify.verify(
-        fastify.BearerToken,
+      start: string
+      end: string
+      text: string
+    }[]
+  >
+  ```
+
+  ```ts title="Usage example"
+  import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+  import { Type } from '@sinclair/typebox'
+  import { MultipartFile } from '@/models'
+  import { createTranscriptionWithTime } from '@/services/openai'
+
+  export const transcriptionSchema = {
+    tags: ['OpenAI Example'],
+    summary: 'OpenAI transcription example',
+    consumes: ['multipart/form-data'],
+    body: Type.Object({
+      audio: MultipartFile,
+    }),
+    response: {
+      200: Type.Object({
+        transcription: Type.Array(
+          Type.Object({
+            start: Type.String(),
+            end: Type.String(),
+            text: Type.String(),
+          }),
+        ),
       ),
     },
-    async (request) => {
-      const { file } = request.body
-      const transcription = await getTranscription(request.body.file.filename, file.buffer)
+    security: [{ apiKey: [] }] as Security,
+  }
 
-      return {
-        transcription,
-      }
+  const transcription: FastifyPluginAsyncTypebox = async (fastify) => {
+    fastify.post(
+      '/transcription',
+      {
+        schema: transcriptionSchema,
+        onRequest: fastify.verify(
+          fastify.BearerToken,
+        ),
+      },
+      async (request) => {
+        const { audio } = request.body
+        const data = await createTranscriptionWithTime(audio)
+
+        return {
+          transcription: data,
+        }
+      },
+    )
+  }
+
+  export default transcription
+  ```
+
+- `openAIApi.createTranscription` is designed to get the transcription in different formats (default json) for an audio file.
+
+  ```ts title="Usage example"
+  import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+  import { Type } from '@sinclair/typebox'
+  import { MultipartFile } from '@/models'
+  import { openAIApi } from '@/services/openai'
+
+  export const transcriptionSchema = {
+    tags: ['OpenAI Example'],
+    summary: 'OpenAI transcription example',
+    consumes: ['multipart/form-data'],
+    body: Type.Object({
+      audio: MultipartFile,
+    }),
+    response: {
+      200: Type.Object({
+        transcription: Type.String(),
+      ),
     },
-  )
-}
+    security: [{ apiKey: [] }] as Security,
+  }
 
-export default transcription
-```
+  const transcription: FastifyPluginAsyncTypebox = async (fastify) => {
+    fastify.post(
+      '/transcription',
+      {
+        schema: transcriptionSchema,
+        onRequest: fastify.verify(
+          fastify.BearerToken,
+        ),
+      },
+      async (request) => {
+        const { audio } = request.body
+        const { data } = await await openAIApi.createTranscription(
+          audio,
+          'whisper-1',
+        )
 
-:::tip
-If you need more options for setting up Create transcription, you can use the [OpenAI Library](https://www.npmjs.com/package/openai).
+        return {
+          transcription: data.text
+        }
+      },
+    )
+  }
 
-**API reference**: [Create transcription](https://platform.openai.com/docs/api-reference/audio/create?lang=node.js)
-:::
+  export default transcription
+  ```
 
-:::caution
-[OpenAI Library](https://www.npmjs.com/package/openai) can only accept files in `ReadStream`.
-
-Therefore, if you need to send a file received via fastify (files in `Buffer`) to OpenAI, use the **OpenAI API** to send it.
-:::
-
-```ts title="Example of using OpenAI API"
-import { Configuration, OpenAIApi } from 'openai'
-import { BASE_PATH } from 'openai/dist/base'
-import fetch from 'node-fetch'
-import FormData from 'form-data'
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
-const openai = new OpenAIApi(configuration)
-
-export const getTranscriptionText = async (
-  fileName: string,
-  audioFile: Buffer,
-) => {
-  const { Authorization }: Record<string, string> =
-    configuration.baseOptions.headers
-
-  const form = new FormData()
-
-  form.append('file', audioFile, fileName)
-  form.append('model', 'whisper-1')
-
-  const res = await fetch(`${BASE_PATH}/audio/transcriptions`, {
-    method: 'POST',
-    headers: { Authorization },
-    body: form,
-  }).then((res) => res.json())
-
-  return res.text
-}
-```
+  :::tip
+  Read the [OpenAI API reference on Create transcription](https://platform.openai.com/docs/api-reference/audio/create?lang=node.js) to learn more.
+  :::
 
 ### Create translation
 
 Transcribes audio into the input language.
 
-:::tip
-We are not currently using Create translation, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+To work with Create translation, you can use our own OpenAI service with the method `openAIApi.createTranslation`.
 
-**API reference**: [Create translation](https://platform.openai.com/docs/api-reference/audio/create?lang=node.js)
-:::
+```ts title="Usage example"
+import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
+import { Type } from '@sinclair/typebox'
+import { MultipartFile } from '@/models'
+import { openAIApi } from '@/services/openai'
 
-:::caution
-[OpenAI Library](https://www.npmjs.com/package/openai) can only accept files in `ReadStream`.
-
-Therefore, if you need to send a file received via fastify (files in `Buffer`) to OpenAI, use the **OpenAI API** to send it.
-:::
-
-```ts title="Example of using OpenAI API"
-import { Configuration, OpenAIApi } from 'openai'
-import { BASE_PATH } from 'openai/dist/base'
-import fetch from 'node-fetch'
-import FormData from 'form-data'
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
-const openai = new OpenAIApi(configuration)
-
-export const getTranslationText = async (
-  fileName: string,
-  audioFile: Buffer,
-) => {
-  const { Authorization }: Record<string, string> =
-    configuration.baseOptions.headers
-
-  const form = new FormData()
-
-  form.append('file', audioFile, fileName)
-  form.append('model', 'whisper-1')
-
-  const res = await fetch(`${BASE_PATH}/audio/translations`, {
-    method: 'POST',
-    headers: { Authorization },
-    body: form,
-  }).then((res) => res.json())
-
-  return res.text
+export const translationSchema = {
+  tags: ['OpenAI Example'],
+  summary: 'OpenAI translation example',
+  consumes: ['multipart/form-data'],
+  body: Type.Object({
+    audio: MultipartFile,
+  }),
+  response: {
+    200: Type.Object({
+      text: Type.String(),
+    ),
+  },
+  security: [{ apiKey: [] }] as Security,
 }
+
+const translation: FastifyPluginAsyncTypebox = async (fastify) => {
+  fastify.post(
+    '/translation',
+    {
+      schema: translationSchema,
+      onRequest: fastify.verify(
+        fastify.BearerToken,
+      ),
+    },
+    async (request) => {
+      const { audio } = request.body
+      const { data } = await await openAIApi.createTranslation(
+        audio,
+        'whisper-1',
+      )
+
+      return data
+    },
+  )
+}
+
+export default translation
 ```
+
+:::tip
+We are not currently using Create translation, but you can read the
+[OpenAI API reference on Create translation](https://platform.openai.com/docs/api-reference/audio/create?lang=node.js) to learn more.
+:::
 
 ## Edit
 
@@ -414,7 +377,7 @@ Given a prompt and an instruction, the model will return an edited version of th
 Creates a new edit for the provided input, instruction, and parameters.
 
 :::tip
-We are not currently using Create edit, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+We are not currently using Create edit, but you can use our own OpenAI service to implement this.
 
 **API reference**: [Create edit](https://platform.openai.com/docs/api-reference/edits/create?lang=node.js)
 :::
@@ -424,7 +387,7 @@ We are not currently using Create edit, but you can use the [OpenAI Library](htt
 Given a prompt and/or an input image, the model will generate a new image.
 
 :::tip
-We are not currently using Generate images, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+We are not currently using Generate images, but you can use our own OpenAI service to implement this.
 
 **Related guide**: [Image generation](https://platform.openai.com/docs/guides/images?lang=node.js)
 
@@ -441,7 +404,7 @@ Get a vector representation of a given input that can be easily consumed by mach
 - `text-search-ada-doc-001`
 
 :::tip
-We are not currently using Embeddings, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+We are not currently using Embeddings, but you can use our own OpenAI service to implement this.
 
 **Related guide**: [Embeddings](https://platform.openai.com/docs/guides/embeddings)
 
@@ -453,7 +416,7 @@ We are not currently using Embeddings, but you can use the [OpenAI Library](http
 Files are used to upload documents that can be used with features like [Fine-tuning](#fine-tunes).
 
 :::tip
-We are not currently using Files, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+We are not currently using Files, but you can use our own OpenAI service to implement this.
 
 **API reference**: [Files](https://platform.openai.com/docs/api-reference/files?lang=node.js)
 :::
@@ -470,7 +433,7 @@ Manage fine-tuning jobs to tailor a model to your specific training data.
 - `ada`
 
 :::tip
-We are not currently using Fine-tunes, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+We are not currently using Fine-tunes, but you can use our own OpenAI service to implement this.
 
 **Related guide**: [Fine-tune models](https://platform.openai.com/docs/guides/fine-tuning)
 
@@ -487,7 +450,7 @@ Given a input text, outputs if the model classifies it as violating OpenAI's con
 - `text-moderation-latest`
 
 :::tip
-We are not currently using Moderations, but you can use the [OpenAI Library](https://www.npmjs.com/package/openai) to implement this.
+We are not currently using Moderations, but you can use our own OpenAI service to implement this.
 
 **Related guide**: [Moderations](https://platform.openai.com/docs/guides/moderation)
 

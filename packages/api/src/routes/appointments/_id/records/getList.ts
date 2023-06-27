@@ -4,7 +4,7 @@ import { QBAppointment, QBRecord } from 'quickblox'
 import omit from 'lodash/omit'
 
 import { QBCustomObjectId, QCRecord, QCRecordSortKeys } from '@/models'
-import { qbGetCustomObject } from '@/services/customObject'
+import { qbGetCustomObject } from '@/services/quickblox'
 
 const getRecordListSchema = {
   tags: ['Appointments', 'Records'],

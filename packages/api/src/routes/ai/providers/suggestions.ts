@@ -2,8 +2,8 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBUser as TQBUser } from 'quickblox'
 
-import { getChatCompletion } from '@/services/openai'
-import { qbGetUsersByTags } from '@/services/users'
+import { findProviderIdsByKeywords } from '@/services/openai'
+import { qbGetUsersByTags } from '@/services/quickblox'
 import { parseUserCustomData } from '@/utils/user'
 import { QBUser } from '@/models'
 
@@ -77,31 +77,7 @@ const suggestProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       const usersKeywords = getProvidersKeywords(users)
-
-      const res = await getChatCompletion(
-        [
-          {
-            role: 'system',
-            content:
-              'You are a receptionist. You have a list of consultants in the format: "id: keywords"\n' +
-              `${usersKeywords}\n` +
-              'Keywords describe the consultant. User input issue. Select consultants for the user. If there are no suitable consultants, do not display all.',
-          },
-          { role: 'user', content: topic },
-          {
-            role: 'user',
-            content:
-              'Display only list of the id of suitable consultants without explanation of reasons.',
-          },
-        ],
-        {
-          temperature: 0,
-          top_p: 1,
-        },
-      )
-
-      const providerIds: string[] | null = res.match(/\d+/g)
-
+      const providerIds = await findProviderIdsByKeywords(usersKeywords, topic)
       const providers = providerIds?.map((id) => users[id]) || []
 
       return {

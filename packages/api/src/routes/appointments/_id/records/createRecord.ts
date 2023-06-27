@@ -1,9 +1,8 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { MultipartFile, QBCustomObjectId, QCRecord } from '@/models'
-import { getAudioInfo } from '@/services/openai'
-import { qbCreateChildCustomObject } from '@/services/customObject'
-import { qbUploadFile } from '@/services/content'
+import { createAudioDialogAnalytics } from '@/services/openai'
+import { qbCreateChildCustomObject, qbUploadFile } from '@/services/quickblox'
 import { QBRecord } from 'quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -60,17 +59,8 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         )
       }
 
-      const videoData =
-        video &&
-        (await qbUploadFile(
-          video.filename,
-          video.buffer,
-          video.mimetype,
-          Buffer.byteLength(video.buffer),
-        ))
-
-      const audioInfo =
-        audio && (await getAudioInfo(audio.filename, audio.buffer))
+      const videoData = video && (await qbUploadFile(video))
+      const audioInfo = audio && (await createAudioDialogAnalytics(audio))
       const transcription =
         audioInfo?.transcription?.map(
           ({ start, text }) => `${start}|${text}`,

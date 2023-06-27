@@ -1,5 +1,6 @@
-import fetch from 'node-fetch'
 import QB, { QBCustomObject } from 'quickblox'
+
+import qbApi from './api'
 
 export const qbCreateCustomObject = <T extends QBCustomObject>(
   className: string,
@@ -59,18 +60,10 @@ export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
   childClassName: string,
   data: Dictionary<unknown>,
 ) => {
-  const { config, session } = QB.service.qbInst
-  const resData: T = await fetch(
-    `https://${config.endpoints.api}/data/${parentClassName}/${parentId}/${childClassName}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'QB-Token': session?.token || '',
-      },
-      body: JSON.stringify(data),
-    },
-  ).then((res) => res.json())
+  const resData = await qbApi.post<T>(
+    `/data/${parentClassName}/${parentId}/${childClassName}`,
+    data,
+  )
 
-  return resData
+  return resData.data
 }

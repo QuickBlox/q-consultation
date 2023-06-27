@@ -7,3 +7,10 @@ interface JSON {
 type Security = Array<{
   [securityLabel: string]: string[]
 }>
+
+interface File {
+  buffer: Buffer
+  filename: string
+  encoding: string
+  mimetype: string
+}
