@@ -51,6 +51,16 @@ export default createUseComponent(() => {
     actions.toggleShowModal({ modal: 'ShareLinkModal' })
   const toggleLogoutModal = () =>
     actions.toggleShowModal({ modal: 'LogoutModal' })
+  const toggleGuestUserModal = () =>
+    actions.toggleShowModal({ modal: 'GuestUserModal' })
+
+  const createOptions = [
+    {
+      label: t('GuestUser'),
+      onClick: toggleGuestUserModal,
+      hide: false, //need change on the rout
+    },
+  ]
 
   const menuOptions = [
     { label: t('History'), path: HISTORY_ROUTE },
@@ -85,6 +95,7 @@ export default createUseComponent(() => {
       menuMobileOptions,
       menuSidebarOpen,
       isOffline,
+      createOptions,
     },
     handlers: {
       toggleMenuSidebarOpen,

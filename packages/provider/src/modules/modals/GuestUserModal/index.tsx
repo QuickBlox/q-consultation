@@ -1,0 +1,87 @@
+import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
+
+import FormField from '../../../components/FormField'
+import Button from '../../../components/Button'
+import { CloseSvg, ShareSvg } from '../../../icons'
+import { InputField, TextAreaField } from '../../../components/Field'
+import useComponent, { GuestUserModalProps } from './useComponent'
+import './styles.css'
+import {
+  FULL_NAME_MAX_LIMIT,
+  FULL_NAME_MIN_LIMIT,
+} from '../../../constants/restrictions'
+
+export default function GuestUserModal(props: GuestUserModalProps) {
+  const {
+    forms: { guestUserForm },
+    store: { opened },
+    refs: { backdrop },
+    data: { copied, loadingField, isOffline },
+    handlers: { onCancelClick, onBackdropClick },
+  } = useComponent(props)
+  const { t } = useTranslation()
+
+  return (
+    <div
+      className={cn('modal guest-user', { active: opened })}
+      onClick={onBackdropClick}
+      ref={backdrop}
+    >
+      <div className="form">
+        <div className="title">
+          {t('GuestUser')}
+          <CloseSvg className="icon-close" onClick={onCancelClick} />
+        </div>
+        <div className="body">
+          <form onSubmit={guestUserForm.handleSubmit}>
+            <FormField
+              htmlFor="full_name"
+              label={t('FullName')}
+              hint={[
+                t('FIRST_ALPHANUMERIC_CHAR'),
+                t('ONLY_ALPHANUMERIC_SPECIAL_CHAR', { char: '.-’_' }),
+                t('ONLY_ONE_SPECIAL_CHAR', { char: '.-’_' }),
+                t('MIN_LENGTH_CHAR', { count: FULL_NAME_MIN_LIMIT }),
+                t('MAX_LENGTH_CHAR', { count: FULL_NAME_MAX_LIMIT }),
+              ]}
+              error={
+                guestUserForm.touched.full_name &&
+                guestUserForm.errors.full_name &&
+                t(guestUserForm.errors.full_name)
+              }
+            >
+              <InputField
+                autoComplete="name"
+                disabled={loadingField === 'copy-link'}
+                id="full_name"
+                name="full_name"
+                onChange={guestUserForm.handleChange}
+                onBlur={guestUserForm.handleBlur}
+                type="text"
+                placeholder={t('AutocompletePlaceHolderGuestUser')}
+                value={guestUserForm.values.full_name}
+              />
+            </FormField>
+            <div className="btn-group">
+              <Button
+                size="xl"
+                theme="primary"
+                loading={loadingField === 'copy-link'}
+                disabled={isOffline}
+                type="submit"
+                className="btn copy-btn"
+                onClick={() => guestUserForm.setFieldValue('submit', 'copy')}
+              >
+                {t('CreateUser')}
+              </Button>
+            </div>
+            <span className={cn('copied', { active: copied })}>
+              {t('Copied')}
+            </span>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}

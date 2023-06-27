@@ -59,6 +59,8 @@ interface QBError {
   message: string | string[] | Dictionary<string | string[]>
 }
 
+type QBCreateUserParams = QBCreateUserWithLogin | QBCreateUserWithEmail
+
 interface QBUser {
   id: number
   full_name: string

@@ -31,6 +31,7 @@ export default (
   switch (action.type) {
     case Types.QB_USER_GET_REQUEST:
     case Types.QB_USER_LIST_REQUEST:
+    case Types.QB_CREATE_USER_REQUEST:
       return { ...state, error: undefined, loading: true }
     case Types.QB_USER_GET_SUCCESS: {
       const { current_page, per_page, total_entries, entries } = action.payload

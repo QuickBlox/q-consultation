@@ -12,6 +12,7 @@ import {
   DropdownSvg,
   UserSvg,
   ClientsSvg,
+  PlusSvg,
 } from '../../icons'
 
 import { ROOT_ROUTE } from '../../constants/routes'
@@ -33,6 +34,7 @@ export default function Header(props: HeaderProps) {
       menuMobileOptions,
       menuSidebarOpen,
       isOffline,
+      createOptions,
     },
     handlers: {
       toggleMenuSidebarOpen,
@@ -63,6 +65,16 @@ export default function Header(props: HeaderProps) {
         </Link>
       </div>
       <div className={cn('header-nav', 'header-nav-right', { call: onCall })}>
+        {myAccount && Boolean(createOptions.length) && (
+          <Dropdown
+            className="header-dropdown dropdown-create m-hidden"
+            options={createOptions}
+          >
+            <PlusSvg className="icon" />
+            <span className="dropdown-label">{t('Create')}</span>
+            <DropdownSvg className="icon icon-dropdown" />
+          </Dropdown>
+        )}
         {myAccount && CLIENT_APP_URL && (
           <button
             type="button"

@@ -44,6 +44,7 @@
   --priorityLow-backgroundColor: var(--green-5);
   --priorityMed-backgroundColor: var(--orange-4);
   --priorityHigh-backgroundColor: var(--red-5);
+  --icon-cross-mark-color: var(--grey-13);
 
   /* Components */
   --Accordeon-borderBottomColor: var(--blue-3);
