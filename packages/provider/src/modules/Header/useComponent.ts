@@ -58,7 +58,7 @@ export default createUseComponent(() => {
     {
       label: t('GuestUser'),
       onClick: toggleGuestUserModal,
-      hide: false, //need change on the rout
+      hide: !ENABLE_HAS_GUEST_CLIENT,
     },
   ]
 

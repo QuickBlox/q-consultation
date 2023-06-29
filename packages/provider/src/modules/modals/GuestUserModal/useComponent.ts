@@ -49,27 +49,17 @@ export default createUseComponent((props: GuestUserModalProps) => {
   const handleCopy = async (values: FormValues) => {
     if (myAccount) {
       setLoadingField('copy-link')
-      const userLogin = Date.now().toString()
-      const userPassword = Date.now()
 
       const linkPromise = new Promise<string>((resolve) => {
-        actions.createUser(
-          {
-            login: userLogin,
-            password: userPassword, //change to correct pass
-            full_name: values.full_name,
-            tag_list: 'guest',
-          },
-          ({ session }) => {
-            const query = new URLSearchParams()
+        actions.createUser(values.full_name, ({ session }) => {
+          const query = new URLSearchParams()
 
-            query.append('token', session.token)
-            query.append('provider', myAccount.id.toString())
-            const appointmentLink = `${APPOINTMENT_CLIENT_ROUTE}?${query.toString()}`
+          query.append('token', session.token)
+          query.append('provider', myAccount.id.toString())
+          const appointmentLink = `${APPOINTMENT_CLIENT_ROUTE}?${query.toString()}`
 
-            resolve(appointmentLink)
-          },
-        )
+          resolve(appointmentLink)
+        })
       })
 
       if (typeof ClipboardItem === 'function') {

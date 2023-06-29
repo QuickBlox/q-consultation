@@ -21,7 +21,8 @@ const fields = [
   'SERVER_APP_URL',
   'DEFAULT_LANGUAGE',
   'FILE_SIZE_LIMIT',
-  'FILE_EXTENSIONS_WHITELIST'
+  'FILE_EXTENSIONS_WHITELIST',
+  'ENABLE_HAS_GUEST_CLIENT',
 ]
 
 const parseValue = (value) => {

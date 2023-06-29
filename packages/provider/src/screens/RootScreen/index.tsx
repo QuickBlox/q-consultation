@@ -78,7 +78,7 @@ export default function MainScreen() {
         onClick={handleToggleMenu}
       />
       <Modal>
-        <GuestUserModal />
+        {ENABLE_HAS_GUEST_CLIENT && <GuestUserModal />}
         <LogoutModal />
         <ShareLinkModal />
         <AppointmentActionModal />

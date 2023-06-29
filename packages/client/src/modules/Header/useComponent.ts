@@ -28,7 +28,7 @@ export default createUseComponent(() => {
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false)
   const [language, setLanguage] = useState(i18n.language)
   const isGuest = myAccount && currentUserIsGuest(myAccount)
-  const isGuestAccess = isGuest && GUEST_WAITING_ROOM_ONLY
+  const isGuestAccess = isGuest && ENABLE_HAS_GUEST_CLIENT
 
   const selectedLanguageOption = localeOptions.find(
     ({ value }) => language === value,

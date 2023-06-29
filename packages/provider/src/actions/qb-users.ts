@@ -80,7 +80,7 @@ export interface QBUserErrorResetAction extends Action {
 export interface QBCreateUserRequestAction extends Action {
   type: typeof QB_CREATE_USER_REQUEST
   payload: {
-    user: QBCreateUserParams
+    userName: string
     then?: (data: { session: QBSession; user: QBUser }) => void
   }
 }

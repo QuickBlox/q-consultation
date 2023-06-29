@@ -4,8 +4,8 @@ import { QBCreateUserWithLogin } from 'quickblox'
 import { randomBytes } from 'crypto'
 
 import { QBSession, QBUser, QCClient } from '@/models'
-import { qbCreateSession, qbLogin } from '@/services/auth'
-import { qbCreateUser } from '@/services/users'
+import { qbCreateSession, qbLogin } from '@/services/quickblox/auth'
+import { qbCreateUser } from '@/services/quickblox/users'
 
 export const createGuestClientSchema = {
   tags: ['Users', 'Client'],

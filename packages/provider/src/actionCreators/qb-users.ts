@@ -56,13 +56,13 @@ export function clearAppointmentsOfDeletedUsers(
 }
 
 export function createUser(
-  user: Types.QBCreateUserRequestAction['payload']['user'],
+  userName: string,
   then?: Types.QBCreateUserRequestAction['payload']['then'],
 ): Types.QBCreateUserRequestAction {
   return {
     type: Types.QB_CREATE_USER_REQUEST,
     payload: {
-      user,
+      userName,
       then,
     },
   }

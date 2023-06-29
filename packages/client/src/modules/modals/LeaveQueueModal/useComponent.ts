@@ -52,7 +52,7 @@ export default createUseComponent((props: LeaveQueueModalProps) => {
   const backdrop = useRef<HTMLDivElement>(null)
   const isOffline = useIsOffLine()
   const isGuest = store.myAccount && currentUserIsGuest(store.myAccount)
-  const isGuestAccess = isGuest && GUEST_WAITING_ROOM_ONLY
+  const isGuestAccess = isGuest && ENABLE_HAS_GUEST_CLIENT
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'LeaveQueueModal' })

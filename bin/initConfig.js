@@ -42,6 +42,7 @@ function getBaseConfiguration() {
   const DEFAULT_LANGUAGE = readline.question(`Enter default language (optional) [en/ua]:\n`, { defaultInput: 'en', limit: ['en', 'ua'] })
   const FILE_SIZE_LIMIT = readline.questionInt(`Enter a file size limit in bytes (optional):\n`, { defaultInput: DEFAULT_FILE_SIZE_LIMIT })
   const FILE_EXTENSIONS_WHITELIST = readline.question(`Enter a space-separated list of available file extensions (optional):\n`, { defaultInput: DEFAULT_FILE_EXTENSIONS_WHITELIST })
+  const ENABLE_HAS_GUEST_CLIENT = readline.keyInYN(`Enable Guest Client?\n`) || false
 
   return {
     QB_SDK_CONFIG_APP_ID,
@@ -65,6 +66,7 @@ function getBaseConfiguration() {
     DEFAULT_LANGUAGE,
     FILE_SIZE_LIMIT,
     FILE_EXTENSIONS_WHITELIST,
+    ENABLE_HAS_GUEST_CLIENT,
   }
 }
 
