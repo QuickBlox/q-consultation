@@ -5,6 +5,8 @@ import {
   APPOINTMENT_ROUTE,
   PROVIDERS_ROUTE,
   HISTORY_ROUTE,
+  APPOINTMENT_FINISH_ROUTE,
+  GUEST_APPOINTMENT_ROUTE,
 } from '../../constants/routes'
 
 import Modal from '../../components/Modal'
@@ -26,13 +28,27 @@ import HistoryScreen from '../HistoryScreen'
 
 import useComponent from './useComponent'
 import './styles.css'
+import AppointmentFinishScreen from '../AppointmentFinishScreen'
 
 export default function RootScreen() {
   const {
-    data: { location, height, appointmentRouteMatch },
+    data: { location, height, appointmentRouteMatch, isGuestAccess },
   } = useComponent()
 
   const renderContent = () => {
+    if (isGuestAccess) {
+      return (
+        <Switch>
+          <Route
+            path={APPOINTMENT_FINISH_ROUTE}
+            component={AppointmentFinishScreen}
+          />
+          <Route path={APPOINTMENT_ROUTE} component={AppointmentScreen} />
+          <Route path={GUEST_APPOINTMENT_ROUTE} component={AppointmentScreen} />
+        </Switch>
+      )
+    }
+
     return (
       <Switch>
         <Route path={PROFILE_ROUTE} component={ProfileScreen} />

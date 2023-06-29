@@ -14,6 +14,7 @@ import {
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
 import { getAppointments } from '../../actionCreators'
+import { currentUserIsGuest } from '../../utils/user'
 
 const selector = createMapStateSelector({
   myAccount: authMyAccountSelector,
@@ -33,6 +34,8 @@ export default createUseComponent(() => {
   const height = useScreenHeight()
   const isOffline = useIsOffLine()
   const { myAccount, modalOpened, onCall, providerId, ready } = store
+  const isGuest = myAccount && currentUserIsGuest(myAccount)
+  const isGuestAccess = isGuest && GUEST_WAITING_ROOM_ONLY
 
   useEffect(() => {
     if (modalOpened || providerId || onCall) {
@@ -73,6 +76,7 @@ export default createUseComponent(() => {
       height,
       location,
       appointmentRouteMatch,
+      isGuestAccess,
     },
   }
 })

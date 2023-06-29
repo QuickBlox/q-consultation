@@ -38,3 +38,6 @@ export const getCallOpponentId = (
 
   return participantsIds.find((id) => id !== myAccountId)
 }
+
+export const currentUserIsGuest = (user: QBUserWithCustomData) =>
+  user?.user_tags?.toLowerCase()?.includes('guest') || false

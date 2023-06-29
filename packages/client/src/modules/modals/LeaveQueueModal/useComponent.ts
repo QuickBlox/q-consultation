@@ -1,6 +1,6 @@
 import { MouseEvent as ReactMouseEvent, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { generatePath, useHistory } from 'react-router-dom'
 import moment from 'moment'
 
 import {
@@ -10,15 +10,17 @@ import {
 } from '../../../actionCreators'
 import {
   appointmentLoadingSelector,
+  authMyAccountSelector,
   createAppointmentByIdSelector,
   modalAppointmentIdSelector,
   modalLeaveQueueSelector,
 } from '../../../selectors'
 import { createUseComponent, useActions } from '../../../hooks'
-import { ROOT_ROUTE } from '../../../constants/routes'
+import { APPOINTMENT_FINISH_ROUTE, ROOT_ROUTE } from '../../../constants/routes'
 import { combineSelectors } from '../../../utils/selectors'
 import { APPOINTMENT_NOTIFICATION } from '../../../constants/notificationTypes'
 import useIsOffLine from '../../../hooks/useIsOffLine'
+import { currentUserIsGuest } from '../../../utils/user'
 
 export interface LeaveQueueModalProps {
   onClose?: () => void
@@ -29,6 +31,7 @@ const selector = combineSelectors(
     appointmentId: modalAppointmentIdSelector,
     loading: appointmentLoadingSelector,
     opened: modalLeaveQueueSelector,
+    myAccount: authMyAccountSelector,
   },
   ({ appointmentId }) => ({
     appointment: createAppointmentByIdSelector(appointmentId),
@@ -48,6 +51,8 @@ export default createUseComponent((props: LeaveQueueModalProps) => {
 
   const backdrop = useRef<HTMLDivElement>(null)
   const isOffline = useIsOffLine()
+  const isGuest = store.myAccount && currentUserIsGuest(store.myAccount)
+  const isGuestAccess = isGuest && GUEST_WAITING_ROOM_ONLY
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'LeaveQueueModal' })
@@ -86,7 +91,13 @@ export default createUseComponent((props: LeaveQueueModalProps) => {
             then: () => {
               actions.toggleShowModal({ modal: 'LeaveQueueModal' })
 
-              history.push(ROOT_ROUTE)
+              const path = isGuestAccess
+                ? generatePath(APPOINTMENT_FINISH_ROUTE, {
+                    appointmentId: appointment._id,
+                  })
+                : ROOT_ROUTE
+
+              history.push(path)
             },
           })
         },

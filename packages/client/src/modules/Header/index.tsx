@@ -32,6 +32,7 @@ export default function Header(props: HeaderProps) {
       menuSidebarOpen,
       selectedLanguageOption,
       isOffline,
+      isGuestAccess,
     },
     handlers: {
       toggleLogoutModal,
@@ -46,9 +47,13 @@ export default function Header(props: HeaderProps) {
     <header className={cn('header', className, { 'header-auth': myAccount })}>
       <div className="header-nav header-nav-left" />
       <div className="logo">
-        <Link to={generatePath(ROOT_ROUTE)}>
+        {!isGuestAccess ? (
           <LogoSvg className="icon" />
-        </Link>
+        ) : (
+          <Link to={generatePath(ROOT_ROUTE)}>
+            <LogoSvg className="icon" />
+          </Link>
+        )}
       </div>
       <div className="header-nav header-nav-right">
         {!myAccount?.full_name && (

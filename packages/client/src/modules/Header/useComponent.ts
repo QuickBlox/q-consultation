@@ -9,6 +9,7 @@ import { createUseComponent, useActions } from '../../hooks'
 import { authMyAccountSelector } from '../../selectors'
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
+import { currentUserIsGuest } from '../../utils/user'
 
 const selector = createMapStateSelector({
   myAccount: authMyAccountSelector,
@@ -26,6 +27,8 @@ export default createUseComponent(() => {
   const { t, i18n } = useTranslation()
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false)
   const [language, setLanguage] = useState(i18n.language)
+  const isGuest = myAccount && currentUserIsGuest(myAccount)
+  const isGuestAccess = isGuest && GUEST_WAITING_ROOM_ONLY
 
   const selectedLanguageOption = localeOptions.find(
     ({ value }) => language === value,
@@ -56,12 +59,14 @@ export default createUseComponent(() => {
     {
       label: t('History'),
       path: HISTORY_ROUTE,
+      hide:  isGuestAccess,
     },
     {
       label: t('Profile'),
       path: PROFILE_ROUTE,
+      hide:  isGuestAccess,
     },
-    { divider: true },
+    { divider: !isGuestAccess },
     { label: t('Logout'), onClick: toggleLogoutModal },
   ]
 
@@ -69,10 +74,11 @@ export default createUseComponent(() => {
     {
       label: t('History'),
       path: HISTORY_ROUTE,
+      hide:  isGuestAccess,
     },
-    { label: t('Profile'), path: PROFILE_ROUTE },
+    { label: t('Profile'), path: PROFILE_ROUTE, hide:  isGuestAccess,},
     { label: t('Language'), onClick: toggleLanguageModal },
-    { divider: true },
+    { divider: !isGuestAccess },
     { label: t('Logout'), onClick: toggleLogoutModal },
   ]
 
@@ -90,6 +96,7 @@ export default createUseComponent(() => {
       menuSidebarOpen,
       selectedLanguageOption,
       isOffline,
+      isGuestAccess
     },
     handlers: {
       toggleLogoutModal,
