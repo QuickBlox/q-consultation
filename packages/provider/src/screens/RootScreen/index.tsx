@@ -35,7 +35,7 @@ import RecordModal from '../../modules/modals/RecordModal'
 export default function MainScreen() {
   const {
     store: { onCall },
-    data: { isOpenMenu, height, RESOLUTION_XS, appointmentsRouteMatch },
+    data: { isOpenMenu, height, RESOLUTION_XS },
     handlers: { handleToggleMenu },
   } = useComponent()
 
@@ -60,10 +60,7 @@ export default function MainScreen() {
   }
 
   return (
-    <main
-      className="main-screen-wrapper"
-      style={appointmentsRouteMatch ? { height: `${height}px` } : undefined}
-    >
+    <main className="main-screen-wrapper" style={{ height: `${height}px` }}>
       <UploadRecordIndicator />
       <div className={cn('main-screen', { 'on-call': onCall })}>
         <div className="column">
