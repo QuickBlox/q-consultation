@@ -54,14 +54,6 @@ export default createUseComponent(() => {
   const toggleGuestUserModal = () =>
     actions.toggleShowModal({ modal: 'GuestUserModal' })
 
-  const createOptions = [
-    {
-      label: t('GuestUser'),
-      onClick: toggleGuestUserModal,
-      hide: !ENABLE_HAS_GUEST_CLIENT,
-    },
-  ]
-
   const menuOptions = [
     { label: t('History'), path: HISTORY_ROUTE },
     { label: t('Profile'), path: PROFILE_ROUTE },
@@ -70,6 +62,11 @@ export default createUseComponent(() => {
   ]
 
   const menuMobileOptions = [
+    {
+      label: t('Create'),
+      onClick: toggleGuestUserModal,
+      hide: !ENABLE_GUEST_CLIENT,
+    },
     {
       label: t('ShareLink'),
       onClick: toggleShareLinkModal,
@@ -95,7 +92,6 @@ export default createUseComponent(() => {
       menuMobileOptions,
       menuSidebarOpen,
       isOffline,
-      createOptions,
     },
     handlers: {
       toggleMenuSidebarOpen,
@@ -104,6 +100,7 @@ export default createUseComponent(() => {
       toggleLogoutModal,
       handleSelectLanguage,
       selectedLanguageOption,
+      toggleGuestUserModal,
     },
   }
 })

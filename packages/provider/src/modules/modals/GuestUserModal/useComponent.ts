@@ -7,7 +7,7 @@ import {
 import { useSelector } from 'react-redux'
 
 import { createUseComponent, useActions, useForm } from '../../../hooks'
-import { toggleShowModal, createUser } from '../../../actionCreators'
+import { toggleShowModal, createGuestClient } from '../../../actionCreators'
 import {
   authMyAccountSelector,
   modalGuestUserSelector,
@@ -19,7 +19,6 @@ import { APPOINTMENT_CLIENT_ROUTE } from '../../../constants/routes'
 
 interface FormValues {
   full_name: QBUser['full_name']
-  submit?: 'send' | 'copy'
 }
 
 type FormErrors = Partial<DictionaryByKey<FormValues, string>>
@@ -38,20 +37,20 @@ export default createUseComponent((props: GuestUserModalProps) => {
   const store = useSelector(selector)
   const actions = useActions({
     toggleShowModal,
-    createUser,
+    createGuestClient,
   })
   const { myAccount, opened } = store
   const backdrop = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
-  const [loadingField, setLoadingField] = useState<'copy-link' | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const isOffline = useIsOffLine()
 
-  const handleCopy = async (values: FormValues) => {
+  const handleSubmit = async (values: FormValues) => {
     if (myAccount) {
-      setLoadingField('copy-link')
+      setIsLoading(true)
 
       const linkPromise = new Promise<string>((resolve) => {
-        actions.createUser(values.full_name, ({ session }) => {
+        actions.createGuestClient(values.full_name, ({ session }) => {
           const query = new URLSearchParams()
 
           query.append('token', session.token)
@@ -75,20 +74,9 @@ export default createUseComponent((props: GuestUserModalProps) => {
 
         await navigator.clipboard.writeText(link)
       }
-      setLoadingField(null)
+      setIsLoading(false)
       setCopied(true)
       setTimeout(() => setCopied(false), 2.5 * SECOND)
-    }
-  }
-
-  const handleSubmit = (values: FormValues) => {
-    const submitActions = {
-      send: () => {},
-      copy: () => handleCopy(values),
-    }
-
-    if (values.submit) {
-      submitActions[values.submit]()
     }
   }
 
@@ -141,7 +129,7 @@ export default createUseComponent((props: GuestUserModalProps) => {
     actions,
     forms: { guestUserForm },
     refs: { backdrop },
-    data: { copied, loadingField, isOffline },
+    data: { copied, isLoading, isOffline },
     handlers: {
       onCancelClick,
       onBackdropClick,

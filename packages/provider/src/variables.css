@@ -271,6 +271,7 @@
   --HeaderIcon-fill: var(--grey-7);
   --HeaderLogoVersion-color: var(--blue-7);
   --HeaderShare-color: var(--grey-7);
+  --HeaderCreateGuest--color: var(--grey-7);
   --HeaderMenuItemText-color: var(--grey-13);
   --HeaderMenuItemDivider-color: var(--blue-3);
 

@@ -65,7 +65,7 @@ declare global {
   export const DEFAULT_LANGUAGE: string
   export const FILE_SIZE_LIMIT: number
   export const FILE_EXTENSIONS_WHITELIST: string
-  export const ENABLE_HAS_GUEST_CLIENT: boolean
+  export const ENABLE_GUEST_CLIENT: boolean
 
   export const SECOND = 1000
   export const MINUTE = 60000

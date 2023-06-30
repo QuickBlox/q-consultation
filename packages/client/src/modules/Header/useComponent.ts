@@ -9,7 +9,7 @@ import { createUseComponent, useActions } from '../../hooks'
 import { authMyAccountSelector } from '../../selectors'
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
-import { currentUserIsGuest } from '../../utils/user'
+import { isGuestClient } from '../../utils/user'
 
 const selector = createMapStateSelector({
   myAccount: authMyAccountSelector,
@@ -27,8 +27,8 @@ export default createUseComponent(() => {
   const { t, i18n } = useTranslation()
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false)
   const [language, setLanguage] = useState(i18n.language)
-  const isGuest = myAccount && currentUserIsGuest(myAccount)
-  const isGuestAccess = isGuest && ENABLE_HAS_GUEST_CLIENT
+  const isGuestAccess =
+    ENABLE_GUEST_CLIENT && myAccount && isGuestClient(myAccount)
 
   const selectedLanguageOption = localeOptions.find(
     ({ value }) => language === value,
@@ -59,12 +59,12 @@ export default createUseComponent(() => {
     {
       label: t('History'),
       path: HISTORY_ROUTE,
-      hide:  isGuestAccess,
+      hide: isGuestAccess,
     },
     {
       label: t('Profile'),
       path: PROFILE_ROUTE,
-      hide:  isGuestAccess,
+      hide: isGuestAccess,
     },
     { divider: !isGuestAccess },
     { label: t('Logout'), onClick: toggleLogoutModal },
@@ -74,9 +74,9 @@ export default createUseComponent(() => {
     {
       label: t('History'),
       path: HISTORY_ROUTE,
-      hide:  isGuestAccess,
+      hide: isGuestAccess,
     },
-    { label: t('Profile'), path: PROFILE_ROUTE, hide:  isGuestAccess,},
+    { label: t('Profile'), path: PROFILE_ROUTE, hide: isGuestAccess },
     { label: t('Language'), onClick: toggleLanguageModal },
     { divider: !isGuestAccess },
     { label: t('Logout'), onClick: toggleLogoutModal },
@@ -96,7 +96,7 @@ export default createUseComponent(() => {
       menuSidebarOpen,
       selectedLanguageOption,
       isOffline,
-      isGuestAccess
+      isGuestAccess,
     },
     handlers: {
       toggleLogoutModal,

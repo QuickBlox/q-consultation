@@ -3,8 +3,8 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import * as Types from '../actions'
 import {
-  createUserFailure,
-  createUserSuccess,
+  createGuestClientFailure,
+  createGuestClientSuccess,
   getUserFailure,
   getUserSuccess,
   listUsersFailure,
@@ -110,7 +110,7 @@ function* createUser(action: Types.QBCreateUserRequestAction) {
         body: JSON.stringify({ full_name: userName }),
         responseType: 'json',
       })
-    yield put(createUserSuccess(response))
+    yield put(createGuestClientSuccess(response))
 
     if (then) {
       then(response)
@@ -118,12 +118,12 @@ function* createUser(action: Types.QBCreateUserRequestAction) {
   } catch (e) {
     const errorMessage = stringifyError(e)
 
-    yield put(createUserFailure(errorMessage))
+    yield put(createGuestClientFailure(errorMessage))
   }
 }
 
 export default [
   takeEvery(Types.QB_USER_GET_REQUEST, getUser),
   takeEvery(Types.QB_USER_LIST_REQUEST, listUsers),
-  takeEvery(Types.QB_CREATE_USER_REQUEST, createUser),
+  takeEvery(Types.QB_CREATE_GUEST_CLIENT_REQUEST, createUser),
 ]

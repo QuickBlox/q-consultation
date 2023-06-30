@@ -7,9 +7,9 @@ export const QB_USER_LIST_REQUEST = 'QB_USER_LIST_REQUEST'
 export const QB_USER_LIST_SUCCESS = 'QB_USER_LIST_SUCCESS'
 export const QB_USER_LIST_FAILURE = 'QB_USER_LIST_FAILURE'
 export const QB_USER_ERROR_RESET = 'QB_USER_ERROR_RESET'
-export const QB_CREATE_USER_REQUEST = 'QB_CREATE_USER_REQUEST'
-export const QB_CREATE_USER_SUCCESS = 'QB_CREATE_USER_SUCCESS'
-export const QB_CREATE_USER_FAILURE = 'QB_CREATE_USER_FAILURE'
+export const QB_CREATE_GUEST_CLIENT_REQUEST = 'QB_CREATE_GUEST_CLIENT_REQUEST'
+export const QB_CREATE_GUEST_CLIENT_SUCCESS = 'QB_CREATE_GUEST_CLIENT_SUCCESS'
+export const QB_CREATE_GUEST_CLIENT_FAILURE = 'QB_CREATE_GUEST_CLIENT_FAILURE'
 
 type GetUserParam =
   | { login: string }
@@ -78,7 +78,7 @@ export interface QBUserErrorResetAction extends Action {
 }
 
 export interface QBCreateUserRequestAction extends Action {
-  type: typeof QB_CREATE_USER_REQUEST
+  type: typeof QB_CREATE_GUEST_CLIENT_REQUEST
   payload: {
     userName: string
     then?: (data: { session: QBSession; user: QBUser }) => void
@@ -86,12 +86,12 @@ export interface QBCreateUserRequestAction extends Action {
 }
 
 export interface QBCreateUserSuccessAction extends Action {
-  type: typeof QB_CREATE_USER_SUCCESS
+  type: typeof QB_CREATE_GUEST_CLIENT_SUCCESS
   payload: { session: QBSession; user: QBUser }
 }
 
 export interface QBCreateUserFailureAction extends Action {
-  type: typeof QB_CREATE_USER_FAILURE
+  type: typeof QB_CREATE_GUEST_CLIENT_FAILURE
   error: string
 }
 

@@ -3,8 +3,8 @@ import cn from 'classnames'
 
 import FormField from '../../../components/FormField'
 import Button from '../../../components/Button'
-import { CloseSvg, ShareSvg } from '../../../icons'
-import { InputField, TextAreaField } from '../../../components/Field'
+import { CloseSvg } from '../../../icons'
+import { InputField } from '../../../components/Field'
 import useComponent, { GuestUserModalProps } from './useComponent'
 import './styles.css'
 import {
@@ -17,7 +17,7 @@ export default function GuestUserModal(props: GuestUserModalProps) {
     forms: { guestUserForm },
     store: { opened },
     refs: { backdrop },
-    data: { copied, loadingField, isOffline },
+    data: { copied, isLoading, isOffline },
     handlers: { onCancelClick, onBackdropClick },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -53,7 +53,7 @@ export default function GuestUserModal(props: GuestUserModalProps) {
             >
               <InputField
                 autoComplete="name"
-                disabled={loadingField === 'copy-link'}
+                disabled={isLoading}
                 id="full_name"
                 name="full_name"
                 onChange={guestUserForm.handleChange}
@@ -67,11 +67,10 @@ export default function GuestUserModal(props: GuestUserModalProps) {
               <Button
                 size="xl"
                 theme="primary"
-                loading={loadingField === 'copy-link'}
+                loading={isLoading}
                 disabled={isOffline}
                 type="submit"
                 className="btn copy-btn"
-                onClick={() => guestUserForm.setFieldValue('submit', 'copy')}
               >
                 {t('CreateUser')}
               </Button>

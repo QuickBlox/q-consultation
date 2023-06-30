@@ -6,7 +6,6 @@ import {
   PROVIDERS_ROUTE,
   HISTORY_ROUTE,
   APPOINTMENT_FINISH_ROUTE,
-  GUEST_APPOINTMENT_ROUTE,
 } from '../../constants/routes'
 
 import Modal from '../../components/Modal'
@@ -44,7 +43,7 @@ export default function RootScreen() {
             component={AppointmentFinishScreen}
           />
           <Route path={APPOINTMENT_ROUTE} component={AppointmentScreen} />
-          <Route path={GUEST_APPOINTMENT_ROUTE} component={AppointmentScreen} />
+          <Route path={APPOINTMENT_ROUTE} component={AppointmentScreen} />
         </Switch>
       )
     }

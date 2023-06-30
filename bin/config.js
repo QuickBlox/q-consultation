@@ -22,7 +22,7 @@ const fields = [
   'DEFAULT_LANGUAGE',
   'FILE_SIZE_LIMIT',
   'FILE_EXTENSIONS_WHITELIST',
-  'ENABLE_HAS_GUEST_CLIENT',
+  'ENABLE_GUEST_CLIENT',
 ]
 
 const parseValue = (value) => {

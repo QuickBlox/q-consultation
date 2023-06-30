@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { generatePath, useHistory } from 'react-router-dom'
-import { currentUserIsGuest } from '../../utils/user'
+import { isGuestClient } from '../../utils/user'
 
 import {
   authMyAccountSelector,
@@ -34,8 +34,8 @@ export default createUseComponent((props: ConclusionProps) => {
 
   const [loadingConclusion, setLoadingConclusion] = useState(false)
   const isOffline = useIsOffLine()
-  const isGuest = myAccount && currentUserIsGuest(myAccount)
-  const isGuestAccess = isGuest && ENABLE_HAS_GUEST_CLIENT
+  const isGuestAccess =
+    ENABLE_GUEST_CLIENT && myAccount && isGuestClient(myAccount)
 
   const goToMainScreen = () => {
     history.push(ROOT_ROUTE)

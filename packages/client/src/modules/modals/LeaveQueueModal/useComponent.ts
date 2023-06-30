@@ -20,7 +20,7 @@ import { APPOINTMENT_FINISH_ROUTE, ROOT_ROUTE } from '../../../constants/routes'
 import { combineSelectors } from '../../../utils/selectors'
 import { APPOINTMENT_NOTIFICATION } from '../../../constants/notificationTypes'
 import useIsOffLine from '../../../hooks/useIsOffLine'
-import { currentUserIsGuest } from '../../../utils/user'
+import { isGuestClient } from '../../../utils/user'
 
 export interface LeaveQueueModalProps {
   onClose?: () => void
@@ -51,8 +51,8 @@ export default createUseComponent((props: LeaveQueueModalProps) => {
 
   const backdrop = useRef<HTMLDivElement>(null)
   const isOffline = useIsOffLine()
-  const isGuest = store.myAccount && currentUserIsGuest(store.myAccount)
-  const isGuestAccess = isGuest && ENABLE_HAS_GUEST_CLIENT
+  const isGuestAccess =
+    ENABLE_GUEST_CLIENT && store.myAccount && isGuestClient(store.myAccount)
 
   const onCancelClick = () => {
     actions.toggleShowModal({ modal: 'LeaveQueueModal' })

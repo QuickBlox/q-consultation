@@ -55,12 +55,12 @@ export function clearAppointmentsOfDeletedUsers(
   return { type: Types.QB_CLEAR_APPOINTMENT_OF_DELETED_USERS, payload }
 }
 
-export function createUser(
+export function createGuestClient(
   userName: string,
   then?: Types.QBCreateUserRequestAction['payload']['then'],
 ): Types.QBCreateUserRequestAction {
   return {
-    type: Types.QB_CREATE_USER_REQUEST,
+    type: Types.QB_CREATE_GUEST_CLIENT_REQUEST,
     payload: {
       userName,
       then,
@@ -68,15 +68,15 @@ export function createUser(
   }
 }
 
-export function createUserSuccess(payload: {
+export function createGuestClientSuccess(payload: {
   session: QBSession
   user: QBUser
 }): Types.QBCreateUserSuccessAction {
-  return { type: Types.QB_CREATE_USER_SUCCESS, payload }
+  return { type: Types.QB_CREATE_GUEST_CLIENT_SUCCESS, payload }
 }
 
-export function createUserFailure(
+export function createGuestClientFailure(
   error: string,
 ): Types.QBCreateUserFailureAction {
-  return { type: Types.QB_CREATE_USER_FAILURE, error }
+  return { type: Types.QB_CREATE_GUEST_CLIENT_FAILURE, error }
 }

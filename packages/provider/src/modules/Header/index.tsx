@@ -34,7 +34,6 @@ export default function Header(props: HeaderProps) {
       menuMobileOptions,
       menuSidebarOpen,
       isOffline,
-      createOptions,
     },
     handlers: {
       toggleMenuSidebarOpen,
@@ -42,6 +41,7 @@ export default function Header(props: HeaderProps) {
       toggleShareLinkModal,
       handleSelectLanguage,
       selectedLanguageOption,
+      toggleGuestUserModal,
     },
   } = useComponent()
   const { t } = useTranslation()
@@ -65,18 +65,17 @@ export default function Header(props: HeaderProps) {
         </Link>
       </div>
       <div className={cn('header-nav', 'header-nav-right', { call: onCall })}>
-        {myAccount &&
-          Boolean(createOptions.length) &&
-          ENABLE_HAS_GUEST_CLIENT && (
-            <Dropdown
-              className="header-dropdown dropdown-create m-hidden"
-              options={createOptions}
-            >
-              <PlusSvg className="icon" />
-              <span className="dropdown-label">{t('Create')}</span>
-              <DropdownSvg className="icon icon-dropdown" />
-            </Dropdown>
-          )}
+        {myAccount && ENABLE_GUEST_CLIENT && (
+          <button
+            type="button"
+            className="create-guest"
+            onClick={toggleGuestUserModal}
+            title={t('Create')}
+          >
+            <PlusSvg className="icon" />
+            <span className="text">{t('Create')}</span>
+          </button>
+        )}
         {myAccount && CLIENT_APP_URL && (
           <button
             type="button"
