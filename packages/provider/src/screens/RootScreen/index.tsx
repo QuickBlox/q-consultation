@@ -31,6 +31,7 @@ import './styles.css'
 import EditNotesModal from '../../modules/modals/EditNotesModal'
 import SaveRecordModal from '../../modules/modals/SaveRecordModal'
 import RecordModal from '../../modules/modals/RecordModal'
+import GuestUserModal from '../../modules/modals/GuestUserModal'
 
 export default function MainScreen() {
   const {
@@ -77,6 +78,7 @@ export default function MainScreen() {
         onClick={handleToggleMenu}
       />
       <Modal>
+        {ENABLE_GUEST_CLIENT && <GuestUserModal />}
         <LogoutModal />
         <ShareLinkModal />
         <AppointmentActionModal />

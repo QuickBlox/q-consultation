@@ -57,18 +57,24 @@
   padding: 0;
 }
 
-.header .share {
+.header .share,
+.header .create-guest {
   display: inline-flex;
   align-items: center;
   background: transparent;
   border: none;
-  color: var(--HeaderShare-color);
   font-size: var(--font-size-xl);
   font-weight: 600;
   letter-spacing: 0;
   line-height: 19px;
   padding: 4px 10px;
   text-align: center;
+}
+.header .share {
+  color: var(--HeaderShare-color);
+}
+.header .create-guest {
+  color: var(--HeaderCreateGuest--color);
 }
 
 .header .btn {
@@ -80,13 +86,22 @@
   padding: 0;
 }
 
-.header .share .icon, .header .dropdown-create .icon {
+.header .share .icon,
+.header .dropdown-create .icon {
   height: 13px;
   vertical-align: middle;
   width: 13px;
 }
 
-.header .share .text {
+.header .create-guest .icon,
+.header .dropdown-create .icon {
+  height: 13px;
+  vertical-align: middle;
+  width: 13px;
+}
+
+.header .share .text,
+.header .create-guest .text {
   margin-left: 5px;
 }
 
@@ -173,6 +188,7 @@
   }
 
   .header .dropdown-create,
+  .header .create-guest,
   .header .share,
   .header .logout {
     display: none;
@@ -195,6 +211,7 @@
 @media screen and (min-width: 769px) and (max-width: 1200px) {
   .main-screen.on-call > .column .header .dropdown-create,
   .main-screen.on-call > .column .header .share,
+  .main-screen.on-call > .column .header .create-guest,
   .main-screen.on-call > .column .header .logout {
     display: none;
   }

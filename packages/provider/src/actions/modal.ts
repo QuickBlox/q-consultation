@@ -14,6 +14,7 @@ export type ModalType =
   | 'AppointmentDetailsModal'
   | 'SaveRecordModal'
   | 'RecordModal'
+  | 'GuestUserModal'
 
 export const TOGGLE_SHOW_MODAL = 'TOGGLE_SHOW_MODAL'
 

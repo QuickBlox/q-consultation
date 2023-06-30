@@ -24,6 +24,7 @@ const initialState: ModalReducer = {
   AppointmentDetailsModal: false,
   SaveRecordModal: false,
   RecordModal: false,
+  GuestUserModal: false,
 }
 
 type ModalAction =

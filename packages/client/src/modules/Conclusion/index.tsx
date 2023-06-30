@@ -9,7 +9,7 @@ import './styles.css'
 export default function Conclusion(props: ConclusionProps) {
   const {
     store: { currentAppointment, myAccount },
-    data: { loadingConclusion, isOffline },
+    data: { loadingConclusion, isOffline, isGuestAccess },
     handlers: { onDownloadConclusion, goToMainScreen },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -33,13 +33,15 @@ export default function Conclusion(props: ConclusionProps) {
           >
             {t('Download')}
           </Button>
-          <Button
-            className="btn"
-            onClick={goToMainScreen}
-            loading={loadingConclusion}
-          >
-            {t('BackToMainScreen')}
-          </Button>
+          {!isGuestAccess && (
+            <Button
+              className="btn"
+              onClick={goToMainScreen}
+              loading={loadingConclusion}
+            >
+              {t('BackToMainScreen')}
+            </Button>
+          )}
         </div>
       </div>
       <div className="conclusion-description">
