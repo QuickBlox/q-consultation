@@ -110,6 +110,7 @@ function* createUser(action: Types.QBCreateUserRequestAction) {
         body: JSON.stringify({ full_name: userName }),
         responseType: 'json',
       })
+
     yield put(createGuestClientSuccess(response))
 
     if (then) {

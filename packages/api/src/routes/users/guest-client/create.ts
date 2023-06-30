@@ -39,4 +39,6 @@ const createGuestClient: FastifyPluginAsyncTypebox = async (fastify) => {
   })
 }
 
+export const autoload = JSON.parse<boolean>(process.env.ENABLE_GUEST_CLIENT!)
+
 export default createGuestClient
