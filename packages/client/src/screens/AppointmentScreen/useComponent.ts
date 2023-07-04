@@ -5,6 +5,7 @@ import { generatePath, useHistory, useParams } from 'react-router-dom'
 import {
   appointmentLoadingSelector,
   authMyAccountIdSelector,
+  authMyAccountSelector,
   createAppointmentByIdSelector,
 } from '../../selectors'
 import {
@@ -14,7 +15,11 @@ import {
   sendSystemMessage,
 } from '../../actionCreators'
 import { createUseComponent, useActions, useQuery } from '../../hooks'
-import { APPOINTMENT_ROUTE, ROOT_ROUTE } from '../../constants/routes'
+import {
+  APPOINTMENT_FINISH_ROUTE,
+  APPOINTMENT_ROUTE,
+  ROOT_ROUTE,
+} from '../../constants/routes'
 import { createMapStateSelector } from '../../utils/selectors'
 import useIsOffLine from '../../hooks/useIsOffLine'
 import {
@@ -26,11 +31,13 @@ import {
   APPOINTMENT_NOTIFICATION,
   DIALOG_NOTIFICATION,
 } from '../../constants/notificationTypes'
+import { isGuestClient } from '../../utils/user'
 
 const createSelector = (appointmentId?: QBAppointment['_id']) =>
   createMapStateSelector({
     loading: appointmentLoadingSelector,
     myAccountId: authMyAccountIdSelector,
+    myAccount: authMyAccountSelector,
     appointment: createAppointmentByIdSelector(appointmentId),
   })
 
@@ -49,6 +56,8 @@ export default createUseComponent(() => {
   const history = useHistory()
   const { provider } = useQuery()
   const [chatOpen, setChatOpen] = useState<boolean>(false)
+  const isGuestAccess =
+    ENABLE_GUEST_CLIENT && store.myAccount && isGuestClient(store.myAccount)
 
   useEffect(() => {
     if (
@@ -56,7 +65,12 @@ export default createUseComponent(() => {
       ((appointment.date_end && !appointment.conclusion) ||
         appointment.client_id !== myAccountId)
     ) {
-      history.push(ROOT_ROUTE)
+      const path =
+        isGuestAccess && appointmentId
+          ? generatePath(APPOINTMENT_FINISH_ROUTE, { appointmentId })
+          : ROOT_ROUTE
+
+      history.push(path)
     }
   }, [appointment, myAccountId, appointmentId])
 
