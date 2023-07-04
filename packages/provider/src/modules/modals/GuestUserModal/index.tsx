@@ -17,7 +17,7 @@ export default function GuestUserModal(props: GuestUserModalProps) {
     forms: { guestUserForm },
     store: { opened },
     refs: { backdrop },
-    data: { copied, isLoading, isOffline },
+    data: { isLoading, isOffline },
     handlers: { onCancelClick, onBackdropClick },
   } = useComponent(props)
   const { t } = useTranslation()
@@ -75,9 +75,6 @@ export default function GuestUserModal(props: GuestUserModalProps) {
                 {t('CreateUser')}
               </Button>
             </div>
-            <span className={cn('copied', { active: copied })}>
-              {t('Copied')}
-            </span>
           </form>
         </div>
       </div>

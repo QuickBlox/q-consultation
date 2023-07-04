@@ -22,6 +22,7 @@
   "Logout": "Logout",
   "Login": "Login",
   "AnotherProvider": "Another agent",
+  "CopiedGuestLink": "Guest user {{name}} created. Link copied to clipboard.",
   "Send": "Send",
   "Skip": "Skip",
   "Remove": "Remove",

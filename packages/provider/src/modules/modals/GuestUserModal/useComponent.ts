@@ -7,7 +7,11 @@ import {
 import { useSelector } from 'react-redux'
 
 import { createUseComponent, useActions, useForm } from '../../../hooks'
-import { toggleShowModal, createGuestClient } from '../../../actionCreators'
+import {
+  toggleShowModal,
+  createGuestClient,
+  showNotification,
+} from '../../../actionCreators'
 import {
   authMyAccountSelector,
   modalGuestUserSelector,
@@ -16,6 +20,7 @@ import { createMapStateSelector } from '../../../utils/selectors'
 import useIsOffLine from '../../../hooks/useIsOffLine'
 import { validateFullName } from '../../../utils/validate'
 import { APPOINTMENT_CLIENT_ROUTE } from '../../../constants/routes'
+import { useTranslation } from 'react-i18next'
 
 interface FormValues {
   full_name: QBUser['full_name']
@@ -38,12 +43,13 @@ export default createUseComponent((props: GuestUserModalProps) => {
   const actions = useActions({
     toggleShowModal,
     createGuestClient,
+    showNotification,
   })
   const { myAccount, opened } = store
   const backdrop = useRef<HTMLDivElement>(null)
-  const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const isOffline = useIsOffLine()
+  const { t } = useTranslation()
 
   const handleSubmit = async (values: FormValues) => {
     if (myAccount) {
@@ -75,8 +81,14 @@ export default createUseComponent((props: GuestUserModalProps) => {
         await navigator.clipboard.writeText(link)
       }
       setIsLoading(false)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2.5 * SECOND)
+      onCancelClick()
+      actions.showNotification({
+        duration: 3 * SECOND,
+        id: Date.now().toString(),
+        message: t('CopiedGuestLink', { name: values.full_name }),
+        position: 'top-center',
+        type: 'cancel',
+      })
     }
   }
 
@@ -129,7 +141,7 @@ export default createUseComponent((props: GuestUserModalProps) => {
     actions,
     forms: { guestUserForm },
     refs: { backdrop },
-    data: { copied, isLoading, isOffline },
+    data: { isLoading, isOffline },
     handlers: {
       onCancelClick,
       onBackdropClick,
