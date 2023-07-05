@@ -101,6 +101,11 @@ export const modalRecordSelector = createSelector(
   (modal) => modal.RecordModal,
 )
 
+export const modalGuestUserSelector = createSelector(
+  modalSelector,
+  (modal) => modal.GuestUserModal,
+)
+
 export const modalOpenedSelector = createSelector(
   modalSelector,
   (modal) =>

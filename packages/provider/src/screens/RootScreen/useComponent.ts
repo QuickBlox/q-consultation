@@ -27,7 +27,6 @@ const selector = createMapStateSelector({
 export default createUseComponent(() => {
   const store = useSelector(selector)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
-  const appointmentsRouteMatch = useRouteMatch(APPOINTMENTS_ROUTE)
   const RESOLUTION_XS = useMobileLayout()
   const screenHeight = useScreenHeight()
   const isOffline = useIsOffLine()
@@ -60,7 +59,6 @@ export default createUseComponent(() => {
       isOpenMenu,
       height,
       RESOLUTION_XS,
-      appointmentsRouteMatch,
     },
     handlers: {
       handleToggleMenu,

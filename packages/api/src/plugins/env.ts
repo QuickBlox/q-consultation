@@ -20,6 +20,7 @@ const schema = Type.Object({
   AI_QUICK_ANSWER: Type.Boolean({ default: false }),
   AI_SUGGEST_PROVIDER: Type.Boolean({ default: false }),
   AI_RECORD_ANALYTICS: Type.Boolean({ default: false }),
+  ENABLE_GUEST_CLIENT: Type.Boolean({ default: false }),
 })
 
 const options = {
