@@ -143,5 +143,6 @@
   "FIRST_ALPHANUMERIC_CHAR": "Перший символ має бути буквою чи цифрою",
   "ONLY_ALPHANUMERIC_SPECIAL_CHAR": "Використовуйте лише літерно-цифрові символи, пробіли та спеціальні символи ({{char}})",
   "ONLY_ONE_SPECIAL_CHAR": "Використовуйте не більше 1 пробілу або спеціального символу ({{char}}) поспіль",
-  "BASE_REQUIRED_SESSION_DOES_NOT_EXIST": "Потрібний сеанс не існує"
+  "BASE_REQUIRED_SESSION_DOES_NOT_EXIST": "Потрібний сеанс не існує",
+  "SESSION_FINISHED": "Ваш сеанс завершено"
 }

@@ -142,5 +142,6 @@
   "FIRST_ALPHANUMERIC_CHAR": "The first character must be letter or number",
   "ONLY_ALPHANUMERIC_SPECIAL_CHAR": "Use only alphanumeric characters, spaces and special characters ({{char}})",
   "ONLY_ONE_SPECIAL_CHAR": "Use at most 1 space or special character ({{char}}) in succession",
-  "BASE_REQUIRED_SESSION_DOES_NOT_EXIST": "Required session does not exist"
+  "BASE_REQUIRED_SESSION_DOES_NOT_EXIST": "Required session does not exist",
+  "SESSION_FINISHED": "Your session is finished"
 }
