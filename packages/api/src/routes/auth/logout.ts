@@ -4,7 +4,6 @@ import QB, { QBSession } from 'quickblox'
 
 import { qbLogout } from '@/services/auth'
 import { qbChatConnect, qbChatSendSystemMessage } from '@/services/chat'
-import { isQBError } from '@/utils/parse'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
 
 export const logoutSchema = {
@@ -18,19 +17,14 @@ export const logoutSchema = {
 
 const logout: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (session: QBSession) => {
-    try {
-      await qbChatConnect(session.user_id, session.token)
-      const dialogId = QB.chat.helpers.getUserJid(session.user_id)
-      await qbChatSendSystemMessage(dialogId, {
-        extension: {
-          notification_type: CLOSE_SESSION_NOTIFICATION,
-        },
-      })
-    } catch (e) {
-      if (isQBError(e)) {
-        return new Error(e.message.toString())
-      }
-    }
+    await qbChatConnect(session.user_id, session.token)
+    const dialogId = QB.chat.helpers.getUserJid(session.user_id)
+    await qbChatSendSystemMessage(dialogId, {
+      extension: {
+        notification_type: CLOSE_SESSION_NOTIFICATION,
+      },
+    })
+    return undefined
   }
 
   fastify.delete(
