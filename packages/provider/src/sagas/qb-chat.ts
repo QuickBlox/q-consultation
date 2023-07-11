@@ -35,6 +35,7 @@ import { isSessionExpired } from '../utils/session'
 import { stringifyError } from '../utils/parse'
 import {
   APPOINTMENT_NOTIFICATION,
+  CLOSE_SESSION_NOTIFICATION,
   DIALOG_NOTIFICATION,
   TEXT_NOTIFICATION,
 } from '../constants/notificationTypes'
@@ -107,6 +108,22 @@ function* handleQBChatEvents() {
         } = event.payload
 
         if (extension.notification_type) {
+          if (extension.notification_type === CLOSE_SESSION_NOTIFICATION) {
+            yield put(
+              showNotification({
+                id: Date.now().toString(),
+                translate: true,
+                duration: 3 * SECOND,
+                message: 'SESSION_FINISHED',
+                type: 'error',
+                position: 'top-center',
+              }),
+            )
+
+            yield delay(3000)
+
+            yield put(logout())
+          }
           if (
             extension.notification_type === APPOINTMENT_NOTIFICATION &&
             extension.appointment_id
