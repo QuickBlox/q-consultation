@@ -1,0 +1,29 @@
+.modal.guest-user .form .body {
+  padding: 16px 22px;
+}
+
+.modal.guest-user .form .body form {
+  align-items: inherit;
+  display: flex;
+  flex-direction: inherit;
+  justify-content: inherit;
+  width: 100%;
+}
+
+.modal.guest-user .form .title .icon-close path {
+  stroke: var(--icon-cross-mark-color);
+}
+
+.modal.guest-user .form .body .copied {
+  color: var(--ShareLinkModalCopied-color);
+  font-size: var(--font-size-lg);
+  letter-spacing: 0;
+  line-height: 19px;
+  opacity: 0;
+  text-align: center;
+  transition: opacity 0.2s linear;
+}
+
+.modal.guest-user .form .body .copied.active {
+  opacity: 1;
+}

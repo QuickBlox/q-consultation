@@ -2,6 +2,8 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 import omit from 'lodash/omit'
+import pick from 'lodash/pick'
+import keys from 'lodash/keys'
 
 import {
   DateISO,
@@ -9,7 +11,7 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject } from '@/services/customObject'
+import { qbGetCustomObject } from '@/services/quickblox'
 
 const getAllAppointmentListSchema = {
   tags: ['Appointments'],
@@ -61,11 +63,15 @@ const getAllAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request) => {
+      const receivedQuery = pick(
+        request.query,
+        keys(getAllAppointmentListSchema.querystring.properties),
+      )
       const {
         'date_end[from]': dateFrom,
         'date_end[to]': dateTo,
         ...baseFilter
-      } = request.query
+      } = receivedQuery
 
       const filter = {
         ...baseFilter,

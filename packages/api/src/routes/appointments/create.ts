@@ -6,11 +6,11 @@ import without from 'lodash/without'
 import { QCAppointment, QBUserId } from '@/models'
 import {
   qbChatConnect,
-  qbChatCreate,
   qbChatSendSystemMessage,
-} from '@/services/chat'
-import { qbCreateCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+  qbChatCreate,
+  qbCreateCustomObject,
+  findUserById,
+} from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 import {
   APPOINTMENT_NOTIFICATION,
@@ -56,7 +56,9 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
       errors.push('body/client_id Invalid property')
     }
 
-    return errors.length ? new Error(errors.join(';')) : undefined
+    return errors.length
+      ? fastify.httpErrors.badRequest(errors.join(';'))
+      : undefined
   }
 
   const handleResponse = async (

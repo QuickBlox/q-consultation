@@ -7,6 +7,8 @@ import InstallPrerequisites from '/docs/snippets/installation-prerequisites.md'
 import RunDev from '/docs/snippets/scripts/dev.md'
 import ScriptConfig from '/docs/snippets/script-config.md'
 import ScriptSchema from '/docs/snippets/script-schema.md'
+import CreateProvider from '/docs/snippets/create-provider.md'
+import CreateClient from '/docs/snippets/create-client.md'
 
 # Quick Start Guide
 
@@ -73,7 +75,9 @@ Once done, you will be redirected to the **Overview** page of your newly created
 ![](/img/quick-start/002.png)
 ![](/img/quick-start/003.png)
 
-> You can read more about working with applications here: <https://docs.quickblox.com/docs/application>
+:::tip
+You can read more about working with applications here: [QuickBlox Application](https://docs.quickblox.com/docs/application)
+:::
 
 ## Step 4: Configure application
 
@@ -81,21 +85,45 @@ Now, let’s get back to the application credentials which you saw in the QuickB
 
 <ScriptConfig components={props.components} />
 
+:::caution
+If you have registered your QuickBlox account via Google or GitHub and you do not have a password,
+you can recover it on the [Forgot password](https://admin.quickblox.com/forgot) page or use another method to configure the application.
+:::
+
 :::tip
-You can also manually add the config. Read more information in the [Configuration](/dev/setup-and-deployment/configurations#configure-application) section.
+For detailed application configuration information,
+you can visit the [Configuration](/dev/setup-and-deployment/configurations#configure-application) page.
+There you will find other ways to configure and a description of all configuration options.
 :::
 
 ## Step 5: Upload Schema
 
 <ScriptSchema components={props.components} />
 
+:::caution
+If you have registered your QuickBlox account via Google or GitHub and you do not have a password,
+you can recover it on the [Forgot password](https://admin.quickblox.com/forgot) page or use another method to upload schema into application.
+:::
+
 :::tip
-You can also add a scheme manually. Read more information in the [Configuration](/dev/setup-and-deployment/configurations#upload-schema) section.
+For details on uploading schema into applications,
+you can visit the [Configuration](/dev/setup-and-deployment/configurations#upload-schema) page.
+There you will find other ways to upload the schema.
 :::
 
 ## Step 6: Run application
 
 <RunDev components={props.components} />
+
+## Step 7: Create users
+
+### Provider
+
+<CreateProvider components={props.components} />
+
+### Client
+
+<CreateClient components={props.components} />
 
 ## ⏩ What to do next?
 

@@ -1,20 +1,29 @@
 import fp from 'fastify-plugin'
 import { QBError } from 'quickblox'
-import { HttpErrorCodes } from '@fastify/sensible/lib/httpError'
+import axios, { AxiosError } from 'axios'
 
 interface DefaultHttpError extends Error {
   status: number
-  statusCode: HttpErrorCodes
+  statusCode: number
   expose: boolean
 }
 
-interface QBServerError extends Omit<QBError, 'code'> {
-  code?: HttpErrorCodes
+interface QBServerError extends QBError {
+  code?: number
+  errors?: string[] | Dictionary<string | string[]>
+}
+
+interface OpenAIError {
+  error: {
+    message: string
+    type: string
+    code: string
+  }
 }
 
 function isError(
   error: unknown,
-): error is Error | DefaultHttpError | QBServerError {
+): error is Error | DefaultHttpError | QBServerError | AxiosError {
   return typeof error === 'object' && error !== null && 'message' in error
 }
 
@@ -51,39 +60,91 @@ const parseErrorData = (
 function stringifyError(error: unknown) {
   if (typeof error === 'string') return error
 
-  if (isError(error)) {
-    if ('detail' in error && error.detail) {
-      return parseErrorData(error.detail)
+  if (axios.isAxiosError(error)) {
+    const errorData: OpenAIError | QBServerError | string = error.response?.data
+
+    if (
+      typeof errorData === 'object' &&
+      'error' in errorData &&
+      typeof errorData.error === 'object'
+    ) {
+      return `[OpenAI] ${errorData.error.message || errorData.error.code}`
     }
 
-    if (error.message) {
-      return parseErrorData(error.message)
+    if (
+      typeof errorData === 'object' &&
+      'errors' in errorData &&
+      errorData.errors
+    ) {
+      return `[QuickBlox] ${parseErrorData(errorData.errors)}`
     }
+
+    if (
+      typeof errorData === 'object' &&
+      'message' in errorData &&
+      errorData.message
+    ) {
+      return `[QuickBlox] ${parseErrorData(errorData.message)}`
+    }
+
+    return error.response?.statusText
+  }
+
+  if (isError(error)) {
+    if ('detail' in error && error.detail) {
+      return `[QuickBlox] ${parseErrorData(error.detail)}`
+    }
+
+    if (typeof error.message !== 'string') {
+      return `[QuickBlox] ${parseErrorData(error.message)}`
+    }
+
+    return error.message
   }
 
   return JSON.stringify(error)
 }
 
-function parseError(error: unknown): [HttpErrorCodes, string] {
-  let statusCode: HttpErrorCodes = 500
+function statusError(error: unknown): number {
+  if (isError(error)) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      'status' in error.response &&
+      error.response.status
+    ) {
+      return error.response.status
+    }
 
-  if (isError(error) && 'statusCode' in error && error.statusCode) {
-    statusCode = error.statusCode
-  } else if (isError(error) && 'code' in error && error.code) {
-    statusCode = error.code
+    if ('statusCode' in error && typeof error.statusCode === 'number') {
+      return error.statusCode
+    }
+
+    if ('code' in error && typeof error.code === 'number') {
+      return error.code
+    }
   }
 
-  return [statusCode, stringifyError(error)]
+  return 500
+}
+
+function parseError(error: unknown): [status: number, message?: string] {
+  const status = statusError(error)
+  const message = stringifyError(error)
+
+  return [status, message]
 }
 
 export default fp(async (fastify) => {
-  fastify.setErrorHandler((error, request, reply) => {
+  fastify.setErrorHandler((error) => {
     try {
       const [code, message] = parseError(error)
 
-      reply.getHttpError(code, message)
+      return message
+        ? fastify.httpErrors.createError(code, message)
+        : fastify.httpErrors.createError(code)
     } catch (e) {
-      reply.internalServerError()
+      return fastify.httpErrors.internalServerError()
     }
   })
 })

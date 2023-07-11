@@ -11,7 +11,7 @@ npm run lint
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run lint
+yarn lint
 ```
 
 </TabItem>

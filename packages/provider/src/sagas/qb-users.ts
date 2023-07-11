@@ -1,8 +1,10 @@
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import cloneDeep from 'lodash/cloneDeep'
 
 import * as Types from '../actions'
 import {
+  createGuestClientFailure,
+  createGuestClientSuccess,
   getUserFailure,
   getUserSuccess,
   listUsersFailure,
@@ -11,6 +13,8 @@ import {
 import { QBUserGet, QBUserList } from '../qb-api-calls'
 import { stringifyError } from '../utils/parse'
 import { normalize } from '../utils/normalize'
+import { ajax } from './ajax'
+import { authSessionSelector } from '../selectors'
 
 function* getUser(action: Types.QBUserGetRequestAction) {
   const { data, then } = action.payload
@@ -88,7 +92,39 @@ function* listUsers(action: Types.QBUserListRequestAction) {
   }
 }
 
+function* createUser(action: Types.QBCreateUserRequestAction) {
+  try {
+    const { then, userName } = action.payload
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
+    )
+    const url = `${SERVER_APP_URL}/users/guest-client`
+    const { response }: { response: { session: QBSession; user: QBUser } } =
+      yield call(ajax, {
+        method: 'POST',
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session!.token}`,
+        },
+        body: JSON.stringify({ full_name: userName }),
+        responseType: 'json',
+      })
+
+    yield put(createGuestClientSuccess(response))
+
+    if (then) {
+      then(response)
+    }
+  } catch (e) {
+    const errorMessage = stringifyError(e)
+
+    yield put(createGuestClientFailure(errorMessage))
+  }
+}
+
 export default [
   takeEvery(Types.QB_USER_GET_REQUEST, getUser),
   takeEvery(Types.QB_USER_LIST_REQUEST, listUsers),
+  takeEvery(Types.QB_CREATE_GUEST_CLIENT_REQUEST, createUser),
 ]

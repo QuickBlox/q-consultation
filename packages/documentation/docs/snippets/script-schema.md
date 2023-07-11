@@ -15,7 +15,7 @@ npm run init:schema
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run init:schema
+yarn init:schema
 ```
 
 </TabItem>

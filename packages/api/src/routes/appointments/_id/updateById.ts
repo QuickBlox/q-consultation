@@ -4,10 +4,13 @@ import QB, { QBAppointment, QBSession } from 'quickblox'
 import without from 'lodash/without'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
-import { qbUpdateCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+import {
+  qbUpdateCustomObject,
+  findUserById,
+  qbChatConnect,
+  qbChatSendSystemMessage,
+} from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
-import { qbChatConnect, qbChatSendSystemMessage } from '@/services/chat'
 import { APPOINTMENT_NOTIFICATION } from '@/constants/notificationTypes'
 
 const updateAppointmentSchema = {
@@ -45,7 +48,7 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
     const provider = await findUserById(provider_id)
 
     if (!provider || !userHasTag(provider, 'provider')) {
-      return new Error('body/provider_id Invalid property')
+      return fastify.httpErrors.badRequest('body/provider_id Invalid property')
     }
 
     return undefined

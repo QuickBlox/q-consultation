@@ -5,6 +5,13 @@ sidebar_position: 2
 
 # API application
 
+API application implements the API for the [Client and Provider applications](/dev/development/provider-and-client),
+as well as integration with them.
+The application does not have its own database and uses [QuickBlox](https://docs.quickblox.com/) to store and share data.
+Within this application, an API has been implemented that extends the capabilities of QuickBlox,
+adapting them to the features of QConsultation Lite.
+However, all other [QuickBlox methods](https://docs.quickblox.com/reference/overview) can be used without modification.
+
 :::info Prerequisites
 
 - **Programming language**: [TypeScript](https://www.typescriptlang.org/)

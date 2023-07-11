@@ -1,7 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import { Type } from '@sinclair/typebox'
-import { QBAppointment } from 'quickblox'
+import { Static, Type } from '@sinclair/typebox'
+import { QBAppointment, QBSession } from 'quickblox'
 import omit from 'lodash/omit'
+import pick from 'lodash/pick'
+import keys from 'lodash/keys'
 
 import {
   DateISO,
@@ -9,8 +11,7 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject } from '@/services/customObject'
-import { findUserById } from '@/services/users'
+import { qbGetCustomObject, findUserById } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 
 const getMyAppointmentListSchema = {
@@ -62,21 +63,46 @@ const getMyAppointmentListSchema = {
 }
 
 const getMyAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
+  const handleValidate = async (
+    session: QBSession,
+    query: Static<typeof getMyAppointmentListSchema.querystring>,
+  ) => {
+    const { provider_id, client_id } = query
+    const user = await findUserById(session.user_id)
+    const isProvider = userHasTag(user!, 'provider')
+
+    if (isProvider && provider_id) {
+      return fastify.httpErrors.forbidden('body/provider_id Forbidden property')
+    }
+
+    if (!isProvider && client_id) {
+      return fastify.httpErrors.forbidden('body/client_id Forbidden property')
+    }
+
+    return undefined
+  }
+
   fastify.get(
     '/my',
     {
       schema: getMyAppointmentListSchema,
+      preHandler: (request, reply, done) => {
+        handleValidate(request.session!, request.query).then(done).catch(done)
+      },
       onRequest: fastify.verify(fastify.SessionToken),
     },
     async (request) => {
       const myAccount = await findUserById(request.session!.user_id)
       const isProvider = userHasTag(myAccount!, 'provider')
-
+      const receivedQuery = pick(
+        request.query,
+        keys(getMyAppointmentListSchema.querystring.properties),
+      )
       const {
         'date_end[from]': dateFrom,
         'date_end[to]': dateTo,
         ...baseFilter
-      } = request.query
+      } = receivedQuery
       const filter = {
         ...baseFilter,
         [isProvider ? 'provider_id' : 'client_id']: request.session!.user_id,

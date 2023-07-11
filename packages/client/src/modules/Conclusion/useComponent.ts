@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { generatePath, useHistory } from 'react-router-dom'
+import { isGuestClient } from '../../utils/user'
 
 import {
   authMyAccountSelector,
   createAppointmentByIdSelector,
   createUsersProviderByAppointmentIdSelector,
 } from '../../selectors'
-import { ROOT_ROUTE } from '../../constants/routes'
+import { APPOINTMENT_FINISH_ROUTE, ROOT_ROUTE } from '../../constants/routes'
 import { createUseComponent } from '../../hooks'
 import { createMapStateSelector } from '../../utils/selectors'
 import { createPdf } from '../../utils/pdfFile'
@@ -29,10 +30,12 @@ export default createUseComponent((props: ConclusionProps) => {
   const history = useHistory()
   const selector = createSelector(appointmentId)
   const store = useSelector(selector)
-  const { currentAppointment, currentProvider } = store
+  const { currentAppointment, currentProvider, myAccount } = store
 
   const [loadingConclusion, setLoadingConclusion] = useState(false)
   const isOffline = useIsOffLine()
+  const isGuestAccess =
+    ENABLE_GUEST_CLIENT && myAccount && isGuestClient(myAccount)
 
   const goToMainScreen = () => {
     history.push(ROOT_ROUTE)
@@ -49,13 +52,19 @@ export default createUseComponent((props: ConclusionProps) => {
         content: currentAppointment.conclusion,
       }).download('Conclusion.pdf', () => {
         setLoadingConclusion(false)
+
+        if (isGuestAccess && appointmentId) {
+          const path = generatePath(APPOINTMENT_FINISH_ROUTE, { appointmentId })
+
+          history.push(path)
+        }
       })
     }
   }
 
   return {
     store,
-    data: { loadingConclusion, isOffline },
+    data: { loadingConclusion, isOffline, isGuestAccess },
     handlers: { onDownloadConclusion, goToMainScreen },
   }
 })

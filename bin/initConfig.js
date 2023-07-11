@@ -39,6 +39,7 @@ function getBaseConfiguration() {
   const ENABLE_REDUX_LOGGER = readline.keyInYN(`Enable Redux logger?\n`) || false
   const CLIENT_APP_URL = readline.question(`Enter Client app URL (optional):\n`, { defaultInput: DEFAULT_CLIENT_APP_URL, limit: /^https?:\/\/[^\s\/$.?#].[^\s]*$/ })
   const SERVER_APP_URL = readline.question(`Enter Server app URL (optional):\n`, { defaultInput: DEFAULT_SERVER_APP_URL, limit: /^https?:\/\/[^\s\/$.?#].[^\s]*$/ })
+  const ENABLE_GUEST_CLIENT = readline.keyInYN(`Enable Guest Client?\n`) || false
   const DEFAULT_LANGUAGE = readline.question(`Enter default language (optional) [en/ua]:\n`, { defaultInput: 'en', limit: ['en', 'ua'] })
   const FILE_SIZE_LIMIT = readline.questionInt(`Enter a file size limit in bytes (optional):\n`, { defaultInput: DEFAULT_FILE_SIZE_LIMIT })
   const FILE_EXTENSIONS_WHITELIST = readline.question(`Enter a space-separated list of available file extensions (optional):\n`, { defaultInput: DEFAULT_FILE_EXTENSIONS_WHITELIST })
@@ -65,6 +66,7 @@ function getBaseConfiguration() {
     DEFAULT_LANGUAGE,
     FILE_SIZE_LIMIT,
     FILE_EXTENSIONS_WHITELIST,
+    ENABLE_GUEST_CLIENT,
   }
 }
 

@@ -9,3 +9,4 @@ export type NotificationTypes =
   | typeof CONCLUSION_NOTIFICATION
   | typeof DIALOG_NOTIFICATION
   | typeof APPOINTMENT_NOTIFICATION
+  | typeof CLOSE_SESSION_NOTIFICATION

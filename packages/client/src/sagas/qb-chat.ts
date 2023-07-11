@@ -41,6 +41,7 @@ import {
   APPOINTMENT_NOTIFICATION,
   CLOSE_SESSION_NOTIFICATION,
   DIALOG_NOTIFICATION,
+  CLOSE_SESSION_NOTIFICATION,
   TEXT_NOTIFICATION,
 } from '../constants/notificationTypes'
 import { QBChatConnect } from '../qb-api-calls'
@@ -116,9 +117,9 @@ function* handleQBChatEvents() {
               showNotification({
                 id: Date.now().toString(),
                 translate: true,
-                duration: 3 * SECOND,
                 message: 'SESSION_FINISHED',
                 type: 'error',
+                duration: 3 * SECOND,
                 position: 'top-center',
               }),
             )

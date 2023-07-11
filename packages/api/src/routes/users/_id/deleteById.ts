@@ -2,7 +2,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import QB, { QBSession } from 'quickblox'
 
-import { qbDeleteUser } from '@/services/users'
+import { qbDeleteUser } from '@/services/quickblox'
 import { QBUserId } from '@/models'
 import { qbChatConnect, qbChatSendSystemMessage } from '@/services/chat'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'

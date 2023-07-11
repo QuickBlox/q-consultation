@@ -6,8 +6,11 @@ import {
 } from 'fastify'
 import { QBSession } from 'quickblox'
 
-import { qbCreateSession, qbSessionWithToken } from '@/services/auth'
-import { findUserById } from '@/services/users'
+import {
+  qbCreateSession,
+  qbSessionWithToken,
+  findUserById,
+} from '@/services/quickblox'
 
 export type TokenHandler = (token?: string | null) => Promise<QBSession | null>
 

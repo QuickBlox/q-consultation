@@ -2,13 +2,15 @@ import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 
 import {
-  MicSvg,
-  CamSvg,
   ScreenshareSvg,
   SwitchCamSvg,
   ExitFullscreenSvg,
   FullscreenSvg,
   EndCallSvg,
+  CamOffSvg,
+  CamOnSvg,
+  MicOnSvg,
+  MicOffSvg,
 } from '../../icons'
 import { useMobileLayout } from '../../hooks'
 import IS_MOBILE from '../../utils/isMobile'
@@ -34,22 +36,30 @@ export default function CallControls(props: CallControlsProps) {
   return (
     <div className="controls">
       <button
-        className={cn('control-btn', { active: muteAudio })}
+        className={cn('control-btn', { disable: muteAudio })}
         disabled={!session || isOffline}
         onClick={toggleMuteAudio}
         title={muteAudio ? t('Unmute') : t('Mute')}
         type="button"
       >
-        <MicSvg className="icon" />
+        {muteAudio ? (
+          <MicOnSvg className="icon" />
+        ) : (
+          <MicOffSvg className="icon" />
+        )}
       </button>
       <button
-        className={cn('control-btn', { active: muteVideo })}
+        className={cn('control-btn', { disable: muteVideo })}
         disabled={!session || isOffline}
         onClick={toggleMuteVideo}
         title={muteVideo ? t('TurnOnCam') : t('TurnOffCam')}
         type="button"
       >
-        <CamSvg className="icon" />
+        {muteVideo ? (
+          <CamOnSvg className="icon" />
+        ) : (
+          <CamOffSvg className="icon" />
+        )}
       </button>
       {!IS_MOBILE && (
         <button

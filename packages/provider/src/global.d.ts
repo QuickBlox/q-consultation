@@ -59,6 +59,8 @@ interface QBError {
   message: string | string[] | Dictionary<string | string[]>
 }
 
+type QBCreateUserParams = QBCreateUserWithLogin | QBCreateUserWithEmail
+
 interface QBUser {
   id: number
   full_name: string
@@ -89,6 +91,7 @@ type QBUserCustomData = Partial<{
   full_name: string
   address: string
   birthdate: string
+  profession: string
   description: string
   gender: string
   language: string

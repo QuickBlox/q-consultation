@@ -1,2 +1,2 @@
-export * from './base'
-export * from './services'
+export { default as openAIApi } from './api'
+export * from './integration'

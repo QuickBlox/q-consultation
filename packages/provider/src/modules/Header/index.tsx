@@ -12,6 +12,7 @@ import {
   DropdownSvg,
   UserSvg,
   ClientsSvg,
+  PlusSvg,
 } from '../../icons'
 
 import { ROOT_ROUTE } from '../../constants/routes'
@@ -40,6 +41,7 @@ export default function Header(props: HeaderProps) {
       toggleShareLinkModal,
       handleSelectLanguage,
       selectedLanguageOption,
+      toggleGuestUserModal,
     },
   } = useComponent()
   const { t } = useTranslation()
@@ -63,6 +65,17 @@ export default function Header(props: HeaderProps) {
         </Link>
       </div>
       <div className={cn('header-nav', 'header-nav-right', { call: onCall })}>
+        {myAccount && ENABLE_GUEST_CLIENT && (
+          <button
+            type="button"
+            className="create-guest"
+            onClick={toggleGuestUserModal}
+            title={t('Create')}
+          >
+            <PlusSvg className="icon" />
+            <span className="text">{t('Create')}</span>
+          </button>
+        )}
         {myAccount && CLIENT_APP_URL && (
           <button
             type="button"
