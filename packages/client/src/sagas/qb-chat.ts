@@ -39,6 +39,7 @@ import { isSessionExpired } from '../utils/session'
 import { stringifyError } from '../utils/parse'
 import {
   APPOINTMENT_NOTIFICATION,
+  CLOSE_SESSION_NOTIFICATION,
   DIALOG_NOTIFICATION,
   CLOSE_SESSION_NOTIFICATION,
   TEXT_NOTIFICATION,

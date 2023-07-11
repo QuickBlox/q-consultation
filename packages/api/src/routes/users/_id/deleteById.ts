@@ -1,8 +1,12 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
+import QB, { QBSession } from 'quickblox'
 
 import { qbDeleteUser } from '@/services/quickblox'
 import { QBUserId } from '@/models'
+import { qbChatConnect, qbChatSendSystemMessage } from '@/services/chat'
+import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
+import { isQBError } from '@/utils/parse'
 
 export const deleteSchema = {
   tags: ['Users'],
@@ -17,10 +21,27 @@ export const deleteSchema = {
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
+  const handleResponse = async (session: QBSession, userId: number) => {
+    await qbChatConnect(session.user_id, session.token)
+    const dialogId = QB.chat.helpers.getUserJid(userId)
+
+    await qbChatSendSystemMessage(dialogId, {
+      extension: {
+        notification_type: CLOSE_SESSION_NOTIFICATION,
+      },
+    })
+
+    return undefined
+  }
   fastify.delete(
     '',
     {
       schema: deleteSchema,
+      preHandler: (request, reply, done) => {
+        handleResponse(request.session!, request.params.id)
+          .then(done)
+          .catch(done)
+      },
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request, reply) => {
