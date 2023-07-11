@@ -2,8 +2,11 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import QB, { QBSession } from 'quickblox'
 
-import { qbLogout } from '@/services/auth'
-import { qbChatConnect, qbChatSendSystemMessage } from '@/services/chat'
+import {
+  qbChatConnect,
+  qbChatSendSystemMessage,
+  qbLogout,
+} from '@/services/quickblox'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
 
 export const logoutSchema = {

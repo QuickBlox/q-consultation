@@ -36,9 +36,9 @@ declare module 'quickblox' {
   }
 
   export type QBUserCustomData = Partial<{
-    full_name: string
     address: string
     birthdate: string
+    profession: string
     description: string
     gender: string
     language: string
@@ -459,7 +459,7 @@ declare module 'quickblox' {
     login: string
     password: string
     blob_id?: number
-    custom_data: string | null
+    custom_data?: string | null
     email?: string
     external_user_id?: string | number
     facebook_id?: string
@@ -537,6 +537,20 @@ declare module 'quickblox' {
       callback: (error?: QBError, user: QBUser) => void,
     ): void
   }
+
+  type QBLoginParams =
+    | {
+        login: string
+        password: string
+      }
+    | {
+        email: string
+        password: string
+      }
+    | {
+        provider: 'firebase_phone'
+        firebase_phone: { access_token: string; project_id: string }
+      }
 
   interface Quickblox {
     buildNumber: string

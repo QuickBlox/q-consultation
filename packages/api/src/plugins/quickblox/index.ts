@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin'
 import { QBSession } from 'quickblox'
-import { qbInit } from '@/services/auth'
+import { qbInit } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 import {
   TokenHandler,

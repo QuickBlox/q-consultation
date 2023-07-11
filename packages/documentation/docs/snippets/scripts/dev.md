@@ -13,7 +13,7 @@ npm run dev
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run dev
+yarn dev
 ```
 
 </TabItem>

@@ -11,7 +11,7 @@ npm run build
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run build
+yarn build
 ```
 
 </TabItem>

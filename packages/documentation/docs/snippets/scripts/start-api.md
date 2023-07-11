@@ -13,7 +13,7 @@ npm run start:api
 <TabItem value="yarn" label="yarn">
 
 ```bash
-yarn run start:api
+yarn start:api
 ```
 
 </TabItem>

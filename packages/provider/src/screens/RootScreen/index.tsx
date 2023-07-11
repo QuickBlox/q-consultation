@@ -31,11 +31,12 @@ import './styles.css'
 import EditNotesModal from '../../modules/modals/EditNotesModal'
 import SaveRecordModal from '../../modules/modals/SaveRecordModal'
 import RecordModal from '../../modules/modals/RecordModal'
+import GuestUserModal from '../../modules/modals/GuestUserModal'
 
 export default function MainScreen() {
   const {
     store: { onCall },
-    data: { isOpenMenu, height, RESOLUTION_XS, appointmentsRouteMatch },
+    data: { isOpenMenu, height, RESOLUTION_XS },
     handlers: { handleToggleMenu },
   } = useComponent()
 
@@ -60,10 +61,7 @@ export default function MainScreen() {
   }
 
   return (
-    <main
-      className="main-screen-wrapper"
-      style={appointmentsRouteMatch ? { height: `${height}px` } : undefined}
-    >
+    <main className="main-screen-wrapper" style={{ height: `${height}px` }}>
       <UploadRecordIndicator />
       <div className={cn('main-screen', { 'on-call': onCall })}>
         <div className="column">
@@ -77,6 +75,7 @@ export default function MainScreen() {
         onClick={handleToggleMenu}
       />
       <Modal>
+        {ENABLE_GUEST_CLIENT && <GuestUserModal />}
         <LogoutModal />
         <ShareLinkModal />
         <AppointmentActionModal />

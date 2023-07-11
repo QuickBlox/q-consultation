@@ -4,8 +4,12 @@ import pick from 'lodash/pick'
 
 import { MultipartFile, QBUser, QBUserId, QCClient } from '@/models'
 import { parseUserCustomData, stringifyUserCustomData } from '@/utils/user'
-import { findUserById, qbUpdateUser } from '@/services/users'
-import { qbDeleteFile, qbUploadFile } from '@/services/content'
+import {
+  findUserById,
+  qbUpdateUser,
+  qbDeleteFile,
+  qbUploadFile,
+} from '@/services/quickblox'
 
 const updateByIdSchema = {
   tags: ['Users', 'Client'],
@@ -104,7 +108,6 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       )
       const customData = pick(
         request.body,
-        'full_name',
         'address',
         'birthdate',
         'gender',
@@ -119,12 +122,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(
-          avatar.filename,
-          avatar.buffer,
-          avatar.mimetype,
-          Buffer.byteLength(avatar.buffer),
-        )
+        const file = await qbUploadFile(avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -164,7 +162,6 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       const userData = pick(request.body, 'full_name', 'email', 'password')
       const customData = pick(
         request.body,
-        'full_name',
         'address',
         'birthdate',
         'gender',
@@ -184,12 +181,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(
-          avatar.filename,
-          avatar.buffer,
-          avatar.mimetype,
-          Buffer.byteLength(avatar.buffer),
-        )
+        const file = await qbUploadFile(avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {

@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox'
 
-import { findUserById } from '@/services/users'
+import { findUserById } from '@/services/quickblox'
 import { QBUser } from '@/models'
 
 export const profileSchema = {

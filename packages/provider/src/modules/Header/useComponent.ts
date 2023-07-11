@@ -51,6 +51,8 @@ export default createUseComponent(() => {
     actions.toggleShowModal({ modal: 'ShareLinkModal' })
   const toggleLogoutModal = () =>
     actions.toggleShowModal({ modal: 'LogoutModal' })
+  const toggleGuestUserModal = () =>
+    actions.toggleShowModal({ modal: 'GuestUserModal' })
 
   const menuOptions = [
     { label: t('History'), path: HISTORY_ROUTE },
@@ -60,6 +62,11 @@ export default createUseComponent(() => {
   ]
 
   const menuMobileOptions = [
+    {
+      label: t('Create'),
+      onClick: toggleGuestUserModal,
+      hide: !ENABLE_GUEST_CLIENT,
+    },
     {
       label: t('ShareLink'),
       onClick: toggleShareLinkModal,
@@ -93,6 +100,7 @@ export default createUseComponent(() => {
       toggleLogoutModal,
       handleSelectLanguage,
       selectedLanguageOption,
+      toggleGuestUserModal,
     },
   }
 })

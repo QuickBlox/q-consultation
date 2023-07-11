@@ -4,10 +4,14 @@ import { pick } from 'lodash'
 import { QBCreateUserWithEmail } from 'quickblox'
 
 import { MultipartFile, QBSession, QBUser, QCProvider } from '@/models'
-import { qbCreateSession, qbLogin } from '@/services/auth'
-import { qbCreateUser, qbUpdateUser } from '@/services/users'
-import { getCompletion } from '@/services/openai'
-import { qbUploadFile } from '@/services/content'
+import {
+  qbLogin,
+  qbCreateSession,
+  qbCreateUser,
+  qbUpdateUser,
+  qbUploadFile,
+} from '@/services/quickblox'
+import { createProviderKeywords } from '@/services/openai'
 import { stringifyUserCustomData } from '@/utils/user'
 
 export const signUpSchema = {
@@ -36,7 +40,7 @@ export const signUpSchema = {
 
 const signup: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('', { schema: signUpSchema }, async (request, reply) => {
-    const { description, avatar, email, password } = request.body
+    const { profession, description, avatar, email, password } = request.body
 
     if (avatar && !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)) {
       return reply.badRequest(
@@ -47,7 +51,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     const userData = pick(request.body, 'full_name', 'email', 'password')
     const customData = pick(
       request.body,
-      'full_name',
+      'profession',
       'description',
       'language',
     )
@@ -55,12 +59,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
     let keywords = ''
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-      keywords += await getCompletion(
-        `Write in English keywords describing a specialist for this description separated by commas:\n${description.replaceAll(
-          '\n',
-          ' ',
-        )}\n\n`,
-      )
+      keywords += await createProviderKeywords(profession, description)
     }
 
     await qbCreateUser<QBCreateUserWithEmail>({
@@ -71,15 +70,10 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       }),
       tag_list: ['provider'],
     })
-    let user = await qbLogin(email, password)
+    let user = await qbLogin({ email, password })
 
     if (avatar) {
-      const file = await qbUploadFile(
-        avatar.filename,
-        avatar.buffer,
-        avatar.mimetype,
-        Buffer.byteLength(avatar.buffer),
-      )
+      const file = await qbUploadFile(avatar)
 
       user = await qbUpdateUser(user.id, {
         custom_data: stringifyUserCustomData({
