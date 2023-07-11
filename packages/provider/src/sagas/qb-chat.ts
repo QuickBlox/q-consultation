@@ -36,7 +36,7 @@ import { stringifyError } from '../utils/parse'
 import {
   APPOINTMENT_NOTIFICATION,
   DIALOG_NOTIFICATION,
-  LOGOUT_NOTIFICATION,
+  CLOSE_SESSION_NOTIFICATION,
   TEXT_NOTIFICATION,
 } from '../constants/notificationTypes'
 import { QBChatConnect } from '../qb-api-calls'
@@ -108,10 +108,7 @@ function* handleQBChatEvents() {
         } = event.payload
 
         if (extension.notification_type) {
-          if (
-            extension.notification_type === LOGOUT_NOTIFICATION &&
-            extension.session_finished === 'true'
-          ) {
+          if (extension.notification_type === CLOSE_SESSION_NOTIFICATION) {
             yield put(
               showNotification({
                 id: Date.now().toString(),
@@ -122,6 +119,10 @@ function* handleQBChatEvents() {
                 position: 'top-center',
               }),
             )
+
+            yield delay(3000)
+
+            yield put(logout())
           }
           if (
             extension.notification_type === APPOINTMENT_NOTIFICATION &&
