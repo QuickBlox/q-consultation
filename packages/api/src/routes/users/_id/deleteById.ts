@@ -21,23 +21,17 @@ export const deleteSchema = {
 }
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
-  const handleResponse = async (session: QBSession, id: number) => {
-    try {
-      await qbChatConnect(session.user_id, session.token)
-      const dialogId = QB.chat.helpers.getUserJid(id)
+  const handleResponse = async (session: QBSession, userId: number) => {
+    await qbChatConnect(session.user_id, session.token)
+    const dialogId = QB.chat.helpers.getUserJid(userId)
 
-      await qbChatSendSystemMessage(dialogId, {
-        extension: {
-          notification_type: CLOSE_SESSION_NOTIFICATION,
-        },
-      })
+    await qbChatSendSystemMessage(dialogId, {
+      extension: {
+        notification_type: CLOSE_SESSION_NOTIFICATION,
+      },
+    })
 
-      return undefined
-    } catch (e) {
-      if (isQBError(e)) {
-        return new Error(e.message.toString())
-      }
-    }
+    return undefined
   }
   fastify.delete(
     '',
