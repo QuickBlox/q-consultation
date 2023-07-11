@@ -2,11 +2,13 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import QB, { QBSession } from 'quickblox'
 
-import { qbDeleteUser } from '@/services/quickblox'
+import {
+  qbDeleteUser,
+  qbChatConnect,
+  qbChatSendSystemMessage,
+} from '@/services/quickblox'
 import { QBUserId } from '@/models'
-import { qbChatConnect, qbChatSendSystemMessage } from '@/services/chat'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
-import { isQBError } from '@/utils/parse'
 
 export const deleteSchema = {
   tags: ['Users'],
@@ -33,6 +35,7 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
 
     return undefined
   }
+
   fastify.delete(
     '',
     {

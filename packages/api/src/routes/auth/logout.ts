@@ -22,11 +22,13 @@ const logout: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (session: QBSession) => {
     await qbChatConnect(session.user_id, session.token)
     const dialogId = QB.chat.helpers.getUserJid(session.user_id)
+
     await qbChatSendSystemMessage(dialogId, {
       extension: {
         notification_type: CLOSE_SESSION_NOTIFICATION,
       },
     })
+
     return undefined
   }
 

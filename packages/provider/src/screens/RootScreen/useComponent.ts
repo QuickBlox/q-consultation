@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useRouteMatch } from 'react-router-dom'
-import { APPOINTMENTS_ROUTE } from '../../constants/routes'
 
 import {
   createUseComponent,
