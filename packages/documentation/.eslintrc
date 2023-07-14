@@ -50,6 +50,7 @@
     "camelcase": "off",
     "no-shadow": "off",
     "no-underscore-dangle": "off",
+    "no-use-before-define": "off",
     "import/extensions": ["error", "ignorePackages", {
       "ts": "never",
       "tsx": "never"

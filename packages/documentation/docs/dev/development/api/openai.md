@@ -363,25 +363,6 @@ We are not currently using Create translation, but you can read the
 [OpenAI API reference on Create translation](https://platform.openai.com/docs/api-reference/audio/create?lang=node.js) to learn more.
 :::
 
-## Edit
-
-Given a prompt and an instruction, the model will return an edited version of the prompt.
-
-**Available models**:
-
-- `text-davinci-edit-001`
-- `code-davinci-edit-001`
-
-### Create edit
-
-Creates a new edit for the provided input, instruction, and parameters.
-
-:::tip
-We are not currently using Create edit, but you can use our own OpenAI service to implement this.
-
-**API reference**: [Create edit](https://platform.openai.com/docs/api-reference/edits/create?lang=node.js)
-:::
-
 ## Images
 
 Given a prompt and/or an input image, the model will generate a new image.
