@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkq_consultation_doc=self.webpackChunkq_consultation_doc||[]).push([[918],{3752:(s,c,t)=>{t.d(c,{Z:()=>e});var a=t(1388),n=t(7336),o=t(2009);const e={...a.Z,Tabs:n.Z,TabItem:o.Z}}}]);
