@@ -1,12 +1,11 @@
-The client application has a registration page,
-so you can either use it or use the [API](/api#tag/Client/paths/~1users~1client/post) to create a user.
+The client application has a self-registration option, so you can either create a client via the web application or via [API](/api#tag/Client/paths/~1users~1client/post).
 
-1. **Registration page**
+1. **Registration via web application**
 
    To create a client, navigate to the registration page by accessing the following URL: <https://localhost:3001/signup>.
    Fill in the required information and submit form.
 
-   ![](/img/snippets/create-client.jpg)
+  <Image src='/img/snippets/create-client.jpg'/>
 
 2. **Console method**
 

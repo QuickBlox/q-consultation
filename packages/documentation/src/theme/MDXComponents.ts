@@ -2,6 +2,7 @@
 import MDXComponents from '@theme-original/MDXComponents'
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
+import Image from '../components/Image'
 
 export default {
   // Re-use the default mapping
@@ -15,4 +16,5 @@ export default {
    */
   Tabs,
   TabItem,
+  Image,
 }
