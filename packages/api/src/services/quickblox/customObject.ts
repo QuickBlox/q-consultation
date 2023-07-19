@@ -67,3 +67,16 @@ export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
 
   return resData.data
 }
+
+export const qbUpdateCustomObjectByCriteria = async <T extends QBCustomObject>(
+  className: string,
+  filters: Dictionary<unknown>,
+  data: Dictionary<unknown>,
+) => {
+  const resData = await qbApi.post<T>(`/data/${className}/by_criteria.json`, {
+    ...data,
+    search_criteria: filters,
+  })
+
+  return resData.data
+}

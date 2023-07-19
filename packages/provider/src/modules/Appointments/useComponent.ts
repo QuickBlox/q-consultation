@@ -8,7 +8,6 @@ import {
   listUsers,
   sendSystemMessage,
   toggleShowModal,
-  updateAppointment,
 } from '../../actionCreators'
 import {
   appointmentActiveListSelector,
@@ -26,9 +25,7 @@ import {
   usersLoadingSelector,
 } from '../../selectors'
 import { createUseComponent, useActions } from '../../hooks'
-import { QBDialogCreateSuccessAction } from '../../actions'
 import { createMapStateSelector } from '../../utils/selectors'
-import { DIALOG_NOTIFICATION } from '../../constants/notificationTypes'
 import useIsOffLine from '../../hooks/useIsOffLine'
 
 const PER_PAGE = 30
@@ -65,7 +62,6 @@ export default createUseComponent((props: AppointmentsProps) => {
     listUsers,
     toggleShowModal,
     getRecords,
-    updateAppointment,
     sendSystemMessage,
   })
   const isOffline = useIsOffLine()
@@ -100,29 +96,6 @@ export default createUseComponent((props: AppointmentsProps) => {
 
     if (!selected || selected !== item._id) {
       onSelect(item._id)
-
-      if (!item.dialog_id) {
-        actions.createDialog({
-          userIds: item.client_id,
-          then: (action: QBDialogCreateSuccessAction) => {
-            actions.updateAppointment({
-              _id: item._id,
-              data: { dialog_id: action.payload._id },
-              then: () => {
-                actions.sendSystemMessage({
-                  dialogId: QB.chat.helpers.getUserJid(item.client_id),
-                  message: {
-                    extension: {
-                      notification_type: DIALOG_NOTIFICATION,
-                      dialog_id: action.payload._id,
-                    },
-                  },
-                })
-              },
-            })
-          },
-        })
-      }
     }
   }
 

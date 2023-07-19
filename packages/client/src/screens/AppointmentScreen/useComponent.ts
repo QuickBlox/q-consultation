@@ -11,7 +11,6 @@ import {
 import {
   getAppointments,
   createAppointment,
-  createDialog,
   sendSystemMessage,
 } from '../../actionCreators'
 import { createUseComponent, useActions, useQuery } from '../../hooks'
@@ -25,12 +24,7 @@ import useIsOffLine from '../../hooks/useIsOffLine'
 import {
   QBAppointmentCreateSuccessAction,
   QBAppointmentGetSuccessAction,
-  QBDialogCreateSuccessAction,
 } from '../../actions'
-import {
-  APPOINTMENT_NOTIFICATION,
-  DIALOG_NOTIFICATION,
-} from '../../constants/notificationTypes'
 import { isGuestClient } from '../../utils/user'
 
 const createSelector = (appointmentId?: QBAppointment['_id']) =>
@@ -46,7 +40,6 @@ export default createUseComponent(() => {
   const actions = useActions({
     getAppointments,
     createAppointment,
-    createDialog,
     sendSystemMessage,
   })
   const selector = createSelector(appointmentId)
@@ -104,45 +97,16 @@ export default createUseComponent(() => {
 
             history.push(path)
           } else {
-            actions.createDialog({
-              userId: providerId,
-              then: (actionDialog: QBDialogCreateSuccessAction) => {
-                actions.createAppointment({
-                  client_id: myAccountId,
-                  provider_id: providerId,
-                  dialog_id: actionDialog.payload._id,
-                  description: '',
-                  then: (
-                    actionAppointment: QBAppointmentCreateSuccessAction,
-                  ) => {
-                    const systemMessages = [
-                      {
-                        extension: {
-                          notification_type: DIALOG_NOTIFICATION,
-                          dialog_id: actionDialog.payload._id,
-                        },
-                      },
-                      {
-                        extension: {
-                          notification_type: APPOINTMENT_NOTIFICATION,
-                          appointment_id: actionAppointment.payload._id,
-                        },
-                      },
-                    ]
-
-                    systemMessages.forEach((systemMessage) => {
-                      actions.sendSystemMessage({
-                        dialogId: QB.chat.helpers.getUserJid(providerId),
-                        message: systemMessage,
-                      })
-                    })
-                    const path = generatePath(APPOINTMENT_ROUTE, {
-                      appointmentId: actionAppointment.payload._id,
-                    })
-
-                    history.push(path)
-                  },
+            actions.createAppointment({
+              client_id: myAccountId,
+              provider_id: providerId,
+              description: '',
+              then: (actionAppointment: QBAppointmentCreateSuccessAction) => {
+                const path = generatePath(APPOINTMENT_ROUTE, {
+                  appointmentId: actionAppointment.payload._id,
                 })
+
+                history.push(path)
               },
             })
           }

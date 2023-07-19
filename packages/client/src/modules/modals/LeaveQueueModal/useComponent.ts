@@ -78,28 +78,15 @@ export default createUseComponent((props: LeaveQueueModalProps) => {
           date_end: moment().toISOString(),
         },
         then: () => {
-          const systemMessage = {
-            extension: {
-              notification_type: APPOINTMENT_NOTIFICATION,
-              appointment_id: appointment._id,
-            },
-          }
+          actions.toggleShowModal({ modal: 'LeaveQueueModal' })
 
-          actions.sendSystemMessage({
-            dialogId: QB.chat.helpers.getUserJid(appointment.provider_id),
-            message: systemMessage,
-            then: () => {
-              actions.toggleShowModal({ modal: 'LeaveQueueModal' })
+          const path = isGuestAccess
+            ? generatePath(APPOINTMENT_FINISH_ROUTE, {
+                appointmentId: appointment._id,
+              })
+            : ROOT_ROUTE
 
-              const path = isGuestAccess
-                ? generatePath(APPOINTMENT_FINISH_ROUTE, {
-                    appointmentId: appointment._id,
-                  })
-                : ROOT_ROUTE
-
-              history.push(path)
-            },
-          })
+          history.push(path)
         },
       })
     }

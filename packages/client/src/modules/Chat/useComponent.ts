@@ -7,7 +7,6 @@ import {
   listUsers,
   createDialog,
   sendSystemMessage,
-  updateAppointment,
 } from '../../actionCreators'
 import {
   authMyAccountIdSelector,
@@ -20,9 +19,7 @@ import {
   usersNotFoundSelector,
 } from '../../selectors'
 import { createUseComponent, useActions } from '../../hooks'
-import { QBDialogCreateSuccessAction } from '../../actions'
 import { createMapStateSelector } from '../../utils/selectors'
-import { DIALOG_NOTIFICATION } from '../../constants/notificationTypes'
 import useIsOffLine from '../../hooks/useIsOffLine'
 
 export interface ChatProps {
@@ -52,7 +49,6 @@ export default createUseComponent((props: ChatProps) => {
     getDialog,
     listUsers,
     createDialog,
-    updateAppointment,
     sendSystemMessage,
   })
   const isOffline = useIsOffLine()
@@ -75,37 +71,10 @@ export default createUseComponent((props: ChatProps) => {
     t('Unknown')
 
   useEffect(() => {
-    if (currentAppointment && !isOffline) {
-      if (currentAppointment.dialog_id) {
-        actions.getDialog({
-          _id: currentAppointment.dialog_id,
-        })
-      } else {
-        actions.createDialog({
-          userId: currentAppointment.provider_id,
-          then: (action: QBDialogCreateSuccessAction) => {
-            actions.updateAppointment({
-              _id: currentAppointment._id,
-              data: {
-                dialog_id: action.payload._id,
-              },
-              then: () => {
-                actions.sendSystemMessage({
-                  dialogId: QB.chat.helpers.getUserJid(
-                    currentAppointment.provider_id,
-                  ),
-                  message: {
-                    extension: {
-                      notification_type: DIALOG_NOTIFICATION,
-                      dialog_id: action.payload._id,
-                    },
-                  },
-                })
-              },
-            })
-          },
-        })
-      }
+    if (currentAppointment && !isOffline && currentAppointment.dialog_id) {
+      actions.getDialog({
+        _id: currentAppointment.dialog_id,
+      })
     }
   }, [currentAppointment?.dialog_id, isOffline])
 

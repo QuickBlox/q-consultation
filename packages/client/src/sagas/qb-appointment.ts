@@ -16,15 +16,11 @@ import {
   updateAppointmentFailure,
   updateAppointmentSuccess,
 } from '../actionCreators'
-import {
-  QBDataCreate,
-  QBDataDelete,
-  QBDataGet,
-  QBDataUpdate,
-} from '../qb-api-calls'
+import { QBDataDelete, QBDataGet } from '../qb-api-calls'
 import { normalize } from '../utils/normalize'
 import { stringifyError } from '../utils/parse'
-import { authMyAccountIdSelector } from '../selectors'
+import { authMyAccountIdSelector, authSessionSelector } from '../selectors'
+import { ajax } from './ajax'
 
 interface AppointmentResponse {
   class_name: string
@@ -62,16 +58,28 @@ function* createAppointment(action: Types.QBAppointmentCreateRequestAction) {
   const { then, ...data } = action.payload
 
   try {
-    const customObject: QBAppointment = yield call(
-      QBDataCreate,
-      'Appointment',
-      {
-        priority: 0,
-        ...data,
-      },
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
     )
 
-    const result = createAppointmentSuccess(customObject)
+    const url = `${SERVER_APP_URL}/appointments`
+
+    const {
+      response,
+    }: {
+      response: QBAppointment
+    } = yield call(ajax, {
+      method: 'POST',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session!.token}`,
+      },
+      body: JSON.stringify(data),
+      responseType: 'json',
+    })
+
+    const result = createAppointmentSuccess(response)
 
     yield put(result)
 
@@ -89,12 +97,25 @@ function* updateAppointment(action: Types.QBAppointmentUpdateRequestAction) {
   const { _id, data, then } = action.payload
 
   try {
-    const response: QBAppointment = yield call(
-      QBDataUpdate,
-      'Appointment',
-      _id,
-      data,
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
     )
+    const url = `${SERVER_APP_URL}/appointments/${_id}`
+
+    const {
+      response,
+    }: {
+      response: QBAppointment
+    } = yield call(ajax, {
+      method: 'PATCH',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session!.token}`,
+      },
+      body: JSON.stringify(data),
+      responseType: 'json',
+    })
     const result = updateAppointmentSuccess({ appointment: response })
 
     yield put(result)

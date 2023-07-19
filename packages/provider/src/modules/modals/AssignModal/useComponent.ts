@@ -21,7 +21,6 @@ import {
 import { createUseComponent, useActions } from '../../../hooks'
 import { combineSelectors } from '../../../utils/selectors'
 import {
-  APPOINTMENT_NOTIFICATION,
   DIALOG_NOTIFICATION,
   TEXT_NOTIFICATION,
 } from '../../../constants/notificationTypes'
@@ -94,55 +93,38 @@ export default createUseComponent((props: AssignModalProps) => {
         _id: appointment._id,
         data: { provider_id: providerId },
         then: () => {
-          const systemMessageAppointment = {
+          const clientSystemMessage = {
             extension: {
-              notification_type: APPOINTMENT_NOTIFICATION,
-              appointment_id: appointment._id,
+              notification_type: TEXT_NOTIFICATION,
+              notification_text: 'YOU_HAVE_NEW_PROVIDER',
+              translate: 'true',
             },
           }
-
-          const clientSystemMessages = [
-            systemMessageAppointment,
-            {
-              extension: {
-                notification_type: TEXT_NOTIFICATION,
-                notification_text: 'YOU_HAVE_NEW_PROVIDER',
-                translate: 'true',
-              },
-            },
-          ]
 
           const currentUserName = myAccount
             ? myAccount.full_name || myAccount.login || myAccount.email
             : t('AnotherProvider')
 
-          const providerSystemMessages = [
-            systemMessageAppointment,
-            {
-              extension: {
-                notification_type: TEXT_NOTIFICATION,
-                notification_text: 'PROVIDER_HAS_ASSIGNED_CLIENT_TO_YOU',
-                translate: 'true',
-                translate_options: JSON.stringify({
-                  provider: currentUserName,
-                  client: userName,
-                }),
-              },
+          const providerSystemMessage = {
+            extension: {
+              notification_type: TEXT_NOTIFICATION,
+              notification_text: 'PROVIDER_HAS_ASSIGNED_CLIENT_TO_YOU',
+              translate: 'true',
+              translate_options: JSON.stringify({
+                provider: currentUserName,
+                client: userName,
+              }),
             },
-          ]
+          }
 
-          clientSystemMessages.forEach((systemMessage) => {
-            actions.sendSystemMessage({
-              dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
-              message: systemMessage,
-            })
+          actions.sendSystemMessage({
+            dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
+            message: clientSystemMessage,
           })
 
-          providerSystemMessages.forEach((systemMessage) => {
-            actions.sendSystemMessage({
-              dialogId: QB.chat.helpers.getUserJid(providerId),
-              message: systemMessage,
-            })
+          actions.sendSystemMessage({
+            dialogId: QB.chat.helpers.getUserJid(providerId),
+            message: providerSystemMessage,
           })
 
           actions.toggleShowModal({ modal: 'AssignModal' })

@@ -2,7 +2,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { CANCEL } from 'redux-saga'
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'HEAD'
+type HttpMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'PATCH'
+  | 'DELETE'
+  | 'OPTIONS'
+  | 'HEAD'
 
 export interface AjaxResponse<T> {
   /** Status code of the request */
