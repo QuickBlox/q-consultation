@@ -17,13 +17,11 @@ qb_schema:
         access: open
         primary: true
       update:
-        access: open
-        primary: true
+        access: open_for_users_ids
       delete:
-        access: open
+        access: open_for_users_ids
       create:
-        access: open
-        primary: true
+        access: open_for_users_ids
   custom_class_Record:
     name: Record
     fields:
@@ -37,9 +35,10 @@ qb_schema:
       read:
         access: open
       update:
-        access: owner
+        access: open_for_users_ids
       delete:
-        access: owner
+        access: not_allowed
+        primary: true
       create:
-        access: open
+        access: not_allowed
         primary: true

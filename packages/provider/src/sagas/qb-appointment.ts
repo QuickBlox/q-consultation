@@ -14,10 +14,11 @@ import {
   updateAppointmentFailure,
   updateAppointmentSuccess,
 } from '../actionCreators'
-import { QBDataDelete, QBDataGet, QBDataUpdate } from '../qb-api-calls'
+import { QBDataDelete, QBDataGet } from '../qb-api-calls'
 import { normalize } from '../utils/normalize'
 import { isQBError, stringifyError } from '../utils/parse'
-import { authMyAccountIdSelector } from '../selectors'
+import { authMyAccountIdSelector, authSessionSelector } from '../selectors'
+import { ajax } from './ajax'
 
 interface AppointmentResponse {
   class_name: string
@@ -71,14 +72,27 @@ function* updateAppointment(action: Types.QBAppointmentUpdateRequestAction) {
   const { _id, data, then } = action.payload
 
   try {
-    const response: QBAppointment = yield call(
-      QBDataUpdate,
-      'Appointment',
-      _id,
-      data,
-    )
     const myAccountId: SagaReturnType<typeof authMyAccountIdSelector> =
       yield select(authMyAccountIdSelector)
+    const session: ReturnType<typeof authSessionSelector> = yield select(
+      authSessionSelector,
+    )
+    const url = `${SERVER_APP_URL}/appointments/${_id}`
+
+    const {
+      response,
+    }: {
+      response: QBAppointment
+    } = yield call(ajax, {
+      method: 'PATCH',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session!.token}`,
+      },
+      body: JSON.stringify(data),
+      responseType: 'json',
+    })
 
     const history: Array<QBAppointment['_id']> = []
     const liveQueue: Array<QBAppointment['_id']> = []

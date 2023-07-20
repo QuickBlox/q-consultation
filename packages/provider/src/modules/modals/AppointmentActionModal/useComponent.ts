@@ -90,17 +90,6 @@ export default createUseComponent((props: AppointmentActionModalProps) => {
         id: Date.now().toString(),
       })
     } else if (appointment) {
-      const systemMessage = {
-        extension: {
-          notification_type: APPOINTMENT_NOTIFICATION,
-          appointment_id: appointment._id,
-        },
-      }
-
-      actions.sendSystemMessage({
-        dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
-        message: systemMessage,
-      })
       const dialog = dialogs[appointment.dialog_id]
 
       if (dialog) {

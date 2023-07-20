@@ -2,6 +2,7 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Static, Type } from '@sinclair/typebox'
 import QB, { QBAppointment, QBSession } from 'quickblox'
 import without from 'lodash/without'
+import union from 'lodash/union'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
 import {
@@ -9,6 +10,8 @@ import {
   findUserById,
   qbChatConnect,
   qbChatSendSystemMessage,
+  qbUpdateDialog,
+  qbUpdateCustomObjectByCriteria,
 } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 import { APPOINTMENT_NOTIFICATION } from '@/constants/notificationTypes'
@@ -19,15 +22,17 @@ const updateAppointmentSchema = {
   params: Type.Object({
     id: QBCustomObjectId,
   }),
-  body: Type.Omit(QCAppointment, [
-    '_id',
-    'user_id',
-    '_parent_id',
-    'created_at',
-    'updated_at',
-    'client_id',
-    'dialog_id',
-  ]),
+  body: Type.Partial(
+    Type.Omit(QCAppointment, [
+      '_id',
+      'user_id',
+      '_parent_id',
+      'created_at',
+      'updated_at',
+      'client_id',
+      'dialog_id',
+    ]),
+  ),
   response: {
     200: Type.Ref(QCAppointment),
   },
@@ -45,10 +50,15 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
     body: Static<typeof updateAppointmentSchema.body>,
   ) => {
     const { provider_id } = body
-    const provider = await findUserById(provider_id)
 
-    if (!provider || !userHasTag(provider, 'provider')) {
-      return fastify.httpErrors.badRequest('body/provider_id Invalid property')
+    if (provider_id) {
+      const provider = await findUserById(provider_id)
+
+      if (!provider || !userHasTag(provider, 'provider')) {
+        return fastify.httpErrors.badRequest(
+          'body/provider_id Invalid property',
+        )
+      }
     }
 
     return undefined
@@ -80,7 +90,7 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
     }
   }
 
-  fastify.put(
+  fastify.patch(
     '',
     {
       schema: updateAppointmentSchema,
@@ -97,6 +107,49 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request) => {
       const { id } = request.params
+      const { provider_id } = request.body
+
+      if (provider_id) {
+        const { permissions: currentPermissions, dialog_id } =
+          // TODO: Workaround. Replace with getting a custom object with permissions
+          await qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {})
+
+        const { users_ids } = currentPermissions.update
+        const accessData = {
+          access: 'open_for_users_ids',
+          ids: union(users_ids, [provider_id.toString()]),
+        }
+        const permissions = {
+          read: accessData,
+          update: accessData,
+          delete: accessData,
+        }
+
+        const [appointmentResult] = await Promise.allSettled([
+          qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {
+            ...request.body,
+            permissions,
+          }),
+          qbUpdateCustomObjectByCriteria(
+            'Record',
+            { appointment_id: id },
+            {
+              permissions: {
+                read: permissions.read,
+              },
+            },
+          ),
+          qbUpdateDialog(dialog_id, {
+            push_all: { occupants_ids: [provider_id] },
+          }),
+        ])
+
+        if (appointmentResult.status === 'rejected') {
+          throw appointmentResult.reason
+        }
+
+        return appointmentResult.value
+      }
 
       const appointment = await qbUpdateCustomObject<QBAppointment>(
         id,

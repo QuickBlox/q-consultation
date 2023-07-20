@@ -309,6 +309,18 @@ declare module 'quickblox' {
     updated_at: string
   }
 
+  interface QBAccess {
+    access: 'open' | 'owner' | 'open_for_users_ids' | 'open_for_groups'
+    users_ids: string[]
+  }
+
+  interface QBPermissions {
+    create: QBAccess
+    read: QBAccess
+    update: QBAccess
+    delete: QBAccess
+  }
+
   export interface QBCustomObject {
     /**
      * ID of the record
@@ -323,12 +335,7 @@ declare module 'quickblox' {
     created_at: number
     /** Date & time when record was updated, filled automatically */
     updated_at: number
-  }
-
-  type QBAppointmentPermissions = {
-    read: { access: string }
-    update: { access: string }
-    delete: { access: string }
+    permissions: QBPermissions
   }
 
   export interface QBAppointment extends Omit<QBCustomObject, '_parent_id'> {
@@ -348,7 +355,6 @@ declare module 'quickblox' {
     is_canceled: boolean | null
     is_finished: boolean | null
     has_assistant: boolean | null
-    permissions: QBAppointmentPermissions
   }
 
   export interface QBRecord extends Omit<QBCustomObject, '_parent_id'> {
