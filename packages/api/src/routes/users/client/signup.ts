@@ -20,7 +20,9 @@ export const signUpSchema = {
   body: Type.Intersect([
     Type.Omit(QCClient, ['id', 'created_at', 'updated_at', 'last_request_at']),
     Type.Object({
-      password: Type.String(),
+      password: Type.String({
+        description: "User's password",
+      }),
       avatar: Type.Optional(MultipartFile),
     }),
   ]),

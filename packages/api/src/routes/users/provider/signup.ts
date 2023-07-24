@@ -26,7 +26,9 @@ export const signUpSchema = {
       'last_request_at',
     ]),
     Type.Object({
-      password: Type.String(),
+      password: Type.String({
+        description: "User's password",
+      }),
       avatar: Type.Optional(MultipartFile),
     }),
   ]),
