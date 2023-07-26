@@ -63,20 +63,20 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         )
       }
 
-      const [{ permissions: currentPermissions }, videoData, audioInfo] =
-        await Promise.all([
-          // TODO: Workaround. Replace with getting a custom object with permissions
-          qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {}),
-          video && (await qbUploadFile(video)),
-          audio && (await createAudioDialogAnalytics(audio)),
-        ])
+      const [{ provider_id }, videoData, audioInfo] = await Promise.all([
+        // TODO: Workaround. Replace with getting a custom object by id
+        qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {}),
+        video && (await qbUploadFile(video)),
+        audio && (await createAudioDialogAnalytics(audio)),
+      ])
 
-      const { users_ids } = currentPermissions.read
       const accessData = {
         access: 'open_for_users_ids',
-        ids: users_ids,
+        ids: [fastify.qbAdminId, provider_id].reduce<string[]>(
+          (res, userId) => (userId ? [...res, userId.toString()] : res),
+          [],
+        ),
       }
-
       const permissions = {
         read: accessData,
       }
