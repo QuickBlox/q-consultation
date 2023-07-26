@@ -2,7 +2,6 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Static, Type } from '@sinclair/typebox'
 import QB, { QBAppointment, QBSession } from 'quickblox'
 import without from 'lodash/without'
-import union from 'lodash/union'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
 import {
@@ -110,33 +109,43 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
       const { provider_id } = request.body
 
       if (provider_id) {
-        const { permissions: currentPermissions, dialog_id } =
-          // TODO: Workaround. Replace with getting a custom object with permissions
+        const { client_id, dialog_id } =
+          // TODO: Workaround. Replace with getting a custom object by id
           await qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {})
 
-        const { users_ids } = currentPermissions.update
-        const accessData = {
+        const appointmentAccessData = {
           access: 'open_for_users_ids',
-          ids: union(users_ids, [provider_id.toString()]),
+          ids: [fastify.qbAdminId, provider_id, client_id].reduce<string[]>(
+            (res, userId) => (userId ? [...res, userId.toString()] : res),
+            [],
+          ),
         }
-        const permissions = {
-          read: accessData,
-          update: accessData,
-          delete: accessData,
+        const recordAccessData = {
+          access: 'open_for_users_ids',
+          ids: [fastify.qbAdminId, provider_id].reduce<string[]>(
+            (res, userId) => (userId ? [...res, userId.toString()] : res),
+            [],
+          ),
+        }
+        const appointmentPermissions = {
+          read: appointmentAccessData,
+          update: appointmentAccessData,
+          delete: appointmentAccessData,
+        }
+        const recordPermissions = {
+          read: recordAccessData,
         }
 
         const [appointmentResult] = await Promise.allSettled([
           qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {
             ...request.body,
-            permissions,
+            permissions: appointmentPermissions,
           }),
           qbUpdateCustomObjectByCriteria(
             'Record',
             { appointment_id: id },
             {
-              permissions: {
-                read: permissions.read,
-              },
+              permissions: recordPermissions,
             },
           ),
           qbUpdateDialog(dialog_id, {
