@@ -15,7 +15,10 @@ export const QBCustomObjectId = Type.String({ pattern: '^[a-z0-9]{24}$' })
 export const QBUser = Type.Object(
   {
     id: QBUserId,
-    full_name: Type.String(),
+    full_name: Type.String({
+      minLength: 3,
+      maxLength: 60,
+    }),
     email: Type.String({ format: 'email' }),
     // login: Type.String(),
     // phone: Type.String(),
