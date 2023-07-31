@@ -14,7 +14,8 @@
     "start:pages": "lerna run --scope integration-pages start",
     "lint": "lerna run lint",
     "init:config": "node ./bin/initConfig.js",
-    "init:schema": "node ./bin/initSchema.js"
+    "init:schema": "node ./bin/initSchema.js",
+    "init:data": "node ./bin/initData.js"
   },
   "workspaces": [
     "packages/*"
