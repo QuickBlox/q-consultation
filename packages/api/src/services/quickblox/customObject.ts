@@ -67,3 +67,10 @@ export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
 
   return resData.data
 }
+
+export const qbDeleteRecords = async <T extends QBCustomObject>(
+  className: string,
+  data: Dictionary<unknown>,
+) => {
+  await qbApi.delete<T>(`/data/${className}/by_criteria.json`, data)
+}
