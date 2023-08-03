@@ -11,7 +11,7 @@ export const suggestProviderSchema = {
   tags: ['AI', 'Provider'],
   summary: 'Get suggested providers by name or issue',
   body: Type.Object({
-    topic: Type.String(),
+    topic: Type.String({ minLength: 1 }),
   }),
   response: {
     200: Type.Object({
