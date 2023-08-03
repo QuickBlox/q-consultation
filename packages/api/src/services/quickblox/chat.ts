@@ -47,6 +47,21 @@ export const qbChatCreate = (
     )
   })
 
+export const qbUpdateDialog = (
+  dialogId: QBChatDialog['_id'],
+  data: Dictionary<unknown>,
+) => {
+  return new Promise<QBChatDialog>((resolve, reject) => {
+    QB.chat.dialog.update(dialogId, data, (error, chat) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(chat)
+      }
+    })
+  })
+}
+
 export const qbChatJoin = (dialogId: QBChatDialog['_id']) =>
   new Promise((resolve, reject) => {
     const dialogJid = QB.chat.helpers.getRoomJidFromDialogId(dialogId)

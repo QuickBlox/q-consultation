@@ -2,8 +2,12 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { MultipartFile, QBCustomObjectId, QCRecord } from '@/models'
 import { createAudioDialogAnalytics } from '@/services/openai'
-import { qbCreateChildCustomObject, qbUploadFile } from '@/services/quickblox'
-import { QBRecord } from 'quickblox'
+import {
+  qbCreateChildCustomObject,
+  qbUpdateCustomObject,
+  qbUploadFile,
+} from '@/services/quickblox'
+import { QBAppointment, QBRecord } from 'quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
   const createRecordSchema = {
@@ -59,8 +63,23 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         )
       }
 
-      const videoData = video && (await qbUploadFile(video))
-      const audioInfo = audio && (await createAudioDialogAnalytics(audio))
+      const [{ provider_id }, videoData, audioInfo] = await Promise.all([
+        // TODO: Workaround. Replace with getting a custom object by id
+        qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {}),
+        video && (await qbUploadFile(video)),
+        audio && (await createAudioDialogAnalytics(audio)),
+      ])
+
+      const accessData = {
+        access: 'open_for_users_ids',
+        ids: [fastify.qbAdminId, provider_id].reduce<string[]>(
+          (res, userId) => (userId ? [...res, userId.toString()] : res),
+          [],
+        ),
+      }
+      const permissions = {
+        read: accessData,
+      }
       const transcription =
         audioInfo?.transcription?.map(
           ({ start, text }) => `${start}|${text}`,
@@ -77,6 +96,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
           transcription,
           summary: audioInfo?.summary,
           actions: audioInfo?.actions,
+          permissions,
         },
       )
 

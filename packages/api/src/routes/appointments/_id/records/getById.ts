@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox'
 import { QBRecord } from 'quickblox'
 
 import { QBCustomObjectId, QCRecord } from '@/models'
-import { qbGetCustomObject } from '@/services/quickblox'
+import { qbUpdateCustomObject } from '@/services/quickblox'
 
 const getRecordSchema = {
   tags: ['Appointments', 'Records'],
@@ -31,19 +31,14 @@ const getRecordById: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request, reply) => {
       const { id, recordId } = request.params
 
-      const {
-        items: [record],
-      } = await qbGetCustomObject<QBRecord>('Record', {
-        _id: {
-          in: [recordId],
-        },
-        appointment_id: {
-          in: [id],
-        },
-        limit: 1,
-      })
+      // TODO: Workaround. Replace with getting a custom object by id
+      const record = await qbUpdateCustomObject<QBRecord>(
+        recordId,
+        'Appointment',
+        {},
+      )
 
-      if (!record) {
+      if (record.appointment_id !== id) {
         return reply.notFound()
       }
 
