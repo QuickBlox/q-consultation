@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 import { createUseComponent, useActions, useForm } from '../../../hooks'
 import {
@@ -20,7 +21,6 @@ import { createMapStateSelector } from '../../../utils/selectors'
 import useIsOffLine from '../../../hooks/useIsOffLine'
 import { validateFullName } from '../../../utils/validate'
 import { APPOINTMENT_CLIENT_ROUTE } from '../../../constants/routes'
-import { useTranslation } from 'react-i18next'
 
 interface FormValues {
   full_name: QBUser['full_name']
@@ -50,6 +50,20 @@ export default createUseComponent((props: GuestUserModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const isOffline = useIsOffLine()
   const { t } = useTranslation()
+
+  const onCancelClick = () => {
+    actions.toggleShowModal({ modal: 'GuestUserModal' })
+
+    if (onClose) {
+      onClose()
+    }
+  }
+
+  const onBackdropClick = (e: ReactMouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (backdrop.current && e.target === backdrop.current) {
+      onCancelClick()
+    }
+  }
 
   const handleSubmit = async (values: FormValues) => {
     if (myAccount) {
@@ -114,21 +128,6 @@ export default createUseComponent((props: GuestUserModalProps) => {
     validate: handleValidate,
     onSubmit: handleSubmit,
   })
-
-  const onCancelClick = () => {
-    guestUserForm.resetForm()
-    actions.toggleShowModal({ modal: 'GuestUserModal' })
-
-    if (onClose) {
-      onClose()
-    }
-  }
-
-  const onBackdropClick = (e: ReactMouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (backdrop.current && e.target === backdrop.current) {
-      onCancelClick()
-    }
-  }
 
   useEffect(() => {
     if (!opened) {

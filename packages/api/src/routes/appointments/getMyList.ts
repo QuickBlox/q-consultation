@@ -2,6 +2,8 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Static, Type } from '@sinclair/typebox'
 import { QBAppointment, QBSession } from 'quickblox'
 import omit from 'lodash/omit'
+import pick from 'lodash/pick'
+import keys from 'lodash/keys'
 
 import {
   DateISO,
@@ -92,12 +94,15 @@ const getMyAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request) => {
       const myAccount = await findUserById(request.session!.user_id)
       const isProvider = userHasTag(myAccount!, 'provider')
-
+      const receivedQuery = pick(
+        request.query,
+        keys(getMyAppointmentListSchema.querystring.properties),
+      )
       const {
         'date_end[from]': dateFrom,
         'date_end[to]': dateTo,
         ...baseFilter
-      } = request.query
+      } = receivedQuery
       const filter = {
         ...baseFilter,
         [isProvider ? 'provider_id' : 'client_id']: request.session!.user_id,
