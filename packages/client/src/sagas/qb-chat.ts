@@ -149,7 +149,8 @@ function* handleQBChatEvents() {
                   ? JSON.parse(extension.translate_options)
                   : undefined,
                 message: extension.notification_text,
-                position: 'bottom-center',
+                position: 'top-center',
+                type: 'cancel',
               }),
             )
           }

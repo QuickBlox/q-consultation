@@ -253,6 +253,6 @@ The Request section will specify the MIME Type of the request body:
 - `multipart/form-data` - used to send files in the body request.
   Use [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) in JavaScript.
 
-![](/img/api-endpoints.jpg)
+<Image src='/img/api-endpoints.jpg'/>
 
 :::

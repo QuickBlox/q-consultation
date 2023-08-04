@@ -21,6 +21,7 @@ import {
 import { createUseComponent, useActions } from '../../../hooks'
 import { combineSelectors } from '../../../utils/selectors'
 import {
+  APPOINTMENT_NOTIFICATION,
   DIALOG_NOTIFICATION,
   TEXT_NOTIFICATION,
 } from '../../../constants/notificationTypes'
@@ -77,6 +78,7 @@ export default createUseComponent((props: AssignModalProps) => {
   const handleAppointmentUpdate = (
     dialogId: QBChatDialog['_id'],
     providerId: QBAppointment['provider_id'],
+    provider: QBUser['full_name'],
   ) => {
     if (appointment) {
       actions.sendSystemMessage({
@@ -93,38 +95,58 @@ export default createUseComponent((props: AssignModalProps) => {
         _id: appointment._id,
         data: { provider_id: providerId },
         then: () => {
-          const clientSystemMessage = {
+          const systemMessageAppointment = {
             extension: {
-              notification_type: TEXT_NOTIFICATION,
-              notification_text: 'YOU_HAVE_NEW_PROVIDER',
-              translate: 'true',
+              notification_type: APPOINTMENT_NOTIFICATION,
+              appointment_id: appointment._id,
             },
           }
+
+          const clientSystemMessages = [
+            systemMessageAppointment,
+            {
+              extension: {
+                notification_type: TEXT_NOTIFICATION,
+                notification_text: 'YOU_HAVE_NEW_PROVIDER',
+                translate: 'true',
+                translate_options: JSON.stringify({
+                  provider,
+                }),
+              },
+            },
+          ]
 
           const currentUserName = myAccount
             ? myAccount.full_name || myAccount.login || myAccount.email
             : t('AnotherProvider')
 
-          const providerSystemMessage = {
-            extension: {
-              notification_type: TEXT_NOTIFICATION,
-              notification_text: 'PROVIDER_HAS_ASSIGNED_CLIENT_TO_YOU',
-              translate: 'true',
-              translate_options: JSON.stringify({
-                provider: currentUserName,
-                client: userName,
-              }),
+          const providerSystemMessages = [
+            systemMessageAppointment,
+            {
+              extension: {
+                notification_type: TEXT_NOTIFICATION,
+                notification_text: 'PROVIDER_HAS_ASSIGNED_CLIENT_TO_YOU',
+                translate: 'true',
+                translate_options: JSON.stringify({
+                  provider: currentUserName,
+                  client: userName,
+                }),
+              },
             },
-          }
+          ]
 
-          actions.sendSystemMessage({
-            dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
-            message: clientSystemMessage,
+          clientSystemMessages.forEach((systemMessage) => {
+            actions.sendSystemMessage({
+              dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
+              message: systemMessage,
+            })
           })
 
-          actions.sendSystemMessage({
-            dialogId: QB.chat.helpers.getUserJid(providerId),
-            message: providerSystemMessage,
+          providerSystemMessages.forEach((systemMessage) => {
+            actions.sendSystemMessage({
+              dialogId: QB.chat.helpers.getUserJid(providerId),
+              message: systemMessage,
+            })
           })
 
           actions.toggleShowModal({ modal: 'AssignModal' })
@@ -151,7 +173,7 @@ export default createUseComponent((props: AssignModalProps) => {
 
       if (dialog) {
         if (dialog.occupants_ids.includes(value.id)) {
-          handleAppointmentUpdate(dialog._id, value.id)
+          handleAppointmentUpdate(dialog._id, value.id, value.full_name)
         } else {
           actions.updateDialog({
             dialogId: dialog._id,
@@ -168,7 +190,7 @@ export default createUseComponent((props: AssignModalProps) => {
                   },
                 },
               })
-              handleAppointmentUpdate(dialog._id, value.id)
+              handleAppointmentUpdate(dialog._id, value.id, value.full_name)
             },
           })
         }
