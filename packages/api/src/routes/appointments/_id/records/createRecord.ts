@@ -63,9 +63,13 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         )
       }
 
-      const [{ provider_id }, videoData, audioInfo] = await Promise.all([
-        // TODO: Workaround. Replace with getting a custom object by id
-        qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {}),
+      // TODO: Workaround. Replace with getting a custom object by id
+      const { provider_id } = await qbUpdateCustomObject<QBAppointment>(
+        id,
+        'Appointment',
+        {},
+      )
+      const [videoData, audioInfo] = await Promise.all([
         video && (await qbUploadFile(video)),
         audio && (await createAudioDialogAnalytics(audio)),
       ])
