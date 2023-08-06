@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Static, Type } from '@sinclair/typebox'
-import QB, { QBAppointment, QBSession } from 'quickblox'
+import QB, { QBAppointment, QBSession, QBUser } from 'quickblox'
 import without from 'lodash/without'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
@@ -66,25 +66,28 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (
     session: QBSession,
     payload: SuccessResponse | null,
+    prevProviderId: QBUser['id'] | null,
   ) => {
     if (payload) {
       await qbChatConnect(session.user_id, session.token)
 
       const recipients = without(
-        [payload.provider_id, payload.client_id],
+        [prevProviderId, payload.provider_id, payload.client_id],
         session.user_id,
       )
 
       recipients.forEach((userId) => {
-        const dialogId = QB.chat.helpers.getUserJid(userId)
-        const systemMessage = {
-          extension: {
-            notification_type: APPOINTMENT_NOTIFICATION,
-            appointment_id: payload._id,
-          },
-        }
+        if (userId) {
+          const dialogId = QB.chat.helpers.getUserJid(userId)
+          const systemMessage = {
+            extension: {
+              notification_type: APPOINTMENT_NOTIFICATION,
+              appointment_id: payload._id,
+            },
+          }
 
-        qbChatSendSystemMessage(dialogId, systemMessage)
+          qbChatSendSystemMessage(dialogId, systemMessage)
+        }
       })
     }
   }
@@ -99,8 +102,11 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
       },
       onResponse: (request, reply, done) => {
         const data: SuccessResponse | null = reply.payload
+        const prevProviderId = request.state.get<QBUser['id'] | null>(
+          'prevProviderId',
+        )
 
-        handleResponse(request.session!, data)
+        handleResponse(request.session!, data, prevProviderId)
         done()
       },
     },
@@ -109,9 +115,11 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
       const { provider_id } = request.body
 
       if (provider_id) {
-        const { client_id, dialog_id } =
+        const { dialog_id, client_id, provider_id: prevProviderId } =
           // TODO: Workaround. Replace with getting a custom object by id
           await qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {})
+
+        request.state.set('prevProviderId', prevProviderId)
 
         const appointmentAccessData = {
           access: 'open_for_users_ids',
