@@ -83,17 +83,28 @@ const config = {
             type: 'doc',
             position: 'left',
             label: 'Developer Docs',
-            docId: 'dev/intro'
+            docId: 'dev/intro',
           },
           {
             position: 'left',
             label: 'Server API',
             to: '/api',
           },
+          {
+            position: 'left',
+            label: 'Blog',
+            to: 'https://quickblox.com/blog/quickblox/q-consultation/',
+          },
           // {
           //   type: 'docsVersionDropdown', // temporarily disabled, enable again when adding versioning, see https://tutorial.docusaurus.io/docs/tutorial-extras/manage-docs-versions
           //   position: 'right',
           // },
+          {
+            href: 'https://discord.gg/ZWZ3WpYZ9q',
+            position: 'right',
+            className: 'header-discord-logo',
+            'aria-label': 'Discord',
+          },
           {
             href: 'https://github.com/QuickBlox/q-consultation',
             // label: 'GitHub',

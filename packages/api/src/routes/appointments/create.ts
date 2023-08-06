@@ -121,6 +121,19 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request) => {
       const { provider_id, client_id, description } = request.body
 
+      const accessData = {
+        access: 'open_for_users_ids',
+        ids: [fastify.qbAdminId, provider_id, client_id].reduce<string[]>(
+          (res, id) => (id ? [...res, id.toString()] : res),
+          [],
+        ),
+      }
+      const permissions = {
+        read: accessData,
+        update: accessData,
+        delete: accessData,
+      }
+
       const dialog = await qbChatCreate([provider_id, client_id])
       const appointment = await qbCreateCustomObject<QBAppointment>(
         'Appointment',
@@ -130,6 +143,7 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
           provider_id,
           client_id,
           description,
+          permissions,
         },
       )
 

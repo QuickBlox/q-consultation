@@ -1,18 +1,13 @@
 ### Client application interface
 
-Main screen:
-![](/img/snippets/001.png)
+<Image src='/img/snippets/001.png' caption='Main screen'/>
 
-Waiting room:
-![](/img/snippets/002.png)
+<Image src='/img/snippets/002.png' caption='Waiting room'/>
 
-Video call:
-![](/img/snippets/003.png)
+<Image src='/img/snippets/003.png' caption='Video call'/>
 
 ### Provider application interface
 
-Main screen:
-![](/img/snippets/004.png)
+<Image src='/img/snippets/004.png' caption='Main screen'/>
 
-Video call:
-![](/img/snippets/005.png)
+<Image src='/img/snippets/005.png' caption='Video call'/>

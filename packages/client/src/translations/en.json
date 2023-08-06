@@ -130,7 +130,7 @@
   "INVALID_FILE": "Invalid file. Available only files with the extension {{extensions}}",
   "FILE_SIZE_LIMIT": "File exceeds size limit {{size}}",
   "TO_LARGER_FROM": "The \"To\" field must be larger than the \"From\" field",
-  "YOU_HAVE_NEW_PROVIDER": "You have a new agent",
+  "YOU_HAVE_NEW_PROVIDER": "You have a new agent: {{provider}}",
   "SELECT_DATE_TIME_APPOINTMENT": "Please select the date and time of the appointment",
   "APPOINTMENT_CREATED": "Appointment created: {{date}} ({{name}})",
   "APPOINTMENT_BEGINS": "Appointment begins: {{date}} ({{name}})",

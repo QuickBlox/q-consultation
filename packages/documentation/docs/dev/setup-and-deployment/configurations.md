@@ -99,8 +99,6 @@ For more details on the format see [RTCIceServer docs](https://developer.mozilla
 
 <ScriptSchema components={props.components} />
 
-> If you have created a QuickBlox account via Google or GitHub and you do not have a password, then this option for adding a schema is not suitable for you and you need to add it manually.
-
 You can also add a scheme manually through the [Admin Panel](https://admin.quickblox.com).
 
 You will find the [**schema.yml**](https://github.com/QuickBlox/q-consultation/blob/master/qconsultation_config/schema.yml) file in the **qconsultation_config** folder of the project directory.
@@ -112,14 +110,14 @@ To import this file to the QuickBlox admin panel, follow the steps below:
 3. There, click **Browse** for the **Import schema File**.
 4. Once the file is added, click **Import Schema**.
 
-![](/img/configurations/008.png)
+<Image src='/img/configurations/008.gif'/>
 
 If something goes wrong, you can also manually create a custom class (**Appointment** and **Record**) in the way described below:
 
 1. In the top-right corner, choose **List** of the **Custom** tab.
 2. There, click **Add** and choose **Add new class** from the drop-down menu.
 
-![](/img/configurations/009.png)
+<Image src='/img/configurations/009.gif'/>
 
 3. A modal window will appear where you need to specify the class name and create and create its fields:
 
@@ -137,7 +135,7 @@ Appointment
   date_end: Date
 ```
 
-![](/img/configurations/010.png)
+<Image src='/img/configurations/010.gif'/>
 
 Record
 
@@ -150,15 +148,11 @@ Record
   uid: String
 ```
 
-![](/img/configurations/012.jpg)
+<Image src='/img/configurations/012.gif'/>
 
 4. After all the fields added, click **Create class**.
 5. Once done, the modal window will close. You need to choose **Edit permission**, set the permissions as shown on the below screenshot and click **Edit permissions**:
 
-Appointment
+<Image src='/img/configurations/011.gif' caption='Appointment'/>
 
-![](/img/configurations/011.png)
-
-Record
-
-![](/img/configurations/013.jpg)
+<Image src='/img/configurations/013.gif' caption='Record'/>

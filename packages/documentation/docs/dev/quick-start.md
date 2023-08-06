@@ -71,9 +71,7 @@ After registering the QuickBlox account, you need to create an application in yo
 
 Once done, you will be redirected to the **Overview** page of your newly created application. There, you will find application credentials necessary to connect Q-Consultation application to the QuickBlox server. We will get back to them later.
 
-![](/img/quick-start/001.png)
-![](/img/quick-start/002.png)
-![](/img/quick-start/003.png)
+<Image src='/img/quick-start/001.gif'/>
 
 :::tip
 You can read more about working with applications here: [QuickBlox Application](https://docs.quickblox.com/docs/application)
@@ -83,12 +81,12 @@ You can read more about working with applications here: [QuickBlox Application](
 
 Now, let’s get back to the application credentials which you saw in the QuickBlox admin panel.
 
-<ScriptConfig components={props.components} />
-
 :::caution
 If you have registered your QuickBlox account via Google or GitHub and you do not have a password,
 you can recover it on the [Forgot password](https://admin.quickblox.com/forgot) page or use another method to configure the application.
 :::
+
+<ScriptConfig components={props.components} />
 
 :::tip
 For detailed application configuration information,
@@ -99,11 +97,6 @@ There you will find other ways to configure and a description of all configurati
 ## Step 5: Upload Schema
 
 <ScriptSchema components={props.components} />
-
-:::caution
-If you have registered your QuickBlox account via Google or GitHub and you do not have a password,
-you can recover it on the [Forgot password](https://admin.quickblox.com/forgot) page or use another method to upload schema into application.
-:::
 
 :::tip
 For details on uploading schema into applications,

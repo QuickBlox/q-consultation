@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin'
-import { QBSession } from 'quickblox'
-import { qbInit } from '@/services/quickblox'
+import { QBSession, QBUser } from 'quickblox'
+import { qbCreateSession, qbInit } from '@/services/quickblox'
 import { userHasTag } from '@/utils/user'
 import {
   TokenHandler,
@@ -12,6 +12,20 @@ import {
 
 export default fp(
   async (fastify) => {
+    fastify.decorate('qbAdminId', null)
+
+    fastify.addHook('onReady', async () => {
+      const { QB_ADMIN_EMAIL, QB_ADMIN_PASSWORD } = fastify.config
+
+      if (QB_ADMIN_EMAIL && QB_ADMIN_PASSWORD) {
+        qbInit(fastify.config)
+        const session = await qbCreateSession(QB_ADMIN_EMAIL, QB_ADMIN_PASSWORD)
+
+        // eslint-disable-next-line no-param-reassign
+        fastify.qbAdminId = session.user_id
+      }
+    })
+
     fastify.addHook('onRequest', async () => {
       qbInit(fastify.config)
     })
@@ -54,6 +68,7 @@ export default fp(
 
 declare module 'fastify' {
   interface FastifyInstance {
+    qbAdminId: QBUser['id'] | null
     SessionToken: TokenHandler
     ClientSessionToken: TokenHandler
     ProviderSessionToken: TokenHandler

@@ -43,12 +43,9 @@ export interface QBAppointmentCreateSuccessAction extends Action {
 export interface QBAppointmentCreateRequestAction extends Action {
   type: typeof QB_APPOINTMENT_CREATE_REQUEST
   payload: {
-    dialog_id: QBChatDialog['_id']
     client_id: QBUser['id']
     provider_id: QBUser['id']
     description: string
-    date_start?: string
-    date_end?: string
     then?: (data: QBAppointmentCreateSuccessAction) => void
   }
 }
