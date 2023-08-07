@@ -17,6 +17,7 @@ import { userHasTag } from '@/utils/user'
 const getMyAppointmentListSchema = {
   tags: ['Appointments'],
   summary: 'Get a list of my appointments',
+  description: 'Retrieve all user appointments list',
   querystring: Type.Partial(
     Type.Object({
       limit: Type.Integer({
@@ -31,7 +32,11 @@ const getMyAppointmentListSchema = {
       }),
       sort_desc: QCAppointmentSortKeys,
       sort_asc: QCAppointmentSortKeys,
-      priority: Type.Integer({ minimum: 0, maximum: 2 }),
+      priority: Type.Integer({
+        minimum: 0,
+        maximum: 2,
+        description: 'The priority of the appointment in the queue',
+      }),
       provider_id: {
         ...QBUserId,
         description: 'Only for `clientSession` Authorization',

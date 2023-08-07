@@ -16,6 +16,7 @@ import { qbGetCustomObject } from '@/services/quickblox'
 const getAllAppointmentListSchema = {
   tags: ['Appointments'],
   summary: 'Get a list of all appointments',
+  description: 'Retrieve a list of all users appointments using an apiKey',
   querystring: Type.Partial(
     Type.Object({
       limit: Type.Integer({
@@ -30,7 +31,11 @@ const getAllAppointmentListSchema = {
       }),
       sort_desc: QCAppointmentSortKeys,
       sort_asc: QCAppointmentSortKeys,
-      priority: Type.Integer({ minimum: 0, maximum: 2 }),
+      priority: Type.Integer({
+        minimum: 0,
+        maximum: 2,
+        description: 'The priority of the appointment in the queue',
+      }),
       provider_id: QBUserId,
       client_id: QBUserId,
       'date_end[from]': DateISO,
