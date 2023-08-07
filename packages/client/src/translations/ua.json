@@ -129,7 +129,7 @@
   "INVALID_FILE": "Неправильний файл. Доступні лише файли з розширенням {{extensions}}",
   "FILE_SIZE_LIMIT": "Розмір файлу перевищує ліміт {{size}}",
   "TO_LARGER_FROM": "Поле \"До\" має бути більше, ніж поле \"З\".",
-  "YOU_HAVE_NEW_PROVIDER": "У вас новий агент",
+  "YOU_HAVE_NEW_PROVIDER": "У вас новий агент: {{provider}}",
   "SELECT_DATE_TIME_APPOINTMENT": "Будь ласка, виберіть дату та час зустрічі",
   "APPOINTMENT_CREATED": "Зустріч створена: {{date}} ({{name}})",
   "APPOINTMENT_BEGINS": "Зустріч починається: {{date}} ({{name}})",

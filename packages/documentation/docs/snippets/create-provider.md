@@ -14,6 +14,7 @@ There is no registration in the provider's application, so to create a user you 
    --header 'content-type: multipart/form-data' \
    --form 'full_name=<Full name>' \
    --form email=<Email> \
+   --form profession=<Profession> \
    --form password=<Password>
    ```
 
@@ -34,6 +35,10 @@ There is no registration in the provider's application, so to create a user you 
    Content-Disposition: form-data; name="password"
 
    <Password>
+   -----011000010111000001101001
+   Content-Disposition: form-data; name="profession"
+
+   <Profession>
    -----011000010111000001101001--
    ' |  \
    http POST http://localhost:4000/users/provider \
@@ -53,11 +58,12 @@ There is no registration in the provider's application, so to create a user you 
    - Add the following form options with the actual data:
      - `full_name`
      - `email`
+     - `profession`
      - `password`
    - Send the request.
 
 :::note
-In both methods, the request will be sent to the specified URL with the provided data about the provider. Make sure to replace `<Full name>`, `<Email>`, and `<Password>` with the actual values you want to use for creating the provider.
+In both methods, the request will be sent to the specified URL with the provided data about the provider. Make sure to replace `<Full name>`, `<Email>`, `<Profession>` and `<Password>` with the actual values you want to use for creating the provider.
 :::
 
 Choose the preferred method based on your development environment and tools.

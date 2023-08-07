@@ -83,11 +83,11 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
       const { items: [currentAppointment] = [] } = currentAppointmentData || {}
       const { profession } = parseUserCustomData(myAccount?.custom_data)
 
-      if (!currentMessage || !currentAppointment) {
+      if (!currentMessage) {
         return reply.notFound()
       }
 
-      const { client_id, provider_id, description } = currentAppointment
+      const { client_id, provider_id, description } = currentAppointment || {}
 
       if (provider_id !== user_id || currentMessage.sender_id !== client_id) {
         return reply.forbidden()

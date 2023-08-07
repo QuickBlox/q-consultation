@@ -116,12 +116,12 @@ function statusError(error: unknown): number {
       return error.response.status
     }
 
-    if ('statusCode' in error && typeof error.statusCode === 'number') {
-      return error.statusCode
+    if ('statusCode' in error && !Number.isNaN(error.statusCode)) {
+      return Number(error.statusCode)
     }
 
-    if ('code' in error && typeof error.code === 'number') {
-      return error.code
+    if ('code' in error && !Number.isNaN(error.code)) {
+      return Number(error.code)
     }
   }
 

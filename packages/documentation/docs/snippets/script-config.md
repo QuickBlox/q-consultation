@@ -21,4 +21,4 @@ yarn init:config
 
 </Tabs>
 
-![](/img/snippets/config.jpeg)
+<Image src='/img/snippets/config.gif'/>
