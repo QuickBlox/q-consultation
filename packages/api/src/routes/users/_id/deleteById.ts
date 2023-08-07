@@ -3,12 +3,15 @@ import { Type } from '@sinclair/typebox'
 import QB, { QBSession } from 'quickblox'
 
 import {
+  findUserById,
   qbDeleteUser,
   qbChatConnect,
   qbChatSendSystemMessage,
+  qbDeleteCustomObjectByCriteria,
 } from '@/services/quickblox'
 import { QBUserId } from '@/models'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
+import { userHasTag } from '@/utils/user'
 
 export const deleteSchema = {
   tags: ['Users'],
@@ -49,8 +52,18 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params
+      const user = await findUserById(id)
+      const userField = userHasTag(user!, 'provider')
+        ? 'provider_id'
+        : 'client_id'
 
-      await qbDeleteUser(id)
+      await Promise.all([
+        qbDeleteUser(id),
+        qbDeleteCustomObjectByCriteria('Appointment', {
+          [userField]: id,
+        }),
+      ])
+
       reply.code(204)
 
       return null
