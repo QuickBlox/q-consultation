@@ -7,7 +7,7 @@ import {
   qbDeleteUser,
   qbChatConnect,
   qbChatSendSystemMessage,
-  qbDeleteRecords,
+  qbDeleteCustomObjectByCriteria,
 } from '@/services/quickblox'
 import { QBUserId } from '@/models'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
@@ -53,13 +53,17 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request, reply) => {
       const { id } = request.params
       const user = await findUserById(id)
-      if (userHasTag(user!, 'provider')) {
-        await qbDeleteRecords('Appointment', {
-          provider_id: id.toString(),
-        })
-      }
-      await qbDeleteRecords('Appointment', { client_id: id })
-      await qbDeleteUser(id)
+      const userField = userHasTag(user!, 'provider')
+        ? 'provider_id'
+        : 'client_id'
+
+      await Promise.all([
+        qbDeleteUser(id),
+        qbDeleteCustomObjectByCriteria('Appointment', {
+          [userField]: id,
+        }),
+      ])
+
       reply.code(204)
 
       return null

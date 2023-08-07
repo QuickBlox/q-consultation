@@ -68,13 +68,6 @@ export const qbCreateChildCustomObject = async <T extends QBCustomObject>(
   return resData.data
 }
 
-export const qbDeleteRecords = async <T extends QBCustomObject>(
-  className: string,
-  data: Dictionary<unknown>,
-) => {
-  await qbApi.delete<T>(`/data/${className}/by_criteria.json`, data)
-}
-
 export const qbUpdateCustomObjectByCriteria = async <T extends QBCustomObject>(
   className: string,
   filters: Dictionary<unknown>,
@@ -84,6 +77,23 @@ export const qbUpdateCustomObjectByCriteria = async <T extends QBCustomObject>(
     ...data,
     search_criteria: filters,
   })
+
+  return resData.data
+}
+
+export const qbDeleteCustomObjectByCriteria = async (
+  className: string,
+  data: Dictionary<unknown>,
+) => {
+  const resData = await qbApi.delete<{ total_deleted: number }>(
+    `/data/${className}/by_criteria.json`,
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data,
+    },
+  )
 
   return resData.data
 }
