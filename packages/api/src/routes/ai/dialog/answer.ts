@@ -49,11 +49,15 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
       if (isQBError(error)) {
         if (Array.isArray(error.message))
           return fastify.httpErrors.forbidden(error.message[0])
+
         if (typeof error.message === 'string')
           return fastify.httpErrors.forbidden(error.message)
       }
+
+      return fastify.httpErrors.internalServerError()
     }
   }
+
   fastify.get(
     '/:dialogId/messages/:clientMessageId/answer',
     {
