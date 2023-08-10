@@ -345,16 +345,10 @@ declare module 'quickblox' {
     provider_id: QBUser['id']
     dialog_id: QBChatDialog['_id']
     description: string
-    notes: string
-    conclusion?: string
-    date_start?: string
-    date_end?: string
-    language?: string
-    records?: Array<QBContentObject['id']>
-    appointment_name: string | null
-    is_canceled: boolean | null
-    is_finished: boolean | null
-    has_assistant: boolean | null
+    notes: string | null
+    conclusion: string | null
+    date_end: string | null
+    language: string | null
   }
 
   export interface QBRecord extends Omit<QBCustomObject, '_parent_id'> {

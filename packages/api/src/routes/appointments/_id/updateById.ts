@@ -112,7 +112,7 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request) => {
       const { id } = request.params
-      const { provider_id } = request.body
+      const { provider_id, conclusion, date_end } = request.body
 
       if (provider_id) {
         const { dialog_id, client_id, provider_id: prevProviderId } =
@@ -144,9 +144,14 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
           read: recordAccessData,
         }
 
+        const data =
+          conclusion && !date_end
+            ? { ...request.body, date_end: new Date().toISOString() }
+            : request.body
+
         const [appointmentResult] = await Promise.allSettled([
           qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {
-            ...request.body,
+            ...data,
             permissions: appointmentPermissions,
           }),
           qbUpdateCustomObjectByCriteria(

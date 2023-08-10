@@ -45,7 +45,7 @@ export default (
         loading: false,
         limit,
         skip,
-        entries: { ...state.entries, ...entries },
+        entries: omit({ ...state.entries, ...entries }, filterIds),
         history: difference(
           reset === 'history' ? history : union(state.history, history),
           filterIds,
