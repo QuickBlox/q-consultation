@@ -27,6 +27,10 @@ export const deleteSchema = {
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (session: QBSession, userId: number) => {
+    const user = await findUserById(userId)
+
+    if (!user) return fastify.httpErrors.notFound('The user was not found')
+
     await qbChatConnect(session.user_id, session.token)
     const dialogId = QB.chat.helpers.getUserJid(userId)
 
