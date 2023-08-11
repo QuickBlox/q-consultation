@@ -48,10 +48,10 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
     } catch (error) {
       if (isQBError(error)) {
         if (Array.isArray(error.message))
-          return fastify.httpErrors.forbidden(error.message[0])
+          return fastify.httpErrors.notFound(error.message[0])
 
         if (typeof error.message === 'string')
-          return fastify.httpErrors.forbidden(error.message)
+          return fastify.httpErrors.notFound(error.message)
       }
 
       return fastify.httpErrors.internalServerError()
