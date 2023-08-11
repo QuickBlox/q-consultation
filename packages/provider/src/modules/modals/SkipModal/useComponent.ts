@@ -20,7 +20,6 @@ import {
 } from '../../../selectors'
 import { createUseComponent, useActions } from '../../../hooks'
 import { combineSelectors } from '../../../utils/selectors'
-import { APPOINTMENT_NOTIFICATION } from '../../../constants/notificationTypes'
 
 export interface SkipModalProps {
   onClose?: () => void
