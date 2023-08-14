@@ -5,7 +5,6 @@ import {
   QBChatMessage,
   QBChatNewMessage,
   QBSystemMessage,
-  QBChatDialogType,
 } from 'quickblox'
 import { QBApi } from './api'
 
@@ -38,7 +37,7 @@ export const qbChatCreate = (
       {
         name: '-',
         occupants_ids: Array.isArray(userIds) ? userIds : [userIds],
-        type: QBChatDialogType.GROUP,
+        type: 2,
         data,
       },
       (error, chat) => {
