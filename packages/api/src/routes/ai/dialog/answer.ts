@@ -4,7 +4,8 @@ import { ChatCompletionRequestMessage } from 'openai'
 import { QBAppointment, QBSession } from 'quickblox'
 import { QBDialogId, QBMessageId } from '@/models'
 import {
-  findUserById,
+  QBUserApi,
+  getUserById,
   qbChatConnect,
   qbChatGetMessages,
   qbChatJoin,
@@ -12,7 +13,7 @@ import {
 } from '@/services/quickblox'
 import { createQuickAnswerForDialog } from '@/services/openai'
 import { loopToLimitTokens } from '@/services/openai/utils'
-import { parseUserCustomData } from '@/utils/user'
+import { parseUserCustomData } from '@/services/quickblox/utils'
 import { isQBError } from '@/utils/parse'
 
 export const quickAnswerSchema = {
@@ -41,8 +42,8 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
       const { dialogId } = params
       const { token, user_id } = session
 
-      await qbChatConnect(user_id, token)
-      await qbChatJoin(dialogId)
+      await qbChatConnect(QBUserApi, user_id, token)
+      await qbChatJoin(QBUserApi, dialogId)
 
       return undefined
     } catch (error) {
@@ -73,14 +74,14 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
 
       const [currentMessageData, currentAppointmentData, myAccount] =
         await Promise.all([
-          qbChatGetMessages(dialogId, {
+          qbChatGetMessages(QBUserApi, dialogId, {
             _id: clientMessageId,
           }),
-          qbGetCustomObject<QBAppointment>('Appointment', {
+          qbGetCustomObject<QBAppointment>(QBUserApi, 'Appointment', {
             dialog_id: dialogId,
             limit: 1,
           }),
-          findUserById(user_id),
+          getUserById(QBUserApi, user_id),
         ])
 
       const { items: [currentMessage] = [] } = currentMessageData || {}
@@ -101,7 +102,7 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
         return reply.badRequest('Message text is missing')
       }
 
-      const { items } = await qbChatGetMessages(dialogId, {
+      const { items } = await qbChatGetMessages(QBUserApi, dialogId, {
         date_sent: {
           lte: currentMessage.date_sent,
         },

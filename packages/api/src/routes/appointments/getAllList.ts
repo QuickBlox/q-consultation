@@ -11,7 +11,7 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject } from '@/services/quickblox'
+import { QBUserApi, qbGetCustomObject } from '@/services/quickblox'
 
 const getAllAppointmentListSchema = {
   tags: ['Appointments'],
@@ -82,6 +82,7 @@ const getAllAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       const appointments = await qbGetCustomObject<QBAppointment>(
+        QBUserApi,
         'Appointment',
         filter,
       )

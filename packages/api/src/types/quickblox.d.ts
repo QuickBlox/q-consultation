@@ -538,7 +538,7 @@ declare module 'quickblox' {
     ): void
   }
 
-  type QBLoginParams =
+  export type QBLoginParams =
     | {
         login: string
         password: string

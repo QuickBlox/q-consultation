@@ -11,8 +11,8 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject, findUserById } from '@/services/quickblox'
-import { userHasTag } from '@/utils/user'
+import { qbGetCustomObject, getUserById, QBUserApi } from '@/services/quickblox'
+import { userHasTag } from '@/services/quickblox/utils'
 
 const getMyAppointmentListSchema = {
   tags: ['Appointments'],
@@ -68,7 +68,7 @@ const getMyAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
     query: Static<typeof getMyAppointmentListSchema.querystring>,
   ) => {
     const { provider_id, client_id } = query
-    const user = await findUserById(session.user_id)
+    const user = await getUserById(QBUserApi, session.user_id)
     const isProvider = userHasTag(user!, 'provider')
 
     if (isProvider && provider_id) {
@@ -92,7 +92,7 @@ const getMyAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.SessionToken),
     },
     async (request) => {
-      const myAccount = await findUserById(request.session!.user_id)
+      const myAccount = await getUserById(QBUserApi, request.session!.user_id)
       const isProvider = userHasTag(myAccount!, 'provider')
       const receivedQuery = pick(
         request.query,
@@ -113,6 +113,7 @@ const getMyAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       const appointments = await qbGetCustomObject<QBAppointment>(
+        QBUserApi,
         'Appointment',
         filter,
       )

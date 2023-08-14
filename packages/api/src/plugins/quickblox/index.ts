@@ -1,7 +1,8 @@
 import fp from 'fastify-plugin'
 import { QBSession, QBUser } from 'quickblox'
-import { qbCreateSession, qbInit } from '@/services/quickblox'
-import { userHasTag } from '@/utils/user'
+
+import { userHasTag } from '@/services/quickblox/utils'
+import { QBAdminApi, QBUserApi, qbCreateSession } from '@/services/quickblox'
 import {
   TokenHandler,
   createVerify,
@@ -12,14 +13,17 @@ import {
 
 export default fp(
   async (fastify) => {
+    const { BEARER_TOKEN, QB_ADMIN_EMAIL, QB_ADMIN_PASSWORD } = fastify.config
+
     fastify.decorate('qbAdminId', null)
 
     fastify.addHook('onReady', async () => {
-      const { QB_ADMIN_EMAIL, QB_ADMIN_PASSWORD } = fastify.config
-
       if (QB_ADMIN_EMAIL && QB_ADMIN_PASSWORD) {
-        qbInit(fastify.config)
-        const session = await qbCreateSession(QB_ADMIN_EMAIL, QB_ADMIN_PASSWORD)
+        QBAdminApi.init()
+        const session = await qbCreateSession(QBAdminApi, {
+          email: QB_ADMIN_EMAIL,
+          password: QB_ADMIN_PASSWORD,
+        })
 
         // eslint-disable-next-line no-param-reassign
         fastify.qbAdminId = session.user_id
@@ -27,24 +31,29 @@ export default fp(
     })
 
     fastify.addHook('onRequest', async () => {
-      qbInit(fastify.config)
+      QBUserApi.init()
     })
 
     fastify.decorateRequest('session', null)
 
-    fastify.decorate('SessionToken', getSessionByUserToken)
+    fastify.decorate('SessionToken', (token?: string) =>
+      getSessionByUserToken(QBUserApi, token),
+    )
     fastify.decorate('ClientSessionToken', async (token?: string) => {
-      const data = await getUserAndSessionByUserToken(token)
+      const data = await getUserAndSessionByUserToken(QBUserApi, token)
 
       return !data || userHasTag(data.user, 'provider') ? null : data.session
     })
     fastify.decorate('ProviderSessionToken', async (token?: string) => {
-      const data = await getUserAndSessionByUserToken(token)
+      const data = await getUserAndSessionByUserToken(QBUserApi, token)
 
       return data && userHasTag(data.user, 'provider') ? data.session : null
     })
     fastify.decorate('BearerToken', (token?: string) =>
-      getSessionByBearerToken(token, fastify.config),
+      getSessionByBearerToken(QBUserApi, BEARER_TOKEN, token, {
+        email: QB_ADMIN_EMAIL,
+        password: QB_ADMIN_PASSWORD,
+      }),
     )
     fastify.decorate(
       'verify',

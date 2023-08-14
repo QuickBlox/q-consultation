@@ -3,12 +3,16 @@ import { Type } from '@sinclair/typebox'
 import pick from 'lodash/pick'
 
 import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
-import { stringifyUserCustomData, parseUserCustomData } from '@/utils/user'
 import {
-  findUserById,
+  stringifyUserCustomData,
+  parseUserCustomData,
+} from '@/services/quickblox/utils'
+import {
   qbUpdateUser,
   qbDeleteFile,
   qbUploadFile,
+  getUserById,
+  QBUserApi,
 } from '@/services/quickblox'
 import { createProviderKeywords } from '@/services/openai'
 
@@ -118,16 +122,19 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'description',
         'language',
       )
-      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserData = await getUserById(
+        QBUserApi,
+        request.session!.user_id,
+      )
       const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id)
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(avatar)
+        const file = await qbUploadFile(QBUserApi, avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -140,14 +147,18 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         keywords += await createProviderKeywords(profession, description)
       }
 
-      const updatedUser = await qbUpdateUser(request.session!.user_id, {
-        ...userData,
-        custom_data: stringifyUserCustomData(
-          avatarData
-            ? { ...customData, keywords, avatar: avatarData }
-            : { ...customData, keywords },
-        ),
-      })
+      const updatedUser = await qbUpdateUser(
+        QBUserApi,
+        request.session!.user_id,
+        {
+          ...userData,
+          custom_data: stringifyUserCustomData(
+            avatarData
+              ? { ...customData, keywords, avatar: avatarData }
+              : { ...customData, keywords },
+          ),
+        },
+      )
 
       return updatedUser
     },
@@ -179,7 +190,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'description',
         'language',
       )
-      const prevUserData = await findUserById(id)
+      const prevUserData = await getUserById(QBUserApi, id)
 
       if (!prevUserData) {
         return reply.notFound()
@@ -189,11 +200,11 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id)
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(avatar)
+        const file = await qbUploadFile(QBUserApi, avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -206,7 +217,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         keywords += await createProviderKeywords(profession, description)
       }
 
-      const updatedUser = await qbUpdateUser(request.params.id, {
+      const updatedUser = await qbUpdateUser(QBUserApi, request.params.id, {
         ...userData,
         custom_data: stringifyUserCustomData(
           avatarData

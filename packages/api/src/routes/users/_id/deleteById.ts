@@ -1,17 +1,18 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import QB, { QBSession } from 'quickblox'
+import { QBSession } from 'quickblox'
 
 import {
-  findUserById,
+  getUserById,
   qbDeleteUser,
   qbChatConnect,
   qbChatSendSystemMessage,
   qbDeleteCustomObjectByCriteria,
+  QBUserApi,
 } from '@/services/quickblox'
 import { QBUserId } from '@/models'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
-import { userHasTag } from '@/utils/user'
+import { userHasTag } from '@/services/quickblox/utils'
 
 export const deleteSchema = {
   tags: ['Users'],
@@ -27,14 +28,14 @@ export const deleteSchema = {
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (session: QBSession, userId: number) => {
-    const user = await findUserById(userId)
+    const user = await getUserById(QBUserApi, userId)
 
     if (!user) return fastify.httpErrors.notFound('The user was not found')
 
-    await qbChatConnect(session.user_id, session.token)
-    const dialogId = QB.chat.helpers.getUserJid(userId)
+    await qbChatConnect(QBUserApi, session.user_id, session.token)
+    const dialogId = QBUserApi.chat.helpers.getUserJid(userId)
 
-    await qbChatSendSystemMessage(dialogId, {
+    await qbChatSendSystemMessage(QBUserApi, dialogId, {
       extension: {
         notification_type: CLOSE_SESSION_NOTIFICATION,
       },
@@ -56,14 +57,14 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params
-      const user = await findUserById(id)
+      const user = await getUserById(QBUserApi, id)
       const userField = userHasTag(user!, 'provider')
         ? 'provider_id'
         : 'client_id'
 
       await Promise.all([
-        qbDeleteUser(id),
-        qbDeleteCustomObjectByCriteria('Appointment', {
+        qbDeleteUser(QBUserApi, id),
+        qbDeleteCustomObjectByCriteria(QBUserApi, 'Appointment', {
           [userField]: id,
         }),
       ])

@@ -2,8 +2,8 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 
 import { QBSession, QBUser } from '@/models'
-import { qbCreateSession, qbLogin } from '@/services/quickblox'
-import { userHasTag } from '@/utils/user'
+import { QBUserApi, qbCreateSession, qbLogin } from '@/services/quickblox'
+import { userHasTag } from '@/services/quickblox/utils'
 
 export const loginSchema = {
   tags: ['Auth'],
@@ -27,8 +27,8 @@ export const loginSchema = {
 const login: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('/login', { schema: loginSchema }, async (request, reply) => {
     const { role, email, password } = request.body
-    const session = await qbCreateSession()
-    const user = await qbLogin({ email, password })
+    const session = await qbCreateSession(QBUserApi)
+    const user = await qbLogin(QBUserApi, { email, password })
     const isProvider = userHasTag(user, 'provider')
 
     if (role === 'provider' ? isProvider : !isProvider) {
