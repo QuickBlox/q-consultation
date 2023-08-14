@@ -104,7 +104,7 @@ declare module 'quickblox' {
     [key: string]: unknown
   }
 
-  export enum QBChatDialogType {
+  enum QBChatDialogType {
     PUBLIC = 1,
     GROUP = 2,
     PRIVATE = 3,
@@ -123,7 +123,7 @@ declare module 'quickblox' {
     name: string
     occupants_ids: number[]
     photo: null
-    type: number
+    type: QBChatDialogType
     /** Date ISO string */
     updated_at: string
     user_id: QBUser['id']
