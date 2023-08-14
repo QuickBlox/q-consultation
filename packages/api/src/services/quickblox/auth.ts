@@ -1,35 +1,7 @@
-import { FastifyInstance } from 'fastify'
-import QB, { QBConfig, QBError, QBSession, QBUser } from 'quickblox'
+import { QBError, QBLoginParams, QBSession, QBUser } from 'quickblox'
+import { QBApi } from './api'
 
-export const qbInit = (config: FastifyInstance['config']) => {
-  const qbConfig: QBConfig = {
-    debug: config.QB_SDK_CONFIG_DEBUG,
-    endpoints: {},
-    webrtc: {},
-  }
-
-  if (config.QB_SDK_CONFIG_ENDPOINT_API) {
-    qbConfig.endpoints.api = config.QB_SDK_CONFIG_ENDPOINT_API
-  }
-
-  if (config.QB_SDK_CONFIG_ENDPOINT_CHAT) {
-    qbConfig.endpoints.chat = config.QB_SDK_CONFIG_ENDPOINT_CHAT
-  }
-
-  if (config.QB_SDK_CONFIG_ICE_SERVERS) {
-    qbConfig.webrtc.iceServers = config.QB_SDK_CONFIG_ICE_SERVERS
-  }
-
-  QB.init(
-    config.QB_SDK_CONFIG_APP_ID,
-    config.QB_SDK_CONFIG_AUTH_KEY,
-    config.QB_SDK_CONFIG_AUTH_SECRET,
-    config.QB_SDK_CONFIG_ACCOUNT_KEY,
-    qbConfig,
-  )
-}
-
-export const qbSessionWithToken = (token: string) =>
+export const qbSessionWithToken = (QB: QBApi, token: string) =>
   new Promise<QBSession>((resolve, reject) => {
     QB.startSessionWithToken(token, (error, res) => {
       if (error) {
@@ -40,7 +12,7 @@ export const qbSessionWithToken = (token: string) =>
     })
   })
 
-export const qbCreateSession = (email?: string, password?: string) =>
+export const qbCreateSession = (QB: QBApi, credentials?: QBLoginParams) =>
   new Promise<QBSession>((resolve, reject) => {
     const cbSession = (error: QBError | undefined, response: QBSession) => {
       if (error) {
@@ -50,14 +22,14 @@ export const qbCreateSession = (email?: string, password?: string) =>
       }
     }
 
-    if (email && password) {
-      QB.createSession({ email, password }, cbSession)
+    if (credentials) {
+      QB.createSession(credentials, cbSession)
     } else {
       QB.createSession(cbSession)
     }
   })
 
-export const qbGetSession = () => {
+export const qbGetSession = (QB: QBApi) => {
   return new Promise<QBSession>((resolve, reject) => {
     QB.getSession((getSessionError, response) => {
       if (getSessionError || !response?.session) {
@@ -79,7 +51,7 @@ type LoginCredentials =
       password: string
     }
 
-export const qbLogin = (credentials: LoginCredentials) =>
+export const qbLogin = (QB: QBApi, credentials: LoginCredentials) =>
   new Promise<QBUser>((resolve, reject) => {
     QB.login(credentials, (error, result) => {
       if (error) {
@@ -90,7 +62,7 @@ export const qbLogin = (credentials: LoginCredentials) =>
     })
   })
 
-export function qbLogout() {
+export function qbLogout(QB: QBApi) {
   return new Promise<void>((resolve, reject) => {
     QB.destroySession((error) => {
       if (error) {

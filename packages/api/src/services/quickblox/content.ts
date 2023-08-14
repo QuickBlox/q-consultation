@@ -1,10 +1,14 @@
-import QB, { BlobObject, QBContentObject } from 'quickblox'
+import { BlobObject, QBContentObject } from 'quickblox'
 import FormData from 'form-data'
 import omit from 'lodash/omit'
+import { QBApi } from './api'
 
-import qbApi from './api'
-
-const qbCreateFile = (name: string, content_type: string, isPublic?: boolean) =>
+const qbCreateFile = (
+  QB: QBApi,
+  name: string,
+  content_type: string,
+  isPublic?: boolean,
+) =>
   new Promise<BlobObject>((resolve, reject) => {
     QB.content.create(
       { name, content_type, public: isPublic || false },
@@ -18,7 +22,7 @@ const qbCreateFile = (name: string, content_type: string, isPublic?: boolean) =>
     )
   })
 
-const qbMarkUploaded = (id: number, size: number) =>
+const qbMarkUploaded = (QB: QBApi, id: number, size: number) =>
   new Promise((resolve, reject) => {
     QB.content.markUploaded({ id, size }, (error, result) => {
       if (error) {
@@ -30,10 +34,11 @@ const qbMarkUploaded = (id: number, size: number) =>
   })
 
 export const qbUploadFile = async (
+  QB: QBApi,
   file: File,
   isPublic?: boolean,
 ): Promise<QBContentObject> => {
-  const blob = await qbCreateFile(file.filename, file.mimetype, isPublic)
+  const blob = await qbCreateFile(QB, file.filename, file.mimetype, isPublic)
   const fileSize = Buffer.byteLength(file.buffer)
   const url = new URL(blob.blob_object_access.params)
   const form = new FormData()
@@ -43,8 +48,8 @@ export const qbUploadFile = async (
   })
   form.append('file', file.buffer, file.filename)
 
-  await qbApi.post(`${url.origin}${url.pathname}`, form)
-  await qbMarkUploaded(blob.id, fileSize)
+  await QB.axios.post(`${url.origin}${url.pathname}`, form)
+  await qbMarkUploaded(QB, blob.id, fileSize)
 
   const fileData = omit(blob, [
     'blob_object_access',
@@ -55,7 +60,7 @@ export const qbUploadFile = async (
   return fileData
 }
 
-export function qbDeleteFile(contentId: QBContentObject['id']) {
+export function qbDeleteFile(QB: QBApi, contentId: QBContentObject['id']) {
   return new Promise((resolve, reject) => {
     QB.content.delete(contentId, (error, response) => {
       if (error) {

@@ -10,9 +10,10 @@ import {
   qbCreateUser,
   qbUpdateUser,
   qbUploadFile,
+  QBUserApi,
 } from '@/services/quickblox'
 import { createProviderKeywords } from '@/services/openai'
-import { stringifyUserCustomData } from '@/utils/user'
+import { stringifyUserCustomData } from '@/services/quickblox/utils'
 
 export const signUpSchema = {
   tags: ['Users', 'Provider'],
@@ -55,14 +56,14 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       'description',
       'language',
     )
-    const session = await qbCreateSession()
+    const session = await qbCreateSession(QBUserApi)
     let keywords = ''
 
     if (fastify.config.AI_SUGGEST_PROVIDER && description) {
       keywords += await createProviderKeywords(profession, description)
     }
 
-    await qbCreateUser<QBCreateUserWithEmail>({
+    await qbCreateUser<QBCreateUserWithEmail>(QBUserApi, {
       ...userData,
       custom_data: stringifyUserCustomData({
         ...customData,
@@ -70,12 +71,12 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
       }),
       tag_list: ['provider'],
     })
-    let user = await qbLogin({ email, password })
+    let user = await qbLogin(QBUserApi, { email, password })
 
     if (avatar) {
-      const file = await qbUploadFile(avatar)
+      const file = await qbUploadFile(QBUserApi, avatar)
 
-      user = await qbUpdateUser(user.id, {
+      user = await qbUpdateUser(QBUserApi, user.id, {
         custom_data: stringifyUserCustomData({
           ...customData,
           keywords,

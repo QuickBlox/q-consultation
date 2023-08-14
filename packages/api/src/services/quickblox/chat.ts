@@ -1,13 +1,16 @@
-import QB, {
+import {
   QBSession,
   QBUser,
   QBChatDialog,
   QBChatMessage,
   QBChatNewMessage,
   QBSystemMessage,
+  QBChatDialogType,
 } from 'quickblox'
+import { QBApi } from './api'
 
 export const qbChatConnect = (
+  QB: QBApi,
   userId: QBUser['id'],
   token: QBSession['token'],
 ) =>
@@ -21,11 +24,12 @@ export const qbChatConnect = (
     })
   })
 
-export const qbChatDisconnect = () => {
+export const qbChatDisconnect = (QB: QBApi) => {
   QB.chat.disconnect()
 }
 
 export const qbChatCreate = (
+  QB: QBApi,
   userIds: QBUser['id'] | Array<QBUser['id']>,
   data?: Dictionary<unknown>,
 ) =>
@@ -34,7 +38,7 @@ export const qbChatCreate = (
       {
         name: '-',
         occupants_ids: Array.isArray(userIds) ? userIds : [userIds],
-        type: 2,
+        type: QBChatDialogType.GROUP,
         data,
       },
       (error, chat) => {
@@ -48,6 +52,7 @@ export const qbChatCreate = (
   })
 
 export const qbUpdateDialog = (
+  QB: QBApi,
   dialogId: QBChatDialog['_id'],
   data: Dictionary<unknown>,
 ) => {
@@ -62,7 +67,7 @@ export const qbUpdateDialog = (
   })
 }
 
-export const qbChatJoin = (dialogId: QBChatDialog['_id']) =>
+export const qbChatJoin = (QB: QBApi, dialogId: QBChatDialog['_id']) =>
   new Promise((resolve, reject) => {
     const dialogJid = QB.chat.helpers.getRoomJidFromDialogId(dialogId)
 
@@ -75,13 +80,18 @@ export const qbChatJoin = (dialogId: QBChatDialog['_id']) =>
     })
   })
 
-export const qbChatSendMessage = (to: string, message: QBChatNewMessage) => {
+export const qbChatSendMessage = (
+  QB: QBApi,
+  to: string,
+  message: QBChatNewMessage,
+) => {
   return new Promise<QBChatMessage['_id']>((resolve) => {
     resolve(QB.chat.send(to, message))
   })
 }
 
 export const qbChatSendSystemMessage = (
+  QB: QBApi,
   to: QBUser['id'] | string,
   message: { extension: QBSystemMessage['extension'] },
 ) => {
@@ -97,6 +107,7 @@ type GetMessagesResult = {
 }
 
 export function qbChatGetMessages(
+  QB: QBApi,
   dialogId: QBChatDialog['_id'],
   params: Partial<{
     skip: number

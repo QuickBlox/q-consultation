@@ -3,6 +3,7 @@ import { Type } from '@sinclair/typebox'
 import { MultipartFile, QBCustomObjectId, QCRecord } from '@/models'
 import { createAudioDialogAnalytics } from '@/services/openai'
 import {
+  QBUserApi,
   qbCreateChildCustomObject,
   qbUpdateCustomObject,
   qbUploadFile,
@@ -65,12 +66,13 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
 
       // TODO: Workaround. Replace with getting a custom object by id
       const { provider_id } = await qbUpdateCustomObject<QBAppointment>(
+        QBUserApi,
         id,
         'Appointment',
         {},
       )
       const [videoData, audioInfo] = await Promise.all([
-        video && (await qbUploadFile(video)),
+        video && (await qbUploadFile(QBUserApi, video)),
         audio && (await createAudioDialogAnalytics(audio)),
       ])
 
@@ -90,6 +92,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         ) || []
 
       const record = await qbCreateChildCustomObject<QBRecord>(
+        QBUserApi,
         'Appointment',
         id,
         'Record',

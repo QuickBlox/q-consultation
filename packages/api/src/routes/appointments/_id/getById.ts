@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
-import { qbUpdateCustomObject } from '@/services/quickblox'
+import { QBUserApi, qbUpdateCustomObject } from '@/services/quickblox'
 
 const getAppointmentSchema = {
   tags: ['Appointments'],
@@ -33,6 +33,7 @@ const getAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
 
       // TODO: Workaround. Replace with getting a custom object by id
       const appointment = await qbUpdateCustomObject<QBAppointment>(
+        QBUserApi,
         id,
         'Appointment',
         {},

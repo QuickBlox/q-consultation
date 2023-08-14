@@ -1,24 +1,20 @@
-import {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  onRequestHookHandler,
-} from 'fastify'
-import { QBSession } from 'quickblox'
+import { FastifyReply, FastifyRequest, onRequestHookHandler } from 'fastify'
+import { QBLoginParams, QBSession } from 'quickblox'
 
 import {
+  QBApi,
+  getUserById,
   qbCreateSession,
   qbSessionWithToken,
-  findUserById,
 } from '@/services/quickblox'
 
 export type TokenHandler = (token?: string | null) => Promise<QBSession | null>
 
-export const getSessionByUserToken = async (token?: string) => {
+export const getSessionByUserToken = async (QB: QBApi, token?: string) => {
   try {
     if (!token) return null
 
-    const session = await qbSessionWithToken(token)
+    const session = await qbSessionWithToken(QB, token)
 
     if (session.user_id) return session
 
@@ -28,12 +24,15 @@ export const getSessionByUserToken = async (token?: string) => {
   }
 }
 
-export const getUserAndSessionByUserToken = async (token?: string) => {
+export const getUserAndSessionByUserToken = async (
+  QB: QBApi,
+  token?: string,
+) => {
   try {
-    const session = await getSessionByUserToken(token)
+    const session = await getSessionByUserToken(QB, token)
 
     if (session) {
-      const user = await findUserById(session.user_id)
+      const user = await getUserById(QB, session.user_id)
 
       return user ? { user, session } : null
     }
@@ -44,15 +43,19 @@ export const getUserAndSessionByUserToken = async (token?: string) => {
   }
 }
 
-export const getSessionByBearerToken = (
-  token: string | undefined,
-  config: FastifyInstance['config'],
+export const getSessionByBearerToken = async (
+  QB: QBApi,
+  bearerToken: string | undefined,
+  tokenValue: string | undefined,
+  credentials: QBLoginParams,
 ) => {
-  if (config.BEARER_TOKEN && config.BEARER_TOKEN === token) {
-    return qbCreateSession(config.QB_ADMIN_EMAIL, config.QB_ADMIN_PASSWORD)
+  if (bearerToken && bearerToken === tokenValue) {
+    const session = await qbCreateSession(QB, credentials)
+
+    return session
   }
 
-  return Promise.resolve(null)
+  return null
 }
 
 export const createVerify =
