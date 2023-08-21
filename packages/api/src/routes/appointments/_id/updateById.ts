@@ -12,8 +12,6 @@ import {
   qbUpdateCustomObjectByCriteria,
   getUserById,
   QBUserApi,
-  QBAdminApi,
-  qbCreateSession,
 } from '@/services/quickblox'
 import { userHasTag } from '@/services/quickblox/utils'
 import { APPOINTMENT_NOTIFICATION } from '@/constants/notificationTypes'
@@ -118,22 +116,17 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
       const { provider_id, conclusion, date_end } = request.body
 
       if (provider_id) {
-        QBAdminApi.init()
-
-        const [{ dialog_id, client_id, provider_id: prevProviderId }] =
-          await Promise.all([
-            // TODO: Workaround. Replace with getting a custom object by id
-            qbUpdateCustomObject<QBAppointment>(
-              QBUserApi,
-              id,
-              'Appointment',
-              {},
-            ),
-            qbCreateSession(QBAdminApi, {
-              email: fastify.config.QB_ADMIN_EMAIL,
-              password: fastify.config.QB_ADMIN_PASSWORD,
-            }),
-          ])
+        const {
+          dialog_id,
+          client_id,
+          provider_id: prevProviderId,
+          // TODO: Workaround. Replace with getting a custom object by id
+        } = await qbUpdateCustomObject<QBAppointment>(
+          QBUserApi,
+          id,
+          'Appointment',
+          {},
+        )
 
         request.state.set('prevProviderId', prevProviderId)
 
@@ -158,6 +151,7 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
         }
         const recordPermissions = {
           read: recordAccessData,
+          update: recordAccessData,
         }
 
         const data =
@@ -166,12 +160,12 @@ const updateAppointmentById: FastifyPluginAsyncTypebox = async (fastify) => {
             : request.body
 
         const [appointmentResult] = await Promise.allSettled([
-          qbUpdateCustomObject<QBAppointment>(QBAdminApi, id, 'Appointment', {
+          qbUpdateCustomObject<QBAppointment>(QBUserApi, id, 'Appointment', {
             ...data,
             permissions: appointmentPermissions,
           }),
           qbUpdateCustomObjectByCriteria(
-            QBAdminApi,
+            QBUserApi,
             'Record',
             { appointment_id: id },
             {

@@ -10,7 +10,9 @@ import {
   qbChatCreate,
   qbCreateCustomObject,
   getUserById,
+  QBAdminApi,
   QBUserApi,
+  qbCreateSession,
 } from '@/services/quickblox'
 import { userHasTag } from '@/services/quickblox/utils'
 import {
@@ -135,9 +137,16 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
         delete: accessData,
       }
 
-      const dialog = await qbChatCreate(QBUserApi, [provider_id, client_id])
+      QBAdminApi.init()
+      const [dialog] = await Promise.all([
+        qbChatCreate(QBUserApi, [provider_id, client_id]),
+        qbCreateSession(QBAdminApi, {
+          email: fastify.config.QB_ADMIN_EMAIL,
+          password: fastify.config.QB_ADMIN_PASSWORD,
+        }),
+      ])
       const appointment = await qbCreateCustomObject<QBAppointment>(
-        QBUserApi,
+        QBAdminApi,
         'Appointment',
         {
           priority: 0,
