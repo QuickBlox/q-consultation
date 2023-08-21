@@ -3,8 +3,10 @@ import { Type } from '@sinclair/typebox'
 import { MultipartFile, QBCustomObjectId, QCRecord } from '@/models'
 import { createAudioDialogAnalytics } from '@/services/openai'
 import {
+  QBAdminApi,
   QBUserApi,
   qbCreateChildCustomObject,
+  qbCreateSession,
   qbUpdateCustomObject,
   qbUploadFile,
 } from '@/services/quickblox'
@@ -64,13 +66,16 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         )
       }
 
-      // TODO: Workaround. Replace with getting a custom object by id
-      const { provider_id } = await qbUpdateCustomObject<QBAppointment>(
-        QBUserApi,
-        id,
-        'Appointment',
-        {},
-      )
+      QBAdminApi.init()
+      const [{ provider_id }] = await Promise.all([
+        // TODO: Workaround. Replace with getting a custom object by id
+        qbUpdateCustomObject<QBAppointment>(QBUserApi, id, 'Appointment', {}),
+        qbCreateSession(QBAdminApi, {
+          email: fastify.config.QB_ADMIN_EMAIL,
+          password: fastify.config.QB_ADMIN_PASSWORD,
+        }),
+      ])
+
       const [videoData, audioInfo] = await Promise.all([
         video && (await qbUploadFile(QBUserApi, video)),
         audio && (await createAudioDialogAnalytics(audio)),
@@ -93,7 +98,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         ) || []
 
       const record = await qbCreateChildCustomObject<QBRecord>(
-        QBUserApi,
+        QBAdminApi,
         'Appointment',
         id,
         'Record',
