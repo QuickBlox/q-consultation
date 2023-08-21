@@ -130,7 +130,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(QBUserApi, avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
@@ -200,7 +200,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(QBUserApi, avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
