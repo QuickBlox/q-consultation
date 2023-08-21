@@ -43,7 +43,7 @@ const signup: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.post('', { schema: signUpSchema }, async (request, reply) => {
     const { profession, description, avatar, email, password } = request.body
 
-    if (avatar && !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)) {
+    if (avatar && !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)) {
       return reply.badRequest(
         `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
       )
