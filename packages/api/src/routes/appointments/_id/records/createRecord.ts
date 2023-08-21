@@ -85,6 +85,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
       }
       const permissions = {
         read: accessData,
+        update: accessData,
       }
       const transcription =
         audioInfo?.transcription?.map(
