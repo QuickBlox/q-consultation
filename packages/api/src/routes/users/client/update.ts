@@ -96,7 +96,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       if (
         avatar &&
         avatar !== 'none' &&
-        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+        !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)
       ) {
         return reply.badRequest(
           `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
@@ -163,7 +163,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       if (
         avatar &&
         avatar !== 'none' &&
-        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+        !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)
       ) {
         return reply.badRequest(
           `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,

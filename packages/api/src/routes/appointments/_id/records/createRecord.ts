@@ -51,19 +51,14 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
 
       if (
         audio &&
-        !/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/.test(
-          audio.filename.toLowerCase(),
-        )
+        !/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/i.test(audio.filename)
       ) {
         return reply.badRequest(
           `body/audio Unsupported file format. The following file types are supported: mp3, mp4, mpeg, mpga, m4a, wav and webm.`,
         )
       }
 
-      if (
-        video &&
-        !/\.(mp4|mov|avi|mkv|webm)$/.test(video.filename.toLowerCase())
-      ) {
+      if (video && !/\.(mp4|mov|avi|mkv|webm)$/i.test(video.filename)) {
         return reply.badRequest(
           `body/video Unsupported file format. The following file types are supported: mp4, mov, avi, mkv and webm.`,
         )
