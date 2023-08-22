@@ -21,10 +21,7 @@ import {
 } from '../../../selectors'
 import { createUseComponent, useActions, useForm } from '../../../hooks'
 import { combineSelectors } from '../../../utils/selectors'
-import {
-  APPOINTMENT_NOTIFICATION,
-  CONCLUSION_NOTIFICATION,
-} from '../../../constants/notificationTypes'
+import { CONCLUSION_NOTIFICATION } from '../../../constants/notificationTypes'
 
 export interface ConclusionModalProps {
   onClose?: () => void

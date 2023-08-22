@@ -3,12 +3,16 @@ import { Type } from '@sinclair/typebox'
 import pick from 'lodash/pick'
 
 import { MultipartFile, QBUser, QBUserId, QCClient } from '@/models'
-import { parseUserCustomData, stringifyUserCustomData } from '@/utils/user'
 import {
-  findUserById,
+  parseUserCustomData,
+  stringifyUserCustomData,
+} from '@/services/quickblox/utils'
+import {
+  getUserById,
   qbUpdateUser,
   qbDeleteFile,
   qbUploadFile,
+  QBUserApi,
 } from '@/services/quickblox'
 
 const updateByIdSchema = {
@@ -107,7 +111,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       if (
         avatar &&
         avatar !== 'none' &&
-        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+        !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)
       ) {
         return reply.badRequest(
           `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
@@ -128,28 +132,35 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'gender',
         'language',
       )
-      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserData = await getUserById(
+        QBUserApi,
+        request.session!.user_id,
+      )
       const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(avatar)
+        const file = await qbUploadFile(QBUserApi, avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
         avatarData = undefined
       }
 
-      const updatedUser = await qbUpdateUser(request.session!.user_id, {
-        ...userData,
-        custom_data: stringifyUserCustomData(
-          avatarData ? { ...customData, avatar: avatarData } : customData,
-        ),
-      })
+      const updatedUser = await qbUpdateUser(
+        QBUserApi,
+        request.session!.user_id,
+        {
+          ...userData,
+          custom_data: stringifyUserCustomData(
+            avatarData ? { ...customData, avatar: avatarData } : customData,
+          ),
+        },
+      )
 
       return updatedUser
     },
@@ -167,7 +178,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       if (
         avatar &&
         avatar !== 'none' &&
-        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+        !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)
       ) {
         return reply.badRequest(
           `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
@@ -182,7 +193,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'gender',
         'language',
       )
-      const prevUserData = await findUserById(id)
+      const prevUserData = await getUserById(QBUserApi, id)
 
       if (!prevUserData) {
         return reply.notFound()
@@ -192,18 +203,18 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(avatar)
+        const file = await qbUploadFile(QBUserApi, avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
         avatarData = undefined
       }
 
-      const updatedUser = await qbUpdateUser(request.params.id, {
+      const updatedUser = await qbUpdateUser(QBUserApi, request.params.id, {
         ...userData,
         custom_data: stringifyUserCustomData(
           avatarData ? { ...customData, avatar: avatarData } : customData,

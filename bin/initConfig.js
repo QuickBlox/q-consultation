@@ -25,10 +25,11 @@ function getBaseConfiguration() {
   const QB_SDK_CONFIG_ENDPOINT_CHAT = readline.question(`Enter QuickBlox Chat endpoint (optional):\n`, { defaultInput: QB_DEFAULT_CHAT_ENDPOINT })
   const QB_SDK_CONFIG_ICE_SERVERS = readline.question(`Enter QuickBlox ICE servers in one line (optional):\n`) || []
 
+  const QB_ADMIN_EMAIL = readline.questionEMail(`Enter QuickBlox account owner email:\n`)
+  const QB_ADMIN_PASSWORD = readline.question(`Enter QuickBlox account owner password:\n`, { hideEchoBack: true })
+
   const enableIntegrationAPI = readline.keyInYN(`Enable integration with your API?\n`) || false
   const BEARER_TOKEN = enableIntegrationAPI ? readline.question(`Enter Bearer Token:\n`) : ''
-  const QB_ADMIN_EMAIL = enableIntegrationAPI ? readline.questionEMail(`Enter QuickBlox account owner email:\n`) : ''
-  const QB_ADMIN_PASSWORD = enableIntegrationAPI ? readline.question(`Enter QuickBlox account owner password:\n`, { hideEchoBack: true }) : ''
 
   const enableOpenAI = readline.keyInYN(`Enable OpenAI?\n`) || false
   const OPENAI_API_KEY = enableOpenAI ? readline.question(`Enter OpenAI API Key:\n`) : ''
@@ -53,9 +54,9 @@ function getBaseConfiguration() {
     QB_SDK_CONFIG_ENDPOINT_API,
     QB_SDK_CONFIG_ENDPOINT_CHAT,
     QB_SDK_CONFIG_ICE_SERVERS,
-    BEARER_TOKEN,
     QB_ADMIN_EMAIL,
     QB_ADMIN_PASSWORD,
+    BEARER_TOKEN,
     OPENAI_API_KEY,
     AI_QUICK_ANSWER,
     AI_SUGGEST_PROVIDER,
@@ -63,10 +64,10 @@ function getBaseConfiguration() {
     ENABLE_REDUX_LOGGER,
     CLIENT_APP_URL,
     SERVER_APP_URL,
+    ENABLE_GUEST_CLIENT,
     DEFAULT_LANGUAGE,
     FILE_SIZE_LIMIT,
     FILE_EXTENSIONS_WHITELIST,
-    ENABLE_GUEST_CLIENT,
   }
 }
 

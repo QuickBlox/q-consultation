@@ -4,7 +4,11 @@ import { QBAppointment, QBRecord } from 'quickblox'
 import omit from 'lodash/omit'
 
 import { QBCustomObjectId, QCRecord, QCRecordSortKeys } from '@/models'
-import { qbGetCustomObject, qbUpdateCustomObject } from '@/services/quickblox'
+import {
+  QBUserApi,
+  qbGetCustomObject,
+  qbUpdateCustomObject,
+} from '@/services/quickblox'
 
 const getRecordListSchema = {
   tags: ['Appointments', 'Records'],
@@ -60,12 +64,12 @@ const getRecordList: FastifyPluginAsyncTypebox = async (fastify) => {
       const { id } = request.params
 
       const [records] = await Promise.all([
-        qbGetCustomObject<QBRecord>('Record', {
+        qbGetCustomObject<QBRecord>(QBUserApi, 'Record', {
           ...request.query,
           appointment_id: id,
         }),
         // TODO: Workaround. Replace with getting a custom object by id
-        qbUpdateCustomObject<QBAppointment>(id, 'Appointment', {}),
+        qbUpdateCustomObject<QBAppointment>(QBUserApi, id, 'Appointment', {}),
       ])
 
       return omit(records, 'class_name')

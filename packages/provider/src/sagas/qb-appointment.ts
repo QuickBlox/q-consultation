@@ -40,6 +40,7 @@ function* getAppointments(action: Types.QBAppointmentGetRequestAction) {
 
     const history: Array<QBAppointment['_id']> = []
     const liveQueue: Array<QBAppointment['_id']> = []
+    const filterIds: Array<QBAppointment['_id']> = []
 
     list.forEach((appointmentId) => {
       const appointment = entries[appointmentId]
@@ -51,6 +52,14 @@ function* getAppointments(action: Types.QBAppointmentGetRequestAction) {
       }
     })
 
+    if (
+      list.length === 0 &&
+      '_id' in filters &&
+      typeof filters._id === 'string'
+    ) {
+      filterIds.push(filters._id)
+    }
+
     yield put(
       getAppointmentsSuccess({
         entries,
@@ -59,6 +68,7 @@ function* getAppointments(action: Types.QBAppointmentGetRequestAction) {
         history,
         liveQueue,
         reset,
+        filterIds,
       }),
     )
   } catch (e) {

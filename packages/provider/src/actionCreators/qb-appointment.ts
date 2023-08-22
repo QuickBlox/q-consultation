@@ -14,6 +14,7 @@ export function getAppointmentsSuccess(payload: {
   entries: Dictionary<QBAppointment>
   history: Array<QBAppointment['_id']>
   liveQueue: Array<QBAppointment['_id']>
+  filterIds: Array<QBAppointment['_id']>
   reset?: Types.AppointmentReset
   limit: number
   skip: number

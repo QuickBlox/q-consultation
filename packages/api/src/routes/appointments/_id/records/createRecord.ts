@@ -3,7 +3,10 @@ import { Type } from '@sinclair/typebox'
 import { MultipartFile, QBCustomObjectId, QCRecord } from '@/models'
 import { createAudioDialogAnalytics } from '@/services/openai'
 import {
+  QBAdminApi,
+  QBUserApi,
   qbCreateChildCustomObject,
+  qbCreateSession,
   qbUpdateCustomObject,
   qbUploadFile,
 } from '@/services/quickblox'
@@ -50,27 +53,31 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
 
       if (
         audio &&
-        !/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/.test(audio.filename)
+        !/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/i.test(audio.filename)
       ) {
         return reply.badRequest(
           `body/audio Unsupported file format. The following file types are supported: mp3, mp4, mpeg, mpga, m4a, wav and webm.`,
         )
       }
 
-      if (video && !/\.(mp4|mov|avi|mkv|webm)$/.test(video.filename)) {
+      if (video && !/\.(mp4|mov|avi|mkv|webm)$/i.test(video.filename)) {
         return reply.badRequest(
           `body/video Unsupported file format. The following file types are supported: mp4, mov, avi, mkv and webm.`,
         )
       }
 
-      // TODO: Workaround. Replace with getting a custom object by id
-      const { provider_id } = await qbUpdateCustomObject<QBAppointment>(
-        id,
-        'Appointment',
-        {},
-      )
+      QBAdminApi.init()
+      const [{ provider_id }] = await Promise.all([
+        // TODO: Workaround. Replace with getting a custom object by id
+        qbUpdateCustomObject<QBAppointment>(QBUserApi, id, 'Appointment', {}),
+        qbCreateSession(QBAdminApi, {
+          email: fastify.config.QB_ADMIN_EMAIL,
+          password: fastify.config.QB_ADMIN_PASSWORD,
+        }),
+      ])
+
       const [videoData, audioInfo] = await Promise.all([
-        video && (await qbUploadFile(video)),
+        video && (await qbUploadFile(QBUserApi, video)),
         audio && (await createAudioDialogAnalytics(audio)),
       ])
 
@@ -83,6 +90,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
       }
       const permissions = {
         read: accessData,
+        update: accessData,
       }
       const transcription =
         audioInfo?.transcription?.map(
@@ -90,6 +98,7 @@ const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
         ) || []
 
       const record = await qbCreateChildCustomObject<QBRecord>(
+        QBAdminApi,
         'Appointment',
         id,
         'Record',

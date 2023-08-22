@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox'
 
-import { findUserById } from '@/services/quickblox'
+import { QBUserApi, getUserById } from '@/services/quickblox'
 import { QBUser, QBUserId } from '@/models'
 
 export const deleteSchema = {
@@ -27,7 +27,7 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken, fastify.SessionToken),
     },
     async (request, reply) => {
-      const user = await findUserById(request.params.id)
+      const user = await getUserById(QBUserApi, request.params.id)
 
       if (!user) {
         return reply.notFound()

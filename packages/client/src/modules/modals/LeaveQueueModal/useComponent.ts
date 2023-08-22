@@ -18,7 +18,6 @@ import {
 import { createUseComponent, useActions } from '../../../hooks'
 import { APPOINTMENT_FINISH_ROUTE, ROOT_ROUTE } from '../../../constants/routes'
 import { combineSelectors } from '../../../utils/selectors'
-import { APPOINTMENT_NOTIFICATION } from '../../../constants/notificationTypes'
 import useIsOffLine from '../../../hooks/useIsOffLine'
 import { isGuestClient } from '../../../utils/user'
 

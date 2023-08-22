@@ -167,19 +167,27 @@ export const QCAppointment = Type.Intersect(
       description: Type.String({
         description: 'Description of the appointment',
       }),
-      notes: Type.Optional(
-        Type.String({
+      notes: Type.Union(
+        [Type.Null(), Type.String()], 
+        {
           description: 'Notes for appointment',
-        }),
+        },
       ),
-      conclusion: Type.Optional(
-        Type.String({
+      conclusion: Type.Union(
+        [Type.Null(), Type.String()],
+        {
           description: 'Conclusions for appointments',
-        }),
+        },
       ),
-      date_end: Type.Optional(DateISO),
-      language: Type.Optional(
-        Type.String({ description: 'Language of the appointment' }),
+      date_end: Type.Union(
+        [Type.Null(), DateISO],
+        {
+          description: 'End date of the appointment',
+        },
+      ),
+      language: Type.Union(
+        [Type.Null(), Type.String()],
+        { description: 'Language of the appointment' },
       ),
     }),
   ],

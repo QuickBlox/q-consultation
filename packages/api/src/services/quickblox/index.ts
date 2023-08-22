@@ -1,4 +1,4 @@
-export { default as qbApi } from './api'
+export { QBApi, QBUserApi, QBAdminApi } from './api'
 export * from './auth'
 export * from './chat'
 export * from './content'

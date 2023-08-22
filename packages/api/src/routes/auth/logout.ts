@@ -1,8 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import QB, { QBSession } from 'quickblox'
+import { QBSession } from 'quickblox'
 
 import {
+  QBUserApi,
   qbChatConnect,
   qbChatSendSystemMessage,
   qbLogout,
@@ -20,10 +21,10 @@ export const logoutSchema = {
 
 const logout: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (session: QBSession) => {
-    await qbChatConnect(session.user_id, session.token)
-    const dialogId = QB.chat.helpers.getUserJid(session.user_id)
+    await qbChatConnect(QBUserApi, session.user_id, session.token)
+    const dialogId = QBUserApi.chat.helpers.getUserJid(session.user_id)
 
-    await qbChatSendSystemMessage(dialogId, {
+    await qbChatSendSystemMessage(QBUserApi, dialogId, {
       extension: {
         notification_type: CLOSE_SESSION_NOTIFICATION,
       },
@@ -42,7 +43,7 @@ const logout: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.SessionToken),
     },
     async (request, reply) => {
-      await qbLogout()
+      await qbLogout(QBUserApi)
       reply.code(204)
 
       return null

@@ -21,7 +21,6 @@ import {
   usersSelectedModalAppointmentSelector,
 } from '../../../selectors'
 import { combineSelectors } from '../../../utils/selectors'
-import { APPOINTMENT_NOTIFICATION } from '../../../constants/notificationTypes'
 
 export interface AppointmentActionModalProps {
   onClose?: () => void

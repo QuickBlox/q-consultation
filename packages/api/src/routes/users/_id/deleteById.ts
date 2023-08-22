@@ -1,14 +1,18 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import QB, { QBSession } from 'quickblox'
+import { QBSession } from 'quickblox'
 
 import {
+  getUserById,
   qbDeleteUser,
   qbChatConnect,
   qbChatSendSystemMessage,
+  qbDeleteCustomObjectByCriteria,
+  QBUserApi,
 } from '@/services/quickblox'
 import { QBUserId } from '@/models'
 import { CLOSE_SESSION_NOTIFICATION } from '@/constants/notificationTypes'
+import { userHasTag } from '@/services/quickblox/utils'
 
 export const deleteSchema = {
   tags: ['Users'],
@@ -26,10 +30,14 @@ export const deleteSchema = {
 
 const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
   const handleResponse = async (session: QBSession, userId: number) => {
-    await qbChatConnect(session.user_id, session.token)
-    const dialogId = QB.chat.helpers.getUserJid(userId)
+    const user = await getUserById(QBUserApi, userId)
 
-    await qbChatSendSystemMessage(dialogId, {
+    if (!user) return fastify.httpErrors.notFound('The user was not found')
+
+    await qbChatConnect(QBUserApi, session.user_id, session.token)
+    const dialogId = QBUserApi.chat.helpers.getUserJid(userId)
+
+    await qbChatSendSystemMessage(QBUserApi, dialogId, {
       extension: {
         notification_type: CLOSE_SESSION_NOTIFICATION,
       },
@@ -51,8 +59,18 @@ const deleteById: FastifyPluginAsyncTypebox = async (fastify) => {
     },
     async (request, reply) => {
       const { id } = request.params
+      const user = await getUserById(QBUserApi, id)
+      const userField = userHasTag(user!, 'provider')
+        ? 'provider_id'
+        : 'client_id'
 
-      await qbDeleteUser(id)
+      await Promise.all([
+        qbDeleteUser(QBUserApi, id),
+        qbDeleteCustomObjectByCriteria(QBUserApi, 'Appointment', {
+          [userField]: id,
+        }),
+      ])
+
       reply.code(204)
 
       return null

@@ -1,10 +1,11 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import { Type } from '@sinclair/typebox'
+import { Static, Type } from '@sinclair/typebox'
 import { ChatCompletionRequestMessage } from 'openai'
-import { QBAppointment } from 'quickblox'
+import { QBAppointment, QBSession } from 'quickblox'
 import { QBDialogId, QBMessageId } from '@/models'
 import {
-  findUserById,
+  QBUserApi,
+  getUserById,
   qbChatConnect,
   qbChatGetMessages,
   qbChatJoin,
@@ -12,7 +13,8 @@ import {
 } from '@/services/quickblox'
 import { createQuickAnswerForDialog } from '@/services/openai'
 import { loopToLimitTokens } from '@/services/openai/utils'
-import { parseUserCustomData } from '@/utils/user'
+import { parseUserCustomData } from '@/services/quickblox/utils'
+import { isQBError } from '@/utils/parse'
 
 export const quickAnswerSchema = {
   tags: ['AI', 'Dialog'],
@@ -32,29 +34,54 @@ export const quickAnswerSchema = {
 const MAX_TOKENS = 3584
 
 const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
+  const handleConnect = async (
+    params: Static<typeof quickAnswerSchema.params>,
+    session: QBSession,
+  ) => {
+    try {
+      const { dialogId } = params
+      const { token, user_id } = session
+
+      await qbChatConnect(QBUserApi, user_id, token)
+      await qbChatJoin(QBUserApi, dialogId)
+
+      return undefined
+    } catch (error) {
+      if (isQBError(error)) {
+        if (Array.isArray(error.message))
+          return fastify.httpErrors.notFound(error.message[0])
+
+        if (typeof error.message === 'string')
+          return fastify.httpErrors.notFound(error.message)
+      }
+
+      return fastify.httpErrors.internalServerError()
+    }
+  }
+
   fastify.get(
     '/:dialogId/messages/:clientMessageId/answer',
     {
       schema: quickAnswerSchema,
+      preHandler: (request, reply, done) => {
+        handleConnect(request.params, request.session!).then(done).catch(done)
+      },
       onRequest: fastify.verify(fastify.ProviderSessionToken),
     },
     async (request, reply) => {
       const { dialogId, clientMessageId } = request.params
-      const { token, user_id } = request.session!
-
-      await qbChatConnect(user_id, token)
-      await qbChatJoin(dialogId)
+      const { user_id } = request.session!
 
       const [currentMessageData, currentAppointmentData, myAccount] =
         await Promise.all([
-          qbChatGetMessages(dialogId, {
+          qbChatGetMessages(QBUserApi, dialogId, {
             _id: clientMessageId,
           }),
-          qbGetCustomObject<QBAppointment>('Appointment', {
+          qbGetCustomObject<QBAppointment>(QBUserApi, 'Appointment', {
             dialog_id: dialogId,
             limit: 1,
           }),
-          findUserById(user_id),
+          getUserById(QBUserApi, user_id),
         ])
 
       const { items: [currentMessage] = [] } = currentMessageData || {}
@@ -75,7 +102,7 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
         return reply.badRequest('Message text is missing')
       }
 
-      const { items } = await qbChatGetMessages(dialogId, {
+      const { items } = await qbChatGetMessages(QBUserApi, dialogId, {
         date_sent: {
           lte: currentMessage.date_sent,
         },
