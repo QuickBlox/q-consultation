@@ -8,7 +8,7 @@ import { parseUserCustomData } from '@/services/quickblox/utils'
 import { QBUser } from '@/models'
 
 export const suggestProviderSchema = {
-  tags: ['AI', 'Provider'],
+  tags: ['AI', 'Users'],
   summary: 'Get suggested providers by name or issue',
   body: Type.Object({
     topic: Type.String({ minLength: 1 }),

@@ -11,7 +11,7 @@ import {
 } from '@/services/quickblox'
 
 const getRecordListSchema = {
-  tags: ['Appointments', 'Records'],
+  tags: ['Appointments'],
   summary: 'Get a list of records for the appointment',
   params: Type.Object({
     id: QBCustomObjectId,

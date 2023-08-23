@@ -17,7 +17,7 @@ import { parseUserCustomData } from '@/services/quickblox/utils'
 import { isQBError } from '@/utils/parse'
 
 export const quickAnswerSchema = {
-  tags: ['AI', 'Dialog'],
+  tags: ['AI', 'Chat'],
   summary: 'Get Quick answer for dialog',
   params: Type.Object({
     dialogId: QBDialogId,

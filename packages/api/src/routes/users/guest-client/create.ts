@@ -9,8 +9,9 @@ import { qbCreateUser } from '@/services/quickblox/users'
 import { QBUserApi } from '@/services/quickblox'
 
 export const createGuestClientSchema = {
-  tags: ['Users', 'Client'],
+  tags: ['Users'],
   summary: 'Create Guest client',
+  description: 'Creates a new guest client',
   body: Type.Pick(QCClient, ['full_name']),
   response: {
     200: Type.Object({

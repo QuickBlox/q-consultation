@@ -17,8 +17,9 @@ import {
 import { createProviderKeywords } from '@/services/openai'
 
 const updateByIdSchema = {
-  tags: ['Users', 'Provider'],
+  tags: ['Users'],
   summary: 'Update provider by id',
+  description: 'Update a specific provider profile by ID using an apiKey',
   consumes: ['multipart/form-data'],
   params: Type.Object({
     id: QBUserId,
@@ -32,8 +33,12 @@ const updateByIdSchema = {
     ]),
     Type.Partial(
       Type.Object({
-        password: Type.String(),
-        avatar: Type.Union([MultipartFile, Type.Literal('none')]),
+        password: Type.String({
+          description: "User's password",
+        }),
+        avatar: Type.Union([MultipartFile, Type.Literal('none')], {
+          description: "User's avatar",
+        }),
       }),
     ),
   ]),
@@ -44,8 +49,10 @@ const updateByIdSchema = {
 }
 
 const updateMySchema = {
-  tags: ['Users', 'Provider'],
+  tags: ['Users'],
   summary: 'Update provider profile',
+  description:
+    'Update a provider profile. A user can be updated only by themselves or an account owner',
   consumes: ['multipart/form-data'],
   body: Type.Union(
     [
@@ -59,7 +66,9 @@ const updateMySchema = {
           ]),
           Type.Object({
             avatar: Type.Optional(
-              Type.Union([MultipartFile, Type.Literal('none')]),
+              Type.Union([MultipartFile, Type.Literal('none')], {
+                description: "User's avatar",
+              }),
             ),
           }),
         ],
@@ -74,10 +83,18 @@ const updateMySchema = {
         ]),
         Type.Object({
           avatar: Type.Optional(
-            Type.Union([MultipartFile, Type.Literal('none')]),
+            Type.Union([MultipartFile, Type.Literal('none')], {
+              description: "User's avatar",
+            }),
           ),
-          password: Type.String(),
-          old_password: Type.String(),
+          password: Type.String({
+            description:
+              "User's new password. Field old_password must be set to update password",
+          }),
+          old_password: Type.String({
+            description:
+              'Old user password (required only if a new password is provided)',
+          }),
         }),
       ]),
     ],

@@ -17,10 +17,10 @@ export const Error = Type.Object(
 
 export const MultipartFile = Type.Object(
   {
-    buffer: Type.Any(),
-    filename: Type.String(),
-    encoding: Type.String(),
-    mimetype: Type.String(),
+    buffer: Type.Any({ description: 'Record buffer' }),
+    filename: Type.String({ description: 'Record filename' }),
+    encoding: Type.String({ description: 'Record encoding' }),
+    mimetype: Type.String({ description: 'Record mimetype' }),
   },
   {
     title: 'File',

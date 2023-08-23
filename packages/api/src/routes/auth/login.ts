@@ -9,12 +9,17 @@ export const loginSchema = {
   tags: ['Auth'],
   summary: 'User login',
   body: Type.Object({
-    role: Type.Union([
-      Type.Literal('client', { title: 'Client' }),
-      Type.Literal('provider', { title: 'Provider' }),
-    ]),
-    email: Type.String({ format: 'email' }),
-    password: Type.String(),
+    role: Type.Union(
+      [
+        Type.Literal('client', { title: 'client' }),
+        Type.Literal('provider', { title: 'provider' }),
+      ],
+      {
+        description: "User's role as a provider or client",
+      },
+    ),
+    email: Type.String({ format: 'email', description: "User's email" }),
+    password: Type.String({ description: "User's password" }),
   }),
   response: {
     200: Type.Object({

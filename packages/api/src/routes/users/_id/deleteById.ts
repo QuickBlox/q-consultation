@@ -17,6 +17,8 @@ import { userHasTag } from '@/services/quickblox/utils'
 export const deleteSchema = {
   tags: ['Users'],
   summary: 'Delete user by id',
+  description:
+    'Delete a user by ID. The user can only be deleted using the apiKey',
   params: Type.Object({
     id: QBUserId,
   }),

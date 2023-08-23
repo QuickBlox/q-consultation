@@ -6,7 +6,7 @@ import { QBCustomObjectId, QCRecord } from '@/models'
 import { QBUserApi, qbUpdateCustomObject } from '@/services/quickblox'
 
 const getRecordSchema = {
-  tags: ['Appointments', 'Records'],
+  tags: ['Appointments'],
   summary: 'Get a record for the appointment',
   params: Type.Object({
     id: QBCustomObjectId,

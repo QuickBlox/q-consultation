@@ -26,7 +26,9 @@ export const createAppointmentSchema = {
   body: Type.Object({
     provider_id: QBUserId,
     client_id: QBUserId,
-    description: Type.String(),
+    description: Type.String({
+      description: 'Description of the appointment',
+    }),
   }),
   response: {
     200: Type.Ref(QCAppointment),
