@@ -6,10 +6,12 @@ import { randomBytes } from 'crypto'
 import { QBSession, QBUser, QCClient } from '@/models'
 import { qbCreateSession, qbLogin } from '@/services/quickblox/auth'
 import { qbCreateUser } from '@/services/quickblox/users'
+import { QBUserApi } from '@/services/quickblox'
 
 export const createGuestClientSchema = {
-  tags: ['Users', 'Client'],
+  tags: ['Users'],
   summary: 'Create Guest client',
+  description: 'Creates a new guest client',
   body: Type.Pick(QCClient, ['full_name']),
   response: {
     200: Type.Object({
@@ -25,15 +27,15 @@ const createGuestClient: FastifyPluginAsyncTypebox = async (fastify) => {
     const { full_name } = request.body
     const login = Date.now().toString()
     const password = randomBytes(8).toString('hex')
-    const session = await qbCreateSession()
+    const session = await qbCreateSession(QBUserApi)
 
-    await qbCreateUser<QBCreateUserWithLogin>({
+    await qbCreateUser<QBCreateUserWithLogin>(QBUserApi, {
       login,
       password,
       full_name,
       tag_list: 'guest',
     })
-    const user = await qbLogin({ login, password })
+    const user = await qbLogin(QBUserApi, { login, password })
 
     return { session, user }
   })

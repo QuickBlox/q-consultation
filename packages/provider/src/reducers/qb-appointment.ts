@@ -37,17 +37,23 @@ export default (
     case Types.QB_APPOINTMENT_UPDATE_REQUEST:
       return { ...state, error: undefined, loading: true }
     case Types.QB_APPOINTMENT_GET_SUCCESS: {
-      const { limit, skip, entries, history, liveQueue, reset } = action.payload
+      const { limit, skip, entries, history, liveQueue, filterIds, reset } =
+        action.payload
 
       const newState = {
         ...state,
         loading: false,
         limit,
         skip,
-        entries: { ...state.entries, ...entries },
-        history: reset === 'history' ? history : union(state.history, history),
-        liveQueue:
+        entries: omit({ ...state.entries, ...entries }, filterIds),
+        history: difference(
+          reset === 'history' ? history : union(state.history, history),
+          filterIds,
+        ),
+        liveQueue: difference(
           reset === 'liveQueue' ? liveQueue : union(state.liveQueue, liveQueue),
+          filterIds,
+        ),
       }
 
       const historyIntersaction = intersection(

@@ -21,10 +21,7 @@ import {
 } from '../../../selectors'
 import { createUseComponent, useActions, useForm } from '../../../hooks'
 import { combineSelectors } from '../../../utils/selectors'
-import {
-  APPOINTMENT_NOTIFICATION,
-  CONCLUSION_NOTIFICATION,
-} from '../../../constants/notificationTypes'
+import { CONCLUSION_NOTIFICATION } from '../../../constants/notificationTypes'
 
 export interface ConclusionModalProps {
   onClose?: () => void
@@ -78,17 +75,6 @@ export default createUseComponent((props: ConclusionModalProps) => {
 
   const sendSystemMessageRemoveDialogAndClose = () => {
     if (appointment) {
-      const systemMessage = {
-        extension: {
-          notification_type: APPOINTMENT_NOTIFICATION,
-          appointment_id: appointment._id,
-        },
-      }
-
-      actions.sendSystemMessage({
-        dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
-        message: systemMessage,
-      })
       const dialog = dialogs[appointment.dialog_id]
 
       if (dialog) {

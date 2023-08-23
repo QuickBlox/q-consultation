@@ -3,18 +3,23 @@ import { Type } from '@sinclair/typebox'
 import pick from 'lodash/pick'
 
 import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
-import { stringifyUserCustomData, parseUserCustomData } from '@/utils/user'
 import {
-  findUserById,
+  stringifyUserCustomData,
+  parseUserCustomData,
+} from '@/services/quickblox/utils'
+import {
   qbUpdateUser,
   qbDeleteFile,
   qbUploadFile,
+  getUserById,
+  QBUserApi,
 } from '@/services/quickblox'
 import { createProviderKeywords } from '@/services/openai'
 
 const updateByIdSchema = {
-  tags: ['Users', 'Provider'],
+  tags: ['Users'],
   summary: 'Update provider by id',
+  description: 'Update a specific provider profile by ID using an apiKey',
   consumes: ['multipart/form-data'],
   params: Type.Object({
     id: QBUserId,
@@ -28,8 +33,12 @@ const updateByIdSchema = {
     ]),
     Type.Partial(
       Type.Object({
-        password: Type.String(),
-        avatar: Type.Union([MultipartFile, Type.Literal('none')]),
+        password: Type.String({
+          description: "User's password",
+        }),
+        avatar: Type.Union([MultipartFile, Type.Literal('none')], {
+          description: "User's avatar",
+        }),
       }),
     ),
   ]),
@@ -40,8 +49,10 @@ const updateByIdSchema = {
 }
 
 const updateMySchema = {
-  tags: ['Users', 'Provider'],
+  tags: ['Users'],
   summary: 'Update provider profile',
+  description:
+    'Update a provider profile. A user can be updated only by themselves or an account owner',
   consumes: ['multipart/form-data'],
   body: Type.Union(
     [
@@ -55,7 +66,9 @@ const updateMySchema = {
           ]),
           Type.Object({
             avatar: Type.Optional(
-              Type.Union([MultipartFile, Type.Literal('none')]),
+              Type.Union([MultipartFile, Type.Literal('none')], {
+                description: "User's avatar",
+              }),
             ),
           }),
         ],
@@ -70,10 +83,18 @@ const updateMySchema = {
         ]),
         Type.Object({
           avatar: Type.Optional(
-            Type.Union([MultipartFile, Type.Literal('none')]),
+            Type.Union([MultipartFile, Type.Literal('none')], {
+              description: "User's avatar",
+            }),
           ),
-          password: Type.String(),
-          old_password: Type.String(),
+          password: Type.String({
+            description:
+              "User's new password. Field old_password must be set to update password",
+          }),
+          old_password: Type.String({
+            description:
+              'Old user password (required only if a new password is provided)',
+          }),
         }),
       ]),
     ],
@@ -98,7 +119,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       if (
         avatar &&
         avatar !== 'none' &&
-        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+        !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)
       ) {
         return reply.badRequest(
           `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
@@ -118,16 +139,19 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'description',
         'language',
       )
-      const prevUserData = await findUserById(request.session!.user_id)
+      const prevUserData = await getUserById(
+        QBUserApi,
+        request.session!.user_id,
+      )
       const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(avatar)
+        const file = await qbUploadFile(QBUserApi, avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -140,14 +164,18 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         keywords += await createProviderKeywords(profession, description)
       }
 
-      const updatedUser = await qbUpdateUser(request.session!.user_id, {
-        ...userData,
-        custom_data: stringifyUserCustomData(
-          avatarData
-            ? { ...customData, keywords, avatar: avatarData }
-            : { ...customData, keywords },
-        ),
-      })
+      const updatedUser = await qbUpdateUser(
+        QBUserApi,
+        request.session!.user_id,
+        {
+          ...userData,
+          custom_data: stringifyUserCustomData(
+            avatarData
+              ? { ...customData, keywords, avatar: avatarData }
+              : { ...customData, keywords },
+          ),
+        },
+      )
 
       return updatedUser
     },
@@ -165,7 +193,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       if (
         avatar &&
         avatar !== 'none' &&
-        !/\.(jpe?g|a?png|gif|webp)$/.test(avatar.filename)
+        !/\.(jpe?g|a?png|gif|webp)$/i.test(avatar.filename)
       ) {
         return reply.badRequest(
           `body/avatar Unsupported file format. The following file types are supported: jpg, jpeg, png, apng and webp.`,
@@ -179,7 +207,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'description',
         'language',
       )
-      const prevUserData = await findUserById(id)
+      const prevUserData = await getUserById(QBUserApi, id)
 
       if (!prevUserData) {
         return reply.notFound()
@@ -189,11 +217,11 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       let avatarData = prevUserCustomData.avatar
 
       if (avatar && avatarData?.id) {
-        qbDeleteFile(avatarData.id)
+        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
-        const file = await qbUploadFile(avatar)
+        const file = await qbUploadFile(QBUserApi, avatar)
 
         avatarData = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
@@ -206,7 +234,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         keywords += await createProviderKeywords(profession, description)
       }
 
-      const updatedUser = await qbUpdateUser(request.params.id, {
+      const updatedUser = await qbUpdateUser(QBUserApi, request.params.id, {
         ...userData,
         custom_data: stringifyUserCustomData(
           avatarData

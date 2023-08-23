@@ -3,15 +3,15 @@ import { Type } from '@sinclair/typebox'
 import { QBUser as TQBUser } from 'quickblox'
 
 import { findProviderIdsByKeywords } from '@/services/openai'
-import { qbGetUsersByTags } from '@/services/quickblox'
-import { parseUserCustomData } from '@/utils/user'
+import { QBUserApi, qbGetUsersByTags } from '@/services/quickblox'
+import { parseUserCustomData } from '@/services/quickblox/utils'
 import { QBUser } from '@/models'
 
 export const suggestProviderSchema = {
-  tags: ['AI', 'Provider'],
+  tags: ['AI', 'Users'],
   summary: 'Get suggested providers by name or issue',
   body: Type.Object({
-    topic: Type.String(),
+    topic: Type.String({ minLength: 1 }),
   }),
   response: {
     200: Type.Object({
@@ -27,10 +27,14 @@ export const suggestProviderSchema = {
 
 const getAllProviders = async (page = 1): Promise<Dictionary<TQBUser>> => {
   const PER_PAGE = 100
-  const { total_entries, items } = await qbGetUsersByTags('provider', {
-    per_page: PER_PAGE,
-    page,
-  })
+  const { total_entries, items } = await qbGetUsersByTags(
+    QBUserApi,
+    'provider',
+    {
+      per_page: PER_PAGE,
+      page,
+    },
+  )
 
   const providersDictionary = items.reduce<Dictionary<TQBUser>>(
     (res, { user }) => ({ ...res, [user.id]: user }),

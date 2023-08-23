@@ -78,6 +78,7 @@ export default createUseComponent((props: AssignModalProps) => {
   const handleAppointmentUpdate = (
     dialogId: QBChatDialog['_id'],
     providerId: QBAppointment['provider_id'],
+    provider: QBUser['full_name'],
   ) => {
     if (appointment) {
       actions.sendSystemMessage({
@@ -108,6 +109,9 @@ export default createUseComponent((props: AssignModalProps) => {
                 notification_type: TEXT_NOTIFICATION,
                 notification_text: 'YOU_HAVE_NEW_PROVIDER',
                 translate: 'true',
+                translate_options: JSON.stringify({
+                  provider,
+                }),
               },
             },
           ]
@@ -169,7 +173,7 @@ export default createUseComponent((props: AssignModalProps) => {
 
       if (dialog) {
         if (dialog.occupants_ids.includes(value.id)) {
-          handleAppointmentUpdate(dialog._id, value.id)
+          handleAppointmentUpdate(dialog._id, value.id, value.full_name)
         } else {
           actions.updateDialog({
             dialogId: dialog._id,
@@ -186,7 +190,7 @@ export default createUseComponent((props: AssignModalProps) => {
                   },
                 },
               })
-              handleAppointmentUpdate(dialog._id, value.id)
+              handleAppointmentUpdate(dialog._id, value.id, value.full_name)
             },
           })
         }

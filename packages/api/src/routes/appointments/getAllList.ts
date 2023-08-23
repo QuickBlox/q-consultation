@@ -2,6 +2,8 @@ import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import { QBAppointment } from 'quickblox'
 import omit from 'lodash/omit'
+import pick from 'lodash/pick'
+import keys from 'lodash/keys'
 
 import {
   DateISO,
@@ -9,11 +11,12 @@ import {
   QCAppointment,
   QCAppointmentSortKeys,
 } from '@/models'
-import { qbGetCustomObject } from '@/services/quickblox'
+import { QBUserApi, qbGetCustomObject } from '@/services/quickblox'
 
 const getAllAppointmentListSchema = {
   tags: ['Appointments'],
   summary: 'Get a list of all appointments',
+  description: 'Retrieve a list of all users appointments using an apiKey',
   querystring: Type.Partial(
     Type.Object({
       limit: Type.Integer({
@@ -28,7 +31,11 @@ const getAllAppointmentListSchema = {
       }),
       sort_desc: QCAppointmentSortKeys,
       sort_asc: QCAppointmentSortKeys,
-      priority: Type.Integer({ minimum: 0, maximum: 2 }),
+      priority: Type.Integer({
+        minimum: 0,
+        maximum: 2,
+        description: 'The priority of the appointment in the queue',
+      }),
       provider_id: QBUserId,
       client_id: QBUserId,
       'date_end[from]': DateISO,
@@ -61,11 +68,15 @@ const getAllAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
       onRequest: fastify.verify(fastify.BearerToken),
     },
     async (request) => {
+      const receivedQuery = pick(
+        request.query,
+        keys(getAllAppointmentListSchema.querystring.properties),
+      )
       const {
         'date_end[from]': dateFrom,
         'date_end[to]': dateTo,
         ...baseFilter
-      } = request.query
+      } = receivedQuery
 
       const filter = {
         ...baseFilter,
@@ -76,6 +87,7 @@ const getAllAppointmentList: FastifyPluginAsyncTypebox = async (fastify) => {
       }
 
       const appointments = await qbGetCustomObject<QBAppointment>(
+        QBUserApi,
         'Appointment',
         filter,
       )

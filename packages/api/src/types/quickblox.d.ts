@@ -104,7 +104,7 @@ declare module 'quickblox' {
     [key: string]: unknown
   }
 
-  export enum QBChatDialogType {
+  enum QBChatDialogType {
     PUBLIC = 1,
     GROUP = 2,
     PRIVATE = 3,
@@ -123,7 +123,7 @@ declare module 'quickblox' {
     name: string
     occupants_ids: number[]
     photo: null
-    type: number
+    type: QBChatDialogType
     /** Date ISO string */
     updated_at: string
     user_id: QBUser['id']
@@ -309,6 +309,18 @@ declare module 'quickblox' {
     updated_at: string
   }
 
+  interface QBAccess {
+    access: 'open' | 'owner' | 'open_for_users_ids' | 'open_for_groups'
+    users_ids: string[]
+  }
+
+  interface QBPermissions {
+    create: QBAccess
+    read: QBAccess
+    update: QBAccess
+    delete: QBAccess
+  }
+
   export interface QBCustomObject {
     /**
      * ID of the record
@@ -323,12 +335,7 @@ declare module 'quickblox' {
     created_at: number
     /** Date & time when record was updated, filled automatically */
     updated_at: number
-  }
-
-  type QBAppointmentPermissions = {
-    read: { access: string }
-    update: { access: string }
-    delete: { access: string }
+    permissions: QBPermissions
   }
 
   export interface QBAppointment extends Omit<QBCustomObject, '_parent_id'> {
@@ -338,17 +345,10 @@ declare module 'quickblox' {
     provider_id: QBUser['id']
     dialog_id: QBChatDialog['_id']
     description: string
-    notes: string
-    conclusion?: string
-    date_start?: string
-    date_end?: string
-    language?: string
-    records?: Array<QBContentObject['id']>
-    appointment_name: string | null
-    is_canceled: boolean | null
-    is_finished: boolean | null
-    has_assistant: boolean | null
-    permissions: QBAppointmentPermissions
+    notes: string | null
+    conclusion: string | null
+    date_end: string | null
+    language: string | null
   }
 
   export interface QBRecord extends Omit<QBCustomObject, '_parent_id'> {
@@ -538,7 +538,7 @@ declare module 'quickblox' {
     ): void
   }
 
-  type QBLoginParams =
+  export type QBLoginParams =
     | {
         login: string
         password: string

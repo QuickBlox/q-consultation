@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type, Static } from '@sinclair/typebox'
-import QB, { QBAppointment, QBSession } from 'quickblox'
+import { QBAppointment, QBSession } from 'quickblox'
 import without from 'lodash/without'
 
 import { QCAppointment, QBUserId } from '@/models'
@@ -9,9 +9,12 @@ import {
   qbChatSendSystemMessage,
   qbChatCreate,
   qbCreateCustomObject,
-  findUserById,
+  getUserById,
+  QBAdminApi,
+  QBUserApi,
+  qbCreateSession,
 } from '@/services/quickblox'
-import { userHasTag } from '@/utils/user'
+import { userHasTag } from '@/services/quickblox/utils'
 import {
   APPOINTMENT_NOTIFICATION,
   DIALOG_NOTIFICATION,
@@ -23,7 +26,9 @@ export const createAppointmentSchema = {
   body: Type.Object({
     provider_id: QBUserId,
     client_id: QBUserId,
-    description: Type.String(),
+    description: Type.String({
+      description: 'Description of the appointment',
+    }),
   }),
   response: {
     200: Type.Ref(QCAppointment),
@@ -43,8 +48,8 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
   ) => {
     const { client_id, provider_id } = body
     const [client, provider] = await Promise.all([
-      findUserById(client_id),
-      findUserById(provider_id),
+      getUserById(QBUserApi, client_id),
+      getUserById(QBUserApi, provider_id),
     ])
     const errors = []
 
@@ -66,7 +71,7 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
     payload: SuccessResponse | null,
   ) => {
     if (payload) {
-      await qbChatConnect(session.user_id, session.token)
+      await qbChatConnect(QBUserApi, session.user_id, session.token)
 
       const recipients = without(
         [payload.provider_id, payload.client_id],
@@ -74,7 +79,7 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
       )
 
       recipients.forEach((userId) => {
-        const dialogId = QB.chat.helpers.getUserJid(userId)
+        const dialogId = QBUserApi.chat.helpers.getUserJid(userId)
         const systemMessages = [
           {
             dialogId,
@@ -97,7 +102,7 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
         ]
 
         systemMessages.forEach(({ dialogId: to, message }) => {
-          qbChatSendSystemMessage(to, message)
+          qbChatSendSystemMessage(QBUserApi, to, message)
         })
       })
     }
@@ -121,8 +126,29 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
     async (request) => {
       const { provider_id, client_id, description } = request.body
 
-      const dialog = await qbChatCreate([provider_id, client_id])
+      const accessData = {
+        access: 'open_for_users_ids',
+        ids: [fastify.qbAdminId, provider_id, client_id].reduce<string[]>(
+          (res, id) => (id ? [...res, id.toString()] : res),
+          [],
+        ),
+      }
+      const permissions = {
+        read: accessData,
+        update: accessData,
+        delete: accessData,
+      }
+
+      QBAdminApi.init()
+      const [dialog] = await Promise.all([
+        qbChatCreate(QBUserApi, [provider_id, client_id]),
+        qbCreateSession(QBAdminApi, {
+          email: fastify.config.QB_ADMIN_EMAIL,
+          password: fastify.config.QB_ADMIN_PASSWORD,
+        }),
+      ])
       const appointment = await qbCreateCustomObject<QBAppointment>(
+        QBAdminApi,
         'Appointment',
         {
           priority: 0,
@@ -130,6 +156,7 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
           provider_id,
           client_id,
           description,
+          permissions,
         },
       )
 

@@ -1,11 +1,13 @@
-import QB, {
+import {
   QBCreateUserWithLogin,
   QBCreateUserWithEmail,
   QBUser,
   ListUserResponse,
 } from 'quickblox'
+import { QBApi } from './api'
 
 export const qbCreateUser = <T = QBCreateUserWithLogin | QBCreateUserWithEmail>(
+  QB: QBApi,
   data: T,
 ) =>
   new Promise<QBUser>((resolve, reject) => {
@@ -19,6 +21,7 @@ export const qbCreateUser = <T = QBCreateUserWithLogin | QBCreateUserWithEmail>(
   })
 
 export const qbGetUsersByTags = (
+  QB: QBApi,
   tags: string | string[],
   config?: {
     page?: number
@@ -38,7 +41,7 @@ export const qbGetUsersByTags = (
     )
   })
 
-export const qbGetUsers = (filter: Dictionary<unknown>) =>
+export const qbGetUsers = (QB: QBApi, filter: Dictionary<unknown>) =>
   new Promise<ListUserResponse>((resolve, reject) => {
     QB.users.listUsers({ filter }, (error, result) => {
       if (error) {
@@ -49,21 +52,17 @@ export const qbGetUsers = (filter: Dictionary<unknown>) =>
     })
   })
 
-export const findUserById = async (
+export const getUserById = async (
+  QB: QBApi,
   userId: QBUser['id'],
 ): Promise<QBUser | null> => {
-  const userResult = await qbGetUsers({
-    field: 'id',
-    param: 'in',
-    value: [userId],
-  })
+  const { data } = await QB.axios.get<{ user: QBUser }>(`/users/${userId}`)
 
-  const [userData] = userResult?.items || []
-
-  return userData?.user
+  return data.user
 }
 
 export const qbUpdateUser = (
+  QB: QBApi,
   userId: QBUser['id'],
   data: Partial<Omit<QBUser, 'id'>>,
 ) =>
@@ -77,7 +76,7 @@ export const qbUpdateUser = (
     })
   })
 
-export const qbDeleteUser = (userId: QBUser['id']) =>
+export const qbDeleteUser = (QB: QBApi, userId: QBUser['id']) =>
   new Promise<void>((resolve, reject) => {
     QB.users.delete(userId, (error) => {
       if (error) {

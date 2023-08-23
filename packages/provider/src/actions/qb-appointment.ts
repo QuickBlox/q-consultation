@@ -26,6 +26,7 @@ export interface QBAppointmentGetSuccessAction extends Action {
     entries: Dictionary<QBAppointment>
     history: Array<QBAppointment['_id']>
     liveQueue: Array<QBAppointment['_id']>
+    filterIds: Array<QBAppointment['_id']>
     reset?: AppointmentReset
     limit: number
     skip: number

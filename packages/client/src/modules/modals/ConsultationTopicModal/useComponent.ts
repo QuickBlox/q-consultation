@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux'
 
 import {
   createAppointment,
-  createDialog,
   sendSystemMessage,
   toggleShowModal,
 } from '../../../actionCreators'
@@ -23,16 +22,9 @@ import {
   modalConsultationTopicValueSelector,
 } from '../../../selectors'
 import { createUseComponent, useActions } from '../../../hooks'
-import {
-  QBAppointmentCreateSuccessAction,
-  QBDialogCreateSuccessAction,
-} from '../../../actions'
+import { QBAppointmentCreateSuccessAction } from '../../../actions'
 import { APPOINTMENT_ROUTE } from '../../../constants/routes'
 import { createMapStateSelector } from '../../../utils/selectors'
-import {
-  APPOINTMENT_NOTIFICATION,
-  DIALOG_NOTIFICATION,
-} from '../../../constants/notificationTypes'
 import useIsOffLine from '../../../hooks/useIsOffLine'
 
 export interface ConsultationTopicModalProps {
@@ -53,7 +45,6 @@ export default createUseComponent((props: ConsultationTopicModalProps) => {
   const store = useSelector(selector)
   const actions = useActions({
     createAppointment,
-    createDialog,
     sendSystemMessage,
     toggleShowModal,
   })
@@ -96,44 +87,17 @@ export default createUseComponent((props: ConsultationTopicModalProps) => {
 
   const handleJoinDialog = () => {
     if (providerId) {
-      actions.createDialog({
-        userId: providerId,
-        then: (actionDialog: QBDialogCreateSuccessAction) => {
-          actions.createAppointment({
-            client_id: myAccountId,
-            provider_id: providerId,
-            dialog_id: actionDialog.payload._id,
-            description,
-            then: (actionAppointment: QBAppointmentCreateSuccessAction) => {
-              const systemMessages = [
-                {
-                  extension: {
-                    notification_type: DIALOG_NOTIFICATION,
-                    dialog_id: actionDialog.payload._id,
-                  },
-                },
-                {
-                  extension: {
-                    notification_type: APPOINTMENT_NOTIFICATION,
-                    appointment_id: actionAppointment.payload._id,
-                  },
-                },
-              ]
-
-              systemMessages.forEach((systemMessage) => {
-                actions.sendSystemMessage({
-                  dialogId: QB.chat.helpers.getUserJid(providerId),
-                  message: systemMessage,
-                })
-              })
-              onCancelClick()
-              const path = generatePath(APPOINTMENT_ROUTE, {
-                appointmentId: actionAppointment.payload._id,
-              })
-
-              history.push(path)
-            },
+      actions.createAppointment({
+        client_id: myAccountId,
+        provider_id: providerId,
+        description,
+        then: (actionAppointment: QBAppointmentCreateSuccessAction) => {
+          onCancelClick()
+          const path = generatePath(APPOINTMENT_ROUTE, {
+            appointmentId: actionAppointment.payload._id,
           })
+
+          history.push(path)
         },
       })
     }
