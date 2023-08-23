@@ -14,7 +14,7 @@ import { QBAppointment, QBRecord } from 'quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
   const createRecordSchema = {
-    tags: ['Appointments', 'Records'],
+    tags: ['Appointments'],
     summary: 'Create a record for the appointment',
     consumes: ['multipart/form-data'],
     params: Type.Object({

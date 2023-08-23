@@ -86,8 +86,8 @@ export const QCClient = Type.Intersect(
       }),
       gender: Type.Union(
         [
-          Type.Literal('male', { title: 'Male' }),
-          Type.Literal('female', { title: 'Female' }),
+          Type.Literal('male', { title: 'male' }),
+          Type.Literal('female', { title: 'female' }),
         ],
         { description: "User's gender" },
       ),
@@ -167,28 +167,18 @@ export const QCAppointment = Type.Intersect(
       description: Type.String({
         description: 'Description of the appointment',
       }),
-      notes: Type.Union(
-        [Type.Null(), Type.String()], 
-        {
-          description: 'Notes for appointment',
-        },
-      ),
-      conclusion: Type.Union(
-        [Type.Null(), Type.String()],
-        {
-          description: 'Conclusions for appointments',
-        },
-      ),
-      date_end: Type.Union(
-        [Type.Null(), DateISO],
-        {
-          description: 'End date of the appointment',
-        },
-      ),
-      language: Type.Union(
-        [Type.Null(), Type.String()],
-        { description: 'Language of the appointment' },
-      ),
+      notes: Type.Union([Type.Null(), Type.String()], {
+        description: 'Notes for appointment',
+      }),
+      conclusion: Type.Union([Type.Null(), Type.String()], {
+        description: 'Conclusions for appointments',
+      }),
+      date_end: Type.Union([Type.Null(), DateISO], {
+        description: 'End date of the appointment',
+      }),
+      language: Type.Union([Type.Null(), Type.String()], {
+        description: 'Language of the appointment',
+      }),
     }),
   ],
   { $id: 'QCAppointment' },

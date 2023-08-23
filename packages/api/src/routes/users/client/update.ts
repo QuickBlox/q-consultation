@@ -16,7 +16,7 @@ import {
 } from '@/services/quickblox'
 
 const updateByIdSchema = {
-  tags: ['Users', 'Client'],
+  tags: ['Users'],
   summary: 'Update client by id',
   description: 'Update a specific client profile by ID using an apiKey',
   consumes: ['multipart/form-data'],
@@ -41,7 +41,7 @@ const updateByIdSchema = {
 }
 
 const updateMySchema = {
-  tags: ['Users', 'Client'],
+  tags: ['Users'],
   summary: 'Update client profile',
   description:
     'Update a client profile. A user can be updated only by themselves or an account owner',

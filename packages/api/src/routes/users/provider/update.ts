@@ -17,7 +17,7 @@ import {
 import { createProviderKeywords } from '@/services/openai'
 
 const updateByIdSchema = {
-  tags: ['Users', 'Provider'],
+  tags: ['Users'],
   summary: 'Update provider by id',
   description: 'Update a specific provider profile by ID using an apiKey',
   consumes: ['multipart/form-data'],
@@ -49,7 +49,7 @@ const updateByIdSchema = {
 }
 
 const updateMySchema = {
-  tags: ['Users', 'Provider'],
+  tags: ['Users'],
   summary: 'Update provider profile',
   description:
     'Update a provider profile. A user can be updated only by themselves or an account owner',

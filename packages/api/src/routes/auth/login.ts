@@ -11,8 +11,8 @@ export const loginSchema = {
   body: Type.Object({
     role: Type.Union(
       [
-        Type.Literal('client', { title: 'Client' }),
-        Type.Literal('provider', { title: 'Provider' }),
+        Type.Literal('client', { title: 'client' }),
+        Type.Literal('provider', { title: 'provider' }),
       ],
       {
         description: "User's role as a provider or client",

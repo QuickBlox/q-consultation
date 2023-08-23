@@ -33,12 +33,12 @@ You will need to set the following keys with your credentials:
  QB_SDK_CONFIG_ENDPOINT_CHAT="chat.quickblox.com"
  # [Optional if you use QuickBlox Basic Plan] QuickBlox JS SDK custom ICE servers
  QB_SDK_CONFIG_ICE_SERVERS=[]
+ # QuickBlox account owner email
+ QB_ADMIN_EMAIL=""
+ # QuickBlox account owner password
+ QB_ADMIN_PASSWORD=""
  # [Required if you need integration with your API] Bearer token
  BEARER_TOKEN=""
- # [Required if you need integration with your API] QuickBlox account owner email
- QB_ADMIN_EMAIL=""
- # [Required if you need integration with your API] QuickBlox account owner password
- QB_ADMIN_PASSWORD=""
  # [Required if you need AI features] OpenAI API Key
  OPENAI_API_KEY=""
  # Enable AI Quick answer feature
@@ -148,11 +148,11 @@ Record
   uid: String
 ```
 
-<Image src='/img/configurations/012.gif'/>
+<Image src='/img/configurations/011.gif'/>
 
 4. After all the fields added, click **Create class**.
 5. Once done, the modal window will close. You need to choose **Edit permission**, set the permissions as shown on the below screenshot and click **Edit permissions**:
 
-<Image src='/img/configurations/011.gif' caption='Appointment'/>
+<Image src='/img/configurations/permission-appointment.jpg' caption='Appointment'/>
 
-<Image src='/img/configurations/013.gif' caption='Record'/>
+<Image src='/img/configurations/permission-record.jpg' caption='Record'/>

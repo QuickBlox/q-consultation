@@ -2,13 +2,20 @@ import fp from 'fastify-plugin'
 import swagger, { SwaggerOptions } from '@fastify/swagger'
 import swaggerUI, { FastifySwaggerUiOptions } from '@fastify/swagger-ui'
 import { Type } from '@sinclair/typebox'
+
 import * as models from '@/models'
+import description from './description'
 
 const swaggerOptions: SwaggerOptions = {
   openapi: {
     info: {
       version: process.env.npm_package_version || '',
       title: process.env.npm_package_name || '',
+      description,
+      license: {
+        name: 'MIT',
+        url: 'https://github.com/QuickBlox/q-consultation/blob/master/LICENSE',
+      },
     },
     components: {
       securitySchemes: {
@@ -30,6 +37,7 @@ const swaggerOptions: SwaggerOptions = {
         },
       },
     },
+    tags: [],
   },
   refResolver: {
     buildLocalReference: (json, baseUri, fragment, i) => {

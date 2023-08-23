@@ -15,8 +15,8 @@ import {
 import { stringifyUserCustomData } from '@/services/quickblox/utils'
 
 export const signUpSchema = {
-  tags: ['Users', 'Client'],
-  summary: 'Signup client',
+  tags: ['Users'],
+  summary: 'Create client',
   consumes: ['multipart/form-data'],
   body: Type.Intersect([
     Type.Omit(QCClient, ['id', 'created_at', 'updated_at', 'last_request_at']),

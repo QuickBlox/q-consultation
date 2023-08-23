@@ -16,8 +16,8 @@ import { createProviderKeywords } from '@/services/openai'
 import { stringifyUserCustomData } from '@/services/quickblox/utils'
 
 export const signUpSchema = {
-  tags: ['Users', 'Provider'],
-  summary: 'Signup provider',
+  tags: ['Users'],
+  summary: 'Create provider',
   consumes: ['multipart/form-data'],
   body: Type.Intersect([
     Type.Omit(QCProvider, [
