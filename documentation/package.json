@@ -1,6 +1,6 @@
 {
-  "name": "q-consultation-doc",
-  "version": "2.0.0-alpha.4",
+  "name": "@qc-doc/docusaurus",
+  "version": "2.0.0",
   "license": "MIT",
   "author": {
     "name": "Injoit LTD",

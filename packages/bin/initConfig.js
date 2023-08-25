@@ -5,7 +5,7 @@ const readline = require('readline-sync')
 
 const writeFile = util.promisify(fs.writeFile)
 
-const qcConfigFileLocation = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
+const qcConfigFileLocation = path.resolve(__dirname, '..', '..', '.env')
 
 const QB_DEFAULT_API_ENDPOINT = 'api.quickblox.com'
 const QB_DEFAULT_CHAT_ENDPOINT = 'chat.quickblox.com'
@@ -74,7 +74,7 @@ function getBaseConfiguration() {
 function createConfigFile(configLocation, config) {
   const envConfig = Object.entries(config)
     .map(([key, value]) => `${key}=${typeof value === 'string' && key !== 'QB_SDK_CONFIG_ICE_SERVERS' ? `"${value}"` : value}`)
-    .join('\n')
+    .join('\n') + '\n'
 
   return writeFile(configLocation, envConfig)
 }

@@ -1,0 +1,12 @@
+{
+  "name": "@qc/eslint-config-base",
+  "version": "2.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Injoit LTD",
+    "email": "sales@quickblox.com"
+  },
+  "main": "./index.js",
+  "dependencies": {},
+  "devDependencies": {}
+}

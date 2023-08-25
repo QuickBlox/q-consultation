@@ -1,8 +1,5 @@
-const path = require('path')
 const fs = require('fs')
 const dotenv = require('dotenv')
-
-const CONFIG_PATH = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
 
 const fields = [
   'QB_SDK_CONFIG_APP_ID',
@@ -37,9 +34,9 @@ const parseValue = (value) => {
   }
 }
 
-function getConfig() {
-  if (fs.existsSync(CONFIG_PATH)) {
-    const dotenvFile = fs.readFileSync(CONFIG_PATH)
+function getConfig(configPath) {
+  if (fs.existsSync(configPath)) {
+    const dotenvFile = fs.readFileSync(configPath)
     const appConfig = dotenv.parse(dotenvFile)
 
     let isInvalid = typeof appConfig !== "object"
@@ -58,7 +55,7 @@ function getConfig() {
       appConfig.QB_SDK_CONFIG_AUTH_SECRET.length === 0 ||
       appConfig.QB_SDK_CONFIG_ACCOUNT_KEY.length === 0
     ) {
-      throw new Error(`Config is empty (${CONFIG_PATH})`)
+      throw new Error(`Config is empty (${configPath})`)
     }
 
     return Object.entries(appConfig).reduce(
@@ -66,7 +63,7 @@ function getConfig() {
       {},
     )
   } else {
-    throw new Error(`Config was not found at path: ${CONFIG_PATH}`)
+    throw new Error(`Config was not found at path: ${configPath}`)
   }
 }
 

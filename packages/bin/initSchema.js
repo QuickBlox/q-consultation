@@ -9,8 +9,8 @@ const dotenv = require('dotenv')
 
 const readFile = util.promisify(fs.readFile)
 
-const qcConfigFileLocation = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
-const qcSchemasFileLocation = path.resolve(__dirname, '..', 'qconsultation_config', 'schema.yml')
+const qcConfigFileLocation = path.resolve(__dirname, '..', '..', '.env')
+const qcSchemasFileLocation = path.resolve(__dirname, '..', '..', 'schema.yml')
 const { parsed: config } = dotenv.config({ path: qcConfigFileLocation })
 
 function getAccountOwnerCredentials() {

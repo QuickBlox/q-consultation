@@ -25,7 +25,7 @@ const schema = Type.Object({
 
 const options = {
   dotenv: {
-    path: path.resolve(__dirname, '../../../../qconsultation_config/.env'),
+    path: path.resolve(__dirname, '../../../../.env'),
   },
   schema,
 }

@@ -12,7 +12,7 @@ import ScriptSchema from '/docs/snippets/script-schema.md'
 
 <ScriptConfig components={props.components} />
 
-You can also manually add the [**".env"**](https://github.com/QuickBlox/q-consultation/blob/master/qconsultation_config/.env) file to the **"qconsultation_config"** folder.
+You can also manually add the [**".env"**](https://github.com/QuickBlox/q-consultation/blob/master/.env) file.
 
 You will need to set the following keys with your credentials:
 
@@ -101,7 +101,7 @@ For more details on the format see [RTCIceServer docs](https://developer.mozilla
 
 You can also add a scheme manually through the [Admin Panel](https://admin.quickblox.com).
 
-You will find the [**schema.yml**](https://github.com/QuickBlox/q-consultation/blob/master/qconsultation_config/schema.yml) file in the **qconsultation_config** folder of the project directory.
+You will find the [**schema.yml**](https://github.com/QuickBlox/q-consultation/blob/master/schema.yml) file in the project directory.
 
 To import this file to the QuickBlox admin panel, follow the steps below:
 

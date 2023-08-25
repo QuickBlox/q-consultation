@@ -1,6 +1,6 @@
 {
-  "name": "q-consultation-lite",
-  "version": "2.0.0-alpha.4",
+  "name": "q-consultation",
+  "version": "2.0.0",
   "license": "MIT",
   "author": {
     "name": "Injoit LTD",
@@ -8,22 +8,21 @@
   },
   "scripts": {
     "dev": "lerna run dev",
-    "build": "lerna run --ignore q-consultation-doc build",
-    "start:api": "lerna run --scope q-consultation-api start",
-    "start:doc": "lerna run --scope q-consultation-doc start",
-    "start:pages": "lerna run --scope integration-pages start",
+    "build": "lerna run --ignore @qc-doc/docusaurus build",
+    "start:api": "lerna run --scope @qc-apps/api start",
+    "start:doc": "lerna run --scope @qc-doc/docusaurus start",
+    "start:pages": "lerna run --scope @qc-apps/integration-pages start",
     "lint": "lerna run lint",
-    "init:config": "node ./bin/initConfig.js",
-    "init:schema": "node ./bin/initSchema.js"
+    "init:config": "lerna run --scope @qc/bin init:config",
+    "init:schema": "lerna run --scope @qc/bin init:schema"
   },
   "workspaces": [
-    "packages/*"
+    "apps/*",
+    "packages/*",
+    "documentation"
   ],
   "devDependencies": {
-    "dotenv": "^16.0.3",
-    "js-yaml": "^4.1.0",
-    "lerna": "^6.0.1",
-    "prettier": "^2.4.0",
-    "readline-sync": "^1.4.10"
+    "lerna": "^7.1.5",
+    "prettier": "^2.4.0"
   }
 }

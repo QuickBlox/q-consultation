@@ -184,10 +184,7 @@ sidebar_position: 3
 │           ├ tsconfig.json
 │           └ webpack.config.js
 │
-├──── qconsultation_config
-│     ├ .env # application config
-│     └ schema.yml # QuickBlox schema
-│
+├ .env # application config
 ├ .editorconfig
 ├ .gitignore
 ├ .prettierignore
@@ -196,5 +193,5 @@ sidebar_position: 3
 ├ LICENSE
 ├ package-lock.json
 ├ package.json
-└ quickblox.min.js # QuickBlox SDK
+└ schema.yml # QuickBlox schema
 ```
