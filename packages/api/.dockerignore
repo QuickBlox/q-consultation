@@ -1,0 +1,10 @@
+node_modules
+build/
+dist/
+
+.DS_Store
+.vscode
+.idea
+.tmp
+
+.eslint*

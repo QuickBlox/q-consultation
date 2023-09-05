@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  api:
+    container_name: qc-api
+    build:
+      context: ./packages/api
+    restart: always
+    ports:
+      - 4000:4000
+    volumes:
+      - ./qconsultation_config/.env:/app/qconsultation_config/.env
+    networks:
+      - qcNetwork
+
+  provider:
+    container_name: qc-provider
+    build:
+      context: ./packages/provider
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./qconsultation_config/.env:/app/qconsultation_config/.env
+    depends_on:
+      - api
+    networks:
+      - qcNetwork
+
+  client:
+    container_name: qc-client
+    build:
+      context: ./packages/client
+    restart: always
+    ports:
+      - 3001:3001
+    volumes:
+      - ./qconsultation_config/.env:/app/qconsultation_config/.env
+    depends_on:
+      - api
+    networks:
+      - qcNetwork
+
+networks:
+  qcNetwork:
+    driver: bridge

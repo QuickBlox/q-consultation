@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const dotenv = require('dotenv')
 
-const CONFIG_PATH = path.resolve(__dirname, '..', 'qconsultation_config', '.env')
+const CONFIG_PATH = path.resolve(__dirname, '..', '..', 'qconsultation_config', '.env')
 
 const fields = [
   'QB_SDK_CONFIG_APP_ID',
