@@ -34,7 +34,7 @@
     "form-data": "^4.0.0",
     "gpt-3-encoder": "^1.1.4",
     "lodash": "^4.17.21",
-    "openai": "^3.2.1",
+    "openai": "^4.5.0",
     "quickblox": "^2.16.0"
   },
   "devDependencies": {

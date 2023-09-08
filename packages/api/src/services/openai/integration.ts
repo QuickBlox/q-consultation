@@ -1,16 +1,19 @@
-import { ChatCompletionRequestMessage } from 'openai'
+import { toFile } from 'openai/uploads'
+import { ChatCompletionMessageParam } from 'openai/resources/chat'
 
 import openAIApi from './api'
 import { completeSentence } from './utils'
 
-export const createTranscriptionWithTime = async (audio: File) => {
-  const resp = await openAIApi.createTranscription(
-    audio,
-    'whisper-1',
-    '',
-    'srt',
-  )
-  const transcriptionText = resp.data as unknown as string
+export const createTranscriptionWithTime = async (audio: MultipartFile) => {
+  const file = await toFile(audio.buffer, audio.filename, {
+    type: audio.mimetype,
+  })
+  const transcription = await openAIApi.audio.transcriptions.create({
+    file,
+    model: 'whisper-1',
+    response_format: 'srt',
+  })
+  const transcriptionText = transcription as unknown as string
   const srtRegex = /^([\d:]+),\d+ --> ([\d:]+),\d+\s+(.*)$/gm
 
   return Array.from(transcriptionText.matchAll(srtRegex)).reduce<
@@ -22,21 +25,21 @@ export const createTranscriptionWithTime = async (audio: File) => {
   }, [])
 }
 
-export const createAudioDialogAnalytics = async (audio: File) => {
+export const createAudioDialogAnalytics = async (audio: MultipartFile) => {
   const transcription = await createTranscriptionWithTime(audio)
   const transcriptionText = transcription.map(({ text }) => text).join(' ')
   const chatComplationConfig = {
     model: 'gpt-3.5-turbo',
     temperature: 0,
   }
-  const messagesForSummary: ChatCompletionRequestMessage[] = [
+  const messagesForSummary: ChatCompletionMessageParam[] = [
     {
       role: 'user',
       content: 'Generate summary in English from this dialog',
     },
     { role: 'user', content: transcriptionText },
   ]
-  const messagesForActions: ChatCompletionRequestMessage[] = [
+  const messagesForActions: ChatCompletionMessageParam[] = [
     {
       role: 'system',
       content:
@@ -52,21 +55,21 @@ export const createAudioDialogAnalytics = async (audio: File) => {
 
   const [summaryRes, actionsRes] = textRegex.test(transcriptionText)
     ? await Promise.all([
-        openAIApi.createChatCompletion({
+        openAIApi.chat.completions.create({
           messages: messagesForSummary,
           ...chatComplationConfig,
         }),
-        openAIApi.createChatCompletion({
+        openAIApi.chat.completions.create({
           messages: messagesForActions,
           ...chatComplationConfig,
         }),
       ])
     : []
   const summary =
-    summaryRes?.data?.choices?.[0].message?.content ||
+    summaryRes?.choices?.[0].message?.content ||
     'There is no sufficient information to generate a summary'
   const actions =
-    actionsRes?.data?.choices?.[0].message?.content ||
+    actionsRes?.choices?.[0].message?.content ||
     'There is no sufficient information to generate an action points'
 
   return {
@@ -79,22 +82,22 @@ export const createAudioDialogAnalytics = async (audio: File) => {
 export const createQuickAnswerForDialog = async (
   profession: string,
   dialogDescription: string,
-  dialogMessages: ChatCompletionRequestMessage[],
+  dialogMessages: ChatCompletionMessageParam[],
 ) => {
-  const messages: ChatCompletionRequestMessage[] = [
+  const messages: ChatCompletionMessageParam[] = [
     {
       role: 'system',
       content: `You are a specialist ${profession}. You are consulting the client. You were approached with an issue: "${dialogDescription}".`,
     },
     ...dialogMessages,
   ]
-  const { data } = await openAIApi.createChatCompletion({
+  const { choices } = await openAIApi.chat.completions.create({
     messages,
     model: 'gpt-3.5-turbo',
     temperature: 0.5,
   })
 
-  return completeSentence(data.choices[0]?.message?.content)
+  return completeSentence(choices[0]?.message?.content)
 }
 
 export const createProviderKeywords = async (
@@ -105,7 +108,8 @@ export const createProviderKeywords = async (
   const prompt =
     `You are a specialist ${profession} with a description: "${parsedDescription}"\n` +
     'Generate keywords in English by description that will allow customers to search for specialists in the description of the issue, separated by commas.\n\n'
-  const { data } = await openAIApi.createCompletion({
+  // TODO: Replace with openAIApi.chat.completions.create
+  const { choices } = await openAIApi.completions.create({
     prompt,
     model: 'text-davinci-003',
     temperature: 0,
@@ -115,14 +119,14 @@ export const createProviderKeywords = async (
     presence_penalty: 0,
   })
 
-  return data.choices[0]?.text?.trim() || ''
+  return choices[0]?.text?.trim() || ''
 }
 
 export const findProviderIdsByKeywords = async (
   usersKeywords: string,
   topic: string,
 ) => {
-  const messages: ChatCompletionRequestMessage[] = [
+  const messages: ChatCompletionMessageParam[] = [
     {
       role: 'system',
       content:
@@ -137,7 +141,7 @@ export const findProviderIdsByKeywords = async (
         'Display only list of the id of suitable consultants without explanation of reasons.',
     },
   ]
-  const { data } = await openAIApi.createChatCompletion({
+  const { choices } = await openAIApi.chat.completions.create({
     messages,
     model: 'gpt-3.5-turbo',
     temperature: 0,
@@ -145,7 +149,7 @@ export const findProviderIdsByKeywords = async (
   })
 
   const providerIds: string[] | null | undefined =
-    data?.choices?.[0]?.message?.content?.match(/\d+/g)
+    choices?.[0]?.message?.content?.match(/\d+/g)
 
   return providerIds
 }

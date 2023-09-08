@@ -35,7 +35,7 @@ const qbMarkUploaded = (QB: QBApi, id: number, size: number) =>
 
 export const qbUploadFile = async (
   QB: QBApi,
-  file: File,
+  file: MultipartFile,
   isPublic?: boolean,
 ): Promise<QBContentObject> => {
   const blob = await qbCreateFile(QB, file.filename, file.mimetype, isPublic)

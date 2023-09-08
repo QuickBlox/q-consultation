@@ -1,7 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Static, Type } from '@sinclair/typebox'
-import { ChatCompletionRequestMessage } from 'openai'
 import { QBSession } from 'quickblox'
+import { ChatCompletionMessageParam } from 'openai/resources/chat'
 import { QBDialogId, QBMessageId } from '@/models'
 import {
   QBUserApi,
@@ -114,11 +114,12 @@ const quickAnswer: FastifyPluginAsyncTypebox = async (fastify) => {
         items,
         ({ message }) => message || '',
       ).reverse()
-      const chatCompletionMessages: ChatCompletionRequestMessage[] =
-        messages.map(({ message, sender_id }) => ({
+      const chatCompletionMessages: ChatCompletionMessageParam[] = messages.map(
+        ({ message, sender_id }) => ({
           role: sender_id === client_id ? 'user' : 'assistant',
           content: message!,
-        }))
+        }),
+      )
 
       const answer = await createQuickAnswerForDialog(
         profession || '',

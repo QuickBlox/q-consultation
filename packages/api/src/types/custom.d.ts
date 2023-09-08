@@ -8,7 +8,7 @@ type Security = Array<{
   [securityLabel: string]: string[]
 }>
 
-interface File {
+interface MultipartFile {
   buffer: Buffer
   filename: string
   encoding: string
