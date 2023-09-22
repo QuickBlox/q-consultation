@@ -6,7 +6,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 
-const getConfig = require('../../bin/config')
+const getConfig = require('./config')
 const packageInfo = require('./package.json')
 const manifest = require('./public/manifest.json')
 
@@ -44,7 +44,7 @@ module.exports = () => {
   const plugins = [
     new webpack.DefinePlugin(envVars),
     new webpack.ProvidePlugin({
-      QB: path.resolve(__dirname, '../../quickblox.min.js'),
+      QB: 'quickblox/quickblox.min.js',
       QBMediaRecorder: 'media-recorder-js',
     }),
     new MiniCssExtractPlugin({
