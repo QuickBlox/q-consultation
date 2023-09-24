@@ -1,6 +1,6 @@
 ---
 sidebar_label: 'Provider & Client application'
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Provider & Client application
