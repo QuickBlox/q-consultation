@@ -58,7 +58,7 @@ const updateMySchema = {
     [
       Type.Intersect(
         [
-          Type.Omit(QCProvider, [
+          Type.Partial(QCProvider, [
             'id',
             'created_at',
             'updated_at',
@@ -75,7 +75,7 @@ const updateMySchema = {
         { title: 'Without password' },
       ),
       Type.Intersect([
-        Type.Omit(QCProvider, [
+        Type.Partial(QCProvider, [
           'id',
           'created_at',
           'updated_at',
@@ -107,7 +107,7 @@ const updateMySchema = {
 }
 
 const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
-  fastify.put(
+  fastify.patch(
     '',
     {
       schema: updateMySchema,
@@ -160,7 +160,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
 
       let keywords = ''
 
-      if (fastify.config.AI_SUGGEST_PROVIDER && description) {
+      if (fastify.config.AI_SUGGEST_PROVIDER && description && profession) {
         keywords += await createProviderKeywords(profession, description)
       }
 

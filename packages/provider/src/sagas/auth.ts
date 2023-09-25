@@ -188,11 +188,19 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
       const url = `${SERVER_APP_URL}/users/provider`
       const form = new FormData()
 
-      form.append('full_name', newMyAccount.full_name || '')
-      form.append('email', newMyAccount.email || '')
-      form.append('profession', newCustomData.profession || '')
-      form.append('description', newCustomData.description || '')
-      form.append('language', newCustomData.language || '')
+      if (
+        newMyAccount.full_name &&
+        newMyAccount.email &&
+        newCustomData.profession &&
+        newCustomData.description &&
+        newCustomData.language
+      ) {
+        form.append('full_name', newMyAccount.full_name)
+        form.append('email', newMyAccount.email)
+        form.append('profession', newCustomData.profession)
+        form.append('description', newCustomData.description)
+        form.append('language', newCustomData.language)
+      }
 
       if (newMyAccount.password && newMyAccount.old_password) {
         form.append('password', newMyAccount.password)
@@ -210,7 +218,7 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
       }: {
         response: QBUser
       } = yield call(ajax, {
-        method: 'PUT',
+        method: 'PATCH',
         url,
         headers: {
           Authorization: `Bearer ${session!.token}`,
