@@ -12,10 +12,10 @@ export const qbCreateUser = <T = QBCreateUserWithLogin | QBCreateUserWithEmail>(
 ) =>
   new Promise<QBUser>((resolve, reject) => {
     QB.users.create(data, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (result) {
         resolve(result)
+      } else {
+        reject(error)
       }
     })
   })
@@ -32,10 +32,10 @@ export const qbGetUsersByTags = (
     QB.users.get(
       { tags: typeof tags === 'string' ? tags : tags.join(), ...config },
       (error, result) => {
-        if (error) {
-          reject(error)
-        } else {
+        if (result) {
           resolve(result)
+        } else {
+          reject(error)
         }
       },
     )
@@ -44,10 +44,10 @@ export const qbGetUsersByTags = (
 export const qbGetUsers = (QB: QBApi, filter: Dictionary<unknown>) =>
   new Promise<ListUserResponse>((resolve, reject) => {
     QB.users.listUsers({ filter }, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (result) {
         resolve(result)
+      } else {
+        reject(error)
       }
     })
   })
@@ -68,10 +68,10 @@ export const qbUpdateUser = (
 ) =>
   new Promise<QBUser>((resolve, reject) => {
     QB.users.update(userId, data, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (result) {
         resolve(result)
+      } else {
+        reject(error)
       }
     })
   })

@@ -1,9 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { QBRecord } from 'quickblox'
 
 import { QBCustomObjectId, QCRecord } from '@/models'
 import { QBUserApi, qbUpdateCustomObject } from '@/services/quickblox'
+import { QBRecord } from '@/types/quickblox'
 
 const getRecordSchema = {
   tags: ['Appointments'],

@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type, Static } from '@sinclair/typebox'
-import { QBAppointment, QBSession } from 'quickblox'
+import { QBSession } from 'quickblox'
 import without from 'lodash/without'
 
 import { QCAppointment, QBUserId } from '@/models'
@@ -19,6 +19,7 @@ import {
   APPOINTMENT_NOTIFICATION,
   DIALOG_NOTIFICATION,
 } from '@/constants/notificationTypes'
+import { QBAppointment } from '@/types/quickblox'
 
 export const createAppointmentSchema = {
   tags: ['Appointments'],
@@ -80,7 +81,7 @@ const createAppointment: FastifyPluginAsyncTypebox = async (fastify) => {
 
       recipients.forEach((userId) => {
         const dialogId = QBUserApi.chat.helpers.getUserJid(userId)
-        const systemMessages = [
+        const systemMessages = <const>[
           {
             dialogId,
             message: {

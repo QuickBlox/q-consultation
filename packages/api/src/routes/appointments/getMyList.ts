@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Static, Type } from '@sinclair/typebox'
-import { QBAppointment, QBSession } from 'quickblox'
+import { QBSession } from 'quickblox'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import keys from 'lodash/keys'
@@ -13,6 +13,7 @@ import {
 } from '@/models'
 import { qbGetCustomObject, getUserById, QBUserApi } from '@/services/quickblox'
 import { userHasTag } from '@/services/quickblox/utils'
+import { QBAppointment } from '@/types/quickblox'
 
 const getMyAppointmentListSchema = {
   tags: ['Appointments'],

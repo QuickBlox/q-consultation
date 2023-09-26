@@ -8,10 +8,10 @@ export const qbCreateCustomObject = <T extends QBCustomObject>(
 ) =>
   new Promise<T>((resolve, reject) => {
     QB.data.create<T>(className, data, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (result) {
         resolve(result)
+      } else {
+        reject(error)
       }
     })
   })
@@ -26,11 +26,11 @@ export const qbUpdateCustomObject = <T extends QBCustomObject>(
     QB.data.update<{ _id: string } & Dictionary<unknown>, T>(
       className,
       { _id, ...data },
-      (error, item) => {
-        if (error) {
-          reject(error)
+      (error, result) => {
+        if (result) {
+          resolve(result)
         } else {
-          resolve(item)
+          reject(error)
         }
       },
     )
@@ -48,10 +48,10 @@ export const qbGetCustomObject = <T extends QBCustomObject>(
     skip: number
   }>((resolve, reject) => {
     QB.data.list<T>(className, filters, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (result) {
         resolve(result)
+      } else {
+        reject(error)
       }
     })
   })

@@ -1,4 +1,5 @@
-import { QBUser, QBUserCustomData } from 'quickblox'
+import { QBUser } from 'quickblox'
+import { QBUserCustomData } from '@/types/quickblox'
 
 export const userHasTag = (user: QBUser, tag: string) => {
   return user.user_tags?.includes(tag)
