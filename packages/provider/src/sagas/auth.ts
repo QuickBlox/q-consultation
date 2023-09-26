@@ -182,30 +182,25 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
     if (currentMyAccount) {
       const { then, data: newMyAccount } = action.payload
       const newCustomData = newMyAccount.custom_data
-        ? { ...newMyAccount.custom_data }
+        ? { ...currentMyAccount.custom_data, ...newMyAccount.custom_data }
         : {}
 
       const url = `${SERVER_APP_URL}/users/provider`
       const form = new FormData()
 
-      if (
-        newMyAccount.full_name &&
-        newMyAccount.email &&
-        newCustomData.profession &&
-        newCustomData.description &&
-        newCustomData.language
-      ) {
-        form.append('full_name', newMyAccount.full_name)
-        form.append('email', newMyAccount.email)
-        form.append('profession', newCustomData.profession)
-        form.append('description', newCustomData.description)
-        form.append('language', newCustomData.language)
+      const appendIfValueExists = (key: string, value: string | undefined) => {
+        if (value) form.append(key, value)
       }
 
-      if (newMyAccount.password && newMyAccount.old_password) {
-        form.append('password', newMyAccount.password)
-        form.append('old_password', newMyAccount.old_password)
-      }
+      appendIfValueExists('full_name', newMyAccount.full_name)
+      appendIfValueExists('email', newMyAccount.email)
+      appendIfValueExists('profession', newCustomData.profession)
+      appendIfValueExists('description', newCustomData.description)
+
+      form.append('language', newCustomData.language || '')
+
+      appendIfValueExists('password', newMyAccount.password)
+      appendIfValueExists('old_password', newMyAccount.old_password)
 
       if (currentMyAccount.custom_data.avatar && !newCustomData.avatar) {
         form.append('avatar', 'none')

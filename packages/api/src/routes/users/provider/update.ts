@@ -54,51 +54,49 @@ const updateMySchema = {
   description:
     'Update a provider profile. A user can be updated only by themselves or an account owner',
   consumes: ['multipart/form-data'],
-  body: Type.Union(
-    [
-      Type.Intersect(
-        [
-          Type.Partial(QCProvider, [
+  body: Type.Partial(
+    Type.Union(
+      [
+        Type.Intersect(
+          [
+            Type.Omit(QCProvider, [
+              'id',
+              'created_at',
+              'updated_at',
+              'last_request_at',
+            ]),
+            Type.Object({
+              avatar: Type.Union([MultipartFile, Type.Literal('none')], {
+                description: "User's avatar",
+              }),
+            }),
+          ],
+          { title: 'Without password' },
+        ),
+        Type.Intersect([
+          Type.Omit(QCProvider, [
             'id',
             'created_at',
             'updated_at',
             'last_request_at',
           ]),
           Type.Object({
-            avatar: Type.Optional(
-              Type.Union([MultipartFile, Type.Literal('none')], {
-                description: "User's avatar",
-              }),
-            ),
-          }),
-        ],
-        { title: 'Without password' },
-      ),
-      Type.Intersect([
-        Type.Partial(QCProvider, [
-          'id',
-          'created_at',
-          'updated_at',
-          'last_request_at',
-        ]),
-        Type.Object({
-          avatar: Type.Optional(
-            Type.Union([MultipartFile, Type.Literal('none')], {
+            avatar: Type.Union([MultipartFile, Type.Literal('none')], {
               description: "User's avatar",
             }),
-          ),
-          password: Type.String({
-            description:
-              "User's new password. Field old_password must be set to update password",
+            password: Type.String({
+              description:
+                "User's new password. Field old_password must be set to update password",
+            }),
+            old_password: Type.String({
+              description:
+                'Old user password (required only if a new password is provided)',
+            }),
           }),
-          old_password: Type.String({
-            description:
-              'Old user password (required only if a new password is provided)',
-          }),
-        }),
-      ]),
-    ],
-    { title: 'With password' },
+        ]),
+      ],
+      { title: 'With password' },
+    ),
   ),
   response: {
     200: Type.Ref(QBUser),
