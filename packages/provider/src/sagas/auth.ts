@@ -193,8 +193,8 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
           form.append(field, value as string)
         } else if (field === 'avatar' && !value) {
           form.append('avatar', 'none')
-        } else if (newCustomData.avatar instanceof File) {
-          form.append('avatar', newCustomData.avatar)
+        } else if (value instanceof File) {
+          form.append('avatar', value)
         }
       })
 
