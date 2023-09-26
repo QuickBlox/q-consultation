@@ -4,21 +4,21 @@ import { QBApi } from './api'
 export const qbSessionWithToken = (QB: QBApi, token: string) =>
   new Promise<QBSession>((resolve, reject) => {
     QB.startSessionWithToken(token, (error, res) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (res) {
         resolve(res.session)
+      } else {
+        reject(error)
       }
     })
   })
 
 export const qbCreateSession = (QB: QBApi, credentials?: QBLoginParams) =>
   new Promise<QBSession>((resolve, reject) => {
-    const cbSession = (error: QBError | undefined, response: QBSession) => {
-      if (error) {
-        reject(error)
-      } else {
+    const cbSession = (error?: QBError | null, response?: QBSession | null) => {
+      if (response) {
         resolve(response)
+      } else {
+        reject(error)
       }
     }
 
@@ -54,10 +54,10 @@ type LoginCredentials =
 export const qbLogin = (QB: QBApi, credentials: LoginCredentials) =>
   new Promise<QBUser>((resolve, reject) => {
     QB.login(credentials, (error, result) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (result) {
         resolve(result)
+      } else {
+        reject(error)
       }
     })
   })

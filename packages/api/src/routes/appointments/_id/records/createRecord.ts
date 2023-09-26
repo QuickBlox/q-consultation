@@ -10,7 +10,7 @@ import {
   qbUpdateCustomObject,
   qbUploadFile,
 } from '@/services/quickblox'
-import { QBAppointment, QBRecord } from 'quickblox'
+import { QBAppointment, QBRecord } from '@/types/quickblox'
 
 const createRecord: FastifyPluginAsyncTypebox = async (fastify) => {
   const createRecordSchema = {

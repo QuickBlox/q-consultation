@@ -13,10 +13,10 @@ const qbCreateFile = (
     QB.content.create(
       { name, content_type, public: isPublic || false },
       (error, result) => {
-        if (error) {
-          reject(error)
-        } else {
+        if (result) {
           resolve(result)
+        } else {
+          reject(error)
         }
       },
     )
