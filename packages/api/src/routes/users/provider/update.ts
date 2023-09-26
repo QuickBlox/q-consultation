@@ -15,6 +15,7 @@ import {
   QBUserApi,
 } from '@/services/quickblox'
 import { createProviderKeywords } from '@/services/openai'
+import { defaults } from 'lodash'
 
 const updateByIdSchema = {
   tags: ['Users'],
@@ -131,7 +132,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'password',
         'old_password',
       )
-      const customData = pick(
+      const newCustomData = pick(
         request.body,
         'profession',
         'description',
@@ -143,6 +144,8 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
       )
       const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
       let avatarData = prevUserCustomData.avatar
+
+      const customData = defaults({}, newCustomData, prevUserCustomData)
 
       if (avatar && avatarData?.id) {
         qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
@@ -156,7 +159,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         avatarData = undefined
       }
 
-      let keywords = ''
+      let keywords = prevUserCustomData?.keywords || ''
 
       if (fastify.config.AI_SUGGEST_PROVIDER && description && profession) {
         keywords += await createProviderKeywords(profession, description)

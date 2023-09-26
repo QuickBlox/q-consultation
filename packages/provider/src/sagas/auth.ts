@@ -182,31 +182,21 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
     if (currentMyAccount) {
       const { then, data: newMyAccount } = action.payload
       const newCustomData = newMyAccount.custom_data
-        ? { ...currentMyAccount.custom_data, ...newMyAccount.custom_data }
+        ? { ...newMyAccount.custom_data }
         : {}
 
       const url = `${SERVER_APP_URL}/users/provider`
       const form = new FormData()
 
-      const appendIfValueExists = (key: string, value: string | undefined) => {
-        if (value) form.append(key, value)
-      }
-
-      appendIfValueExists('full_name', newMyAccount.full_name)
-      appendIfValueExists('email', newMyAccount.email)
-      appendIfValueExists('profession', newCustomData.profession)
-      appendIfValueExists('description', newCustomData.description)
-
-      form.append('language', newCustomData.language || '')
-
-      appendIfValueExists('password', newMyAccount.password)
-      appendIfValueExists('old_password', newMyAccount.old_password)
-
-      if (currentMyAccount.custom_data.avatar && !newCustomData.avatar) {
-        form.append('avatar', 'none')
-      } else if (newCustomData.avatar instanceof File) {
-        form.append('avatar', newCustomData.avatar)
-      }
+      Object.entries(newCustomData).forEach(([field, value]) => {
+        if (field !== 'avatar') {
+          form.append(field, value as string)
+        } else if (field === 'avatar' && !value) {
+          form.append('avatar', 'none')
+        } else if (newCustomData.avatar instanceof File) {
+          form.append('avatar', newCustomData.avatar)
+        }
+      })
 
       const {
         response,
