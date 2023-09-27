@@ -99,8 +99,6 @@ export default createUseComponent(() => {
       isGuestAccess,
     },
     handlers: {
-      toggleLogoutModal,
-      toggleLanguageModal,
       toggleMenuSidebarOpen,
       handleSelectLanguage,
     },
