@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import pick from 'lodash/pick'
+import { merge, pick } from 'lodash'
 
 import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
 import {
@@ -15,7 +15,6 @@ import {
   QBUserApi,
 } from '@/services/quickblox'
 import { createProviderKeywords } from '@/services/openai'
-import { defaults } from 'lodash'
 
 const updateByIdSchema = {
   tags: ['Users'],
@@ -143,26 +142,26 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         request.session!.user_id,
       )
       const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
-      let avatarData = prevUserCustomData.avatar
 
-      const customData = defaults({}, newCustomData, prevUserCustomData)
+      const customData = merge(prevUserCustomData, newCustomData)
 
-      if (avatar && avatarData?.id) {
-        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
+      if (avatar && prevUserCustomData?.avatar?.id) {
+        qbDeleteFile(QBUserApi, prevUserCustomData.avatar.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
         const file = await qbUploadFile(QBUserApi, avatar)
 
-        avatarData = { id: file.id, uid: file.uid }
+        customData.avatar = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
-        avatarData = undefined
+        customData.avatar = undefined
       }
 
-      let keywords = prevUserCustomData?.keywords || ''
-
       if (fastify.config.AI_SUGGEST_PROVIDER && description && profession) {
-        keywords += await createProviderKeywords(profession, description)
+        customData.keywords = await createProviderKeywords(
+          profession,
+          description,
+        )
       }
 
       const updatedUser = await qbUpdateUser(
@@ -170,11 +169,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         request.session!.user_id,
         {
           ...userData,
-          custom_data: stringifyUserCustomData(
-            avatarData
-              ? { ...customData, keywords, avatar: avatarData }
-              : { ...customData, keywords },
-          ),
+          custom_data: stringifyUserCustomData(customData),
         },
       )
 
