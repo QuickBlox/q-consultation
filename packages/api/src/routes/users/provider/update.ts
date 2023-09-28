@@ -1,6 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
 import pick from 'lodash/pick'
+import merge from 'lodash/merge'
 
 import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
 import {
@@ -54,10 +55,26 @@ const updateMySchema = {
   description:
     'Update a provider profile. A user can be updated only by themselves or an account owner',
   consumes: ['multipart/form-data'],
-  body: Type.Union(
-    [
-      Type.Intersect(
-        [
+  body: Type.Partial(
+    Type.Union(
+      [
+        Type.Intersect(
+          [
+            Type.Omit(QCProvider, [
+              'id',
+              'created_at',
+              'updated_at',
+              'last_request_at',
+            ]),
+            Type.Object({
+              avatar: Type.Union([MultipartFile, Type.Literal('none')], {
+                description: "User's avatar",
+              }),
+            }),
+          ],
+          { title: 'Without password' },
+        ),
+        Type.Intersect([
           Type.Omit(QCProvider, [
             'id',
             'created_at',
@@ -65,40 +82,22 @@ const updateMySchema = {
             'last_request_at',
           ]),
           Type.Object({
-            avatar: Type.Optional(
-              Type.Union([MultipartFile, Type.Literal('none')], {
-                description: "User's avatar",
-              }),
-            ),
-          }),
-        ],
-        { title: 'Without password' },
-      ),
-      Type.Intersect([
-        Type.Omit(QCProvider, [
-          'id',
-          'created_at',
-          'updated_at',
-          'last_request_at',
-        ]),
-        Type.Object({
-          avatar: Type.Optional(
-            Type.Union([MultipartFile, Type.Literal('none')], {
+            avatar: Type.Union([MultipartFile, Type.Literal('none')], {
               description: "User's avatar",
             }),
-          ),
-          password: Type.String({
-            description:
-              "User's new password. Field old_password must be set to update password",
+            password: Type.String({
+              description:
+                "User's new password. Field old_password must be set to update password",
+            }),
+            old_password: Type.String({
+              description:
+                'Old user password (required only if a new password is provided)',
+            }),
           }),
-          old_password: Type.String({
-            description:
-              'Old user password (required only if a new password is provided)',
-          }),
-        }),
-      ]),
-    ],
-    { title: 'With password' },
+        ]),
+      ],
+      { title: 'With password' },
+    ),
   ),
   response: {
     200: Type.Ref(QBUser),
@@ -107,7 +106,7 @@ const updateMySchema = {
 }
 
 const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
-  fastify.put(
+  fastify.patch(
     '',
     {
       schema: updateMySchema,
@@ -133,7 +132,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         'password',
         'old_password',
       )
-      const customData = pick(
+      const newCustomData = pick(
         request.body,
         'profession',
         'description',
@@ -144,24 +143,26 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         request.session!.user_id,
       )
       const prevUserCustomData = parseUserCustomData(prevUserData!.custom_data)
-      let avatarData = prevUserCustomData.avatar
 
-      if (avatar && avatarData?.id) {
-        qbDeleteFile(QBUserApi, avatarData.id).catch(() => null)
+      const customData = merge(prevUserCustomData, newCustomData)
+
+      if (avatar && prevUserCustomData?.avatar?.id) {
+        qbDeleteFile(QBUserApi, prevUserCustomData.avatar.id).catch(() => null)
       }
 
       if (avatar && avatar !== 'none') {
         const file = await qbUploadFile(QBUserApi, avatar)
 
-        avatarData = { id: file.id, uid: file.uid }
+        customData.avatar = { id: file.id, uid: file.uid }
       } else if (avatar === 'none') {
-        avatarData = undefined
+        customData.avatar = undefined
       }
 
-      let keywords = ''
-
-      if (fastify.config.AI_SUGGEST_PROVIDER && description) {
-        keywords += await createProviderKeywords(profession, description)
+      if (fastify.config.AI_SUGGEST_PROVIDER && description && profession) {
+        customData.keywords = await createProviderKeywords(
+          profession,
+          description,
+        )
       }
 
       const updatedUser = await qbUpdateUser(
@@ -169,11 +170,7 @@ const updateProvider: FastifyPluginAsyncTypebox = async (fastify) => {
         request.session!.user_id,
         {
           ...userData,
-          custom_data: stringifyUserCustomData(
-            avatarData
-              ? { ...customData, keywords, avatar: avatarData }
-              : { ...customData, keywords },
-          ),
+          custom_data: stringifyUserCustomData(customData),
         },
       )
 
