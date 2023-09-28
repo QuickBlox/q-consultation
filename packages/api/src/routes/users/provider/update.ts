@@ -1,6 +1,7 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { merge, pick } from 'lodash'
+import pick from 'lodash/pick'
+import merge from 'lodash/merge'
 
 import { MultipartFile, QBUser, QBUserId, QCProvider } from '@/models'
 import {
