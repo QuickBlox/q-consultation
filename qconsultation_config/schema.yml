@@ -14,14 +14,14 @@ qb_schema:
       date_end: Date
     permissions:
       read:
-        access: open
-        primary: true
+        access: open_for_users_ids
       update:
         access: open_for_users_ids
       delete:
         access: open_for_users_ids
       create:
-        access: open_for_users_ids
+        access: open
+        primary: true
   custom_class_Record:
     name: Record
     fields:
@@ -33,12 +33,12 @@ qb_schema:
       uid: String
     permissions:
       read:
-        access: open
+        access: open_for_users_ids
       update:
         access: open_for_users_ids
       delete:
         access: not_allowed
         primary: true
       create:
-        access: not_allowed
+        access: open
         primary: true
