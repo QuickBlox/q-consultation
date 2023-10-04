@@ -180,15 +180,16 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
     )
 
     if (currentMyAccount) {
-      const { then, data: newMyAccount } = action.payload
-      const newCustomData = newMyAccount.custom_data
-        ? { ...newMyAccount.custom_data }
-        : {}
+      const {
+        then,
+        data: { custom_data: userCustomData, ...userData },
+      } = action.payload
+      const profile = { ...userCustomData, ...userData }
 
       const url = `${SERVER_APP_URL}/users/provider`
       const form = new FormData()
 
-      Object.entries(newCustomData).forEach(([field, value]) => {
+      Object.entries(profile).forEach(([field, value]) => {
         if (field !== 'avatar') {
           form.append(field, value as string)
         } else if (field === 'avatar' && !value) {
