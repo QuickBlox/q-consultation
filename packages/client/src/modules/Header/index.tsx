@@ -27,7 +27,11 @@ export default function Header(props: HeaderProps) {
       isOffline,
       isGuestAccess,
     },
-    handlers: { toggleMenuSidebarOpen, handleSelectLanguage },
+    handlers: {
+      toggleLanguageModal,
+      toggleMenuSidebarOpen,
+      handleSelectLanguage,
+    },
   } = useComponent()
   const userName =
     myAccount?.full_name ||
@@ -48,6 +52,15 @@ export default function Header(props: HeaderProps) {
         )}
       </div>
       <div className="header-nav header-nav-right">
+        {!myAccount && (
+          <button
+            type="button"
+            className="btn lang d-hidden"
+            onClick={toggleLanguageModal}
+          >
+            <LanguageSvg className="icon icon-lang" />
+          </button>
+        )}
         <Dropdown
           className="header-dropdown dropdown-lang m-hidden"
           value={language}
@@ -61,64 +74,70 @@ export default function Header(props: HeaderProps) {
           </span>
           <DropdownSvg className="icon icon-dropdown" />
         </Dropdown>
-        <button
-          type="button"
-          className="btn user d-hidden"
-          onClick={toggleMenuSidebarOpen}
-        >
-          <UserSvg className="icon icon-user" />
-        </button>
-        <Dropdown
-          className="header-dropdown dropdown-nav m-hidden"
-          options={menuOptions}
-        >
-          <UserSvg className="icon icon-user" />
-          <span className="dropdown-label">{!minimalistic && userName}</span>
-          <DropdownSvg className="icon icon-dropdown" />
-        </Dropdown>
-        <MobileSidebar
-          position="right"
-          open={menuSidebarOpen}
-          onClose={toggleMenuSidebarOpen}
-        >
-          <ul className="header-menu">
-            {menuMobileOptions.map(
-              (option, index) =>
-                !option.hide && (
-                  <li
-                    key={index}
-                    className={cn('menu-item', {
-                      'menu-item-divider': option.divider,
-                    })}
-                  >
-                    {option.label &&
-                      (option.path ? (
-                        <Link
-                          className="menu-item-text"
-                          to={option.path}
-                          onClick={toggleMenuSidebarOpen}
-                        >
-                          {option.label}
-                        </Link>
-                      ) : (
-                        <span
-                          className="menu-item-text"
-                          onClick={() => {
-                            toggleMenuSidebarOpen()
+        {myAccount && userName && (
+          <>
+            <button
+              type="button"
+              className="btn user d-hidden"
+              onClick={toggleMenuSidebarOpen}
+            >
+              <UserSvg className="icon icon-user" />
+            </button>
+            <Dropdown
+              className="header-dropdown dropdown-nav m-hidden"
+              options={menuOptions}
+            >
+              <UserSvg className="icon icon-user" />
+              <span className="dropdown-label">
+                {!minimalistic && userName}
+              </span>
+              <DropdownSvg className="icon icon-dropdown" />
+            </Dropdown>
+            <MobileSidebar
+              position="right"
+              open={menuSidebarOpen}
+              onClose={toggleMenuSidebarOpen}
+            >
+              <ul className="header-menu">
+                {menuMobileOptions.map(
+                  (option, index) =>
+                    !option.hide && (
+                      <li
+                        key={index}
+                        className={cn('menu-item', {
+                          'menu-item-divider': option.divider,
+                        })}
+                      >
+                        {option.label &&
+                          (option.path ? (
+                            <Link
+                              className="menu-item-text"
+                              to={option.path}
+                              onClick={toggleMenuSidebarOpen}
+                            >
+                              {option.label}
+                            </Link>
+                          ) : (
+                            <span
+                              className="menu-item-text"
+                              onClick={() => {
+                                toggleMenuSidebarOpen()
 
-                            if (option.onClick) {
-                              option.onClick()
-                            }
-                          }}
-                        >
-                          {option.label}
-                        </span>
-                      ))}
-                  </li>
-                ),
-            )}
-          </ul>
-        </MobileSidebar>
+                                if (option.onClick) {
+                                  option.onClick()
+                                }
+                              }}
+                            >
+                              {option.label}
+                            </span>
+                          ))}
+                      </li>
+                    ),
+                )}
+              </ul>
+            </MobileSidebar>
+          </>
+        )}
       </div>
     </header>
   )
