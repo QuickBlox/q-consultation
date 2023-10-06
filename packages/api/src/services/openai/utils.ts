@@ -1,9 +1,10 @@
 import { encode } from 'gpt-3-encoder'
 
-export const completeSentence = (text?: string) =>
+export const completeSentence = (text?: string | null) =>
   text?.replace(/([^.!?;]+)[^.!?;]*$/, ' ...') || ''
 
-export const tokenCounter = (text?: string) => (text ? encode(text).length : 0)
+export const tokenCounter = (text?: string | null) =>
+  text ? encode(text).length : 0
 
 export const loopToLimitTokens = <T>(
   limit: number,

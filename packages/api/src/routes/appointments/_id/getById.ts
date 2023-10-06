@@ -1,9 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { QBAppointment } from 'quickblox'
 
 import { QBCustomObjectId, QCAppointment } from '@/models'
 import { QBUserApi, qbUpdateCustomObject } from '@/services/quickblox'
+import { QBAppointment } from '@/types/quickblox'
 
 const getAppointmentSchema = {
   tags: ['Appointments'],

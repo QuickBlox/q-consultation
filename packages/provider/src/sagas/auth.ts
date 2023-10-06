@@ -180,37 +180,31 @@ function* updateMyAccount(action: Types.QBMyAccountUpdateRequestAction) {
     )
 
     if (currentMyAccount) {
-      const { then, data: newMyAccount } = action.payload
-      const newCustomData = newMyAccount.custom_data
-        ? { ...newMyAccount.custom_data }
-        : {}
+      const {
+        then,
+        data: { custom_data: userCustomData, ...userData },
+      } = action.payload
+      const profile = { ...userCustomData, ...userData }
 
       const url = `${SERVER_APP_URL}/users/provider`
       const form = new FormData()
 
-      form.append('full_name', newMyAccount.full_name || '')
-      form.append('email', newMyAccount.email || '')
-      form.append('profession', newCustomData.profession || '')
-      form.append('description', newCustomData.description || '')
-      form.append('language', newCustomData.language || '')
-
-      if (newMyAccount.password && newMyAccount.old_password) {
-        form.append('password', newMyAccount.password)
-        form.append('old_password', newMyAccount.old_password)
-      }
-
-      if (currentMyAccount.custom_data.avatar && !newCustomData.avatar) {
-        form.append('avatar', 'none')
-      } else if (newCustomData.avatar instanceof File) {
-        form.append('avatar', newCustomData.avatar)
-      }
+      Object.entries(profile).forEach(([field, value]) => {
+        if (field !== 'avatar') {
+          form.append(field, value as string)
+        } else if (field === 'avatar' && !value) {
+          form.append('avatar', 'none')
+        } else if (value instanceof File) {
+          form.append('avatar', value)
+        }
+      })
 
       const {
         response,
       }: {
         response: QBUser
       } = yield call(ajax, {
-        method: 'PUT',
+        method: 'PATCH',
         url,
         headers: {
           Authorization: `Bearer ${session!.token}`,

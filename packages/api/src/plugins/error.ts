@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin'
 import { QBError } from 'quickblox'
 import axios, { AxiosError } from 'axios'
+import { APIError as OpenAIError } from 'openai/error'
 
 interface DefaultHttpError extends Error {
   status: number
@@ -11,14 +12,6 @@ interface DefaultHttpError extends Error {
 interface QBServerError extends QBError {
   code?: number
   errors?: string[] | Dictionary<string | string[]>
-}
-
-interface OpenAIError {
-  error: {
-    message: string
-    type: string
-    code: string
-  }
 }
 
 function isError(
@@ -60,16 +53,12 @@ const parseErrorData = (
 function stringifyError(error: unknown) {
   if (typeof error === 'string') return error
 
-  if (axios.isAxiosError(error)) {
-    const errorData: OpenAIError | QBServerError | string = error.response?.data
+  if (error instanceof OpenAIError) {
+    return `[OpenAI] ${error.message}`
+  }
 
-    if (
-      typeof errorData === 'object' &&
-      'error' in errorData &&
-      typeof errorData.error === 'object'
-    ) {
-      return `[OpenAI] ${errorData.error.message || errorData.error.code}`
-    }
+  if (axios.isAxiosError(error)) {
+    const errorData: QBServerError | string = error.response?.data
 
     if (
       typeof errorData === 'object' &&

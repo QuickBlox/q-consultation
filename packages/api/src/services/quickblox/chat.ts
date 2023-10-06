@@ -41,10 +41,10 @@ export const qbChatCreate = (
         data,
       },
       (error, chat) => {
-        if (error) {
-          reject(error)
-        } else {
+        if (chat) {
           resolve(chat)
+        } else {
+          reject(error)
         }
       },
     )
@@ -57,10 +57,10 @@ export const qbUpdateDialog = (
 ) => {
   return new Promise<QBChatDialog>((resolve, reject) => {
     QB.chat.dialog.update(dialogId, data, (error, chat) => {
-      if (error) {
-        reject(error)
-      } else {
+      if (chat) {
         resolve(chat)
+      } else {
+        reject(error)
       }
     })
   })
@@ -130,10 +130,10 @@ export function qbChatGetMessages(
         ...params,
       },
       (error, messages) => {
-        if (error) {
-          reject(error)
-        } else {
+        if (messages) {
           resolve(messages)
+        } else {
+          reject(error)
         }
       },
     )

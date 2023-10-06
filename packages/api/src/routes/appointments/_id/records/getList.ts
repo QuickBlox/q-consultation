@@ -1,6 +1,5 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import { Type } from '@sinclair/typebox'
-import { QBAppointment, QBRecord } from 'quickblox'
 import omit from 'lodash/omit'
 
 import { QBCustomObjectId, QCRecord, QCRecordSortKeys } from '@/models'
@@ -9,6 +8,7 @@ import {
   qbGetCustomObject,
   qbUpdateCustomObject,
 } from '@/services/quickblox'
+import { QBAppointment, QBRecord } from '@/types/quickblox'
 
 const getRecordListSchema = {
   tags: ['Appointments'],

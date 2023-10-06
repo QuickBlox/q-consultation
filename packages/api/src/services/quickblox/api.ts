@@ -9,20 +9,13 @@ export class QBApi extends QuickBlox {
       debug: process.env.QB_SDK_CONFIG_DEBUG
         ? JSON.parse(process.env.QB_SDK_CONFIG_DEBUG)
         : false,
-      endpoints: {},
-      webrtc: {},
-    }
-
-    if (process.env.QB_SDK_CONFIG_ENDPOINT_API) {
-      qbConfig.endpoints.api = process.env.QB_SDK_CONFIG_ENDPOINT_API
-    }
-
-    if (process.env.QB_SDK_CONFIG_ENDPOINT_CHAT) {
-      qbConfig.endpoints.chat = process.env.QB_SDK_CONFIG_ENDPOINT_CHAT
-    }
-
-    if (process.env.QB_SDK_CONFIG_ICE_SERVERS) {
-      qbConfig.webrtc.iceServers = process.env.QB_SDK_CONFIG_ICE_SERVERS
+      endpoints: {
+        api: process.env.QB_SDK_CONFIG_ENDPOINT_API,
+        chat: process.env.QB_SDK_CONFIG_ENDPOINT_CHAT,
+      },
+      webrtc: {
+        iceServers: process.env.QB_SDK_CONFIG_ICE_SERVERS as any,
+      },
     }
 
     const hasSDKConfig = [
