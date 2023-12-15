@@ -1,0 +1,66 @@
+import { ListUserParams, QBUser } from '@qc/quickblox'
+import * as Types from '../actions'
+
+export function getUser(
+  data: Types.GetUserParams,
+  reset?: boolean,
+  then?: (
+    data: Types.QBUserGetSuccessAction | Types.QBUserGetFailureAction,
+  ) => void,
+): Types.QBUserGetRequestAction {
+  return { type: Types.QB_USER_GET_REQUEST, payload: { data, reset, then } }
+}
+
+export function getUserSuccess(
+  payload: Types.EntriesUserResponse,
+): Types.QBUserGetSuccessAction {
+  return { type: Types.QB_USER_GET_SUCCESS, payload }
+}
+
+export function getUserFailure(
+  error: string,
+  code?: number,
+): Types.QBUserGetFailureAction {
+  return { type: Types.QB_USER_GET_FAILURE, payload: { message: error, code } }
+}
+
+export function listUsers(
+  data: ListUserParams,
+  then?: (data: Types.QBUserListSuccessAction) => void,
+): Types.QBUserListRequestAction {
+  return {
+    type: Types.QB_USER_LIST_REQUEST,
+    payload: {
+      data,
+      then,
+    },
+  }
+}
+
+export function listUsersSuccess(
+  payload: Types.QBUserListSuccessAction['payload'],
+): Types.QBUserListSuccessAction {
+  return { type: Types.QB_USER_LIST_SUCCESS, payload }
+}
+
+export function listUsersFailure(error: string): Types.QBUserListFailureAction {
+  return { type: Types.QB_USER_LIST_FAILURE, error }
+}
+
+export function providersSuggestions(
+  payload: string,
+): Types.QBProvidersByTopicRequestAction {
+  return { type: Types.QB_PROVIDERS_SUGGESTIONS_REQUEST, payload }
+}
+
+export function providersSuggestionsSuccess(
+  payload: Array<QBUser['id']>,
+): Types.QBProvidersByTopicSuccessAction {
+  return { type: Types.QB_PROVIDERS_SUGGESTIONS_SUCCESS, payload }
+}
+
+export function providersSuggestionsFailure(
+  error: string,
+): Types.QBProvidersByTopicFailureAction {
+  return { type: Types.QB_PROVIDERS_SUGGESTIONS_FAILURE, error }
+}

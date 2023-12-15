@@ -1,0 +1,23 @@
+.modal.guest-user .form {
+  max-height: 85%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.guest-user .form .body {
+  padding: 16px 22px;
+}
+
+.modal.guest-user .form .body form {
+  align-items: inherit;
+  display: flex;
+  flex-direction: inherit;
+  justify-content: inherit;
+  width: 100%;
+}
+
+.modal.guest-user .form .body .icon {
+  height: 24px;
+  vertical-align: middle;
+  width: 24px;
+}

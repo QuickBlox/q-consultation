@@ -1,0 +1,31 @@
+.calendar {
+  border-radius: 0;
+  border: none;
+  padding: 0;
+  width: auto;
+}
+
+.calendar.field {
+  background-color: transparent;
+}
+
+.calendar.field .icon {
+  fill: var(--secondary-400);
+}
+
+.calendar.show-overlay .icon {
+  fill: var(--Main-elements)
+}
+
+.calendar .DayPickerInput-Overlay {
+  left: 0;
+}
+
+.calendar.bottom .DayPickerInput-Overlay {
+  top: 0;
+}
+
+.calendar.top .DayPickerInput-Overlay {
+  top: unset;
+  bottom: 25px;
+}

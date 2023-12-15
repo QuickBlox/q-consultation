@@ -1,0 +1,59 @@
+.avatar-upload {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-upload label {
+  display: inline-block;
+}
+
+.avatar-upload input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.avatar-upload input:not(:disabled) + .avatar-upload-photo {
+  cursor: pointer;
+}
+
+.avatar-upload .avatar-upload-photo {
+  width: 76px;
+  height: 76px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--blue-3);
+  background-color: var(--Interface-background);
+}
+
+.avatar-upload .avatar-upload-plus {
+  position: relative;
+}
+
+.avatar-upload .avatar-upload-plus::before,
+.avatar-upload .avatar-upload-plus::after {
+  content: "";
+  position: absolute;
+  background-color: var(--Secondary-elements);
+}
+
+.avatar-upload .avatar-upload-plus::before {
+  width: 2px;
+  height: 18px;
+}
+
+.avatar-upload .avatar-upload-plus::after {
+  width: 18px;
+  height: 2px;
+}
+
+.avatar-upload input:focus + .avatar-upload-photo {
+  box-shadow: 0 4px 11px 4px var(--primary-100);
+}
+
+.avatar-upload .avatar-upload-btn {
+  margin: 0 15px;
+}

@@ -1,0 +1,8 @@
+[production]
+> 0.5%
+last 2 versions
+not dead
+not op_mini all
+
+[development]
+last 1 versions

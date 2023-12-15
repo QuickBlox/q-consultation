@@ -1,0 +1,66 @@
+.section-item {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--blue-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+}
+
+.section-item .title {
+  cursor: pointer;
+  align-items: center;
+  background-color: var(--Interface-background);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 12px;
+  width: 100%;
+}
+
+.section-item .title.disabled {
+  cursor: default;
+}
+
+.section-item .icon-container {
+  display: flex;
+}
+
+.section-item .icon {
+  margin-left: 20px;
+  fill: var(--secondary-900);
+}
+
+.section-item .title .icon.arrow {
+  height: 24px;
+  transition: transform 0.2s ease-in;
+  width: 24px;
+}
+
+.section-item .body {
+  background-color: var(--Interface-background);
+  border: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: var(--caption2-size);
+  height: 0;
+  line-height: var(--caption2-line-height);
+  outline: none;
+  overflow: auto;
+  padding: 0 12px;
+  resize: none;
+  transition: all 0.2s ease-in;
+  width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.section-item.active .icon.arrow {
+  transform: rotate(90deg);
+}
+
+.section-item.active .body {
+  height: 245px;
+  padding: 12px 12px;
+}

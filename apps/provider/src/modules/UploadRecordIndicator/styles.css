@@ -1,0 +1,88 @@
+.upload-record-indicator {
+  box-sizing: border-box;
+  height: 0;
+  width: 100%;
+  transition: height 0.2s linear;
+}
+
+.upload-record-indicator.active {
+  height: 10px;
+}
+
+.upload-record-indicator progress {
+  border-radius: 2px;
+  height: 20px;
+  width: 100%;
+}
+
+.upload-record-indicator progress {
+  display: block;
+  height: 10px;
+}
+
+.upload-record-indicator progress[value] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 2px;
+}
+
+.upload-record-indicator progress[value]::-webkit-progress-bar {
+  background-color: transparent;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px var(--grey-8) inset;
+  overflow: hidden;
+}
+
+.upload-record-indicator progress[value]::-webkit-progress-value {
+  border-radius: 2px;
+  background-color: var(--Main-elements);
+  background-image: linear-gradient(
+    45deg,
+    var(--grey-6) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--grey-6) 50%,
+    var(--grey-6) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 3rem 3rem;
+  -webkit-animation: animate-stripes 2s linear infinite;
+  animation: animate-stripes 2s linear infinite;
+}
+
+.upload-record-indicator progress[value]::-moz-progress-bar {
+  border-radius: 2px;
+  box-shadow: 0 2px 5px var(--grey-8) inset;
+  background-color: var(--Main-elements);
+  background-image: linear-gradient(
+    45deg,
+    var(--grey-6) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--grey-6) 50%,
+    var(--grey-6) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 3rem 3rem;
+  -moz-animation: animate-stripes 2s linear infinite;
+  animation: animate-stripes 2s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% { background-position: 0 0, 0 0, 0 0 }
+  100% { background-position: -100px 0, 0 0, 0 0 }
+}
+
+@-moz-keyframes animate-stripes {
+  0% { background-position: 0 0, 0 0, 0 0 }
+  100% { background-position: -100px 0, 0 0, 0 0 }
+}
+
+@keyframes animate-stripes {
+  0% { background-position: 0 0, 0 0, 0 0 }
+  100% { background-position: -100px 0, 0 0, 0 0 }
+}

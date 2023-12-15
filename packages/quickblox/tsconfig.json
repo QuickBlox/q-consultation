@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "outDir": "dist",
+    "baseUrl": "." ,
+    "lib": [
+      "ESNext"
+    ],
+    "module": "Node16",
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "useUnknownInCatchVariables": true,
+    "moduleResolution": "Node16"
+  },
+  "include": ["src/**/*.ts"]
+}

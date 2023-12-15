@@ -1,0 +1,35 @@
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# production
+dist/
+
+.*
+!.env
+!.babelrc
+!.browserslistrc
+
+# Yarn Berry
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+!.yarnrc.yml
+yarn-debug.log
+yarn-error.log
+
+.vscode
+.idea
+.tmp
+
+cache
+
+*.md
+LICENSE
+schema.yml

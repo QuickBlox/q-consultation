@@ -1,0 +1,6 @@
+position: 2
+label: 'Applications'
+collapsed: false
+link:
+  type: 'generated-index'
+  slug: '/dev/development/apps'

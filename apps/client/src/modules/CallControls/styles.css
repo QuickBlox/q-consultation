@@ -1,0 +1,75 @@
+.controls {
+  align-items: flex-start;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+
+.controls .control-btn {
+  background-color: var(--secondary-400);
+  border-radius: 5px;
+  border: none;
+  color: var(--Tertiary-font);
+  font-size: var(--font-size-xs);
+  height: 44px;
+  line-height: 13px;
+  margin: 0 10px;
+  padding: 0;
+  width: 44px;
+}
+
+.controls .control-btn:disabled {
+  opacity: 0.6;
+}
+
+.controls .control-btn.active {
+  background-color: var(--Incoming-background);
+}
+
+.controls .control-btn.disable,
+.control-btn.active-record {
+  background-color: var(--Warning);
+}
+
+.controls .control-btn .icon {
+  height: 24px;
+  vertical-align: middle;
+  width: 24px;
+}
+
+.controls .control-btn .icon path,
+.icon-device path {
+  fill: var(--Tertiary-elements);
+}
+
+.controls .control-btn.active .icon path {
+  fill: var(--Secondary-elements);
+}
+
+.controls .control-btn.end-call {
+  background-color: var(--Warning);
+  font-weight: bold;
+  padding: 0 1.2em;
+  width: auto;
+}
+
+.controls .control-btn.end-call .icon {
+  fill: var(--Tertiary-elements);
+}
+
+@keyframes pulsating {
+  0%    { transform: none; }
+  50%   { transform: scale(1.2); }
+  100%  { transform: none; }
+}
+
+@media screen and (max-width: 768px) {
+
+  .controls {
+    padding-top: 15px;
+  }
+
+}

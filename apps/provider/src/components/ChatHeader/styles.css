@@ -1,0 +1,164 @@
+.chat-header {
+  align-items: center;
+  border-bottom: 1px solid var(--blue-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: var(--grey-13);
+}
+
+.chat-header .muted {
+  color: var(--blue-7);
+  flex: 1;
+  font-size: var(--font-size-md);
+  line-height: 15px;
+}
+
+.chat-header .section {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+  width: 100%;
+}
+
+.chat-header .section.assignee-info {
+  border: none;
+}
+
+.chat-header .assignee-info .priority-and-name,
+.chat-header .assignee-info .assignee {
+  align-items: flex-start;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.chat-header .assignee-info .priority-and-name {
+  align-items: center;
+  flex-direction: row;
+  padding: 12px;
+}
+
+.chat-header .assignee-info .priority-and-name .name {
+  color: var(--grey-13);
+  flex: 1;
+  font-size: var(--h2-size);
+  font-weight: bold;
+  line-height: var(--h2-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-header .assignee-info .priority-and-name .priority-label {
+  color: var(--blue-7);
+  font-size: var(--font-size-md);
+  line-height: 15px;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.chat-header .assignee-info .priority-and-name .priority-buttons {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 8px;
+}
+
+.chat-header .assignee-info .priority-and-name .priority {
+  border-radius: 50%;
+  border: none;
+  height: 16px;
+  margin: 0 4px;
+  outline: none;
+  padding: 0;
+  width: 16px;
+}
+
+.chat-header .assignee-info .priority-and-name .priority:disabled {
+  opacity: 0.6;
+}
+
+.chat-header .assignee-info .priority-and-name .priority.low {
+  background-color: var(--Low);
+}
+
+.chat-header .assignee-info .priority-and-name .priority.med {
+  background-color: var(--Medium);
+}
+
+.chat-header .assignee-info .priority-and-name .priority.high {
+  background-color: var(--High);
+}
+
+.chat-header .assignee-info .priority-and-name .priority .icon {
+  height: 16px;
+  fill: var(--Incoming-background);
+  width: 10px;
+  stroke: var(--Incoming-background);
+  stroke-width: 2px;
+}
+
+.chat-header .assignee-info .priority-and-name .call {
+  background: transparent;
+  border: none;
+  margin-left: 12px;
+  padding: 4px 5px;
+}
+
+.chat-header .assignee-info .priority-and-name .call .icon {
+  height: 24px;
+  width: 24px;
+}
+
+.chat-header .assignee-info .priority-and-name .call:disabled .icon {
+  opacity: 0.35;
+}
+
+.chat-header .assignee-info .priority-and-name .call .icon path {
+  fill: var(--Main-elements);
+}
+
+.chat-header .assignee-info .priority-and-name .call:disabled .icon path {
+  fill: var(--grey-13);
+}
+
+.chat-header .assignee-info .assignee {
+  flex-direction: column;
+  padding: 6px 12px 12px;
+}
+
+.chat-header .assignee-info .assignee .label {
+  padding: 0 0 5px 0;
+}
+
+.chat-header .assignee-info .assignee .assignee-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.chat-header .assignee-info .assignee .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+
+  .chat-header .back {
+    display: initial;
+    margin-right: 12px;
+  }
+
+  .chat-header .assignee-info .priority-and-name .priority-label {
+    display: none;
+  }
+
+}

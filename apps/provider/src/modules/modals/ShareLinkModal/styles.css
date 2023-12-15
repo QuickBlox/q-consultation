@@ -1,0 +1,17 @@
+.modal.share-link .form {
+  max-height: 85%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.share-link .form .body {
+  padding: 16px 22px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.modal.share-link .form .copy-btn {
+  margin-top: 30px;
+}

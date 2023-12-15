@@ -1,0 +1,133 @@
+.appointment-register {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--Interface-background);
+  border-radius: 5px;
+  box-shadow: 0 1px 4px 0 var(--grey-8);
+  color: var(--Secondary-elements);
+  max-width: 800px;
+  max-height: calc(100vh - 80px);
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.appointment-register .register-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid var(--blue-3);
+}
+
+.appointment-register .register-card {
+  margin: 30px 25px;
+}
+
+.appointment-register .back {
+  background-color: transparent;
+  border: none;
+  display: none;
+  height: 28px;
+  padding: 4px;
+  width: 28px;
+  margin-right: 15px;
+}
+
+.appointment-register .back .icon {
+  height: 20px;
+  width: 20px;
+  fill: var(--secondary-900);
+}
+
+.appointment-register .register-header .title {
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-line-height);
+}
+
+.appointment-register .date-filter {
+  margin-top: 25px;
+}
+
+.appointment-register .date-filter-field {
+  display: inline-flex;
+  align-items: center;
+}
+
+.appointment-register .date-filter-field:first-child {
+  margin-right: 40px;
+}
+
+.appointment-register .date-filter-input {
+  max-width: 150px;
+}
+
+.appointment-register .register-loader {
+  text-align: center;
+  padding: 10px 0;
+  line-height: 0;
+}
+
+.appointment-register .register-empty {
+  text-align: center;
+  padding: 10px;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+  .offline .appointment-register {
+    top: 41px;
+  }
+
+  .appointment-register {
+    position: absolute;
+    max-height: 100%;
+    top: 0;
+    z-index: 3;
+  }
+
+  .appointment-register .register-header {
+    padding: 17px 13px;
+  }
+
+  .appointment-register .register-header-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .appointment-register .register-header .title {
+    font-size: var(--body-size);
+    font-weight: var(--body-weight);
+    line-height: var(--body-line-height);
+  }
+
+  .appointment-register .date-filter {
+    margin-top: 20px;
+  }
+
+  .appointment-register .date-filter-field:first-child {
+    margin-right: 10px;
+  }
+
+  .appointment-register .date-filter-input {
+    font-size: var(--caption2-size);
+    line-height: var(--caption2-line-height);
+    max-width: 111px;
+    padding: 10px 5px;
+  }
+
+  .appointment-register .date-filter-field:last-child .DayPickerInput-Overlay {
+    left: auto;
+    right: 0;
+  }
+
+  .appointment-register .date-filter-label {
+    margin-right: 5px;
+  }
+
+  .appointment-register .back {
+    display: inline-block;
+  }
+
+  .appointment-register .register-card {
+    margin: 20px 12px;
+  }
+}

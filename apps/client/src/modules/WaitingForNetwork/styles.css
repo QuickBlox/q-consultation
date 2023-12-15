@@ -1,0 +1,46 @@
+.waiting-network-container {
+  background-color: var(--grey-11);
+  box-shadow: 0 0 6px 0 var(--secondary-800);
+  box-sizing: border-box;
+  color: var(--Tertiary-font);
+  position: fixed;
+  text-align: center;
+  transition: all 0.25s ease-in-out;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.waiting-network-container, .waiting-network {
+  border-radius: 6px;
+}
+
+.waiting-network {
+  padding: 0.6em 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.waiting-network-container .spinner {
+  margin: 0 10px 0 0;
+}
+
+@media screen and (max-width: 768px) {
+  .waiting-network-container {
+    background-color: #FFF;
+    width: 100%;
+    transform: none;
+    top: 0;
+    left: 0;
+  }
+
+  .waiting-network {
+    background-color: var(--grey-11);
+  }
+
+  .waiting-network-container, .waiting-network {
+    border-radius: 0;
+  }
+}

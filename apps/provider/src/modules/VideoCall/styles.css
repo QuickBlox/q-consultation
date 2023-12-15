@@ -1,0 +1,100 @@
+.call-screen-container,
+.call-screen-container.minimalistic {
+  display: flex;
+  flex-direction: column;
+  flex: 0;
+  height: 100%;
+  overflow: hidden;
+  transition: flex 0.2s linear;
+  max-height: 100vh;
+}
+
+.on-call .call-screen-container {
+  flex: 1;
+}
+
+.call-screen {
+  align-items: center;
+  background-color: var(--Secondary-elements);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+.call-screen .videos {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.call-screen .videos .video-container {
+  display: flex;
+  flex: 1;
+  max-height: 50%;
+  width: 100%;
+}
+
+.call-screen .videos .video-container .overlay {
+  background: linear-gradient(180deg, var(--Secondary-elements) 0%, transparent 100%);
+  box-sizing: border-box;
+  color: var(--Tertiary-font);
+  font-size: var(--caption2-size);
+  left: 0;
+  padding: 20px;
+  position: absolute;
+  right: 0;
+  text-align: start;
+  top: 0;
+}
+
+.call-screen .videos .video-container .overlay p {
+  margin: 0 0 5px 0;
+}
+
+.call-screen .videos .video-container video {
+  max-height: 100%;
+  width: 100%;
+}
+
+.call-screen .videos #local {
+  display: flex;
+  flex: 1;
+  max-height: 50%;
+  max-width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .call-screen-container {
+    flex: 1;
+  }
+
+  .call-screen .videos .video-container {
+    max-height: 100%;
+  }
+
+  .call-screen .videos video#local {
+    box-shadow: 0 9px 20px 0 var(--secondary-800);
+    bottom: 0;
+    flex: 0;
+    max-height: 25%;
+    max-width: 25%;
+    min-height: 15%;
+    position: absolute;
+    right: 0;
+    background-color: var(--secondary-900);
+    opacity: 1;
+    transition: opacity 0.25s ease-in-out;
+  }
+
+  .call-screen .videos video#local.hide {
+    opacity: 0;
+  }
+}

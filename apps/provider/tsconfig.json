@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "useUnknownInCatchVariables": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "moduleResolution": "Node",
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src"
+  ]
+}

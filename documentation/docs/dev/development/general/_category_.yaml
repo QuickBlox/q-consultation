@@ -1,0 +1,6 @@
+position: 1
+label: 'General'
+collapsed: false
+link:
+  type: 'generated-index'
+  slug: '/dev/development/general'

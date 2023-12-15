@@ -1,6 +1,9 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "useWorkspaces": true,
-  "npmClient": "npm",
-  "version": "1.2.4-plus"
+  "version": "2.2.0",
+  "command": {
+    "run": {
+      "npmClient": "yarn"
+    }
+  }
 }

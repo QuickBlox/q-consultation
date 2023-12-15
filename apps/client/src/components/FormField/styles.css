@@ -1,0 +1,142 @@
+.form-field {
+  text-align: start;
+  width: 100%;
+}
+
+.form-field.inline {
+  display: grid;
+}
+
+.form-field .form-field-error,
+.form-field .form-field-label {
+  font-size: var(--caption2-size);
+  line-height: var(--caption2-line-height);
+}
+
+.form-field .form-field-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.form-field.inline .form-field-label {
+  margin-bottom: 0;
+  margin-right: 15px;
+}
+
+.form-field .form-field-label-text {
+  cursor: pointer;
+  color: var(--secondary-900);
+}
+
+.form-field.inline .field-container,
+.form-field.inline .form-field-error {
+  grid-column-start: 2;
+}
+
+.form-field .form-field-error {
+  margin-top: 2px;
+  color: var(--red-4);
+  text-align: center;
+}
+
+.form-field-row {
+  display: flex;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.form-field:not(:first-child),
+.form-field-row:not(:first-child) {
+  margin-top: 12px;
+}
+
+.form-field-col {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.form-field.form-field-col:not(:first-child) {
+  margin-top: 0;
+}
+
+.form-field-tooltip {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.form-field-tooltip svg {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  fill: var(--blue-7);
+}
+
+.form-field-tooltip-body {
+  font-size: var(--caption2-size);
+  line-height: var(--caption2-line-height);
+  visibility: hidden;
+  position: absolute;
+  width: 250px;
+  color: var(--Tertiary-font);
+  background-color: var(--grey-11);
+  transition: opacity 0.25s linear;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  z-index: 1;
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+.form-field-tooltip-body::after {
+  content: "";
+  position: absolute;
+  border-width: 5px;
+  border-style: solid;
+}
+
+.form-field-tooltip-body.tooltip-bottom-end {
+  top: calc(135% + 5px);
+  right: -5px;
+}
+
+.form-field-tooltip-body.tooltip-bottom-end::after {
+  bottom: 100%;
+  right: 7px;
+  border-color: transparent transparent var(--grey-11) transparent;
+}
+
+.form-field-tooltip-body ul {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+  text-align: start;
+}
+
+.form-field-tooltip-body ul li:not(:first-child) {
+  margin-top: 2px;
+}
+
+.form-field-tooltip:hover .form-field-tooltip-body {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .form-field.inline .form-field-label {
+    margin-right: 5px;
+  }
+
+  .form-field-row {
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .form-field-col {
+    margin: 0 0 12px;
+  }
+}

@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  api:
+    container_name: qc-api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    restart: always
+    ports:
+      - 4000:4000
+    env_file:
+      - .env
+    networks:
+      - qcNetwork
+
+  provider:
+    container_name: qc-provider
+    build:
+      context: .
+      dockerfile: ./apps/provider/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
+    networks:
+      - qcNetwork
+
+  client:
+    container_name: qc-client
+    build:
+      context: .
+      dockerfile: ./apps/client/Dockerfile
+    restart: always
+    ports:
+      - 3001:3001
+    depends_on:
+      - api
+    networks:
+      - qcNetwork
+
+networks:
+  qcNetwork:
+    driver: bridge

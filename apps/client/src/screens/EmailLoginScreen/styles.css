@@ -1,0 +1,47 @@
+.login-screen {
+  flex: 1;
+  width: 100%;
+}
+
+.login-screen .login-form {
+  background-color: var(--Interface-background);
+  border-radius: 5px;
+  margin: 0 auto;
+  padding: 30px;
+  width: 490px;
+  box-sizing: border-box;
+  color: var(--Secondary-elements);
+  box-shadow: 0 1px 4px 0 var(--grey-8);
+  transition: all 0.2s ease-in;
+}
+
+.login-screen .title {
+  font-size: 20px;
+  line-height: 27px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.login-screen .subtitle {
+  margin: 10px 0 0;
+}
+
+.login-screen .link {
+  text-decoration: none;
+  color: var(--Main-elements);
+  margin-left: 10px;
+}
+
+.login-screen .link:hover {
+  color: var(--Main-elements);
+}
+
+.login-screen .btn-group {
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .login-screen .login-form {
+    width: calc(100% - 20px);
+  }
+}

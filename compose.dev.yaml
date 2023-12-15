@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  api:
+    container_name: qc-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=api
+    restart: always
+    ports:
+      - 4000:4000
+    volumes:
+      - ./apps/api/:/project/apps/api/
+      - ./packages/:/project/packages/
+    env_file:
+      - .env
+    networks:
+      - qcNetwork
+
+  provider:
+    container_name: qc-provider
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=provider
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./apps/provider/:/project/apps/provider/
+      - ./packages/:/project/packages/
+    env_file:
+      - .env
+    depends_on:
+      - api
+    networks:
+      - qcNetwork
+
+  client:
+    container_name: qc-client
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP=client
+    restart: always
+    ports:
+      - 3001:3001
+    volumes:
+      - ./apps/client/:/project/apps/client/
+      - ./packages/:/project/packages/
+    env_file:
+      - .env
+    depends_on:
+      - api
+    networks:
+      - qcNetwork
+
+networks:
+  qcNetwork:
+    driver: bridge

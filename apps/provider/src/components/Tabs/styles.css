@@ -1,0 +1,90 @@
+.tabs {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-start;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.tabs-disabled::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  cursor: not-allowed;
+}
+
+.tabs .tabs-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.tabs .tabs-container .tab {
+  background-color: var(--Interface-background);
+  border: none;
+  box-shadow: inset 0 -1px 0 0 var(--blue-3);
+  color: var(--blue-7);
+  flex: 1;
+  font-size: var(--tab-size);
+  letter-spacing: 0;
+  line-height: var(--tab-line-height);
+  outline: none;
+  padding: 15px;
+  text-align: center;
+  height: 100%;
+  margin: 0;
+}
+
+.tabs .tabs-container .tab:hover {
+  background-color: var(--grey-2);
+}
+
+.tabs:not(.tabs-disabled) .tabs-container .tab.active {
+  background-color: var(--Incoming-background);
+  box-shadow: inset 0 -2px 0 0 var(--Main-elements);
+  color: var(--Main-elements);
+  font-weight: 600;
+}
+
+.tabs .tabs-container .tab.active:hover {
+  background-color: var(--blue-2);
+}
+
+.tabs .tabs-container .tab:disabled {
+  opacity: 0.6;
+}
+
+.tabs .tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
+}
+
+.tabs .tab-content .tab-content-item {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
+}
+
+.tabs .tab-content .tab-content-item.active {
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .tabs .tabs-container .tab:hover,
+  .tabs .tabs-container .tab.active:hover {
+    background-color: inherit;
+  }
+}

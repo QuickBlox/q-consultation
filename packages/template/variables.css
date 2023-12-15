@@ -1,0 +1,125 @@
+:root {
+  /* Globals */
+  --font-family: 'Open Sans', -apple-system, 'Ubuntu', sans-serif;
+
+  --h1-weight: 600;
+  --h1-size: 24px;
+  --h1-line-height: 33px;
+
+  --h2-weight: 600;
+  --h2-size: 20px;
+  --h2-line-height: 27px;
+
+  --h3-weight: 600;
+  --h3-size: 20px;
+  --h3-line-height: 27px;
+
+  --body-weight: 400;
+  --body-size: 16px;
+  --body-line-height: 22px;
+
+  --tab-weight: 400;
+  --tab-size: 16px;
+  --tab-line-height: 22px;
+  --tab-letter-spacing: 1.25px;
+
+  --caption1-weight: 600;
+  --caption1-size: 14px;
+  --caption1-line-height: 19px;
+
+  --caption2-weight: 400;
+  --caption2-size: 14px;
+  --caption2-line-height: 19px;
+
+  --caption3-weight: 600;
+  --caption3-size: 12px;
+  --caption3-line-height: 15px;
+  --caption3-letter-spacing: 0.5px;
+
+  --font-size-xxs: 9px;
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 13px;
+  --font-size-lg: 14px;
+  --font-size-xl: 16px;
+  --font-size-xxl: 20px;
+
+  /* Palettes */
+  --secondary-50: #E7E7E7;
+  --secondary-100: #C2C2C2;
+  --secondary-200: #999999;
+  --secondary-300: #707070;
+  --secondary-400: #525252;
+  --secondary-500: #333333;
+  --secondary-600: #2E2E2E;
+  --secondary-700: #272727;
+  --secondary-800: #202020;
+  --secondary-900: #141414;
+  --secondary-A100: #9CBCFE;
+  --secondary-A200: #578CFC;
+  --secondary-A300: #3370FC;
+  --secondary-A400: #1748FA;
+
+  --grey-2: #F9F9F9;
+  --grey-6: rgba(255, 255, 255, 0.2);
+  --grey-8: rgba(0, 0, 0, 0.2);
+  --grey-9: #898989;
+  --grey-11: rgba(0, 0, 0, 0.8);
+  --grey-12: #151515;
+  --grey-13: #000;
+
+  --primary-50: #E7EFFF;
+  --primary-100: #C4D7FE;
+  --primary-200: #9CBCFE;
+  --primary-300: #74A1FD;
+  --primary-400: #578CFC;
+  --primary-500: #3978FC;
+  --primary-600: #3370FC;
+  --primary-700: #2C65FB;
+  --primary-800:#245BFB;
+  --primary-900: #1748FA;
+  --primary-A100: #FFFFFF;
+  --primary-A200: #F7F9FF;
+  --primary-A300: #C4CFFF;
+  --primary-A400: #ABBAFF;
+
+  --blue-1: #FAFAFB;
+  --blue-2: #F4F6F9;
+  --blue-3: #CCD0D9;
+  --blue-5: #99A9C6;
+  --blue-6: #97A0B3;
+  --blue-7: #6C7A92;
+  --blue-8: rgba(57, 120, 252, 0.2);
+
+  --green: #00C248;
+  --yellow: #FFBE30;
+  --red: #FF4B4B;
+
+  --red-4: #FC5E39;
+  --red-6: #EF3248;
+
+  --green-4: #00CC4C;
+
+  /* Components */
+  --Main-elements: var(--primary-500);
+  --Secondary-elements: var(--secondary-500);
+  --Tertiary-elements: var(--primary-A100);
+  --Alternative-elements: var(--secondary-200);
+  --Divider: var(--primary-50);
+  --Inactive: var(--secondary-100);
+  --Hover: var(--primary-A200);
+  --Primary-font: var(--secondary-300);
+  --Tertiary-font: var(--primary-A100);
+  --Low: var(--green);
+  --Medium: var(--yellow);
+  --High: var(--red);
+  --Main-background: var(--primary-A200);
+  --Secondary-background: var(--secondary-100);
+  --Interface-background: var(--primary-A100);
+  --Chat-background: var(--primary-A200);
+  --Incoming-background: var(--primary-A100);
+  --Outgoing-background: var(--primary-100);
+  --Success: var(--green);
+  --Information: var(var(--yellow));
+  --Warning: var(--red);
+}

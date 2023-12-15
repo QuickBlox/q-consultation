@@ -1,0 +1,89 @@
+.appointment-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.appointment-info .title {
+  color: var(--blue-7);
+  font-size: var(--font-size-md);
+  line-height: 15px;
+}
+
+.appointment-info .body {
+  color: var(--secondary-900);
+}
+
+.appointment-info .user-info .body .item {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 6px;
+  width: 50%;
+}
+
+.appointment-info .user-info .body .item .value {
+  text-transform: capitalize;
+}
+
+.appointment-info .user-info .body .item .label {
+  color: var(--blue-7);
+  font-size: var(--font-size-md);
+  margin-right: 12px;
+}
+
+.appointment-info .save,
+.appointment-info .cancel {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+}
+
+.appointment-info .icon {
+  height: 24px;
+  width: 24px;
+}
+
+.appointment-info .save:disabled {
+  opacity: 0.35;
+}
+
+.appointment-info .notes .field {
+  background-color: unset;
+  border: none;
+  resize: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.appointment-info .record-list {
+  margin: 0;
+  padding: 0;
+}
+
+.appointment-info .record-item {
+  list-style: none;
+  margin: 9px 0;
+}
+
+.appointment-info .record-item div {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--Main-elements);
+  cursor: pointer;
+}
+
+.appointment-info .icon.file-video {
+  height: 19px;
+  width: 19px;
+  margin-right: 5px;
+  fill: var(--Main-elements);
+}
+
+@media screen and (max-width: 768px) {
+  .appointment-info .user-info .body .item {
+    width: 100%;
+  }
+}

@@ -1,0 +1,99 @@
+.profile-screen {
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+
+.profile-screen-form {
+  align-self: flex-start;
+  background-color: var(--Interface-background);
+  border-radius: 5px;
+  box-shadow: 0 1px 4px 0 var(--grey-8);
+  box-sizing: border-box;
+  color: var(--grey-13);
+  display: inline-block;
+  padding: 20px 25px 50px;
+  transition: all 0.2s ease-in;
+  width: 100%;
+}
+
+.profile-screen-header {
+  display: flex;
+  align-items: center;
+}
+
+.profile-screen .title {
+  text-align: start;
+  margin: 0 0 16px;
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-line-height);
+}
+
+.profile-screen .back {
+  background-color: transparent;
+  border: none;
+  height: 28px;
+  padding: 4px;
+  width: 28px;
+  margin-right: 15px;
+}
+
+.profile-screen .back .icon {
+  height: 20px;
+  width: 20px;
+  fill: var(--secondary-900);
+}
+
+.profile-screen .mr-20 {
+  margin-right: 20px;
+}
+
+.profile-screen .mt-40 {
+  margin-top: 40px;
+}
+
+.profile-screen .btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .offline .profile-screen {
+    top: 41px;
+    height: calc(100% - 41px);
+  }
+
+  .profile-screen {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .profile-screen-form {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .profile-screen-header {
+    background-color: var(--Interface-background);
+    box-shadow: 0 1px 4px 0 var(--grey-8);
+    padding: 17px 13px;
+  }
+
+  .profile-screen .header-title {
+    margin: 0;
+    font-size: var(--body-size);
+    line-height: var(--body-line-height);
+    font-weight: var(--body-weight);
+  }
+
+  .profile-screen-body {
+    padding: 20px 15px;
+  }
+}

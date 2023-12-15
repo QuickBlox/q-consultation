@@ -1,0 +1,17 @@
+{
+  "name": "@qc-apps/integration-pages",
+  "version": "2.2.0",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Injoit LTD",
+    "email": "sales@quickblox.com"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "serve -l 8000 ."
+  },
+  "devDependencies": {
+    "serve": "^14.1.2"
+  }
+}

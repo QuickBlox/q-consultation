@@ -1,0 +1,483 @@
+.field {
+  border-radius: 4px;
+  border: 1px solid var(--blue-3);
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+textarea.field,
+input.field,
+.field input {
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input.field::-webkit-credentials-auto-fill-button,
+.field input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+}
+
+input.field[type='password']::-ms-reveal,
+input.field[type='password']::-ms-clear,
+.field input[type='password']::-ms-reveal,
+.field input[type='password']::-ms-clear {
+  display: none;
+}
+
+textarea.field {
+  min-height: 45px;
+  resize: vertical;
+  line-height: 1.38;
+  height: 100%;
+}
+
+.field input {
+  width: 100%;
+  border: none;
+  padding: 0;
+}
+
+textarea.field::placeholder,
+input.field::placeholder,
+.field input::placeholder {
+  color: var(--blue-7);
+}
+
+textarea.field:focus,
+textarea.field:active,
+input.field:focus,
+input.field:active,
+.radio-field > input:focus + span::before,
+.checkbox-field > input:focus + span::before,
+.field.PhoneInput--focus,
+.field.select-field--focus,
+.field.date-field--focus,
+.field.time-field--focus {
+  box-shadow: 0 4px 11px 4px var(--primary-100);
+}
+
+.flex-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.textarea-wrapper {
+  position: relative;
+  line-height: 0;
+}
+
+.textarea-wrapper .textarea-length {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  line-height: 1;
+  color: var(--Secondary-elements);
+  opacity: 0.5;
+}
+
+/* Radio */
+.radio-field {
+  font-size: var(--caption2-size);
+  line-height: 0;
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.radio-field > input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.radio-field > span {
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.radio-field > span::before {
+  content: '';
+  display: inline-block;
+  box-sizing: border-box;
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 1px solid var(--blue-5);
+  border-radius: 50%;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
+}
+
+.radio-field > input:checked + span::before {
+  border: 5px solid var(--Main-elements);
+  background-color: var(--Incoming-background);
+}
+
+/* Checkbox */
+.checkbox-field {
+  cursor: pointer;
+  font-size: var(--caption2-size);
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.checkbox-field > input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.checkbox-field > span {
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.checkbox-field .icon-check {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: -3px;
+  fill: var(--Main-elements);
+}
+
+.checkbox-field > span::before {
+  content: '';
+  display: inline-block;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 1px solid var(--blue-5);
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.checkbox-field > input:checked + span::before {
+  border-color: var(--Incoming-background);
+  background-color: var(--Incoming-background);
+}
+
+/* Select */
+.field.select-field {
+  position: relative;
+  background-color: inherit;
+}
+
+.field.select-field .flex-field-input.hiden {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.field.select-field .icon {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+  fill: var(--secondary-900);
+  transition: transform 0.2s linear;
+}
+
+.field.select-field .select-field-list {
+  z-index: 2;
+  position: absolute;
+  top: 53px;
+  left: 0;
+  max-height: 208px;
+  width: 100%;
+  padding: 10px 0;
+  margin: 0;
+  border-radius: 5px;
+  background-color: var(--Interface-background);
+  box-shadow: 0 10px 26px 0 var(--grey-8);
+  text-align: start;
+  overflow: auto;
+}
+
+.field.select-field .select-field-label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-right: 10px;
+  color: inherit;
+}
+
+.field.select-field .select-field-option {
+  list-style-type: none;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.field.select-field .select-field-option[aria-selected='true'] {
+  background-color: var(--grey-2);
+  box-shadow: inset 3px 0 0 0 var(--Main-elements);
+}
+
+.field.select-field .select-field-option:hover {
+  background-color: var(--grey-2);
+  box-shadow: inset 3px 0 0 0 var(--Main-elements);
+}
+
+.field.select-field.select-field--opened .icon {
+  transform: rotate(180deg);
+}
+
+/* DateInput */
+.field.date-field {
+  background-color: var(--Interface-background);
+}
+
+.field .DayPickerInput {
+  width: 100%;
+}
+
+.field.date-field label {
+  line-height: 0;
+}
+
+.field.date-field .icon {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+  fill: var(--Secondary-elements);
+}
+
+.field.show-overlay .icon, .field.date-field--focus .icon {
+  fill: var(--DateFieldCalendarIcon-fill--focus)
+}
+
+.field.date-input {
+  position: relative;
+}
+
+.field .DayPickerInput-Overlay {
+  position: absolute;
+  z-index: 1;
+  left: -1px;
+  border-radius: 5px;
+  background-color: var(--Interface-background);
+  box-shadow: 0 10px 26px 0 var(--grey-8);
+}
+
+.field.top .DayPickerInput-Overlay {
+  bottom: 52px;
+}
+
+.field.bottom .DayPickerInput-Overlay {
+  top: 52px;
+}
+
+.field .rdp {
+  padding: 30px;
+  margin: 0;
+}
+
+.field .nav-icon {
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+}
+
+.field .nav-icon-prev {
+  transform: rotate(180deg);
+}
+
+.field .rdp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.field .rdp-nav .rdp-caption_label {
+  font-size: var(--body-size);
+  line-height: var(--body-line-height);
+  padding: 0;
+  border: none;
+  font-weight: var(--body-weight);
+}
+
+.field .rdp-nav_button:disabled {
+  visibility: hidden;
+}
+
+.field .DayPicker-Nav-btn.hide {
+  visibility: hidden;
+}
+
+.field .rdp-head_cell,
+.field .rdp-day {
+  font-size: var(--caption2-size);
+  line-height: 1;
+  color: var(--Secondary-elements);
+  font-weight: normal;
+  width: inherit;
+  height: inherit;
+}
+
+.field .rdp-head_cell {
+  text-transform: none;
+}
+
+.field .rdp-cell,
+.field .rdp-head_cell {
+  width: 26px;
+  height: 26px;
+  padding: 3px 9px;
+}
+
+.field .rdp-button[aria-disabled='true'], .field .rdp-day_outside {
+  color: var(--blue-7);
+  opacity: unset;
+}
+
+.field .rdp-day_today {
+  color: var(--Secondary-elements);
+  font-weight: 700;
+}
+
+.field .rdp-day.is-weekly,
+.field .rdp-day_selected:not([aria-disabled='true']),
+.field .rdp-day_selected:focus:not([aria-disabled='true']),
+.field .rdp-day_selected:active:not([aria-disabled='true']),
+.field .rdp-day_selected:hover:not([aria-disabled='true']) {
+  background-color: var(--Main-elements);
+  color: var(--Tertiary-font);
+}
+
+.field .rdp-day:hover:not([aria-disabled='true']):not([aria-selected='true']) {
+  background-color: var(--blue-8);
+}
+
+.field .rdp-day:focus, .field .rdp-nav_button {
+  border: none;
+  background-color: unset;
+}
+
+.field .rdp-nav_button {
+  width: initial;
+  height: initial;
+  padding: 0;
+}
+
+/* TimeField */
+.field.time-field {
+  display: inline-flex;
+  padding: 0;
+  background-color: var(--TimeFieldInput-backgroundColor);
+}
+
+.field.time-field .time-input {
+  margin: 11px 12px;
+  color: var(--Secondary-elements);
+}
+
+.field.time-field .time-field-controls {
+  line-height: 0;
+  border-left: 1px solid var(--blue-3);
+  display: flex;
+  flex-direction: column;
+}
+
+.field.time-field .time-field-controls .tfc-btn {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  line-height: 0;
+  height: 22px;
+  width: 22px;
+}
+
+.field.time-field .time-field-controls .tfc-btn:first-child {
+  border-bottom: 1px solid var(--blue-3);
+}
+
+.field.time-field .time-field-controls .icon {
+  width: 22px;
+  height: 22px;
+  fill: var(--Secondary-elements);
+}
+
+.field.time-field .time-field-controls .tfc-btn:first-child .icon {
+  transform: rotate(180deg);
+}
+
+/* PhoneInput */
+.field.PhoneInput {
+  background-color: transparent;
+}
+
+.field .PhoneInputCountry {
+  margin-right: 15px;
+}
+
+.field .PhoneInputCountryIcon {
+  width: 20px;
+  height: unset;
+  box-shadow: none;
+  background-color: unset;
+}
+
+.field .PhoneInputCountryIcon img {
+  border: 1px solid var(--blue-3);
+  box-sizing: border-box;
+}
+
+.field .PhoneInputCountrySelectArrow {
+  margin-left: 10px;
+  transform: rotate(45deg) translateY(-2px);
+  border-color: none;
+}
+
+.field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-wrapper .icon {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  right: 8px;
+}
+
+.field-wrapper .icon path {
+  fill: var(--blue-5);
+}
+
+@media screen and (max-width: 768px) {
+  .field .DayPickerInput-Overlay {
+    width: 273px;
+    max-width: 330px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .field .rdp {
+    padding: 20px 10px;
+  }
+
+  .field .rdp-cell,
+  .field .rdp-head_cell {
+    padding: 3px 5px;
+  }
+}

@@ -1,0 +1,29 @@
+.camera-modal .form .body {
+  padding: 0;
+}
+
+.camera-modal .form .footer {
+  padding: 0 27px 40px;
+}
+
+.camera-modal .list-devices {
+  padding: 10px 0;
+  margin: 0;
+  width: 100%;
+}
+
+.camera-modal .list-devices-item {
+  list-style-type: none;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.camera-modal .list-devices-item.active {
+  background-color: var(--grey-2);
+  box-shadow: inset 3px 0 0 0 var(--Main-elements);
+}
+
+.camera-modal .list-devices-item:hover {
+  background-color: var(--grey-2);
+  box-shadow: inset 3px 0 0 0 var(--Main-elements);
+}

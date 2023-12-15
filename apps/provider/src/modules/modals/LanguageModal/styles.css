@@ -1,0 +1,29 @@
+.language-modal .form .body {
+  padding: 0;
+}
+
+.language-modal .form .footer {
+  padding: 0 27px 40px;
+}
+
+.language-modal .list-lang {
+  padding: 10px 0;
+  margin: 0;
+  width: 100%;
+}
+
+.language-modal .list-lang-item {
+  list-style-type: none;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.language-modal .list-lang-item.active {
+  background-color: var(--grey-2);
+  box-shadow: inset 3px 0 0 0 var(--Main-elements);
+}
+
+.language-modal .list-lang-item:hover {
+  background-color: var(--grey-2);
+  box-shadow: inset 3px 0 0 0 var(--Main-elements);
+}

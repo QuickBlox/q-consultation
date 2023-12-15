@@ -1,0 +1,117 @@
+.upload-indicator-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.upload-indicator {
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 5px;
+  transition: z-index 0.2s ease-in-out;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background-color: var(--blue-2);
+  box-shadow: 0 -1px 6px 0 var(--blue-3);
+  z-index: -1;
+}
+
+.upload-indicator.active {
+  z-index: 1;
+}
+
+.upload-indicator progress {
+  border-radius: 2px;
+  height: 20px;
+  width: 100%;
+}
+
+.upload-indicator progress[value] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 2px;
+}
+
+.upload-indicator progress[value]::-webkit-progress-bar {
+  background-color: transparent;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px var(--grey-8) inset;
+  overflow: hidden;
+}
+
+.upload-indicator progress[value]::-webkit-progress-value {
+  border-radius: 2px;
+  background-color: var(--Main-elements);
+  background-image: linear-gradient(
+    45deg, var(--grey-6) 25%,
+    transparent 25%, transparent 50%,
+    var(--grey-6) 50%,
+    var(--grey-6) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 3rem 3rem;
+  -webkit-animation: animate-stripes 2s linear infinite;
+  animation: animate-stripes 2s linear infinite;
+}
+
+.upload-indicator progress[value]::-moz-progress-bar {
+  border-radius: 2px;
+  box-shadow: 0 2px 5px var(--grey-8) inset;
+  background-color: var(--Main-elements);
+  background-image: linear-gradient(
+    45deg, var(--grey-6) 25%,
+    transparent 25%, transparent 50%,
+    var(--grey-6) 50%,
+    var(--grey-6) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 3rem 3rem;
+  -moz-animation: animate-stripes 2s linear infinite;
+  animation: animate-stripes 2s linear infinite;
+}
+
+.upload-indicator .cancel {
+  background-color: var(--Main-elements);
+  border-radius: 4px;
+  border: 2px solid var(--Main-elements);
+  color: var(--Tertiary-font);
+  font-size: var(--caption1-size);
+  font-weight: var(--caption1-weight);
+  letter-spacing: 0;
+  line-height: var(--caption1-line-height);
+  margin: 5px 0 0;
+  min-width: 160px;
+  padding: 0.25em 2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.upload-indicator .icon {
+  fill: var(--Tertiary-elements);
+  height: 24px;
+  width: 24px;
+}
+
+.upload-indicator .cancel .icon {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% { background-position: 0 0, 0 0, 0 0 }
+  100% { background-position: -100px 0, 0 0, 0 0 }
+}
+
+@-moz-keyframes animate-stripes {
+  0% { background-position: 0 0, 0 0, 0 0 }
+  100% { background-position: -100px 0, 0 0, 0 0 }
+}
+
+@keyframes animate-stripes {
+  0% { background-position: 0 0, 0 0, 0 0 }
+  100% { background-position: -100px 0, 0 0, 0 0 }
+}

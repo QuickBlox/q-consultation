@@ -1,0 +1,244 @@
+.header {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 12px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  background-color: var(--blue-1);
+}
+
+.header .header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.header .logo {
+  display: flex;
+  align-items: center;
+  margin: 10px auto 10px 18px;
+}
+
+.header .logo .icon {
+  height: 30px;
+  width: 195px;
+}
+
+.header .logo a {
+  line-height: 0;
+}
+
+.header .header-nav .icon {
+  fill: var(--Secondary-elements);
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.header .logo .version {
+  color: var(--blue-7);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0;
+  line-height: 14px;
+  margin-left: 6px;
+}
+
+.header .btn {
+  height: 28px;
+  width: 28px;
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header .share {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--Secondary-elements);
+  font-size: var(--body-size);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 19px;
+  padding: 4px 10px;
+  text-align: center;
+}
+
+.header .btn {
+  height: 28px;
+  width: 28px;
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header .share .icon,
+.header .dropdown-create .icon {
+  height: 24px;
+  vertical-align: middle;
+  width: 24px;
+}
+
+.header .share .text {
+  margin-left: 5px;
+}
+
+.header .header-dropdown .dropdown-label {
+  font-weight: 600;
+  font-size: var(--body-size);
+  line-height: var(--body-line-height);
+  margin: 0 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.header .icon.icon-lang {
+  height: 24px;
+  width: 24px;
+}
+
+.header .header-dropdown .icon.icon-dropdown {
+  height: 24px;
+  width: 24px;
+}
+
+.header .header-nav-right > *:not(:first-child) {
+  margin-left: 10px;
+}
+
+.header .dropdown-nav {
+  max-width: 180px;
+}
+
+.header .dropdown-nav .icon.icon-user {
+  height: 24px;
+  width: 24px;
+  padding: 5px;
+}
+
+.header-menu {
+  list-style-type: none;
+  padding: 0;
+}
+
+.header-menu .menu-item {
+  cursor: pointer;
+}
+
+.header-menu .menu-item-text {
+  display: block;
+  padding: 8px 16px;
+  font-size: var(--body-size);
+  line-height: var(--body-line-height);
+  color: var(--secondary-900);
+  text-decoration: none;
+}
+
+.header-menu .menu-item-divider {
+  cursor: default;
+  pointer-events: none;
+  border-top: 1px solid var(--blue-3);
+  margin: 8px 0;
+}
+
+.t-display {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 15px 12px;
+    align-items: flex-start;
+  }
+
+  .header .header-nav {
+    flex: 1 1 50px;
+  }
+
+  .header .header-nav-right {
+    justify-content: flex-end;
+  }
+
+  .header:not(.header-auth) {
+    margin-bottom: 15px;
+  }
+
+  .header .dropdown-create,
+  .header .share,
+  .header .logout {
+    display: none;
+  }
+
+  .header .logo {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .header .logo .version {
+    margin: 18px 0 0;
+  }
+
+  .header.header-auth .logo .version {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1660px) {
+  .header-call .dropdown-create,
+  .header-call .dropdown-lang,
+  .header-call .dropdown-nav,
+  .header-call .share,
+  .header-call .logout {
+    display: none;
+  }
+
+  .header-call .dropdown-nav.t-display {
+    display: inline-block;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1280px) {
+  .header-call {
+    padding: 10px 12px;
+    align-items: flex-start;
+  }
+
+  .header-call .header-nav {
+    flex: 1 1 50px;
+  }
+
+  .header-call .header-nav-right {
+    justify-content: flex-end;
+  }
+
+  .header-call:not(.header-auth) {
+    margin-bottom: 15px;
+  }
+
+  .header-call .btn.clients {
+    display: inline-block;
+  }
+
+  .header-call .logo {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .header-call .logo .version {
+    margin: 18px 0 0;
+  }
+
+  .header-call.header-auth .logo .version {
+    display: none;
+  }
+}

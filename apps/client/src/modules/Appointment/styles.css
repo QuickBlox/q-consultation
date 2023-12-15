@@ -1,0 +1,151 @@
+.appointment-container {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: flex 0.2s linear;
+}
+
+.appointment {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 750px;
+  padding: 0 12px;
+}
+
+.appointment .description {
+  max-width: 564px;
+  color: inherit;
+}
+
+.appointment .please-wait {
+  margin-top: 16px;
+  margin-bottom: 20px;
+}
+
+.appointment .radar-circle {
+  height: 50px;
+  width: 50px;
+}
+
+.appointment .radar-circle circle {
+  animation: ripple 1.5s linear 0s infinite;
+  stroke-width: 2px;
+}
+
+.appointment .radar-circle circle:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.appointment .radar-circle circle:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.appointment form {
+  background-color: var(--blue-1);
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  text-align: start;
+  width: 100%;
+  border-radius: 4px;
+  max-width: 564px;
+}
+
+.appointment form fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.appointment form .legend {
+  align-items: center;
+  color: var(--Secondary-elements);
+  display: flex;
+  flex-direction: row;
+  font-size: var(--caption2-size);
+  justify-content: space-between;
+  margin: 0 0 12px;
+  padding: 0;
+  width: 100%;
+}
+
+.appointment form .legend .label {
+  flex: 1;
+}
+
+.appointment .cancel,
+.appointment .save {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  padding: 0 9px;
+}
+
+.appointment .save:disabled {
+  opacity: 0.35;
+}
+
+.appointment .icon {
+  height: 24px;
+  width: 24px;
+  fill: var(--Secondary-elements);
+}
+
+.appointment form textarea {
+  border: 1px solid var(--blue-3);
+  background-color: var(--Interface-background);
+  opacity: 1;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: var(--body-size);
+  padding: 10px 12px;
+  resize: none;
+  width: 100%;
+  outline: none;
+}
+
+.appointment .btn-group {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 40px;
+  width: 100%;
+}
+
+.appointment .btn-group .btn-leave {
+  background-color: transparent;
+  border: none;
+  color: var(--secondary-900);
+  font-family: inherit;
+  font-size: var(--caption2-size);
+  height: 19px;
+  letter-spacing: 0;
+  line-height: 19px;
+  opacity: 0.6;
+  padding: 0;
+  text-align: center;
+  text-decoration: underline;
+}
+
+@keyframes ripple {
+  from {
+    r: 0;
+    stroke: var(--Main-elements);
+  }
+  to {
+    r: 25px;
+    stroke: var(--Interface-background);
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .appointment .btn-chat {
+    display: none;
+  }
+}

@@ -1,0 +1,64 @@
+.more-button {
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--Main-elements);
+  display: flex;
+  flex-direction: row;
+  font-size: var(--body-size);
+  height: 28px;
+  justify-content: center;
+  outline: none;
+  position: relative;
+}
+
+.more-button:disabled {
+  color: var(--blue-7);
+}
+
+.more-button:disabled .icon {
+  fill: var(--blue-7);
+}
+
+.more-button .icon {
+  fill: var(--Main-elements);
+  height: 32px;
+  margin-right: 6px;
+  width: 32px;
+}
+
+.more-button .menu-list {
+  background-color: var(--Interface-background);
+  border-radius: 5px;
+  box-shadow: 0 10px 26px 0 var(--grey-8);
+  color: var(--grey-13);
+  font-size: var(--body-size);
+  letter-spacing: 0;
+  line-height: var(--body-line-height);
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+  z-index: 2;
+}
+
+.more-button .menu-list.active {
+  transform: scale(1);
+}
+
+.more-button .menu-list .menu-option {
+  box-sizing: border-box;
+  padding: 14px 21px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.more-button .menu-list .menu-option:hover {
+  background-color: var(--grey-2);
+}
+
+.more-button .menu-list .divider {
+  border-top: 1px solid var(--blue-3);
+}

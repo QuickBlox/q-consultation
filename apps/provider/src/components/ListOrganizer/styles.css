@@ -1,0 +1,35 @@
+.list-organizer .list-item {
+  display: flex;
+  margin: 7px 0;
+}
+
+.list-organizer .list-item-controls {
+  display: flex;
+  align-items: center;
+}
+
+.list-organizer .list-item-controls {
+  margin: 0 8px;
+}
+
+.list-organizer .list-item-controls .btn {
+  border: none;
+  outline: none;
+  background: none;
+  line-height: 0;
+  padding: 2px;
+  margin: 0 5px;
+}
+
+.list-organizer .list-item-controls .btn .icon {
+  height: 24px;
+  width: 24px;
+}
+
+.list-organizer .list-item-controls .btn-delete .icon {
+  fill: var(--Secondary-elements);
+}
+
+.list-organizer .list-item-controls .btn-add .icon {
+  fill: var(--Main-elements);
+}

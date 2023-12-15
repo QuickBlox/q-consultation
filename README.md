@@ -49,21 +49,21 @@ To learn more about the app features visit: <https://quickblox.com/products/q-co
 ### Client application interface
 
 Main screen:
-![](/packages/documentation/static/img/snippets/001.png)
+![](/documentation/static/img/snippets/001.png)
 
 Waiting room:
-![](/packages/documentation/static/img/snippets/002.png)
+![](/documentation/static/img/snippets/002.png)
 
 Video call:
-![](/packages/documentation/static/img/snippets/003.png)
+![](/documentation/static/img/snippets/003.png)
 
 ### Provider application interface
 
 Main screen:
-![](/packages/documentation/static/img/snippets/004.png)
+![](/documentation/static/img/snippets/004.png)
 
 Video call:
-![](/packages/documentation/static/img/snippets/005.png)
+![](/documentation/static/img/snippets/005.png)
 
 ## How to contribute
 

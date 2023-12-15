@@ -1,0 +1,245 @@
+.appointment-details-modal .container {
+  background-color: var(--Interface-background);
+  border-radius: 6px;
+  color: var(--secondary-900);
+  font-size: var(--body-size);
+  letter-spacing: 0;
+  line-height: var(--body-line-height);
+  width: 520px;
+  max-height: 800px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.appointment-details-modal.appointment-ended .container {
+  width: 800px;
+}
+
+.appointment-details-modal .back {
+  background-color: transparent;
+  border: none;
+  display: none;
+  height: 28px;
+  padding: 4px;
+  width: 28px;
+  margin-right: 15px;
+}
+
+.appointment-details-modal .item {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 6px;
+  width: 50%;
+}
+
+.appointment-details-modal .item .value {
+  text-transform: capitalize;
+}
+
+.appointment-details-modal .item .label {
+  color: var(--blue-7);
+  font-size: var(--font-size-md);
+  margin-right: 12px;
+}
+
+.appointment-details-modal .back .icon {
+  height: 20px;
+  width: 20px;
+  fill: var(--secondary-900);
+}
+
+.appointment-details-modal .header-nav {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.appointment-details-modal .container .tab-wrapper {
+  height: calc(100% - 101px);
+}
+
+.appointment-details-modal .container .tabs {
+  height: 100%;
+}
+
+.appointment-details-modal .container .header-card {
+  display: flex;
+  padding: 12px 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--blue-3);
+}
+
+.appointment-details-modal .container .sections-wrapper {
+  display: flex;
+  height: calc(100% - 101px);
+}
+
+.appointment-details-modal .container .sections-wrapper .col:first-child {
+  border-right: 1px solid var(--blue-3);
+}
+
+.appointment-details-modal .container .sections-wrapper .col .messages-container {
+  height: 100%;
+}
+
+.appointment-details-modal .container .header-card .title {
+  color: var(--secondary-900);
+  line-height: var(--h2-line-height);
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  text-align: start;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.appointment-details-modal .container .header-card .header-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.appointment-details-modal .header-card .date-divider {
+  margin: 0 15px;
+}
+
+.appointment-details-modal .header-card .date-divider::after {
+  content: '';
+  display: block;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background-color: var(--secondary-900);
+}
+
+.appointment-details-modal .container .header-card .user-info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+.appointment-details-modal .container .header-card .user-info .user-name {
+  color: var(--secondary-900);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.appointment-details-modal .container .header-card .user-info .avatar {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.appointment-details-modal .container .title {
+  color: var(--blue-7);
+  flex: 1;
+  font-size: var(--font-size-md);
+  line-height: 15px;
+  cursor: pointer;
+}
+
+.appointment-details-modal .container .col {
+  width: 50%;
+}
+
+.appointment-details-modal .record-list {
+  margin: 0;
+  padding: 0;
+}
+
+.appointment-details-modal .record-item {
+  list-style: none;
+  margin: 9px 0;
+}
+
+.appointment-details-modal .record-item div {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--Main-elements);
+  cursor: pointer;
+}
+
+.appointment-details-modal .icon.file-video {
+  height: 19px;
+  width: 19px;
+  margin-right: 5px;
+  fill: var(--Main-elements);
+}
+
+.appointment-details-modal .user-details {
+  width: 100%;
+}
+
+.appointment-details-modal .save,
+.appointment-details-modal .cancel {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+}
+
+.appointment-details-modal .icon {
+  height: 24px;
+  width: 24px;
+}
+
+.appointment-details-modal .save:disabled {
+  opacity: 0.35;
+}
+
+.appointment-details-modal .notes .field {
+  background-color: unset;
+  border: none;
+  resize: none;
+  box-shadow: none;
+  padding: 0;
+}
+@media screen and (max-width: 768px) {
+  .offline .appointment-details-modal .container .tabs {
+    height: calc(100% - 41px);
+  }
+
+  .appointment-details-modal .container,
+  .appointment-details-modal.appointment-ended .container {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    max-height: none;
+  }
+
+  .appointment-details-modal .container .header-card .title {
+    font-size: var(--body-size);
+    line-height: var(--body-line-height);
+    font-weight: bold;
+  }
+
+  .appointment-details-modal .header-card .date-divider {
+    margin: 0 10px;
+  }
+
+  .appointment-details-modal .header-card .date-divider::after {
+    height: 3px;
+    width: 3px;
+  }
+
+  .appointment-details-modal .container .tab-wrapper {
+    height: calc(100% - 113px);
+  }
+
+  .appointment-details-modal .container .header-card {
+    padding: 17px 13px;
+  }
+
+  .appointment-details-modal .back {
+    display: inline-block;
+  }
+
+  .appointment-details-modal .icon-close {
+    display: none;
+  }
+}

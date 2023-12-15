@@ -1,0 +1,145 @@
+.input-container {
+  align-items: flex-end;
+  background-color: inherit;
+  box-shadow: 0 -1px 6px 0 var(--blue-3);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-height: 40%;
+  z-index: 1;
+}
+
+.input-container .icon {
+  height: 24px;
+  width: 24px;
+}
+
+.input-container button {
+  background-color: transparent;
+  border: none;
+  height: 45px;
+  padding: 10px;
+  width: 45px;
+}
+
+.input-container .attachment {
+  padding: 0;
+}
+
+.input-container .attachment label {
+  padding: 11px 12px;
+}
+
+.input-container .attachment .icon {
+  vertical-align: middle;
+}
+
+.input-container .textbox-field {
+  position: relative;
+  box-sizing: border-box;
+  flex: 1;
+  background-color: var(--Interface-background);
+  height: 100%;
+}
+
+.input-container .textbox-input {
+  box-sizing: border-box;
+  color: var(--secondary-900);
+  flex: 1;
+  font-family: inherit;
+  font-size: var(--body-size);
+  height: 100%;
+  line-height: var(--body-line-height);
+  padding: 12px;
+  text-align: start;
+  overflow-y: auto;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.input-container .textbox-input * {
+  font-weight: normal;
+  font-style: normal;
+  text-transform: none;
+}
+
+.input-container .textbox-input.disabled {
+  cursor: not-allowed;
+}
+
+.input-container .textbox-placeholder {
+  position: absolute;
+  pointer-events: none;
+  color: var(--blue-7);
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+}
+
+.input-container .icon path {
+  fill: var(--Main-elements);
+}
+
+.input-container .attachment label {
+  cursor: inherit;
+  font-size: var(--font-size-xxl);
+  line-height: 20px;
+}
+
+.input-container .textbox-input.with-ai {
+  padding-right: 45px;
+}
+
+.input-container .textbox-field .rephrase-container {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.input-container .textbox-field .rephrase-btn.inactive svg {
+  fill: var(--Inactive);
+}
+
+.input-container .textbox-field .rephrase-tones {
+  position: absolute;
+  width: 240px;
+  bottom: 46px;
+  right: 0;
+  margin: 0;
+  padding: 10px 0;
+  border-radius: 5px;
+  background-color: var(--Interface-background);
+  box-shadow: 0 10px 26px 0 var(--grey-8);
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+  text-align: start;
+  list-style-type: none;
+}
+
+.input-container .textbox-field .rephrase-tones.open {
+  transform: scale(1);
+}
+
+.input-container .textbox-field .rephrase-tones.adaptive {
+  overflow-y: auto;
+  height: 250px;
+}
+
+.input-container .textbox-field .rephrase-tones-item {
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: var(--body-size);
+  line-height: var(--body-line-height);
+  color: var(--Secondary-elements);
+}
+
+.input-container .textbox-field .rephrase-tones-item:hover {
+  background-color: var(--grey-2);
+}
+
+@media screen and (max-width: 768px) {
+  .input-container {
+    max-height: 75px;
+  }
+}

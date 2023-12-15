@@ -1,0 +1,91 @@
+.call-modal.active{
+  z-index: 900;
+}
+
+.call-modal .form {
+  width: 200px;
+  padding: 70px 70px 60px;
+}
+
+.call-modal .info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.call-modal .info .avatar {
+  width: 60px;
+  height: 60px;
+}
+
+.call-modal .user-name {
+  color: var(--secondary-900);
+  text-overflow: ellipsis;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.call-modal .calling {
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--Secondary-elements);
+}
+
+.call-modal .form .btn-group {
+  gap: 88px;
+  margin-top: 74px;
+}
+
+.call-modal .control-btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  line-height: 14px;
+  align-items: center;
+  gap: 7px;
+}
+
+.call-modal .control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  padding: 10px;
+  height: 56px;
+  width: 56px;
+  fill: var(--Tertiary-elements);
+}
+
+.call-modal .icon {
+  height: 100%;
+  width: 100%;
+}
+
+.call-modal .control-btn.accept {
+  padding: 16px;
+  background-color: var(--green-4);
+}
+
+.call-modal .control-btn.decline {
+  background-color: var(--red-6);
+}
+
+@media screen and (max-width: 576px) {
+  .call-modal .form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}

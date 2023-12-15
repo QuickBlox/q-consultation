@@ -1,0 +1,68 @@
+.register-screen {
+  flex: 1;
+  width: 100%;
+}
+
+.register-screen .register-form {
+  background-color: var(--Interface-background);;
+  border-radius: 5px;
+  margin: 0 auto;
+  padding: 30px;
+  width: 490px;
+  box-sizing: border-box;
+  color: var(--Secondary-elements);
+  box-shadow: 0 1px 4px 0 var(--grey-8);
+  transition: all 0.2s ease-in;
+}
+
+.register-screen .title {
+  font-size: 20px;
+  line-height: 27px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.register-screen .subtitle {
+  margin: 10px 0 0;
+}
+
+.register-screen .link {
+  text-decoration: none;
+  color: var(--Main-elements);
+  margin-left: 10px;
+}
+
+.register-screen .link:hover {
+  color: var(--Main-elements);
+}
+
+.register-screen .btn-group {
+  margin-top: 30px;
+}
+
+.register-screen .form-block {
+  margin-top: 30px;
+}
+
+.register-screen .form-block-title {
+  margin: 30px 0 0;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.register-screen .form-field-radio-group {
+  padding: 12px 0;
+  line-height: 0;
+}
+
+.register-screen .mr-10 {
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .register-screen .register-form {
+    width: calc(100% - 20px);
+  }
+}

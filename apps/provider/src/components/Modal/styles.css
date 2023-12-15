@@ -1,0 +1,98 @@
+.modal {
+  align-items: center;
+  background-color: var(--grey-11);
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: opacity 0.25s linear;
+  width: 100%;
+  z-index: -1;
+}
+
+.modal.active {
+  opacity: 1;
+  z-index: 9;
+}
+
+.modal .icon-close {
+  cursor: pointer;
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  top: 15px;
+  right: 15px;
+}
+
+.modal .form {
+  background-color: var(--Interface-background);
+  border-radius: 6px;
+  color: var(--grey-13);
+  font-size: var(--body-size);
+  letter-spacing: 0;
+  line-height: var(--body-line-height);
+  transform: scale(0);
+  transition: transform 0.25s ease-in-out;
+  width: 400px;
+}
+
+.modal.active .form {
+  transform: scale(1);
+}
+
+.modal .form .title {
+  border-bottom: 1px solid var(--blue-3);
+  box-sizing: border-box;
+  font-weight: 600;
+  padding: 18px;
+}
+
+.modal .form .body {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 22px;
+}
+
+.modal .form .label {
+  color: var(--Secondary-elements);
+  font-size: var(--caption2-size);
+  line-height: var(--caption2-line-height);
+}
+
+.modal .form .row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.modal .form .btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .offline .modal.active {
+    top: 41px;
+  }
+
+  .modal .form {
+    width: 330px;
+  }
+
+  .modal .form .row {
+    flex-wrap: wrap;
+  }
+}
