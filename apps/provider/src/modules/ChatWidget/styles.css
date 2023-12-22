@@ -1,0 +1,107 @@
+.chat-widget {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  z-index: 1000;
+  text-align: end;
+}
+
+.chat-widget .cw-dialog {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px 0 var(--grey-8);
+  background-color: var(--Interface-background);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 350px;
+  height: 500px;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.chat-widget .cw-dialog.opened {
+  transform: scale(1);
+}
+
+.chat-widget .cwd-header {
+  align-items: center;
+  box-shadow: 0 0 6px 0 var(--secondary-800);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 62px;
+  justify-content: flex-start;
+  padding: 0 12px;
+  z-index: 1;
+}
+
+.chat-widget .cwd-header .back {
+  background-color: transparent;
+  border: none;
+  height: 28px;
+  width: 28px;
+  padding: 4px;
+}
+
+.chat-widget .cwd-header .back .icon-close {
+  height: 20px;
+  width: 20px;
+  fill: var(--secondary-900);
+}
+
+.chat-widget .cwd-header .dialog-info {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+
+.chat-widget .cwd-header .dialog-info .dialog-name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.chat-widget .cwd-header .dialog-info .call-time {
+  color: var(--blue-7);
+  font-size: var(--caption2-size);
+}
+
+.chat-widget .cwd-main {
+  align-items: center;
+  background-color: var(--blue-2);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.chat-widget .cw-assistant {
+  background-color: var(--Main-elements);
+  border: none;
+  height: 50px;
+  width: 50px;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px 0 var(--grey-8);
+}
+
+.chat-widget .cw-assistant:hover {
+  background-color: var(--primary-600);
+}
+
+.chat-widget .cw-assistant svg {
+  fill: var(--primary-A100);
+}
+
+@media screen and (max-width: 768px) {
+  .chat-widget {
+    bottom: 58px;
+  }
+}

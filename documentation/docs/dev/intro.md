@@ -32,7 +32,7 @@ Q-Consultation is a web application for online chat and video consultations. The
 
 ## How to contribute
 
-See more information at [CONTRIBUTING](/dev/contributing.md)
+See more information at [CONTRIBUTING](/dev/development/contributing.md)
 
 ## License
 

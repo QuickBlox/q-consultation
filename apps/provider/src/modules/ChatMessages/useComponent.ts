@@ -28,6 +28,8 @@ import { translateSelector } from '../../selectors/translate'
 export interface ChatMessagesProps {
   dialogId?: QBChatDialog['_id']
   chatOpen?: boolean
+  enableTranslate?: boolean
+  enableQuickAnswer?: boolean
   setInputValue?: (value: string) => void
 }
 

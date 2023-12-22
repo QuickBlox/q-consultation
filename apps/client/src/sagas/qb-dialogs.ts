@@ -50,15 +50,24 @@ function* getDialog(
 }
 
 function* createDialog(action: Types.QBDialogCreateRequestAction) {
-  const { userId, data, then } = action.payload
+  const { userIds, type, data = {}, then } = action.payload
 
   try {
-    const dialog: QBChatDialog = yield promisifyCall(QB.chat.dialog.create, {
-      name: '-',
-      occupants_ids: [userId],
-      type: 2,
-      data,
-    })
+    const dialog: QBChatDialog = yield promisifyCall(
+      QB.chat.dialog.create,
+      type === 'group'
+        ? {
+            name: '-',
+            occupants_ids: Array.isArray(userIds) ? userIds : [userIds],
+            type: 2,
+            data,
+          }
+        : {
+            occupants_ids: Array.isArray(userIds) ? userIds : [userIds],
+            type: 3,
+            data,
+          },
+    )
     const result = createDialogSuccess(dialog)
 
     yield put(result)

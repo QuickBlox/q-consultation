@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate, generatePath } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { QBUser } from '@qc/quickblox'
+import { QBUser, userHasTag } from '@qc/quickblox'
 
 import {
   appointmentLoadingSelector,
@@ -17,6 +17,8 @@ import {
   toggleShowModal,
   getAppointments,
   getUserAvatar,
+  createDialog,
+  createAppointmentDialog,
 } from '../../actionCreators'
 import { createUseComponent, useActions } from '../../hooks'
 import { APPOINTMENT_ROUTE } from '../../constants/routes'
@@ -48,6 +50,8 @@ export default createUseComponent((props: ProviderDetailsProps) => {
     toggleShowModal,
     getAppointments,
     getUserAvatar,
+    createDialog,
+    createAppointmentDialog,
   })
   const {
     user,
@@ -77,6 +81,25 @@ export default createUseComponent((props: ProviderDetailsProps) => {
         })
 
         navigate(path)
+      } else if (user && userHasTag(user, 'bot')) {
+        actions.createDialog({
+          userIds: user.id,
+          type: 'private',
+          then: ({ payload: newDialog }) => {
+            actions.createAppointmentDialog({
+              dialog_id: newDialog._id,
+              provider_id: user.id,
+              client_id: myAccountId,
+              then: ({ payload: newAppointment }) => {
+                const path = generatePath(APPOINTMENT_ROUTE, {
+                  appointmentId: newAppointment._id,
+                })
+
+                navigate(path)
+              },
+            })
+          },
+        })
       } else {
         actions.toggleShowModal({ modal: 'ConsultationTopicModal', providerId })
       }

@@ -35,6 +35,7 @@ interface MessageBodyProps {
   translatedMessage?: string
   isMine: boolean
   loading: boolean
+  enableTranslate?: boolean
   messagesContainerRef: RefObject<HTMLDivElement>
   showNotification: typeof showNotificationAction
   getTranslate: typeof getTranslateAction
@@ -73,6 +74,7 @@ export default function MessageBody(props: MessageBodyProps) {
     messagesContainerRef,
     getTranslate,
     showNotification,
+    enableTranslate,
   } = props
   const { t } = useTranslation()
   const translateButtonRef = useRef<HTMLButtonElement>(null)
@@ -223,7 +225,7 @@ export default function MessageBody(props: MessageBodyProps) {
           ),
         }}
       />
-      {AI_TRANSLATE && !isMine && (
+      {enableTranslate && !isMine && (
         <>
           <button
             type="button"
@@ -262,7 +264,7 @@ export default function MessageBody(props: MessageBodyProps) {
           </div>
         </>
       )}
-      {AI_TRANSLATE && !isMine && loading && (
+      {enableTranslate && !isMine && loading && (
         <span className="translate-loader">
           <Loader size={20} />
         </span>

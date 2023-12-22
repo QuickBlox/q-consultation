@@ -10,6 +10,7 @@ import useComponent, { ChatInputProps } from './useComponent'
 import './styles.css'
 
 export default function ChatInput(props: ChatInputProps) {
+  const { enableAttachments, enableRephrase } = props
   const {
     refs: { texboxRef, tonesRef },
     store: { rephraseLoading, originText },
@@ -35,28 +36,30 @@ export default function ChatInput(props: ChatInputProps) {
 
   return (
     <footer className="input-container">
-      <button className="attachment" disabled={disableControls} type="button">
-        <label htmlFor="file">
-          <input
-            className="hidden"
-            disabled={disableControls}
-            id="file"
-            onChange={handleFileChange}
-            type="file"
-            accept={FILE_EXTENSIONS_WHITELIST.split(' ')
-              .map((extension) => `.${extension}`)
-              .join(',')}
-          />
-          <AttachSvg className="icon" />
-        </label>
-      </button>
+      {enableAttachments && (
+        <button className="attachment" disabled={disableControls} type="button">
+          <label htmlFor="file">
+            <input
+              className="hidden"
+              disabled={disableControls}
+              id="file"
+              onChange={handleFileChange}
+              type="file"
+              accept={FILE_EXTENSIONS_WHITELIST.split(' ')
+                .map((extension) => `.${extension}`)
+                .join(',')}
+            />
+            <AttachSvg className="icon" />
+          </label>
+        </button>
+      )}
       <div className="textbox-field">
         <div
           contentEditable={!disableControls}
           tabIndex={0}
           className={cn('textbox-input', {
             disabled: disableControls,
-            'with-ai': AI_REPHRASE,
+            'with-ai': enableRephrase,
           })}
           role="textbox"
           ref={texboxRef}
@@ -67,7 +70,7 @@ export default function ChatInput(props: ChatInputProps) {
         {isShowPlaceholder && (
           <span className="textbox-placeholder">{t('YourMessage')}</span>
         )}
-        {AI_REPHRASE && (
+        {enableRephrase && (
           <div ref={tonesRef} className="rephrase-container">
             <ul
               className={cn('rephrase-tones', {

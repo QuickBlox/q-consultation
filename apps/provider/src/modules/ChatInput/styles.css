@@ -6,6 +6,7 @@
   flex-direction: row;
   justify-content: center;
   max-height: 40%;
+  width: 100%;
   z-index: 1;
 }
 

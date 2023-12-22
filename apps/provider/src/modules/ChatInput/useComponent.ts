@@ -23,6 +23,7 @@ import {
 } from '../../actionCreators'
 import * as Types from '../../actions'
 import {
+  authMyAccountIdSelector,
   chatConnectedSelector,
   createDialogsByIdSelector,
   rephraseDialogIdSelector,
@@ -38,11 +39,14 @@ import IS_MOBILE from '../../utils/isMobile'
 
 export interface ChatInputProps {
   dialogId?: QBChatDialog['_id']
+  enableAttachments?: boolean
+  enableRephrase?: boolean
   texboxRef: RefObject<HTMLDivElement>
 }
 
 const createSelector = (dialogId?: QBChatDialog['_id']) =>
   createMapStateSelector({
+    myAccountId: authMyAccountIdSelector,
     connected: chatConnectedSelector,
     currentDialog: createDialogsByIdSelector(dialogId),
     rephraseDialogId: rephraseDialogIdSelector,
@@ -68,6 +72,7 @@ export default createUseComponent((props: ChatInputProps) => {
   const { t } = useTranslation()
   const {
     connected,
+    myAccountId,
     currentDialog,
     rephraseDialogId,
     rephrasedText,
@@ -76,7 +81,9 @@ export default createUseComponent((props: ChatInputProps) => {
   } = store
 
   const disableControls =
-    !currentDialog?.joined || !connected || rephraseLoading
+    currentDialog?.type === 2
+      ? !currentDialog?.joined || !connected || rephraseLoading
+      : !connected || rephraseLoading
   const hasRephrasedText =
     currentDialog?._id === rephraseDialogId && Boolean(rephrasedText)
 
@@ -85,7 +92,7 @@ export default createUseComponent((props: ChatInputProps) => {
 
     if (dialogId && (messageBody?.trim().length || attachment)) {
       const message: QBChatNewMessage = {
-        type: 'groupchat',
+        type: currentDialog?.type === 2 ? 'groupchat' : 'chat',
         body: messageBody?.trim(),
         extension: {
           save_to_history: 1,
@@ -98,7 +105,14 @@ export default createUseComponent((props: ChatInputProps) => {
         message.extension.attachments = [attachment]
       }
       actions.sendMessage({
-        dialogId: QB.chat.helpers.getRoomJidFromDialogId(dialogId),
+        dialogId:
+          currentDialog?.type === 3
+            ? // @ts-ignore
+              QB.chat.helpers.getRecipientId(
+                currentDialog.occupants_ids,
+                myAccountId,
+              )
+            : QB.chat.helpers.getRoomJidFromDialogId(dialogId),
         message,
       })
 

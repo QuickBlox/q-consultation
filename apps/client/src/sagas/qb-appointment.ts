@@ -14,6 +14,8 @@ import QB, {
 import * as Types from '../actions'
 import {
   clearAppointmentsOfDeletedUsers,
+  createAppointmentDialogFailure,
+  createAppointmentDialogSuccess,
   createAppointmentFailure,
   createAppointmentSuccess,
   getAppointmentsFailure,
@@ -97,6 +99,44 @@ function* createAppointment(action: Types.QBAppointmentCreateRequestAction) {
   }
 }
 
+function* createAppointmentDialog(
+  action: Types.QBAppointmentDialogCreateRequestAction,
+) {
+  const { then, ...data } = action.payload
+
+  try {
+    const accessData = {
+      access: 'open_for_users_ids',
+      ids: [data.client_id.toString()],
+    }
+    const permissions = {
+      read: accessData,
+      update: accessData,
+      delete: accessData,
+    }
+    const appointment: QBAppointment = yield promisifyCall(
+      QB.data.create<QBAppointment>,
+      'Appointment',
+      {
+        ...data,
+        priority: 0,
+        permissions,
+      },
+    )
+    const result = createAppointmentDialogSuccess(appointment)
+
+    yield put(result)
+
+    if (then) {
+      then(result)
+    }
+  } catch (e) {
+    const errorMessage = stringifyError(e)
+
+    yield put(createAppointmentDialogFailure(errorMessage))
+  }
+}
+
 function* updateAppointment(action: Types.QBAppointmentUpdateRequestAction) {
   const { _id, data, then } = action.payload
 
@@ -174,4 +214,8 @@ export default [
   takeEvery(Types.QB_APPOINTMENT_GET_REQUEST, getAppointments),
   takeEvery(Types.QB_APPOINTMENT_CREATE_REQUEST, createAppointment),
   takeEvery(Types.QB_APPOINTMENT_UPDATE_REQUEST, updateAppointment),
+  takeEvery(
+    Types.QB_APPOINTMENT_DIALOG_CREATE_REQUEST,
+    createAppointmentDialog,
+  ),
 ]

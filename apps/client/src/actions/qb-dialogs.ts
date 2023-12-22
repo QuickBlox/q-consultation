@@ -51,7 +51,8 @@ export interface QBDialogCreateSuccessAction extends Action {
 export interface QBDialogCreateRequestAction extends Action {
   type: typeof QB_DIALOG_CREATE_REQUEST
   payload: {
-    userId: QBUser['id']
+    userIds: QBUser['id'] | Array<QBUser['id']>
+    type: 'group' | 'private'
     data?: { class_name: string; _id: QBAppointment['_id'] }
     then?: (data: QBDialogCreateSuccessAction) => void
   }

@@ -9,7 +9,14 @@ import useComponent, { ChatProps } from './useComponent'
 import './styles.css'
 
 export default function Chat(props: ChatProps) {
-  const { className, opened, onClose } = props
+  const {
+    className,
+    opened,
+    onClose,
+    enableAttachments,
+    enableRephrase,
+    enableTranslate,
+  } = props
   const {
     data: { dialogName },
     store: { callDuration, currentDialog },
@@ -32,9 +39,17 @@ export default function Chat(props: ChatProps) {
         </div>
       </header>
       <main>
-        <ChatMessages dialogId={currentDialog?._id} chatOpen={opened} />
-        <UploadIndicator />
-        <ChatInput dialogId={currentDialog?._id} />
+        <ChatMessages
+          dialogId={currentDialog?._id}
+          chatOpen={opened}
+          enableTranslate={enableTranslate}
+        />
+        {enableAttachments && <UploadIndicator />}
+        <ChatInput
+          dialogId={currentDialog?._id}
+          enableAttachments={enableAttachments}
+          enableRephrase={enableRephrase}
+        />
       </main>
     </aside>
   )

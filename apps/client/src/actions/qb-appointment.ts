@@ -10,6 +10,12 @@ export const QB_APPOINTMENT_CREATE_FAILURE = 'QB_APPOINTMENT_CREATE_FAILURE'
 export const QB_APPOINTMENT_UPDATE_REQUEST = 'QB_APPOINTMENT_UPDATE_REQUEST'
 export const QB_APPOINTMENT_UPDATE_SUCCESS = 'QB_APPOINTMENT_UPDATE_SUCCESS'
 export const QB_APPOINTMENT_UPDATE_FAILURE = 'QB_APPOINTMENT_UPDATE_FAILURE'
+export const QB_APPOINTMENT_DIALOG_CREATE_REQUEST =
+  'QB_APPOINTMENT_DIALOG_CREATE_REQUEST'
+export const QB_APPOINTMENT_DIALOG_CREATE_SUCCESS =
+  'QB_APPOINTMENT_DIALOG_CREATE_SUCCESS'
+export const QB_APPOINTMENT_DIALOG_CREATE_FAILURE =
+  'QB_APPOINTMENT_DIALOG_CREATE_FAILURE'
 export const QB_CLEAR_APPOINTMENT_OF_DELETED_USERS =
   'QB_CLEAR_APPOINTMENT_OF_DELETED_USERS'
 
@@ -44,11 +50,9 @@ export interface QBAppointmentCreateSuccessAction extends Action {
 export interface QBAppointmentCreateRequestAction extends Action {
   type: typeof QB_APPOINTMENT_CREATE_REQUEST
   payload: {
-    dialog_id: QBChatDialog['_id']
     client_id: QBUser['id']
     provider_id: QBUser['id']
     description: string
-    date_end?: string
     then?: (data: QBAppointmentCreateSuccessAction) => void
   }
 }
@@ -82,6 +86,26 @@ export interface QBClearAppointmentsOfDeletedUsers extends Action {
   payload: Array<QBAppointment['_id']>
 }
 
+export interface QBAppointmentDialogCreateSuccessAction extends Action {
+  type: typeof QB_APPOINTMENT_DIALOG_CREATE_SUCCESS
+  payload: QBAppointment
+}
+
+export interface QBAppointmentDialogCreateRequestAction extends Action {
+  type: typeof QB_APPOINTMENT_DIALOG_CREATE_REQUEST
+  payload: {
+    dialog_id: QBChatDialog['_id']
+    client_id: QBUser['id']
+    provider_id: QBUser['id']
+    then?: (data: QBAppointmentDialogCreateSuccessAction) => void
+  }
+}
+
+export interface QBAppointmentDialogCreateFailureAction extends Action {
+  type: typeof QB_APPOINTMENT_DIALOG_CREATE_FAILURE
+  error: string
+}
+
 export type QBAppointmentAction =
   | QBAppointmentGetRequestAction
   | QBAppointmentGetSuccessAction
@@ -93,3 +117,6 @@ export type QBAppointmentAction =
   | QBAppointmentUpdateSuccessAction
   | QBAppointmentUpdateFailureAction
   | QBClearAppointmentsOfDeletedUsers
+  | QBAppointmentDialogCreateRequestAction
+  | QBAppointmentDialogCreateSuccessAction
+  | QBAppointmentDialogCreateFailureAction

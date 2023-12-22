@@ -9,11 +9,11 @@ import {
   authMyAccountIdSelector,
   authMyAccountSelector,
   createAppointmentByIdSelector,
+  createUsersProviderByAppointmentIdSelector,
 } from '../../selectors'
 import {
   getAppointments,
   createAppointment,
-  createDialog,
   listUsers,
   sendSystemMessage,
   showNotification,
@@ -23,7 +23,6 @@ import {
 import {
   QBAppointmentCreateSuccessAction,
   QBAppointmentGetSuccessAction,
-  QBDialogCreateSuccessAction,
 } from '../../actions'
 import { createUseComponent, useActions, useQuery } from '../../hooks'
 import {
@@ -44,6 +43,7 @@ const createSelector = (appointmentId?: QBAppointment['_id']) =>
   createMapStateSelector({
     loading: appointmentLoadingSelector,
     myAccountId: authMyAccountIdSelector,
+    provider: createUsersProviderByAppointmentIdSelector(appointmentId),
     appointment: createAppointmentByIdSelector(appointmentId),
     myAccount: authMyAccountSelector,
   })
@@ -53,7 +53,6 @@ export default createUseComponent(() => {
   const actions = useActions({
     getAppointments,
     createAppointment,
-    createDialog,
     sendSystemMessage,
     listUsers,
     showNotification,
@@ -165,45 +164,37 @@ export default createUseComponent(() => {
 
             navigate(path)
           } else {
-            actions.createDialog({
-              userId: providerId,
-              then: (actionDialog: QBDialogCreateSuccessAction) => {
-                actions.createAppointment({
-                  client_id: myAccountId,
-                  provider_id: providerId,
-                  dialog_id: actionDialog.payload._id,
-                  description: '',
-                  then: (
-                    actionAppointment: QBAppointmentCreateSuccessAction,
-                  ) => {
-                    const systemMessages = <const>[
-                      {
-                        extension: {
-                          notification_type: DIALOG_NOTIFICATION,
-                          dialog_id: actionDialog.payload._id,
-                        },
-                      },
-                      {
-                        extension: {
-                          notification_type: APPOINTMENT_NOTIFICATION,
-                          appointment_id: actionAppointment.payload._id,
-                        },
-                      },
-                    ]
-
-                    systemMessages.forEach((systemMessage) => {
-                      actions.sendSystemMessage({
-                        dialogId: QB.chat.helpers.getUserJid(providerId),
-                        message: systemMessage,
-                      })
-                    })
-                    const path = generatePath(APPOINTMENT_ROUTE, {
-                      appointmentId: actionAppointment.payload._id,
-                    })
-
-                    navigate(path)
+            actions.createAppointment({
+              client_id: myAccountId,
+              provider_id: providerId,
+              description: '',
+              then: (actionAppointment: QBAppointmentCreateSuccessAction) => {
+                const systemMessages = <const>[
+                  {
+                    extension: {
+                      notification_type: DIALOG_NOTIFICATION,
+                      dialog_id: actionAppointment.payload.dialog_id,
+                    },
                   },
+                  {
+                    extension: {
+                      notification_type: APPOINTMENT_NOTIFICATION,
+                      appointment_id: actionAppointment.payload._id,
+                    },
+                  },
+                ]
+
+                systemMessages.forEach((systemMessage) => {
+                  actions.sendSystemMessage({
+                    dialogId: QB.chat.helpers.getUserJid(providerId),
+                    message: systemMessage,
+                  })
                 })
+                const path = generatePath(APPOINTMENT_ROUTE, {
+                  appointmentId: actionAppointment.payload._id,
+                })
+
+                navigate(path)
               },
             })
           }

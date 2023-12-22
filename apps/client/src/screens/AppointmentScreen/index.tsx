@@ -1,3 +1,4 @@
+import { userHasTag } from '@qc/quickblox'
 import Chat from '../../modules/Chat'
 import Appointment from '../../modules/Appointment'
 import Loader from '../../components/Loader'
@@ -8,9 +9,10 @@ import './styles.css'
 export default function AppointmentScreen() {
   const {
     data: { appointmentId, chatOpen },
-    store: { loading, appointment },
+    store: { loading, appointment, provider },
     handlers: { setChatOpen },
   } = useComponent()
+  const isNotAssistant = provider && !userHasTag(provider, 'bot')
 
   if (loading && !appointment) {
     return (
@@ -38,6 +40,9 @@ export default function AppointmentScreen() {
         opened={chatOpen}
         onClose={() => setChatOpen(false)}
         appointmentId={appointmentId}
+        enableAttachments={isNotAssistant}
+        enableRephrase={AI_REPHRASE && isNotAssistant}
+        enableTranslate={AI_TRANSLATE && isNotAssistant}
       />
     </div>
   )

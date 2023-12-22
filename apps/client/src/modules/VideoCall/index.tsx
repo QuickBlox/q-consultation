@@ -53,6 +53,9 @@ export default function VideoCall() {
             opened={chatOpen}
             onClose={() => setChatOpen(false)}
             appointmentId={appointmentId}
+            enableAttachments
+            enableRephrase={AI_REPHRASE}
+            enableTranslate={AI_TRANSLATE}
           />
         </div>
       )}

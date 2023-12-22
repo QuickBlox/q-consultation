@@ -17,12 +17,11 @@ export default function ProviderList(props: ProviderListProps) {
   const { selected } = props
   const {
     forms: { searchForm },
-    store: { loading, providers, suggestions, avatarEntries },
-    data: { search, isOffline, isShowAll },
+    store: { loading, avatarEntries },
+    data: { search, isOffline, providersWithAssistants },
     handlers: {
       handleChangeSearch,
       handleProviderSelectCreator,
-      filterSearchedProviders,
       handleResetSearch,
     },
   } = useComponent(props)
@@ -107,9 +106,7 @@ export default function ProviderList(props: ProviderListProps) {
         </>
       )}
       <ul className="providers">
-        {AI_SUGGEST_PROVIDER && !isShowAll
-          ? suggestions.map(renderProvider)
-          : providers.filter(filterSearchedProviders).map(renderProvider)}
+        {providersWithAssistants.map(renderProvider)}
         {loading && (
           <li>
             <Loader theme="primary" />

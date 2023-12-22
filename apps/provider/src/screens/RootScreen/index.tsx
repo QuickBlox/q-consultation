@@ -7,9 +7,7 @@ import {
   HISTORY_ROUTE,
   SELECTED_APPOINTMENT_ROUTE,
 } from '../../constants/routes'
-
 import Modal from '../../components/Modal'
-
 import Header from '../../modules/Header'
 import VideoCall from '../../modules/VideoCall'
 import AppointmentActionModal from '../../modules/modals/AppointmentActionModal'
@@ -24,16 +22,15 @@ import ShareLinkModal from '../../modules/modals/ShareLinkModal'
 import GuestUserModal from '../../modules/modals/GuestUserModal'
 import RecordModal from '../../modules/modals/RecordModal'
 import UploadRecordIndicator from '../../modules/UploadRecordIndicator'
-
-import ProfileScreen from '../ProfileScreen'
-import AppointmentsScreen from '../AppointmentsScreen'
-import HistoryScreen from '../HistoryScreen'
-
-import useComponent from './useComponent'
-import './styles.css'
 import EditNotesModal from '../../modules/modals/EditNotesModal'
 import SaveRecordModal from '../../modules/modals/SaveRecordModal'
 import { QUEUE_TYPE } from '../../constants/tabs'
+import ChatWidget from '../../modules/ChatWidget'
+import ProfileScreen from '../ProfileScreen'
+import AppointmentsScreen from '../AppointmentsScreen'
+import HistoryScreen from '../HistoryScreen'
+import useComponent from './useComponent'
+import './styles.css'
 
 export default function MainScreen() {
   const {
@@ -105,6 +102,7 @@ export default function MainScreen() {
         </div>
         {!RESOLUTION_XS && <VideoCall minimalistic={!appointmentsRouteMatch} />}
       </div>
+      {PROVIDER_ASSISTANT_ID > 0 && <ChatWidget userId={PROVIDER_ASSISTANT_ID} />}
       <div
         className={cn('backdrop', { active: isOpenMenu })}
         onClick={handleToggleMenu}

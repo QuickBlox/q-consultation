@@ -2,13 +2,11 @@ import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { generatePath, useNavigate, useLocation } from 'react-router-dom'
-import QB from '@qc/quickblox'
 
 import { QBAppointment } from '@qc/quickblox/dist/types'
 import {
   getDialog,
   listUsers,
-  createDialog,
   sendSystemMessage,
   updateAppointment,
 } from '../../actionCreators'
@@ -24,10 +22,8 @@ import {
   usersNotFoundSelector,
 } from '../../selectors'
 import { createUseComponent, useActions } from '../../hooks'
-import { QBDialogCreateSuccessAction } from '../../actions'
 import { APPOINTMENT_ROUTE } from '../../constants/routes'
 import { createMapStateSelector } from '../../utils/selectors'
-import { DIALOG_NOTIFICATION } from '../../constants/notificationTypes'
 import useIsOffLine from '../../hooks/useIsOffLine'
 
 export interface ChatProps {
@@ -35,6 +31,9 @@ export interface ChatProps {
   className?: string
   opened: boolean
   onClose: () => void
+  enableAttachments?: boolean
+  enableRephrase?: boolean
+  enableTranslate?: boolean
 }
 
 const createSelector = (appointmentId?: QBAppointment['_id']) =>
@@ -57,7 +56,6 @@ export default createUseComponent((props: ChatProps) => {
   const actions = useActions({
     getDialog,
     listUsers,
-    createDialog,
     updateAppointment,
     sendSystemMessage,
   })
@@ -102,37 +100,10 @@ export default createUseComponent((props: ChatProps) => {
   }, [isActiveCall])
 
   useEffect(() => {
-    if (currentAppointment && !isOffline) {
-      if (currentAppointment.dialog_id) {
-        actions.getDialog({
-          _id: currentAppointment.dialog_id,
-        })
-      } else {
-        actions.createDialog({
-          userId: currentAppointment.provider_id,
-          then: (action: QBDialogCreateSuccessAction) => {
-            actions.updateAppointment({
-              _id: currentAppointment._id,
-              data: {
-                dialog_id: action.payload._id,
-              },
-              then: () => {
-                actions.sendSystemMessage({
-                  dialogId: QB.chat.helpers.getUserJid(
-                    currentAppointment.provider_id,
-                  ),
-                  message: {
-                    extension: {
-                      notification_type: DIALOG_NOTIFICATION,
-                      dialog_id: action.payload._id,
-                    },
-                  },
-                })
-              },
-            })
-          },
-        })
-      }
+    if (!isOffline && currentAppointment?.dialog_id) {
+      actions.getDialog({
+        _id: currentAppointment.dialog_id,
+      })
     }
   }, [currentAppointment?.dialog_id, isOffline])
 

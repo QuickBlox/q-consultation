@@ -1,10 +1,9 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { generatePath, useNavigate, useParams } from 'react-router-dom'
-import QB, { QBAppointment } from '@qc/quickblox'
+import { QBAppointment } from '@qc/quickblox'
 
 import {
-  createDialog,
   getAppointments,
   getRecords,
   listUsers,
@@ -29,9 +28,7 @@ import {
   usersLoadingSelector,
 } from '../../selectors'
 import { createUseComponent, useActions } from '../../hooks'
-import { QBDialogCreateSuccessAction } from '../../actions'
 import { createMapStateSelector } from '../../utils/selectors'
-import { DIALOG_NOTIFICATION } from '../../constants/notificationTypes'
 import useIsOffLine from '../../hooks/useIsOffLine'
 import {
   APPOINTMENT_TYPE_ROUTE,
@@ -74,7 +71,6 @@ export default createUseComponent((props: AppointmentsProps) => {
   const { isOpenMenu, toggleMenu, selected, onSelect } = props
   const store = useSelector(selector)
   const actions = useActions({
-    createDialog,
     getAppointments,
     listUsers,
     toggleShowModal,
@@ -129,29 +125,6 @@ export default createUseComponent((props: AppointmentsProps) => {
       })
 
       navigate(path)
-
-      if (!appointment.dialog_id) {
-        actions.createDialog({
-          userIds: appointment.client_id,
-          then: (action: QBDialogCreateSuccessAction) => {
-            actions.updateAppointment({
-              _id: appointment._id,
-              data: { dialog_id: action.payload._id },
-              then: () => {
-                actions.sendSystemMessage({
-                  dialogId: QB.chat.helpers.getUserJid(appointment.client_id),
-                  message: {
-                    extension: {
-                      notification_type: DIALOG_NOTIFICATION,
-                      dialog_id: action.payload._id,
-                    },
-                  },
-                })
-              },
-            })
-          },
-        })
-      }
     }
   }
 

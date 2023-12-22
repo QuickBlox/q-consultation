@@ -31,9 +31,11 @@ export interface QBDialogGetSuccessAction extends Action {
 
 export interface GetDialogPayload {
   _id?: QBChatDialog['_id']
+  type?: 1 | 2 | 3
   skip?: number
   limit?: number
   '_id[in]'?: string
+  'occupants_ids[in]'?: string
   then?: (data: QBDialogGetSuccessAction) => void
 }
 
@@ -57,6 +59,7 @@ export interface QBDialogCreateRequestAction extends Action {
   type: typeof QB_DIALOG_CREATE_REQUEST
   payload: {
     userIds: QBUser['id'] | Array<QBUser['id']>
+    type: 'group' | 'private'
     data?: { class_name: string; _id: QBAppointment['_id'] }
     then?: (data: QBDialogCreateSuccessAction) => void
   }

@@ -31,4 +31,6 @@ yarn-error.log
 .idea
 .tmp
 
+.env
+
 cache

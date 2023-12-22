@@ -75,10 +75,14 @@ export default function Chat(props: ChatProps) {
             <ChatMessages
               dialogId={activeAppointment?.dialog_id}
               chatOpen={activeTab === CHAT_TAB}
+              enableTranslate={AI_TRANSLATE}
+              enableQuickAnswer={AI_QUICK_ANSWER}
               setInputValue={handleSetInputValue}
             />
             <UploadIndicator type="chat" />
             <ChatInput
+              enableAttachments
+              enableRephrase={AI_REPHRASE}
               dialogId={activeAppointment?.dialog_id}
               texboxRef={chatInputRef}
             />

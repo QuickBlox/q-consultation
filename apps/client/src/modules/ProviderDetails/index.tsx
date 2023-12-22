@@ -13,10 +13,7 @@ export default function ProviderDetails(props: ProviderDetailsProps) {
     refs: { refBiography },
     store: { user, usersLoading },
     data: { userData, dialogName, loading, userAvatar },
-    handlers: {
-      handleWaitingRoomClick,
-      createHandleClickSeeMore,
-    },
+    handlers: { handleWaitingRoomClick, createHandleClickSeeMore },
   } = useComponent(props)
   const { t } = useTranslation()
 

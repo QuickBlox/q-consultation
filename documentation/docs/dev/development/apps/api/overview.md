@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # API application
 
-API application implements the API for the [Client and Provider applications](/dev/development/provider-and-client),
+API application implements the API for the [Client and Provider applications](/dev/development/apps/provider-and-client/overview),
 as well as integration with them.
 The application does not have its own database and uses [QuickBlox](https://docs.quickblox.com/) to store and share data.
 Within this application, an API has been implemented that extends the capabilities of QuickBlox,
@@ -175,7 +175,7 @@ A service is a set of functions that implement business logic for a particular e
 `src/services` directory implements functionality for working with OpenAI and QuickBlox entities.
 
 :::tip
-Read more information on OpenAI integration in the [OpenAI](/dev/development/api/openai) section.
+Read more information on OpenAI integration in the [OpenAI](/dev/development/apps/api/openai) section.
 :::
 
 ## Routing

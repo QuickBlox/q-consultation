@@ -5,6 +5,7 @@ import './styles.css'
 import MessageBody from './MessageBody'
 
 export default function ChatMessages(props: ChatMessagesProps) {
+  const { enableTranslate } = props
   const {
     data: { sections, resetScroll },
     store: { myAccountId, loading, users, translate },
@@ -30,11 +31,13 @@ export default function ChatMessages(props: ChatMessagesProps) {
           myAccountId={myAccountId}
           markMessageRead={markMessageRead}
           chatOpen={props.chatOpen}
+          enableTranslate={enableTranslate}
           renderMessage={(message, isMine) => (
             <MessageBody
               key={message._id}
               message={message}
               isMine={isMine}
+              enableTranslate={enableTranslate}
               messagesContainerRef={sectionListRef}
               language={translate[message._id]?.language}
               translatedMessage={translate[message._id]?.translatedMessage}

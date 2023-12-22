@@ -11,6 +11,8 @@ interface ChatMessageProps {
   myAccountId: QBUser['id']
   messages: QBChatMessage[]
   users: Dictionary<QBUser>
+  enableTranslate?: boolean
+  enableQuickAnswer?: boolean
   markMessageRead: typeof markMessageReadAction
   renderMessage: (message: QBChatMessage, isMine: boolean) => JSX.Element
 }
@@ -23,6 +25,8 @@ export default function ChatMessage(props: ChatMessageProps) {
     markMessageRead,
     chatOpen,
     renderMessage,
+    enableTranslate,
+    enableQuickAnswer,
   } = props
   const lastMessage = messages[messages.length - 1]
   const { t } = useTranslation()
@@ -63,10 +67,10 @@ export default function ChatMessage(props: ChatMessageProps) {
     <div
       className={cn('message', {
         my: messageIsMine,
-        'with-ai-translate': AI_TRANSLATE,
+        'with-ai-translate': enableTranslate,
       })}
     >
-      <div className={cn('info', { 'with-ai-answer': AI_QUICK_ANSWER })}>
+      <div className={cn('info', { 'with-ai-answer': enableQuickAnswer })}>
         <span className="sender">{senderName}</span>
         <span className="sent-at">
           {getSentTime(lastMessage.date_sent * 1000)}

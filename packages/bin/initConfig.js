@@ -39,6 +39,8 @@ function getBaseConfiguration() {
   const AI_REPHRASE = enableOpenAI && readline.keyInYN(`Enable AI Rephrase?\n`) || false
   const AI_TRANSLATE = enableOpenAI && readline.keyInYN(`Enable AI Rephrase?\n`) || false
 
+  const PROVIDER_ASSISTANT_ID = readline.questionInt(`Enter Provider Assistant ID (optional):\n`, { defaultInput: -1 })
+
   const APP_NAME =  readline.question(`Enter Application name (optional):\n`) || 'Q-Consultation'
   const APP_DESCRIPTION =  readline.question(`Enter Application description (optional):\n`) || 'Q-Consultation'
 
@@ -72,6 +74,7 @@ function getBaseConfiguration() {
     AI_RECORD_ANALYTICS,
     AI_REPHRASE,
     AI_TRANSLATE,
+    PROVIDER_ASSISTANT_ID,
     APP_NAME,
     APP_DESCRIPTION,
     ENABLE_REDUX_LOGGER,

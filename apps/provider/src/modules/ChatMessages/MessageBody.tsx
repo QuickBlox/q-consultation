@@ -38,6 +38,8 @@ interface MessageBodyProps {
   message: QBChatMessage
   isMine: boolean
   loading: boolean
+  enableTranslate?: boolean
+  enableQuickAnswer?: boolean
   messagesContainerRef: RefObject<HTMLDivElement>
   setInputValue?: (value: string) => void
   showNotification: typeof showNotificationAction
@@ -82,6 +84,8 @@ export default function MessageBody(props: MessageBodyProps) {
     getQuickAnswer,
     cancelQuickAnswer,
     showNotification,
+    enableQuickAnswer,
+    enableTranslate,
   } = props
   const { t } = useTranslation()
   const translateButtonRef = useRef<HTMLButtonElement>(null)
@@ -253,7 +257,7 @@ export default function MessageBody(props: MessageBodyProps) {
           ),
         }}
       />
-      {AI_TRANSLATE && !isMine && (
+      {enableTranslate && !isMine && (
         <>
           <button
             type="button"
@@ -292,7 +296,7 @@ export default function MessageBody(props: MessageBodyProps) {
           </div>
         </>
       )}
-      {AI_QUICK_ANSWER && !isMine && setInputValue && (
+      {enableQuickAnswer && !isMine && setInputValue && (
         <button
           type="button"
           disabled={loading}

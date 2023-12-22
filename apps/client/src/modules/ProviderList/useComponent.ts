@@ -44,7 +44,7 @@ export default createUseComponent((props: ProviderListProps) => {
   const store = useSelector(selector)
   const actions = useActions({ getUser, providersSuggestions, getUserAvatar })
   const isOffline = useIsOffLine()
-  const { loading, providers, totalEntries, avatarEntries } = store
+  const { loading, providers, suggestions, totalEntries, avatarEntries } = store
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [isShowAll, setIsShowAll] = useState(true)
@@ -134,14 +134,18 @@ export default createUseComponent((props: ProviderListProps) => {
     }
   }, [providers, loading])
 
+  const providersWithAssistants =
+    AI_SUGGEST_PROVIDER && !isShowAll
+      ? suggestions
+      : providers.filter(filterSearchedProviders)
+
   return {
     forms: { searchForm },
     store,
-    data: { search, isOffline, isShowAll },
+    data: { search, isOffline, isShowAll, providersWithAssistants },
     handlers: {
       handleChangeSearch,
       handleProviderSelectCreator,
-      filterSearchedProviders,
       handleResetSearch,
     },
   }

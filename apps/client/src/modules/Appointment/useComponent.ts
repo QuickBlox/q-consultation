@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { generatePath, useNavigate } from 'react-router-dom'
-import QB from '@qc/quickblox'
+import QB, { userHasTag } from '@qc/quickblox'
 
 import { QBAppointment } from '@qc/quickblox/dist/types'
 import { createUseComponent, useActions } from '../../hooks'
@@ -13,6 +13,7 @@ import {
 import {
   authMyAccountSelector,
   createAppointmentByIdSelector,
+  createUsersProviderByAppointmentIdSelector,
 } from '../../selectors'
 import { createMapStateSelector } from '../../utils/selectors'
 import { APPOINTMENT_NOTIFICATION } from '../../constants/notificationTypes'
@@ -27,6 +28,7 @@ export interface AppointmentProps {
 const createSelector = (appointmentId?: QBAppointment['_id']) =>
   createMapStateSelector({
     appointment: createAppointmentByIdSelector(appointmentId),
+    provider: createUsersProviderByAppointmentIdSelector(appointmentId),
     myAccount: authMyAccountSelector,
   })
 
@@ -34,7 +36,7 @@ export default createUseComponent((props: AppointmentProps) => {
   const { appointmentId } = props
   const selector = createSelector(appointmentId)
   const store = useSelector(selector)
-  const { appointment } = store
+  const { appointment, provider } = store
   const actions = useActions({
     updateAppointment,
     sendSystemMessage,
@@ -42,6 +44,7 @@ export default createUseComponent((props: AppointmentProps) => {
   })
   const navigate = useNavigate()
   const isOffline = useIsOffLine()
+  const isNotAssistant = provider && !userHasTag(provider, 'bot')
 
   const [description, setDescription] = useState('')
   const [editingDescription, setEditingDescription] = useState(false)
@@ -115,6 +118,7 @@ export default createUseComponent((props: AppointmentProps) => {
       description,
       editingDescription,
       isOffline,
+      isNotAssistant,
     },
     handlers: {
       changeDescription,

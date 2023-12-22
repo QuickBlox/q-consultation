@@ -1,11 +1,11 @@
 import SectionList from '../../components/SectionList'
 import MessageGroup from './MessageGroup'
 import useComponent, { ChatMessagesProps } from './useComponent'
-import './styles.css'
 import MessageBody from './MessageBody'
+import './styles.css'
 
 export default function ChatMessages(props: ChatMessagesProps) {
-  const { chatOpen, setInputValue } = props
+  const { chatOpen, setInputValue, enableTranslate, enableQuickAnswer } = props
   const {
     data: { sections, resetScroll },
     store: { myAccountId, loading, users, loadMessageId, translate },
@@ -37,6 +37,8 @@ export default function ChatMessages(props: ChatMessagesProps) {
           myAccountId={myAccountId}
           chatOpen={chatOpen}
           markMessageRead={markMessageRead}
+          enableTranslate={enableTranslate}
+          enableQuickAnswer={enableQuickAnswer}
           renderMessage={(message, isMine) => (
             <MessageBody
               key={message._id}
@@ -48,6 +50,8 @@ export default function ChatMessages(props: ChatMessagesProps) {
               }
               messagesContainerRef={sectionListRef}
               isMine={isMine}
+              enableTranslate={enableTranslate}
+              enableQuickAnswer={enableQuickAnswer}
               setInputValue={setInputValue}
               getTranslate={getTranslate}
               getQuickAnswer={getQuickAnswer}

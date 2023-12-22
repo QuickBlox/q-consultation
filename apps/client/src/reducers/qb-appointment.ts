@@ -30,8 +30,10 @@ export default (
     case Types.QB_APPOINTMENT_GET_REQUEST:
     case Types.QB_APPOINTMENT_CREATE_REQUEST:
     case Types.QB_APPOINTMENT_UPDATE_REQUEST:
+    case Types.QB_APPOINTMENT_DIALOG_CREATE_REQUEST:
       return { ...state, error: undefined, loading: true }
     case Types.QB_APPOINTMENT_CREATE_SUCCESS:
+    case Types.QB_APPOINTMENT_DIALOG_CREATE_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -51,6 +53,7 @@ export default (
     case Types.QB_APPOINTMENT_GET_FAILURE:
     case Types.QB_APPOINTMENT_CREATE_FAILURE:
     case Types.QB_APPOINTMENT_UPDATE_FAILURE:
+    case Types.QB_APPOINTMENT_DIALOG_CREATE_FAILURE:
       return { ...state, loading: false, error: action.error }
     case Types.QB_APPOINTMENT_UPDATE_SUCCESS: {
       const { appointment } = action.payload

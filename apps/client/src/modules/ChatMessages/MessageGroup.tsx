@@ -12,6 +12,7 @@ interface MessageGroupProps {
   messages: QBChatMessage[]
   users: Dictionary<QBUser>
   chatOpen?: boolean
+  enableTranslate?: boolean
   markMessageRead: typeof markMessageReadAction
   renderMessage: (message: QBChatMessage, isMine: boolean) => JSX.Element
 }
@@ -24,6 +25,7 @@ export default function MessageGroup(props: MessageGroupProps) {
     users,
     chatOpen,
     renderMessage,
+    enableTranslate,
   } = props
   const { t } = useTranslation()
   const RESOLUTION_XS = useMobileLayout()
@@ -65,7 +67,7 @@ export default function MessageGroup(props: MessageGroupProps) {
     <div
       className={cn('message', {
         my: messageIsMine,
-        'with-ai-translate': AI_TRANSLATE,
+        'with-ai-translate': enableTranslate,
       })}
     >
       <div className="info">

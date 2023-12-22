@@ -25,6 +25,7 @@ import useIsOffLine from '../../hooks/useIsOffLine'
 export interface ChatMessagesProps {
   dialogId?: QBChatDialog['_id']
   chatOpen?: boolean
+  enableTranslate?: boolean
 }
 
 const createSelector = (dialogId?: QBChatDialog['_id']) =>

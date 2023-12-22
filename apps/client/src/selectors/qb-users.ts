@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import omitBy from 'lodash/omitBy'
-import { QBUser, QBAppointment } from '@qc/quickblox'
+import { QBUser, QBAppointment, userHasTag } from '@qc/quickblox'
 
 import { StoreState } from '../reducers'
 import { denormalize } from '../utils/normalize'
@@ -27,12 +27,17 @@ export const usersSuggestionsSelector = createSelector(
 export const usersListSelector = createSelector(
   [usersEntriesSelector, usersNotFoundSelector],
   (userEntries, notFoundUserIds) =>
-    denormalize(omitBy(userEntries, ({ id }) => notFoundUserIds.includes(id))),
+    denormalize(
+      omitBy(userEntries, ({ id }) => notFoundUserIds.includes(id)),
+    ).sort((user) => (userHasTag(user, 'bot') ? -1 : 0)),
 )
 
 export const usersListBySuggestionsSelector = createSelector(
   [usersEntriesSelector, usersSuggestionsSelector],
-  (users, suggestions) => suggestions.map((id) => users[id]),
+  (users, suggestions) =>
+    suggestions
+      .map((id) => users[id])
+      .sort((user) => (userHasTag(user, 'bot') ? -1 : 0)),
 )
 
 export const usersLoadingSelector = createSelector(

@@ -11,7 +11,7 @@ export default function Appointment(props: AppointmentProps) {
   const { onOpen } = props
   const {
     store: { appointment, myAccount },
-    data: { description, editingDescription, isOffline },
+    data: { description, editingDescription, isOffline, isNotAssistant },
     handlers: {
       changeDescription,
       startEditingDescription,
@@ -44,42 +44,44 @@ export default function Appointment(props: AppointmentProps) {
         >
           {t('OpenChat')}
         </Button>
-        <form>
-          <fieldset>
-            <div className="legend">
-              <span className="label">{t('ConsultationTopic')}</span>
-              {editingDescription && (
-                <>
-                  <button
-                    className="save"
-                    onClick={updateDescription}
-                    type="button"
-                    disabled={isOffline}
-                  >
-                    <CheckSvg className="icon check" />
-                  </button>
-                  <button
-                    className="cancel"
-                    onClick={stopEditingDescription}
-                    type="button"
-                  >
-                    <SkipSvg className="icon" />
-                  </button>
-                </>
-              )}
-            </div>
-            <textarea
-              id="description"
-              name="description"
-              placeholder={t('EnterQuestion')}
-              onChange={changeDescription}
-              onFocus={startEditingDescription}
-              disabled={!appointment}
-              rows={8}
-              value={description}
-            />
-          </fieldset>
-        </form>
+        {isNotAssistant && (
+          <form>
+            <fieldset>
+              <div className="legend">
+                <span className="label">{t('ConsultationTopic')}</span>
+                {editingDescription && (
+                  <>
+                    <button
+                      className="save"
+                      onClick={updateDescription}
+                      type="button"
+                      disabled={isOffline}
+                    >
+                      <CheckSvg className="icon check" />
+                    </button>
+                    <button
+                      className="cancel"
+                      onClick={stopEditingDescription}
+                      type="button"
+                    >
+                      <SkipSvg className="icon" />
+                    </button>
+                  </>
+                )}
+              </div>
+              <textarea
+                id="description"
+                name="description"
+                placeholder={t('EnterQuestion')}
+                onChange={changeDescription}
+                onFocus={startEditingDescription}
+                disabled={!appointment}
+                rows={8}
+                value={description}
+              />
+            </fieldset>
+          </form>
+        )}
         <div className="btn-group">
           <button
             type="button"

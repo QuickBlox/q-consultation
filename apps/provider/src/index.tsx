@@ -62,6 +62,7 @@ declare global {
   export const AI_QUICK_ANSWER: boolean
   export const AI_REPHRASE: boolean
   export const AI_TRANSLATE: boolean
+  export const PROVIDER_ASSISTANT_ID: number
 
   export const APP_NAME: string
   export const ENABLE_REDUX_LOGGER: boolean

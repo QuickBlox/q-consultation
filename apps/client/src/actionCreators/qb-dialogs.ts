@@ -1,4 +1,4 @@
-import { QBAppointment, QBChatDialog, QBUser } from '@qc/quickblox'
+import { QBChatDialog } from '@qc/quickblox'
 import * as Types from '../actions'
 
 export function getDialog<T extends Types.GetDialogPayload>(
@@ -19,11 +19,9 @@ export function getDialogFailure(
   return { type: Types.QB_DIALOG_GET_FAILURE, error }
 }
 
-export function createDialog(payload: {
-  userId: QBUser['id']
-  data?: { class_name: string; _id: QBAppointment['_id'] }
-  then?: (data: Types.QBDialogCreateSuccessAction) => void
-}): Types.QBDialogCreateRequestAction {
+export function createDialog(
+  payload: Types.QBDialogCreateRequestAction['payload'],
+): Types.QBDialogCreateRequestAction {
   return { type: Types.QB_DIALOG_CREATE_REQUEST, payload }
 }
 

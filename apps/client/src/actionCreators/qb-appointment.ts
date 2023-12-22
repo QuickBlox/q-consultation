@@ -69,3 +69,24 @@ export function clearAppointmentsOfDeletedUsers(
 ): Types.QBClearAppointmentsOfDeletedUsers {
   return { type: Types.QB_CLEAR_APPOINTMENT_OF_DELETED_USERS, payload }
 }
+
+export function createAppointmentDialog(
+  payload: Types.QBAppointmentDialogCreateRequestAction['payload'],
+): Types.QBAppointmentDialogCreateRequestAction {
+  return { type: Types.QB_APPOINTMENT_DIALOG_CREATE_REQUEST, payload }
+}
+
+export function createAppointmentDialogSuccess(
+  appointment: QBAppointment,
+): Types.QBAppointmentDialogCreateSuccessAction {
+  return {
+    type: Types.QB_APPOINTMENT_DIALOG_CREATE_SUCCESS,
+    payload: appointment,
+  }
+}
+
+export function createAppointmentDialogFailure(
+  error: string,
+): Types.QBAppointmentDialogCreateFailureAction {
+  return { type: Types.QB_APPOINTMENT_DIALOG_CREATE_FAILURE, error }
+}

@@ -47,6 +47,12 @@ You will need to set the following keys with your credentials:
  AI_SUGGEST_PROVIDER=true
  # Enable AI Record analytics feature
  AI_RECORD_ANALYTICS=true
+ # Enable AI Rephrase feature
+ AI_REPHRASE=false
+ # Enable AI Translate feature
+ AI_TRANSLATE=false
+ # Chat widget with Assistant for provider
+ PROVIDER_ASSISTANT_ID=-1
  # Application name
  APP_NAME="Q-Consultation"
  # Application description
