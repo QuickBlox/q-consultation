@@ -113,7 +113,7 @@ export const createProviderKeywords = async (
   // TODO: Replace with openAIApi.chat.completions.create
   const { choices } = await openAIApi.completions.create({
     prompt,
-    model: 'text-davinci-003',
+    model: 'gpt-3.5-turbo-instruct',
     temperature: 0,
     max_tokens: 256,
     top_p: 1,
